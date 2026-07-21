@@ -16,8 +16,10 @@
     "metatags": {
       "og:site_name": "Linkzee Docs",
       "og:type": "website",
+      "og:locale": "en_US",
+      "twitter:card": "summary_large_image",
       "author": "Zee Labs LLC",
-      "keywords": "Linkzee, link in bio, affiliate, marketplace, Shopee, Amazon, Mercado Livre, scheduling, bio page"
+      "keywords": "Linkzee, link in bio, bio link, affiliate marketing, marketplace affiliate, Shopee, Amazon, Mercado Livre, product showcase, booking, scheduling, appointments, Google Calendar, Google Meet, AI assistant, MCP, public API"
     },
     "indexing": "all"
   },
@@ -75,7 +77,9 @@
               {
                 "group": "Design & themes",
                 "pages": [
-                  "design/overview"
+                  "design/overview",
+                  "design/themes",
+                  "design/customizing"
                 ]
               },
               {
@@ -92,6 +96,103 @@
                   "scheduling/reschedule-cancel",
                   "scheduling/booking-link",
                   "scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "AI assistant",
+                "pages": [
+                  "ai-assistant/overview",
+                  "ai-assistant/persona",
+                  "ai-assistant/lead-capture",
+                  "ai-assistant/knowledge-base",
+                  "ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "analytics/overview"
+                ]
+              },
+              {
+                "group": "Account & settings",
+                "pages": [
+                  "account/account",
+                  "account/password-security",
+                  "account/public-page-seo",
+                  "account/tracking",
+                  "account/deactivate-account"
+                ]
+              },
+              {
+                "group": "Best practices",
+                "pages": [
+                  "best-practices/growing-clicks",
+                  "best-practices/optimizing-bio",
+                  "best-practices/affiliate-tips",
+                  "best-practices/scheduling-tips"
+                ]
+              },
+              {
+                "group": "Troubleshooting",
+                "pages": [
+                  "troubleshooting/common-issues",
+                  "troubleshooting/account-access",
+                  "troubleshooting/google-connection",
+                  "troubleshooting/publishing-seo"
+                ]
+              },
+              {
+                "group": "FAQ",
+                "pages": [
+                  "faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrations",
+            "groups": [
+              {
+                "group": "Public API",
+                "pages": [
+                  "integrations/api/overview",
+                  "integrations/api/api-keys"
+                ]
+              },
+              {
+                "group": "AI agents (MCP)",
+                "pages": [
+                  "integrations/mcp/overview",
+                  "integrations/mcp/claude",
+                  "integrations/mcp/chatgpt-and-others",
+                  "integrations/mcp/tools-reference"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "api-reference/authentication",
+                  "api-reference/rate-limits"
+                ]
+              },
+              {
+                "group": "Endpoints",
+                "pages": [
+                  "api-reference/store",
+                  "api-reference/products",
+                  "api-reference/categories",
+                  "api-reference/links-collections",
+                  "api-reference/content",
+                  "api-reference/agenda",
+                  "api-reference/leads",
+                  "api-reference/uploads",
+                  "api-reference/knowledge"
                 ]
               }
             ]
@@ -136,7 +237,9 @@
               {
                 "group": "Design e temas",
                 "pages": [
-                  "pt-BR/design/overview"
+                  "pt-BR/design/overview",
+                  "pt-BR/design/themes",
+                  "pt-BR/design/customizing"
                 ]
               },
               {
@@ -153,6 +256,103 @@
                   "pt-BR/scheduling/reschedule-cancel",
                   "pt-BR/scheduling/booking-link",
                   "pt-BR/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Assistente de IA",
+                "pages": [
+                  "pt-BR/ai-assistant/overview",
+                  "pt-BR/ai-assistant/persona",
+                  "pt-BR/ai-assistant/lead-capture",
+                  "pt-BR/ai-assistant/knowledge-base",
+                  "pt-BR/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Desempenho",
+                "pages": [
+                  "pt-BR/analytics/overview"
+                ]
+              },
+              {
+                "group": "Conta e configurações",
+                "pages": [
+                  "pt-BR/account/account",
+                  "pt-BR/account/password-security",
+                  "pt-BR/account/public-page-seo",
+                  "pt-BR/account/tracking",
+                  "pt-BR/account/deactivate-account"
+                ]
+              },
+              {
+                "group": "Boas práticas",
+                "pages": [
+                  "pt-BR/best-practices/growing-clicks",
+                  "pt-BR/best-practices/optimizing-bio",
+                  "pt-BR/best-practices/affiliate-tips",
+                  "pt-BR/best-practices/scheduling-tips"
+                ]
+              },
+              {
+                "group": "Solução de problemas",
+                "pages": [
+                  "pt-BR/troubleshooting/common-issues",
+                  "pt-BR/troubleshooting/account-access",
+                  "pt-BR/troubleshooting/google-connection",
+                  "pt-BR/troubleshooting/publishing-seo"
+                ]
+              },
+              {
+                "group": "Perguntas frequentes",
+                "pages": [
+                  "pt-BR/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrações",
+            "groups": [
+              {
+                "group": "API pública",
+                "pages": [
+                  "pt-BR/integrations/api/overview",
+                  "pt-BR/integrations/api/api-keys"
+                ]
+              },
+              {
+                "group": "Agentes de IA (MCP)",
+                "pages": [
+                  "pt-BR/integrations/mcp/overview",
+                  "pt-BR/integrations/mcp/claude",
+                  "pt-BR/integrations/mcp/chatgpt-and-others",
+                  "pt-BR/integrations/mcp/tools-reference"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Referência da API",
+            "groups": [
+              {
+                "group": "Visão geral",
+                "pages": [
+                  "pt-BR/api-reference/authentication",
+                  "pt-BR/api-reference/rate-limits"
+                ]
+              },
+              {
+                "group": "Endpoints",
+                "pages": [
+                  "pt-BR/api-reference/store",
+                  "pt-BR/api-reference/products",
+                  "pt-BR/api-reference/categories",
+                  "pt-BR/api-reference/links-collections",
+                  "pt-BR/api-reference/content",
+                  "pt-BR/api-reference/agenda",
+                  "pt-BR/api-reference/leads",
+                  "pt-BR/api-reference/uploads",
+                  "pt-BR/api-reference/knowledge"
                 ]
               }
             ]
@@ -197,7 +397,9 @@
               {
                 "group": "Diseño y temas",
                 "pages": [
-                  "es/design/overview"
+                  "es/design/overview",
+                  "es/design/themes",
+                  "es/design/customizing"
                 ]
               },
               {
@@ -214,6 +416,103 @@
                   "es/scheduling/reschedule-cancel",
                   "es/scheduling/booking-link",
                   "es/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Asistente de IA",
+                "pages": [
+                  "es/ai-assistant/overview",
+                  "es/ai-assistant/persona",
+                  "es/ai-assistant/lead-capture",
+                  "es/ai-assistant/knowledge-base",
+                  "es/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Rendimiento",
+                "pages": [
+                  "es/analytics/overview"
+                ]
+              },
+              {
+                "group": "Cuenta y ajustes",
+                "pages": [
+                  "es/account/account",
+                  "es/account/password-security",
+                  "es/account/public-page-seo",
+                  "es/account/tracking",
+                  "es/account/deactivate-account"
+                ]
+              },
+              {
+                "group": "Buenas prácticas",
+                "pages": [
+                  "es/best-practices/growing-clicks",
+                  "es/best-practices/optimizing-bio",
+                  "es/best-practices/affiliate-tips",
+                  "es/best-practices/scheduling-tips"
+                ]
+              },
+              {
+                "group": "Solución de problemas",
+                "pages": [
+                  "es/troubleshooting/common-issues",
+                  "es/troubleshooting/account-access",
+                  "es/troubleshooting/google-connection",
+                  "es/troubleshooting/publishing-seo"
+                ]
+              },
+              {
+                "group": "Preguntas frecuentes",
+                "pages": [
+                  "es/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integraciones",
+            "groups": [
+              {
+                "group": "API pública",
+                "pages": [
+                  "es/integrations/api/overview",
+                  "es/integrations/api/api-keys"
+                ]
+              },
+              {
+                "group": "Agentes de IA (MCP)",
+                "pages": [
+                  "es/integrations/mcp/overview",
+                  "es/integrations/mcp/claude",
+                  "es/integrations/mcp/chatgpt-and-others",
+                  "es/integrations/mcp/tools-reference"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Referencia de la API",
+            "groups": [
+              {
+                "group": "Descripción general",
+                "pages": [
+                  "es/api-reference/authentication",
+                  "es/api-reference/rate-limits"
+                ]
+              },
+              {
+                "group": "Endpoints",
+                "pages": [
+                  "es/api-reference/store",
+                  "es/api-reference/products",
+                  "es/api-reference/categories",
+                  "es/api-reference/links-collections",
+                  "es/api-reference/content",
+                  "es/api-reference/agenda",
+                  "es/api-reference/leads",
+                  "es/api-reference/uploads",
+                  "es/api-reference/knowledge"
                 ]
               }
             ]
@@ -258,7 +557,9 @@
               {
                 "group": "Design et thèmes",
                 "pages": [
-                  "fr/design/overview"
+                  "fr/design/overview",
+                  "fr/design/themes",
+                  "fr/design/customizing"
                 ]
               },
               {
@@ -275,6 +576,103 @@
                   "fr/scheduling/reschedule-cancel",
                   "fr/scheduling/booking-link",
                   "fr/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Assistant IA",
+                "pages": [
+                  "fr/ai-assistant/overview",
+                  "fr/ai-assistant/persona",
+                  "fr/ai-assistant/lead-capture",
+                  "fr/ai-assistant/knowledge-base",
+                  "fr/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Performances",
+                "pages": [
+                  "fr/analytics/overview"
+                ]
+              },
+              {
+                "group": "Compte et paramètres",
+                "pages": [
+                  "fr/account/account",
+                  "fr/account/password-security",
+                  "fr/account/public-page-seo",
+                  "fr/account/tracking",
+                  "fr/account/deactivate-account"
+                ]
+              },
+              {
+                "group": "Bonnes pratiques",
+                "pages": [
+                  "fr/best-practices/growing-clicks",
+                  "fr/best-practices/optimizing-bio",
+                  "fr/best-practices/affiliate-tips",
+                  "fr/best-practices/scheduling-tips"
+                ]
+              },
+              {
+                "group": "Dépannage",
+                "pages": [
+                  "fr/troubleshooting/common-issues",
+                  "fr/troubleshooting/account-access",
+                  "fr/troubleshooting/google-connection",
+                  "fr/troubleshooting/publishing-seo"
+                ]
+              },
+              {
+                "group": "FAQ",
+                "pages": [
+                  "fr/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Intégrations",
+            "groups": [
+              {
+                "group": "API publique",
+                "pages": [
+                  "fr/integrations/api/overview",
+                  "fr/integrations/api/api-keys"
+                ]
+              },
+              {
+                "group": "Agents IA (MCP)",
+                "pages": [
+                  "fr/integrations/mcp/overview",
+                  "fr/integrations/mcp/claude",
+                  "fr/integrations/mcp/chatgpt-and-others",
+                  "fr/integrations/mcp/tools-reference"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Référence API",
+            "groups": [
+              {
+                "group": "Aperçu",
+                "pages": [
+                  "fr/api-reference/authentication",
+                  "fr/api-reference/rate-limits"
+                ]
+              },
+              {
+                "group": "Endpoints",
+                "pages": [
+                  "fr/api-reference/store",
+                  "fr/api-reference/products",
+                  "fr/api-reference/categories",
+                  "fr/api-reference/links-collections",
+                  "fr/api-reference/content",
+                  "fr/api-reference/agenda",
+                  "fr/api-reference/leads",
+                  "fr/api-reference/uploads",
+                  "fr/api-reference/knowledge"
                 ]
               }
             ]
@@ -319,7 +717,9 @@
               {
                 "group": "Design & Themes",
                 "pages": [
-                  "de/design/overview"
+                  "de/design/overview",
+                  "de/design/themes",
+                  "de/design/customizing"
                 ]
               },
               {
@@ -337,6 +737,103 @@
                   "de/scheduling/booking-link",
                   "de/scheduling/ai-scheduling"
                 ]
+              },
+              {
+                "group": "KI-Assistent",
+                "pages": [
+                  "de/ai-assistant/overview",
+                  "de/ai-assistant/persona",
+                  "de/ai-assistant/lead-capture",
+                  "de/ai-assistant/knowledge-base",
+                  "de/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Analysen",
+                "pages": [
+                  "de/analytics/overview"
+                ]
+              },
+              {
+                "group": "Konto & Einstellungen",
+                "pages": [
+                  "de/account/account",
+                  "de/account/password-security",
+                  "de/account/public-page-seo",
+                  "de/account/tracking",
+                  "de/account/deactivate-account"
+                ]
+              },
+              {
+                "group": "Best Practices",
+                "pages": [
+                  "de/best-practices/growing-clicks",
+                  "de/best-practices/optimizing-bio",
+                  "de/best-practices/affiliate-tips",
+                  "de/best-practices/scheduling-tips"
+                ]
+              },
+              {
+                "group": "Fehlerbehebung",
+                "pages": [
+                  "de/troubleshooting/common-issues",
+                  "de/troubleshooting/account-access",
+                  "de/troubleshooting/google-connection",
+                  "de/troubleshooting/publishing-seo"
+                ]
+              },
+              {
+                "group": "Häufige Fragen",
+                "pages": [
+                  "de/faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Integrationen",
+            "groups": [
+              {
+                "group": "Öffentliche API",
+                "pages": [
+                  "de/integrations/api/overview",
+                  "de/integrations/api/api-keys"
+                ]
+              },
+              {
+                "group": "KI-Agenten (MCP)",
+                "pages": [
+                  "de/integrations/mcp/overview",
+                  "de/integrations/mcp/claude",
+                  "de/integrations/mcp/chatgpt-and-others",
+                  "de/integrations/mcp/tools-reference"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API-Referenz",
+            "groups": [
+              {
+                "group": "Überblick",
+                "pages": [
+                  "de/api-reference/authentication",
+                  "de/api-reference/rate-limits"
+                ]
+              },
+              {
+                "group": "Endpoints",
+                "pages": [
+                  "de/api-reference/store",
+                  "de/api-reference/products",
+                  "de/api-reference/categories",
+                  "de/api-reference/links-collections",
+                  "de/api-reference/content",
+                  "de/api-reference/agenda",
+                  "de/api-reference/leads",
+                  "de/api-reference/uploads",
+                  "de/api-reference/knowledge"
+                ]
               }
             ]
           }
@@ -345,6 +842,11 @@
     ],
     "global": {
       "anchors": [
+        {
+          "anchor": "API Reference",
+          "href": "/api-reference/authentication",
+          "icon": "code"
+        },
         {
           "anchor": "Website",
           "href": "https://linkz.ee",
