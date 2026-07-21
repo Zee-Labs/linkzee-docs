@@ -1,0 +1,274 @@
+---
+title: Store
+icon: store
+description: "Store-Profil lesen und aktualisieren, den Theme-Katalog durchsuchen und eine Leistungsübersicht abrufen."
+---
+
+Der Store ist das Herzstück eines Linkzee-Kontos: sein Name, die Bio, die
+Social-Handles, das Theme, die SEO-Felder, die Tracking-Pixel und die
+Marketing-Einstellungen. Mit diesen Endpunkten kannst du das vollständige Profil
+lesen, Änderungen anwenden, die vorgefertigten Themes auflisten und eine schnelle
+Leistungsübersicht abrufen.
+
+Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel
+enthalten:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+  Lesezugriffe funktionieren mit jedem Schlüssel. Aktualisierungen erfordern
+  einen Schlüssel mit dem **write**-Scope.
+</Note>
+
+## Store-Profil abrufen
+
+```
+GET /v1/store
+```
+
+Gibt das vollständige Profil des Stores zurück, zu dem der Schlüssel gehört —
+Identität, Theme, Socials, SEO und Marketing-Einstellungen.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Loja carregada com sucesso",
+  "data": {
+    "id": "665f1c9a4b2e8a0012a3c9d1",
+    "slug": "achadinhos-da-gabi",
+    "name": "Achadinhos da Gabi",
+    "bio": "As melhores ofertas dos marketplaces, todo dia.",
+    "titleStyle": "text",
+    "themeId": "aurora",
+    "themeMode": "dark",
+    "socialsPosition": "top",
+    "socialOrder": ["instagram", "tiktok", "whatsapp"],
+    "productsPosition": "top",
+    "social": {
+      "instagram": "achadinhosdagabi",
+      "tiktok": "achadinhosdagabi"
+    },
+    "seoTitle": "Achadinhos da Gabi",
+    "seoDescription": "Ofertas selecionadas de Shopee, Amazon e Mercado Livre.",
+    "gtmId": "GTM-ABC123",
+    "capiTokenConfigured": true,
+    "capiTokenPreview": "9f3a",
+    "isActive": true
+  }
+}
+```
+
+<Note>
+  Der Conversion-API-Token wird nie vollständig zurückgegeben — du siehst nur
+  `capiTokenConfigured` und die letzten vier Zeichen in `capiTokenPreview`.
+</Note>
+
+## Store-Profil aktualisieren
+
+```
+PATCH /v1/store
+```
+
+Aktualisiert eines oder mehrere Felder des Stores. Sende nur die Felder, die du
+ändern möchtest — alles, was du weglässt, bleibt unverändert. Die Änderungen
+werden sofort auf der öffentlichen Seite wirksam.
+
+### Anfrage
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "Achadinhos da Gabi",
+        "bio": "As melhores ofertas dos marketplaces.",
+        "themeId": "aurora",
+        "socialsPosition": "top",
+        "seoTitle": "Achadinhos da Gabi"
+      }' \
+  https://api.linkz.ee/v1/store
+```
+
+### Parameter
+
+Jedes Feld ist optional; sende nur, was du ändern möchtest.
+
+| Parameter | Typ | Beschreibung |
+| --- | --- | --- |
+| `name` | string | Anzeigename des Stores (max. 120 Zeichen). |
+| `bio` | string | Kurze Beschreibung, die unter dem Namen angezeigt wird (max. 500 Zeichen). |
+| `titleStyle` | string | Titelstil des Profils: `text` oder `logo`. |
+| `logoUrl` | string | URL des Logo-Bilds (http/https). |
+| `bannerUrl` | string | URL des Banner-Bilds (http/https). |
+| `themeId` | string | Id eines vorgefertigten Themes (siehe [Themes](#browse-the-theme-catalog)); ein leerer String bedeutet ein individuelles Design. |
+| `themeMode` | string | Farbmodus: `dark` oder `light`. |
+| `socialsPosition` | string | Wo die Social-Zeile erscheint: `top` oder `bottom`. |
+| `socialOrder` | string[] | Anzeigereihenfolge der sozialen Netzwerke. |
+| `productsPosition` | string | Position der Vitrine relativ zu den Links: `top` oder `bottom`. |
+| `social` | object | Social-Handles, z. B. `{ "instagram": "handle", "tiktok": "handle" }`. |
+| `mainLink` | string | Haupt-Store-Link (http/https). |
+| `seoTitle` | string | Titel der öffentlichen Seite für Suchmaschinen (max. 70 Zeichen). |
+| `seoDescription` | string | Meta-Beschreibung der öffentlichen Seite (max. 160 Zeichen). |
+| `gtmId` | string | Google-Tag-Manager-Container-Id, z. B. `GTM-ABC123`. |
+| `utmSource` | string | Standard-UTM-Quelle, die ausgehenden Links hinzugefügt wird. |
+| `utmMedium` | string | Standard-UTM-Medium. |
+| `utmCampaign` | string | Standard-UTM-Kampagne. |
+| `pixels` | object | Tracking-Pixel-Ids: `metaPixelId`, `tiktokPixelId`, `gaMeasurementId`. |
+| `capiToken` | string | Meta-Conversion-API-Token. Wird im Klartext gesendet, verschlüsselt gespeichert. Leer bedeutet „den aktuellen beibehalten". |
+| `isActive` | boolean | Ob die Seite veröffentlicht und live ist. |
+
+<Warning>
+  Der `slug` des Stores kann über die API nicht geändert werden. Ihn zu senden
+  hat keine Wirkung — er wird ignoriert, damit dein veröffentlichter Bio-Link
+  niemals bricht.
+</Warning>
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Loja atualizada com sucesso",
+  "data": {
+    "id": "665f1c9a4b2e8a0012a3c9d1",
+    "slug": "achadinhos-da-gabi",
+    "name": "Achadinhos da Gabi",
+    "bio": "As melhores ofertas dos marketplaces.",
+    "themeId": "aurora",
+    "socialsPosition": "top",
+    "seoTitle": "Achadinhos da Gabi",
+    "isActive": true
+  }
+}
+```
+
+## Theme-Katalog durchsuchen
+
+```
+GET /v1/themes
+```
+
+Listet die vorgefertigten Themes auf, die du mit `themeId` anwenden kannst. Jeder
+Eintrag enthält eine kurze Beschreibung, die dir hilft, einen Look zum Stil eines
+Stores zu finden.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/themes
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Temas carregados",
+  "data": [
+    {
+      "id": "pure",
+      "name": "Puro",
+      "mode": "light",
+      "description": "Claro minimalista, fundo quase branco, foco total nos produtos."
+    },
+    {
+      "id": "noir",
+      "name": "Noir",
+      "mode": "dark",
+      "description": "Escuro sóbrio, cinza-grafite, elegante e neutro."
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora",
+      "mode": "dark",
+      "description": "Gradiente violeta/azul animado, moderno e premium."
+    }
+  ]
+}
+```
+
+<Note>
+  Verwende eine beliebige `id` aus dieser Liste als `themeId`, wenn du den Store
+  aktualisierst.
+</Note>
+
+## Leistungsübersicht abrufen
+
+```
+GET /v1/analytics/summary
+```
+
+Gibt die wichtigsten Kennzahlen für die Vitrine zurück — Gesamtwerte sowie die
+Top-Produkte und die zuletzt hinzugefügten Produkte.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/analytics/summary
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Dashboard carregado",
+  "data": {
+    "totalProducts": 42,
+    "totalCategories": 6,
+    "totalClicks": 1873,
+    "topProducts": [
+      {
+        "id": "665f2a114b2e8a0012a3ca07",
+        "name": "Fone Bluetooth TWS",
+        "price": 79.9,
+        "clicks": 312
+      }
+    ],
+    "latestProducts": [
+      {
+        "id": "665f2b884b2e8a0012a3ca19",
+        "name": "Luminária de mesa articulada",
+        "price": 129.9,
+        "clicks": 4
+      }
+    ]
+  }
+}
+```
+
+| Feld | Typ | Beschreibung |
+| --- | --- | --- |
+| `totalProducts` | number | Gesamtzahl der Produkte in der Vitrine. |
+| `totalCategories` | number | Gesamtzahl der Kategorien. |
+| `totalClicks` | number | Summe aller Produktklicks. |
+| `topProducts` | array | Bis zu 5 meistgeklickte Produkte. |
+| `latestProducts` | array | Bis zu 5 zuletzt hinzugefügte Produkte. |
+
+<CardGroup cols={2}>
+  <Card title="Content" icon="table-cells" href="/api-reference/content">
+    Lies den öffentlichen Content-Baum und ordne Links, Kollektionen und Produkte neu an.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Vitrinenprodukte auflisten, erstellen, aktualisieren und löschen.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Basis-URL, API-Schlüssel, Scopes und das Standard-Antwortformat.
+  </Card>
+</CardGroup>

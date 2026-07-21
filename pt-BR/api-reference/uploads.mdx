@@ -1,0 +1,124 @@
+---
+title: Uploads
+icon: image
+description: "Envie uma imagem e receba de volta uma URL hospedada que você pode usar no seu logo, produtos, links e muito mais."
+---
+
+Use o endpoint de uploads para enviar uma imagem ao Linkzee e receber de volta uma
+URL permanente, hospedada em CDN. Toda imagem é convertida para **WebP**,
+redimensionada para caber dentro de 1600&nbsp;px e servida com cache de longa
+duração, então a URL que você recebe já está pronta para usar direto em um
+produto, link ou no perfil da sua loja.
+
+O endpoint fica sob a URL base `https://api.linkz.ee` e exige o cabeçalho
+`Authorization: Bearer lzk_your_key`. Fazer upload altera sua página, então é
+preciso uma chave com o escopo **write**.
+
+## Enviar uma imagem
+
+```
+POST /v1/uploads/image
+```
+
+Envia uma única imagem e retorna sua URL hospedada. Envie a requisição como
+`multipart/form-data`, não como JSON.
+
+### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/photo.jpg" \
+  -F "kind=product" \
+  -F "productId=507f1f77bcf86cd799439011" \
+  https://api.linkz.ee/v1/uploads/image
+```
+
+### Parâmetros
+
+Envie-os como campos de formulário multipart.
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `file` | file | Sim | A imagem a enviar. Qualquer formato comum (JPEG, PNG, WebP, etc.), até **8&nbsp;MB**. É convertida para WebP automaticamente. |
+| `kind` | string | Não | Onde a imagem se encaixa. Determina um local de armazenamento estável, de modo que reenviar o mesmo tipo sobrescreve a imagem anterior em vez de acumular. Veja a tabela abaixo. |
+| `productId` | string | Não | Obrigatório quando `kind` é `product`. O produto ao qual esta imagem pertence. Deve ser um produto da sua própria loja. |
+| `linkId` | string | Não | Obrigatório quando `kind` é `link`, `linkMedia` ou `linkPoster`. O link ao qual a imagem pertence. Deve ser um link da sua própria loja. |
+| `staffId` | string | Não | Obrigatório quando `kind` é `staffAvatar`. O membro da equipe ao qual o avatar pertence. |
+
+#### Valores para `kind`
+
+| `kind` | Use para | Envie também |
+| --- | --- | --- |
+| `logo` | O logo da sua loja | — |
+| `product` | A imagem de um produto | `productId` |
+| `wallpaper` | O papel de parede da sua página | — |
+| `banner` | O banner do seu cabeçalho | — |
+| `cutout` | Uma imagem recortada do cabeçalho | — |
+| `link` | A miniatura de um link | `linkId` |
+| `linkMedia` | A capa do card de um link | `linkId` |
+| `linkPoster` | O pôster de vídeo de um link | `linkId` |
+| `conciergeAvatar` | O avatar do seu assistente de IA | — |
+| `staffAvatar` | A foto de um membro da equipe | `staffId` |
+
+<Note>
+Quando você envia um `kind` (e seu ID correspondente), a imagem é armazenada em um
+local fixo para aquele recurso, de modo que um novo upload substitui o antigo.
+Omita o `kind` e cada upload recebe sua própria URL exclusiva.
+</Note>
+
+<Warning>
+Arquivos acima de 8&nbsp;MB são rejeitados. Apenas arquivos de imagem são aceitos —
+outros tipos de arquivo retornam um `400 Bad Request`. Se você definir `kind` como
+`product` ou `link`, o `productId` ou `linkId` correspondente deve referenciar um
+recurso da sua própria loja.
+</Warning>
+
+### Resposta
+
+A `url` é sua imagem hospedada. Como as imagens armazenadas são fortemente
+cacheadas, a URL termina com um marcador de versão `?v=` que muda a cada upload —
+use sempre a URL exata que você recebe de volta.
+
+```json
+{
+  "error": false,
+  "message": "Upload realizado com sucesso",
+  "data": {
+    "url": "https://cdn.linkz.ee/linkzee/users/64a1.../products/507f1f77bcf86cd799439011?v=1721577600000",
+    "width": 1200,
+    "height": 1200,
+    "format": "webp",
+    "hasAlpha": false
+  }
+}
+```
+
+| Campo | Tipo | Descrição |
+| --- | --- | --- |
+| `url` | string | A URL hospedada da imagem, com cache-busting. |
+| `width` | integer | Largura da imagem processada, em pixels. |
+| `height` | integer | Altura da imagem processada, em pixels. |
+| `format` | string | Sempre `webp`. |
+| `hasAlpha` | boolean | Se a imagem tem canal transparente. |
+
+<Note>
+Para anexar uma imagem enviada a um recurso, pegue a `url` retornada e defina-a no
+produto ou link — por exemplo, passe-a como o `image` do produto ao criá-lo ou
+atualizá-lo.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Produtos" icon="box" href="/api-reference/products">
+    Crie produtos e defina suas imagens com uma URL enviada.
+  </Card>
+  <Card title="Links e coleções" icon="link" href="/api-reference/links-collections">
+    Adicione miniaturas e capas aos seus links.
+  </Card>
+  <Card title="Loja" icon="store" href="/api-reference/store">
+    Atualize seu logo, papel de parede e cabeçalho.
+  </Card>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    URL base, chaves, escopos e formatos de resposta.
+  </Card>
+</CardGroup>

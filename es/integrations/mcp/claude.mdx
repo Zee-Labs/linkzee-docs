@@ -1,0 +1,51 @@
+---
+title: Conecta Linkzee en Claude
+icon: comment
+description: "Deja que Claude administre tu Linkzee en lenguaje natural a través de MCP."
+---
+
+Conecta Linkzee a **Claude** y podrás administrar tu página con solo pedirlo —
+"agrega este producto", "¿qué tengo agendado esta semana?", "cambia mi tema". Claude
+se comunica con Linkzee a través de MCP usando tu clave de API, así que nunca sales del chat.
+
+## Configúralo
+
+<Steps>
+  <Step title="Crea una clave de API">
+    En tu panel, abre la sección **API y MCP** y crea una clave. Cópiala
+    cuando se muestre y guárdala en un lugar seguro. Consulta [Claves de API](/integrations/api/api-keys)
+    para ver los pasos completos.
+  </Step>
+  <Step title="Agrega un nuevo servidor MCP en Claude">
+    En **Claude Code**, la **app de escritorio de Claude** o **claude.ai**, agrega un nuevo
+    servidor MCP que apunte a `https://api.linkz.ee/mcp`.
+  </Step>
+  <Step title="Proporciona tu clave de API">
+    Configura tu clave como la autorización del servidor, con el formato
+    `Bearer lzk_...`. Así es como Claude demuestra que actúa en nombre de tu cuenta.
+  </Step>
+  <Step title="Pídele a Claude en lenguaje natural">
+    Una vez conectado, solo describe lo que quieres — "agrega mi nuevo producto en oferta",
+    "reordena mis enlaces", "cambia mis colores" — y Claude se encarga de ello.
+  </Step>
+</Steps>
+
+<Note>
+  Claude funciona con el mismo conjunto de acciones que aparece en la
+  [referencia de herramientas](/integrations/mcp/tools-reference), así que cualquier cosa que un agente pueda
+  hacer a través de MCP, puedes pedirla en el chat.
+</Note>
+
+<Warning>
+  Tu clave de API actúa sobre tu cuenta. Nunca la pegues en un chat público ni la
+  compartas — trátala como una contraseña.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Referencia de herramientas" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    Descubre todo lo que Claude puede hacer con tu Linkzee a través de MCP.
+  </Card>
+  <Card title="Claves de API" icon="key" href="/integrations/api/api-keys">
+    Crea, limita y revoca las claves que conectan Claude con tu cuenta.
+  </Card>
+</CardGroup>

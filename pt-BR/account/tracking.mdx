@@ -1,0 +1,51 @@
+---
+title: Rastreamento
+icon: chart-simple
+description: "Meça conversões com suas próprias ferramentas — conecte o Meta Pixel, a Conversion API, o Google Tag Manager e UTMs padrão."
+---
+
+O Linkzee tem sua própria tela de [Desempenho](/analytics/overview), mas você
+também pode medir conversões com as **suas** ferramentas de marketing. Conecte-as
+uma vez e o Linkzee envia os dados conforme os visitantes interagem com sua página.
+
+Tudo aqui é salvo automaticamente enquanto você digita — não existe botão Salvar.
+
+## Meta Pixel
+
+Adicione o ID do seu **Meta Pixel** para acompanhar visitantes e conversões no
+Gerenciador de Eventos da Meta. Em seguida, adicione também o token da
+**Conversion API**.
+
+O token é importante: navegadores e o iOS frequentemente bloqueiam o script do
+pixel, então eventos podem se perder. A Conversion API envia a conversão direto do
+Linkzee, então ela continua sendo registrada mesmo quando o script é bloqueado.
+Adicionar os dois oferece o rastreamento mais completo.
+
+## Google Tag Manager
+
+Adicione o ID do container do seu **Google Tag Manager** para carregar seu
+container do GTM na sua página pública. A partir daí, você pode gerenciar suas
+próprias tags e acionadores no Google Tag Manager.
+
+## Parâmetros UTM
+
+Defina parâmetros **UTM** padrão — como origem, mídia e campanha — que o Linkzee
+adiciona automaticamente aos seus links de saída. Isso etiqueta o tráfego que você
+envia, para que suas análises o atribuam à origem e à campanha corretas.
+
+<Note>
+  Você encontra esses valores nas suas ferramentas de marketing — o ID do Pixel e
+  o token da Conversion API no **Gerenciador de Eventos da Meta**, e o ID do
+  container no **Google Tag Manager**.
+</Note>
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Desempenho" icon="chart-line" href="/analytics/overview">
+    Veja cliques, visualizações e seus itens de destaque dentro do Linkzee.
+  </Card>
+  <Card title="Configurações da conta" icon="gear" href="/account/account">
+    Defina seu idioma, região, aparência e opções de acessibilidade.
+  </Card>
+</CardGroup>

@@ -1,0 +1,263 @@
+---
+title: Kategorien
+icon: layer-group
+description: "Kategorien, die deine Produkte gruppieren, auflisten, erstellen, aktualisieren, löschen und neu anordnen."
+---
+
+Kategorien sind die Taxonomie hinter deinem Produkt-Schaufenster. Nutze sie, um
+Produkte in Bereiche zu gruppieren (zum Beispiel **Küche** oder **Beauty**), die
+als Filter-Chips auf deiner öffentlichen Seite erscheinen.
+
+Alle Endpunkte liegen unter der Basis-URL `https://api.linkz.ee` und benötigen den
+Header `Authorization: Bearer lzk_your_key`. Lesevorgänge funktionieren mit jedem
+Schlüssel; Erstellen, Aktualisieren, Löschen und Neuanordnen benötigen einen
+Schlüssel mit dem Scope **write**.
+
+## Kategorien auflisten
+
+```
+GET /v1/categories
+```
+
+Gibt jede Kategorie in deinem Store zurück, sortiert für die Anzeige.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Categorias listadas",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "name": "Kitchen",
+      "slug": "kitchen",
+      "emoji": "🍳",
+      "description": "Everything for your kitchen",
+      "isActive": true,
+      "order": 0,
+      "kind": "product"
+    },
+    {
+      "id": "507f1f77bcf86cd799439012",
+      "name": "Beauty",
+      "slug": "beauty",
+      "emoji": "💄",
+      "description": null,
+      "isActive": true,
+      "order": 1,
+      "kind": "product"
+    }
+  ]
+}
+```
+
+## Eine Kategorie erstellen
+
+```
+POST /v1/categories
+```
+
+Erstellt eine neue Produktkategorie. Benötigt den Scope **write**.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen"
+  }' \
+  https://api.linkz.ee/v1/categories
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `name` | string | Nein | Anzeigename, bis zu 80 Zeichen. Wird er weggelassen, wird automatisch ein Slug generiert. |
+| `slug` | string | Nein | URL-freundliche Kennung, bis zu 60 Zeichen. Wird aus `name` abgeleitet, wenn nicht angegeben. |
+| `emoji` | string | Nein | Ein einzelnes Emoji, das neben der Kategorie angezeigt wird, bis zu 16 Zeichen. |
+| `description` | string | Nein | Kurze Beschreibung, bis zu 280 Zeichen. |
+| `isActive` | boolean | Nein | Ob die Kategorie sichtbar ist. Standardmäßig aktiv. |
+| `order` | integer | Nein | Anzeigereihenfolge unter deinen Kategorien. |
+| `kind` | string | Nein | Einer von `product`, `link` oder `collection`. Für über die API erstellte Kategorien standardmäßig `product`, damit sie als Schaufenster-Filter erscheinen. |
+
+<Note>
+Lass `kind` bei Produktkategorien unbesetzt. Die API setzt es automatisch auf
+`product`, damit die Kategorie in der Navigation deines Schaufensters erscheint.
+</Note>
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Categoria criada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen",
+    "slug": "kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Eine Kategorie aktualisieren
+
+```
+PATCH /v1/categories/:id
+```
+
+Aktualisiert ein oder mehrere Felder einer bestehenden Kategorie. Sende nur die
+Felder, die du ändern möchtest. Benötigt den Scope **write**.
+
+### Anfrage
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Kitchen & dining", "emoji": "🍽️" }' \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string | Ja | Die Kategorie-ID, im Pfad übergeben. |
+| `name` | string | Nein | Neuer Anzeigename, bis zu 80 Zeichen. |
+| `slug` | string | Nein | Neue URL-freundliche Kennung, bis zu 60 Zeichen. |
+| `emoji` | string | Nein | Neues Emoji, bis zu 16 Zeichen. |
+| `description` | string | Nein | Neue Beschreibung, bis zu 280 Zeichen. |
+| `isActive` | boolean | Nein | Kategorie anzeigen oder ausblenden. |
+| `order` | integer | Nein | Neue Anzeigereihenfolge. |
+| `kind` | string | Nein | Einer von `product`, `link` oder `collection`. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Categoria atualizada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen & dining",
+    "slug": "kitchen",
+    "emoji": "🍽️",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Eine Kategorie löschen
+
+```
+DELETE /v1/categories/:id
+```
+
+Entfernt eine Kategorie. Produkte bleiben in deinem Store; sie sind lediglich
+nicht mehr unter dieser Kategorie gruppiert. Benötigt den Scope **write**.
+
+### Anfrage
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string | Ja | Die Kategorie-ID, im Pfad übergeben. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Categoria removida",
+  "data": { "id": "507f1f77bcf86cd799439011" }
+}
+```
+
+## Kategorien neu anordnen
+
+```
+PUT /v1/categories/order
+```
+
+Legt in einem einzigen Aufruf eine neue Anzeigereihenfolge für deine Kategorien
+fest. Benötigt den Scope **write**.
+
+### Anfrage
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "507f1f77bcf86cd799439012", "order": 0 },
+      { "id": "507f1f77bcf86cd799439011", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/categories/order
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `items` | array | Ja | Liste der Kategorien mit ihrer neuen Reihenfolge. Mindestens ein Eintrag ist erforderlich. |
+| `items[].id` | string | Ja | Die Kategorie-ID. |
+| `items[].order` | integer | Ja | Die neue Anzeigereihenfolge für diese Kategorie. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Categorias reordenadas",
+  "data": { "updated": 2 }
+}
+```
+
+<Note>
+Jede Änderung, die du über die API vornimmst, erscheint automatisch auf deiner
+öffentlichen Seite und in der Live-Vorschau des Editors. Es gibt nichts zu
+veröffentlichen.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Produkte" icon="box" href="/api-reference/products">
+    Erstelle und verwalte die Produkte, die diese Kategorien gruppieren.
+  </Card>
+  <Card title="Links & Sammlungen" icon="link" href="/api-reference/links-collections">
+    Gruppiere die Links auf deiner Bio-Seite.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    Basis-URL, Schlüssel, Scopes und Antwortformate.
+  </Card>
+</CardGroup>

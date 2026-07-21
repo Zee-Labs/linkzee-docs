@@ -1,0 +1,485 @@
+---
+title: Links y colecciones
+icon: link
+description: "Gestiona los links de tu página de bio y agrúpalos en colecciones."
+---
+
+Los links son los botones de tu página de bio. Las colecciones son los grupos con
+nombre en los que puedes organizar esos botones (por ejemplo "Cozinha" o
+"Favoritos"). Esta página cubre las operaciones de lectura y escritura de ambos.
+
+**URL base:** `https://api.linkz.ee` · cada ruta vive bajo `/v1`.
+Envía tu clave en cada solicitud:
+
+```bash
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Las lecturas (`GET`) funcionan con cualquier clave. Las escrituras (`POST`, `PATCH`, `DELETE`, `PUT`) necesitan una
+clave con el scope de **escritura**. Envía los cuerpos como `application/json`.
+</Note>
+
+## Links
+
+### Listar links
+
+```
+GET /v1/links
+```
+
+Devuelve todos los links de tu página, en orden de visualización.
+
+#### Solicitud
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/links
+```
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Links listados com sucesso",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "collectionId": "66a3c0f2e1b2a40012ab34cd",
+      "title": "Meu Instagram",
+      "url": "https://instagram.com/minhaloja",
+      "thumbnailUrl": "",
+      "mediaType": "",
+      "mediaUrl": "",
+      "isFeatured": false,
+      "highlightFx": "",
+      "order": 0,
+      "isActive": true,
+      "clicks": 128,
+      "createdAt": "2026-07-01T14:02:11.000Z",
+      "updatedAt": "2026-07-18T09:41:55.000Z"
+    }
+  ]
+}
+```
+
+### Crear un link
+
+```
+POST /v1/links
+```
+
+Agrega un nuevo botón al final de tu página.
+
+#### Solicitud
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Meu Instagram",
+    "url": "https://instagram.com/minhaloja",
+    "collectionId": "66a3c0f2e1b2a40012ab34cd"
+  }' \
+  https://api.linkz.ee/v1/links
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `title` | string | Sí | Etiqueta del botón. Hasta 120 caracteres. |
+| `url` | string | Sí | URL de destino, incluyendo `https://`. |
+| `collectionId` | string | No | ID de la colección a la que pertenece este link. Omítelo para dejar el link sin agrupar. |
+| `thumbnailUrl` | string | No | URL de la imagen en miniatura. Sube la imagen primero y luego pasa la URL devuelta. |
+| `isActive` | boolean | No | Si el link es visible en tu página. Por defecto es `true`. |
+| `isFeatured` | boolean | No | Muestra el link con mayor prominencia. Por defecto es `false`. |
+| `highlightFx` | string | No | Resaltado animado (Premium): `""` (ninguno) o `"shake"`. |
+| `mediaType` | string | No | Estilo de portada: `""`, `"image"`, `"video"` o `"embed"`. |
+| `mediaUrl` | string | No | URL de la portada para el `mediaType` elegido. |
+| `posterUrl` | string | No | URL de la imagen de póster para una portada de video. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Link criado com sucesso",
+  "data": {
+    "id": "66b8f1aa77bcf86cd7994400",
+    "collectionId": "66a3c0f2e1b2a40012ab34cd",
+    "title": "Meu Instagram",
+    "url": "https://instagram.com/minhaloja",
+    "isActive": true,
+    "isFeatured": false,
+    "order": 4,
+    "clicks": 0,
+    "createdAt": "2026-07-21T11:20:03.000Z",
+    "updatedAt": "2026-07-21T11:20:03.000Z"
+  }
+}
+```
+
+### Actualizar un link
+
+```
+PATCH /v1/links/{id}
+```
+
+Cambia uno o más campos de un link existente. Envía solo lo que quieras actualizar.
+
+#### Solicitud
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "title": "Sigo lá!", "isActive": false }' \
+  https://api.linkz.ee/v1/links/507f1f77bcf86cd799439011
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `id` | string | Sí | Parámetro de ruta. ID del link a actualizar. |
+| `title` | string | No | Nueva etiqueta del botón. Hasta 120 caracteres. |
+| `url` | string | No | Nueva URL de destino, incluyendo `https://`. |
+| `collectionId` | string \| null | No | Mueve el link a una colección, o envía `null` para quitarlo de su colección. |
+| `thumbnailUrl` | string | No | Nueva URL de la imagen en miniatura. |
+| `isActive` | boolean | No | Muestra u oculta el link. |
+| `isFeatured` | boolean | No | Activa o desactiva la mayor prominencia. |
+| `highlightFx` | string | No | `""` (ninguno) o `"shake"` (Premium). |
+| `mediaType` | string | No | `""`, `"image"`, `"video"` o `"embed"`. |
+| `mediaUrl` | string | No | URL de la portada. |
+| `posterUrl` | string | No | URL de la imagen de póster para una portada de video. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Link atualizado com sucesso",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "title": "Sigo lá!",
+    "url": "https://instagram.com/minhaloja",
+    "isActive": false,
+    "order": 0,
+    "updatedAt": "2026-07-21T11:32:47.000Z"
+  }
+}
+```
+
+### Eliminar un link
+
+```
+DELETE /v1/links/{id}
+```
+
+Quita un link de tu página.
+
+#### Solicitud
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/links/507f1f77bcf86cd799439011
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `id` | string | Sí | Parámetro de ruta. ID del link a eliminar. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Link removido com sucesso"
+}
+```
+
+### Reordenar links
+
+```
+PUT /v1/links/order
+```
+
+Establece el orden de visualización de tus links. Envía cada ID de link con su nueva posición.
+
+#### Solicitud
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "507f1f77bcf86cd799439011", "order": 0 },
+      { "id": "66b8f1aa77bcf86cd7994400", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/links/order
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `items` | array | Sí | Lista de elementos a reordenar. Al menos una entrada. |
+| `items[].id` | string | Sí | ID del link. |
+| `items[].order` | integer | Sí | Nueva posición (la más baja se muestra primero). |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Links reordenados com sucesso"
+}
+```
+
+## Colecciones
+
+Las colecciones agrupan tus links en secciones con nombre dentro de la página. Una colección puede
+tener un nombre, un emoji y una descripción corta.
+
+<Note>
+Las colecciones agrupan solo **links**. Para organizar productos, usa categorías en su lugar —
+consulta la referencia de Categorías.
+</Note>
+
+### Listar colecciones
+
+```
+GET /v1/collections
+```
+
+Devuelve todas las colecciones de tu página, en orden de visualización.
+
+#### Solicitud
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/collections
+```
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Coleções listadas com sucesso",
+  "data": [
+    {
+      "id": "66a3c0f2e1b2a40012ab34cd",
+      "name": "Cozinha",
+      "slug": "cozinha",
+      "emoji": "🍳",
+      "description": "Meus achados para a cozinha",
+      "isActive": true,
+      "order": 0,
+      "createdAt": "2026-06-28T18:10:00.000Z",
+      "updatedAt": "2026-07-10T08:22:13.000Z"
+    }
+  ]
+}
+```
+
+### Crear una colección
+
+```
+POST /v1/collections
+```
+
+Agrega un nuevo grupo en el que puedes organizar tus links.
+
+#### Solicitud
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Cozinha", "emoji": "🍳" }' \
+  https://api.linkz.ee/v1/collections
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `name` | string | No | Nombre visible, de 1 a 80 caracteres. Si se omite, se genera un slug por ti. |
+| `slug` | string | No | Identificador amigable para URL, hasta 60 caracteres. Se deriva de `name` si se omite. |
+| `emoji` | string | No | Un emoji que se muestra junto al nombre. Hasta 16 caracteres. |
+| `description` | string | No | Descripción corta. Hasta 280 caracteres. |
+| `isActive` | boolean | No | Si la colección es visible. Por defecto es `true`. |
+| `order` | integer | No | Posición de visualización. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Coleção criada com sucesso",
+  "data": {
+    "id": "66a3c0f2e1b2a40012ab34cd",
+    "name": "Cozinha",
+    "slug": "cozinha",
+    "emoji": "🍳",
+    "description": "",
+    "isActive": true,
+    "order": 3,
+    "createdAt": "2026-07-21T11:40:52.000Z",
+    "updatedAt": "2026-07-21T11:40:52.000Z"
+  }
+}
+```
+
+### Actualizar una colección
+
+```
+PATCH /v1/collections/{id}
+```
+
+Cambia uno o más campos de una colección. Envía solo lo que quieras actualizar.
+
+#### Solicitud
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Cozinha & Casa", "emoji": "🏠" }' \
+  https://api.linkz.ee/v1/collections/66a3c0f2e1b2a40012ab34cd
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `id` | string | Sí | Parámetro de ruta. ID de la colección a actualizar. |
+| `name` | string | No | Nuevo nombre visible, de 1 a 80 caracteres. |
+| `slug` | string | No | Nuevo slug, hasta 60 caracteres. |
+| `emoji` | string | No | Nuevo emoji. Hasta 16 caracteres. |
+| `description` | string | No | Nueva descripción. Hasta 280 caracteres. |
+| `isActive` | boolean | No | Muestra u oculta la colección. |
+| `order` | integer | No | Nueva posición de visualización. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Coleção atualizada com sucesso",
+  "data": {
+    "id": "66a3c0f2e1b2a40012ab34cd",
+    "name": "Cozinha & Casa",
+    "slug": "cozinha",
+    "emoji": "🏠",
+    "isActive": true,
+    "order": 0,
+    "updatedAt": "2026-07-21T11:45:09.000Z"
+  }
+}
+```
+
+### Eliminar una colección
+
+```
+DELETE /v1/collections/{id}
+```
+
+Quita una colección. Los links que contiene no se eliminan — simplemente quedan
+sin agrupar hasta que los reasignes.
+
+#### Solicitud
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/collections/66a3c0f2e1b2a40012ab34cd
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `id` | string | Sí | Parámetro de ruta. ID de la colección a eliminar. |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Coleção removida com sucesso"
+}
+```
+
+### Reordenar colecciones
+
+```
+PUT /v1/collections/order
+```
+
+Establece el orden de visualización de tus colecciones.
+
+#### Solicitud
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "66a3c0f2e1b2a40012ab34cd", "order": 0 },
+      { "id": "66a3c0f2e1b2a40012ab34ce", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/collections/order
+```
+
+#### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `items` | array | Sí | Lista de elementos a reordenar. Al menos una entrada. |
+| `items[].id` | string | Sí | ID de la colección. |
+| `items[].order` | integer | Sí | Nueva posición (la más baja se muestra primero). |
+
+#### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Coleções reordenadas com sucesso"
+}
+```
+
+<Warning>
+Los IDs son únicos para tu cuenta. Una solicitud de un link o colección que no
+existe en tu página devuelve `404 Not Found`.
+</Warning>
+
+## Páginas relacionadas
+
+<CardGroup cols={2}>
+  <Card title="Productos" icon="box" href="/api-reference/products">
+    Crea y gestiona los productos de tu vitrina.
+  </Card>
+  <Card title="Categorías" icon="layer-group" href="/api-reference/categories">
+    Organiza los productos con categorías de producto.
+  </Card>
+  <Card title="Árbol de contenido" icon="table-cells" href="/api-reference/content">
+    Lee todo el contenido de tu página y reordénalo.
+  </Card>
+  <Card title="Autenticación" icon="lock" href="/api-reference/authentication">
+    Claves, scopes, forma de respuesta y códigos de estado.
+  </Card>
+</CardGroup>

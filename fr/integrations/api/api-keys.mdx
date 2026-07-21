@@ -1,0 +1,62 @@
+---
+title: Clés d'API
+icon: key
+description: "Créez et gérez les clés d'API qui permettent à vos outils et scripts d'agir en toute sécurité sur votre compte Linkzee."
+---
+
+Une **clé d'API** est le moyen par lequel vos outils, scripts et agents d'IA
+prouvent qu'ils sont autorisés à agir sur votre compte Linkzee. Vous créez les
+clés vous-même, vous accordez à chacune l'accès dont elle a besoin, et vous
+révoquez n'importe quelle clé dès que vous ne lui faites plus confiance.
+
+## Créer une clé
+
+<Steps>
+  <Step title="Ouvrez vos paramètres">
+    Dans les paramètres de votre tableau de bord, ouvrez la section **API et MCP**.
+  </Step>
+  <Step title="Créez une nouvelle clé">
+    Créez une clé et choisissez l'accès qu'elle doit avoir. Chaque clé commence
+    par `lzk_`, ce qui la rend facile à reconnaître.
+  </Step>
+  <Step title="Copiez-la tout de suite">
+    Copiez la clé pendant qu'elle est affichée et conservez-la en lieu sûr —
+    traitez-la comme un mot de passe. Collez-la dans l'outil ou l'agent que vous
+    voulez connecter.
+  </Step>
+</Steps>
+
+## Portées
+
+Chaque clé porte une **portée** qui détermine ce qu'elle peut faire :
+
+| Portée | Ce qu'elle permet |
+| --- | --- |
+| **read** | Lister et lire vos données |
+| **write** | Créer, mettre à jour et supprimer |
+
+N'accordez à une clé que l'accès dont elle a besoin. Si un outil se contente
+d'afficher vos données, une clé **read** suffit ; une clé qui modifie votre page
+ou vos produits a besoin de **write**.
+
+## Révoquer une clé
+
+Vous pouvez révoquer une clé à tout moment depuis cette même section **API et
+MCP**. La révocation prend effet immédiatement et arrête instantanément tout
+outil qui utilise encore cette clé : c'est donc le moyen le plus rapide de couper
+l'accès si une clé est un jour exposée ou n'est plus nécessaire.
+
+<Warning>
+  Ne partagez jamais votre clé et ne la placez jamais dans du code public —
+  quiconque la possède peut agir sur votre compte. Si une clé fuite, révoquez-la
+  immédiatement et créez-en une nouvelle.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="API publique" icon="plug" href="/integrations/api/overview">
+    Découvrez ce que vous pouvez automatiser avec l'API Linkzee.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    Comment envoyer votre clé à chaque requête.
+  </Card>
+</CardGroup>

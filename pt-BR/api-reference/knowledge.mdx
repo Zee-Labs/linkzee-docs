@@ -1,0 +1,186 @@
+---
+title: Base de conhecimento
+icon: file-pdf
+description: "Gerencie a base de conhecimento em PDF que alimenta o concierge de IA da sua loja."
+---
+
+A base de conhecimento é um conjunto de documentos PDF que o concierge de IA lê
+para responder às perguntas dos visitantes. Envie manuais de produtos, FAQs,
+catálogos ou políticas, e o concierge extrai as respostas deles.
+
+O texto enviado é extraído na hora e depois indexado de forma assíncrona, para
+que o concierge possa pesquisá-lo. Por padrão, uma loja pode ter até **10 PDFs**
+(cada um com até **10&nbsp;MB**).
+
+<Note>
+Todas as requisições usam a URL base `https://api.linkz.ee` e enviam o cabeçalho
+`Authorization: Bearer lzk_your_key`. Enviar, excluir e reindexar exigem uma
+chave com o escopo **write**.
+</Note>
+
+## Listar PDFs
+
+```
+GET /v1/knowledge/files
+```
+
+Retorna todos os PDFs da sua base de conhecimento, além do limite atual de arquivos.
+
+### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Arquivos listados",
+  "data": {
+    "files": [
+      {
+        "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+        "name": "product-catalog-2026.pdf",
+        "sizeBytes": 482133,
+        "pages": 12,
+        "status": "ready",
+        "createdAt": "2026-07-18T14:22:05.113Z"
+      }
+    ],
+    "maxFiles": 10
+  }
+}
+```
+
+Cada arquivo informa um `status`: `ready` quando seu texto já foi extraído, ou
+`pending` enquanto ainda está sendo processado.
+
+## Enviar um PDF
+
+```
+POST /v1/knowledge/files
+```
+
+Adicione um PDF à sua base de conhecimento. Envie-o como `multipart/form-data`
+com um único campo `file`.
+
+### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@product-catalog-2026.pdf" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `file` | arquivo (PDF) | Sim | O PDF a ser enviado. Tamanho máximo de 10&nbsp;MB. |
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Arquivo processado",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+    "status": "ready",
+    "pages": 12
+  }
+}
+```
+
+<Warning>
+Os envios têm limite de alguns por minuto por chave, já que extrair um PDF é um
+trabalho pesado. Um arquivo acima de 10&nbsp;MB, ou uma requisição que ultrapasse
+seu limite de arquivos, retorna `400 Bad Request`. Espace os envios e tente
+novamente com backoff em caso de `429`.
+</Warning>
+
+## Excluir um PDF
+
+```
+DELETE /v1/knowledge/files/:fileId
+```
+
+Remove um PDF da sua base de conhecimento. O texto dele também é descartado do índice.
+
+### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files/8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `fileId` | string (path) | Sim | O `fileId` do PDF a ser removido. |
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Arquivo removido",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11"
+  }
+}
+```
+
+## Reindexar a base de conhecimento
+
+```
+POST /v1/knowledge/reindex
+```
+
+Agenda uma reconstrução do índice de busca do concierge. A reindexação roda de
+forma assíncrona e rajadas de requisições se agrupam em um único job, então é
+seguro chamá-la depois de um lote de envios ou exclusões.
+
+### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/reindex
+```
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Reindex agendado",
+  "data": {
+    "queued": true
+  }
+}
+```
+
+<Note>
+Os envios já disparam a indexação por conta própria. Chame isto apenas quando
+quiser forçar uma atualização, por exemplo após excluir vários arquivos.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Envie imagens para seus produtos e cabeçalho.
+  </Card>
+  <Card title="Produtos" icon="box" href="/api-reference/products">
+    Gerencie os produtos da sua vitrine.
+  </Card>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    URL base, chaves de API, escopos e códigos de status.
+  </Card>
+</CardGroup>

@@ -1,0 +1,40 @@
+---
+title: MCP para agentes de IA
+icon: robot
+description: "Deixe agentes de IA como Claude, ChatGPT ou Cursor gerenciarem seu Linkzee em linguagem natural."
+---
+
+O **MCP** (Model Context Protocol) permite que agentes de IA — como **Claude**,
+**ChatGPT** ou **Cursor** — controlem seu Linkzee em linguagem natural. É só pedir,
+e o agente faz o trabalho por você:
+
+- "Adicione este produto à minha página."
+- "O que tenho agendado esta semana?"
+- "Mude meu tema."
+
+É a forma mais simples de gerenciar sua página sem precisar de mãos.
+
+## Como funciona
+
+O agente se conecta ao endpoint MCP do Linkzee em `https://api.linkz.ee/mcp`
+usando sua **chave de API**. Depois de conectado, você conversa com seu agente
+normalmente e ele atualiza seu Linkzee para você — sem menus, sem cliques.
+
+<Note>
+  Tudo o que o agente altera é salvo automaticamente e atualiza sua página no ar
+  em tempo real, como se você mesmo estivesse editando.
+</Note>
+
+## Conecte seu agente
+
+<CardGroup cols={2}>
+  <Card title="Claude" icon="comment" href="/integrations/mcp/claude">
+    Conecte o Linkzee no Claude Code, no aplicativo desktop do Claude ou no claude.ai.
+  </Card>
+  <Card title="ChatGPT e outros" icon="plug" href="/integrations/mcp/chatgpt-and-others">
+    Configure o ChatGPT, o Cursor e qualquer agente compatível com MCP.
+  </Card>
+  <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    Veja tudo o que um agente pode fazer através do MCP.
+  </Card>
+</CardGroup>

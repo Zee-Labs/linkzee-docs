@@ -1,0 +1,124 @@
+---
+title: Subidas
+icon: image
+description: "Sube una imagen y recibe a cambio una URL alojada que puedes usar para tu logo, productos, links y más."
+---
+
+Usa el endpoint de subidas para enviar una imagen a Linkzee y recibir a cambio una
+URL permanente alojada en CDN. Cada imagen se convierte a **WebP**, se redimensiona
+para caber dentro de 1600&nbsp;px y se sirve con caché de larga duración, de modo que
+la URL que recibes está lista para colocarse directamente en un producto, un link o
+el perfil de tu tienda.
+
+El endpoint se encuentra bajo la URL base `https://api.linkz.ee` y requiere la
+cabecera `Authorization: Bearer lzk_your_key`. Subir una imagen modifica tu tienda,
+así que necesita una clave con el scope de **escritura**.
+
+## Subir una imagen
+
+```
+POST /v1/uploads/image
+```
+
+Sube una única imagen y devuelve su URL alojada. Envía la petición como
+`multipart/form-data`, no como JSON.
+
+### Petición
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/photo.jpg" \
+  -F "kind=product" \
+  -F "productId=507f1f77bcf86cd799439011" \
+  https://api.linkz.ee/v1/uploads/image
+```
+
+### Parámetros
+
+Envía estos como campos de formulario multipart.
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `file` | file | Sí | La imagen a subir. Cualquier formato común (JPEG, PNG, WebP, etc.), hasta **8&nbsp;MB**. Se convierte a WebP automáticamente. |
+| `kind` | string | No | Dónde pertenece la imagen. Determina una ubicación de almacenamiento estable, de modo que volver a subir el mismo tipo sobrescribe la imagen anterior en lugar de acumularse. Consulta la tabla de abajo. |
+| `productId` | string | No | Obligatorio cuando `kind` es `product`. El producto al que pertenece esta imagen. Debe ser un producto de tu propia tienda. |
+| `linkId` | string | No | Obligatorio cuando `kind` es `link`, `linkMedia` o `linkPoster`. El link al que pertenece la imagen. Debe ser un link de tu propia tienda. |
+| `staffId` | string | No | Obligatorio cuando `kind` es `staffAvatar`. El miembro del equipo al que pertenece el avatar. |
+
+#### Valores para `kind`
+
+| `kind` | Úsalo para | Envía también |
+| --- | --- | --- |
+| `logo` | El logo de tu tienda | — |
+| `product` | La imagen de un producto | `productId` |
+| `wallpaper` | El fondo de tu página | — |
+| `banner` | El banner de tu perfil | — |
+| `cutout` | Una imagen recortada del perfil | — |
+| `link` | La miniatura de un link | `linkId` |
+| `linkMedia` | La portada de la tarjeta de un link | `linkId` |
+| `linkPoster` | El póster de un video de un link | `linkId` |
+| `conciergeAvatar` | El avatar de tu asistente de IA | — |
+| `staffAvatar` | La foto de un miembro del equipo | `staffId` |
+
+<Note>
+Cuando envías un `kind` (y su ID correspondiente), la imagen se almacena en una
+ubicación fija para ese recurso, de modo que una nueva subida reemplaza la anterior.
+Omite `kind` y cada subida obtiene su propia URL única.
+</Note>
+
+<Warning>
+Los archivos de más de 8&nbsp;MB se rechazan. Solo se aceptan archivos de imagen: otros
+tipos de archivo devuelven un `400 Bad Request`. Si estableces `kind` como `product`
+o `link`, el `productId` o `linkId` correspondiente debe hacer referencia a un recurso
+de tu propia tienda.
+</Warning>
+
+### Respuesta
+
+La `url` es tu imagen alojada. Como las imágenes almacenadas se cachean de forma
+agresiva, la URL termina con un marcador de versión `?v=` que cambia en cada subida;
+usa siempre la URL exacta que recibas de vuelta.
+
+```json
+{
+  "error": false,
+  "message": "Upload realizado com sucesso",
+  "data": {
+    "url": "https://cdn.linkz.ee/linkzee/users/64a1.../products/507f1f77bcf86cd799439011?v=1721577600000",
+    "width": 1200,
+    "height": 1200,
+    "format": "webp",
+    "hasAlpha": false
+  }
+}
+```
+
+| Campo | Tipo | Descripción |
+| --- | --- | --- |
+| `url` | string | La URL de la imagen alojada, con invalidación de caché. |
+| `width` | integer | Ancho de la imagen procesada, en píxeles. |
+| `height` | integer | Alto de la imagen procesada, en píxeles. |
+| `format` | string | Siempre `webp`. |
+| `hasAlpha` | boolean | Si la imagen tiene un canal transparente. |
+
+<Note>
+Para asociar una imagen subida a un recurso, toma la `url` devuelta y establécela en
+el producto o el link; por ejemplo, pásala como el `image` del producto cuando lo
+crees o lo actualices.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Productos" icon="box" href="/api-reference/products">
+    Crea productos y establece sus imágenes con una URL subida.
+  </Card>
+  <Card title="Links y colecciones" icon="link" href="/api-reference/links-collections">
+    Añade miniaturas y portadas a tus links.
+  </Card>
+  <Card title="Tienda" icon="store" href="/api-reference/store">
+    Actualiza tu logo, fondo y perfil.
+  </Card>
+  <Card title="Autenticación" icon="lock" href="/api-reference/authentication">
+    URL base, claves, scopes y estructuras de respuesta.
+  </Card>
+</CardGroup>

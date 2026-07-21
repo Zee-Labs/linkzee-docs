@@ -1,0 +1,53 @@
+---
+title: Linkzee in Claude verbinden
+icon: comment
+description: "Lass Claude dein Linkzee in natürlicher Sprache über MCP verwalten."
+---
+
+Verbinde Linkzee mit **Claude** und du kannst deine Seite verwalten, indem du
+einfach fragst — „füge dieses Produkt hinzu", „was habe ich diese Woche gebucht?",
+„wechsle mein Theme". Claude kommuniziert über MCP mit deinem API-Schlüssel mit
+Linkzee, sodass du den Chat nie verlassen musst.
+
+## Einrichtung
+
+<Steps>
+  <Step title="Einen API-Schlüssel erstellen">
+    Öffne in deinem Dashboard den Bereich **API und MCP** und erstelle einen
+    Schlüssel. Kopiere ihn, wenn er angezeigt wird, und bewahre ihn an einem
+    sicheren Ort auf. Alle Schritte findest du unter [API-Schlüssel](/integrations/api/api-keys).
+  </Step>
+  <Step title="Einen neuen MCP-Server in Claude hinzufügen">
+    Füge in **Claude Code**, der **Claude Desktop-App** oder **claude.ai** einen
+    neuen MCP-Server hinzu, der auf `https://api.linkz.ee/mcp` verweist.
+  </Step>
+  <Step title="Deinen API-Schlüssel angeben">
+    Lege deinen Schlüssel als Autorisierung für den Server fest, in der Form
+    `Bearer lzk_...`. So weist Claude nach, dass es in deinem Konto handelt.
+  </Step>
+  <Step title="Claude in natürlicher Sprache fragen">
+    Sobald die Verbindung steht, beschreibe einfach, was du möchtest — „füge mein
+    neues Angebotsprodukt hinzu", „ordne meine Links neu an", „ändere meine Farben"
+    — und Claude erledigt es.
+  </Step>
+</Steps>
+
+<Note>
+  Claude arbeitet mit denselben Aktionen, die in der
+  [Tools-Referenz](/integrations/mcp/tools-reference) aufgeführt sind, sodass du
+  im Chat alles anfordern kannst, was ein Agent über MCP tun kann.
+</Note>
+
+<Warning>
+  Dein API-Schlüssel handelt in deinem Konto. Füge ihn niemals in einen
+  öffentlichen Chat ein und teile ihn nicht — behandle ihn wie ein Passwort.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Tools-Referenz" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    Sieh dir alles an, was Claude über MCP mit deinem Linkzee tun kann.
+  </Card>
+  <Card title="API-Schlüssel" icon="key" href="/integrations/api/api-keys">
+    Erstelle, begrenze und widerrufe die Schlüssel, die Claude mit deinem Konto verbinden.
+  </Card>
+</CardGroup>

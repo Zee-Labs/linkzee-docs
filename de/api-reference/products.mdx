@@ -1,0 +1,292 @@
+---
+title: Produkte
+icon: box
+description: "Produkte in deiner Linkzee-Vitrine auflisten, abrufen, erstellen, aktualisieren und löschen."
+---
+
+Produkte sind die Artikel in deiner öffentlichen Vitrine. Jedes Produkt hat einen
+Namen, einen optionalen Preis, ein Bild und einen Affiliate-Link. Verwende diese
+Endpunkte, um deinen Katalog aus deinen eigenen Systemen synchron zu halten.
+
+Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel enthalten:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Das Lesen von Produkten (`GET`) funktioniert mit jedem Schlüssel. Zum Erstellen,
+Aktualisieren oder Löschen eines Produkts ist ein Schlüssel mit dem **write**-Scope erforderlich.
+</Note>
+
+## Produkte auflisten
+
+```
+GET /v1/products
+```
+
+Gibt jedes Produkt in deinem Store in der Reihenfolge der Vitrine zurück.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Produtos listados",
+  "data": [
+    {
+      "id": "665f1a2b9c4e1f0012a3b4c5",
+      "name": "Wireless Headphones XYZ",
+      "slug": "wireless-headphones-xyz",
+      "description": "Bluetooth 5.3, 30h battery",
+      "price": 99.9,
+      "priceOriginal": 149.9,
+      "installments": "3x of R$ 33.30",
+      "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+      "externalLink": "https://shopee.com.br/product/123",
+      "badge": "Deal",
+      "isActive": true,
+      "isFeatured": false,
+      "categoryId": "665f0000aa11bb22cc33dd44",
+      "clicks": 128,
+      "createdAt": "2026-07-10T12:04:55.000Z"
+    }
+  ]
+}
+```
+
+## Ein Produkt abrufen
+
+```
+GET /v1/products/{id}
+```
+
+Gibt ein einzelnes Produkt anhand seiner ID zurück.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string (path) | Ja | Die Produkt-ID. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Produto encontrado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "slug": "wireless-headphones-xyz",
+    "description": "Bluetooth 5.3, 30h battery",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "installments": "3x of R$ 33.30",
+    "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+    "gallery": [],
+    "externalLink": "https://shopee.com.br/product/123",
+    "buttonText": "Buy",
+    "badge": "Deal",
+    "isActive": true,
+    "isFeatured": false,
+    "categoryId": "665f0000aa11bb22cc33dd44",
+    "showCountdown": false,
+    "clicks": 128,
+    "createdAt": "2026-07-10T12:04:55.000Z"
+  }
+}
+```
+
+## Ein Produkt erstellen
+
+```
+POST /v1/products
+```
+
+Erstellt ein Produkt in deiner Vitrine. Erfordert den **write**-Scope.
+
+Du kannst entweder die Produktfelder direkt senden oder nur eine Marketplace-`url`
+senden und Linkzee Namen, Preis und Bild für dich abrufen lassen. Falls die
+automatische Abfrage unvollständig zurückkommt, sende mindestens `name`, damit das
+Produkt gespeichert werden kann.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Wireless Headphones XYZ",
+    "description": "Bluetooth 5.3, 30h battery",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "imageUrl": "https://example.com/headphones.jpg",
+    "externalLink": "https://shopee.com.br/product/123",
+    "badge": "Deal",
+    "isFeatured": true
+  }' \
+  https://api.linkz.ee/v1/products
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `name` | string | Bedingt | Produktname (max. 160). Optional, wenn `url` gesendet wird — er wird aus der Marketplace-Abfrage gefüllt. |
+| `url` | string | Nein | Marketplace-URL. Wenn ohne `name`/`price` gesendet, versucht Linkzee, diese automatisch zu füllen. |
+| `slug` | string | Nein | Benutzerdefinierter Slug (max. 80). Wird aus dem Namen abgeleitet, wenn er weggelassen wird; pro Store eindeutig. |
+| `description` | string | Nein | Kurze Beschreibung (max. 2000). |
+| `price` | number | Nein | Aktueller Preis in R$. Leer lassen für ein Produkt „ohne Preis". |
+| `priceOriginal` | number | Nein | Ursprünglicher Preis, wird verwendet, um einen Rabatt anzuzeigen. |
+| `installments` | string | Nein | Ratentext, z. B. `3x of R$ 33.30` (max. 80). |
+| `imageUrl` | string | Nein | URL des Hauptbilds (http/https). Externe URLs werden erneut auf dem CDN gehostet. |
+| `gallery` | string[] | Nein | Bis zu 10 zusätzliche Bild-URLs. |
+| `externalLink` | string | Nein | Affiliate-/Marketplace-Link (http/https). |
+| `buttonText` | string | Nein | Beschriftung des Call-to-Action (max. 60), z. B. `Buy`. |
+| `badge` | string | Nein | Kurzer Aktions-Tag (max. 40), z. B. `Deal`. |
+| `categoryId` | string | Nein | ID der Kategorie, zu der dieses Produkt gehört. |
+| `isActive` | boolean | Nein | Ob das Produkt in der Vitrine sichtbar ist. Standardwert ist `true`. |
+| `isFeatured` | boolean | Nein | Zeigt das Produkt größer und oben in der Vitrine an. |
+| `cardSize` | string | Nein | `normal` oder `wide` (eine `wide`-Karte umfasst beide Rasterspalten). |
+| `offerDurationMinutes` | number | Nein | Dauer des Knappheits-Countdowns, in Minuten. |
+| `showCountdown` | boolean | Nein | Zeigt den Countdown-Timer auf der Karte an. |
+
+<Note>
+Um zu vermeiden, dass bei einem erneuten Versuch dasselbe Produkt zweimal erstellt
+wird, sende einen `Idempotency-Key`-Header. Wenn eine Erstellung mit diesem
+Schlüssel bereits erfolgreich war, wird das ursprüngliche Produkt anstelle eines
+Duplikats zurückgegeben.
+</Note>
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Produto criado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "slug": "wireless-headphones-xyz",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+    "externalLink": "https://shopee.com.br/product/123",
+    "badge": "Deal",
+    "isActive": true,
+    "isFeatured": true,
+    "clicks": 0,
+    "createdAt": "2026-07-21T09:15:00.000Z"
+  }
+}
+```
+
+## Ein Produkt aktualisieren
+
+```
+PATCH /v1/products/{id}
+```
+
+Aktualisiert eine beliebige Teilmenge der Felder eines Produkts. Erfordert den
+**write**-Scope. Nur die von dir gesendeten Felder werden geändert.
+
+### Anfrage
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "price": 89.9,
+    "badge": "Flash sale",
+    "isActive": false
+  }' \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string (path) | Ja | Die Produkt-ID. |
+
+Der Body akzeptiert dieselben Felder wie **Ein Produkt erstellen**, außer `url`
+(die automatische Abfrage läuft nur bei der Erstellung). Alle Felder sind optional.
+Sende `categoryId: null`, um das Produkt aus seiner Kategorie zu entfernen.
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Produto atualizado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "price": 89.9,
+    "badge": "Flash sale",
+    "isActive": false
+  }
+}
+```
+
+## Ein Produkt löschen
+
+```
+DELETE /v1/products/{id}
+```
+
+Entfernt ein Produkt aus deiner Vitrine. Erfordert den **write**-Scope.
+
+### Anfrage
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string (path) | Ja | Die Produkt-ID. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Produto removido"
+}
+```
+
+<CardGroup cols={2}>
+  <Card title="Kategorien" icon="layer-group" href="/api-reference/categories">
+    Produkte in Kategorien organisieren.
+  </Card>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Produktbilder auf das CDN hochladen.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    API-Schlüssel, Scopes und Antwortformat.
+  </Card>
+</CardGroup>

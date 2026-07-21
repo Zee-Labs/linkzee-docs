@@ -1,0 +1,61 @@
+---
+title: Chaves de API
+icon: key
+description: "Crie e gerencie as chaves de API que permitem que suas ferramentas e scripts ajam com segurança na sua conta Linkzee."
+---
+
+Uma **chave de API** é como suas ferramentas, scripts e agentes de IA comprovam que
+têm permissão para agir na sua conta Linkzee. Você mesmo cria as chaves, dá a cada
+uma o acesso de que ela precisa e revoga qualquer chave no instante em que deixar de
+confiar nela.
+
+## Criar uma chave
+
+<Steps>
+  <Step title="Abra suas configurações">
+    Nas configurações do seu painel, abra a seção **API e MCP**.
+  </Step>
+  <Step title="Crie uma nova chave">
+    Crie uma chave e escolha o acesso que ela deve ter. Toda chave começa com
+    `lzk_`, então é fácil de reconhecer.
+  </Step>
+  <Step title="Copie na hora">
+    Copie a chave enquanto ela estiver visível e guarde em um lugar seguro — trate
+    como uma senha. Cole na ferramenta ou agente que você quer conectar.
+  </Step>
+</Steps>
+
+## Escopos
+
+Cada chave carrega um **escopo** que define o que ela pode fazer:
+
+| Escopo | O que permite |
+| --- | --- |
+| **read** | Listar e ler seus dados |
+| **write** | Criar, atualizar e excluir |
+
+Dê a uma chave apenas o acesso de que ela precisa. Se uma ferramenta só exibe seus
+dados, uma chave **read** é suficiente; uma chave que altera sua página ou seus
+produtos precisa de **write**.
+
+## Revogar uma chave
+
+Você pode revogar uma chave a qualquer momento na mesma seção **API e MCP**. A
+revogação tem efeito imediato e interrompe na hora qualquer ferramenta que ainda
+esteja usando aquela chave, então é a forma mais rápida de cortar o acesso caso uma
+chave seja exposta ou não seja mais necessária.
+
+<Warning>
+  Nunca compartilhe sua chave nem a coloque em código público — qualquer pessoa que
+  a tiver pode agir na sua conta. Se uma chave vazar, revogue-a imediatamente e crie
+  uma nova.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="API pública" icon="plug" href="/integrations/api/overview">
+    Veja o que você pode automatizar com a API do Linkzee.
+  </Card>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    Como enviar sua chave em cada requisição.
+  </Card>
+</CardGroup>

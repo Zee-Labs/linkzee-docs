@@ -1,0 +1,65 @@
+---
+title: API-Schlüssel
+icon: key
+description: "Erstellen und verwalten Sie die API-Schlüssel, mit denen Ihre Tools und Skripte sicher in Ihrem Linkzee-Konto handeln können."
+---
+
+Ein **API-Schlüssel** ist die Art und Weise, wie Ihre Tools, Skripte und
+KI-Agenten nachweisen, dass sie in Ihrem Linkzee-Konto handeln dürfen. Sie
+erstellen die Schlüssel selbst, geben jedem genau den Zugriff, den er braucht,
+und widerrufen jeden Schlüssel in dem Moment, in dem Sie ihm nicht mehr
+vertrauen.
+
+## Einen Schlüssel erstellen
+
+<Steps>
+  <Step title="Öffnen Sie Ihre Einstellungen">
+    Öffnen Sie in den Einstellungen Ihres Dashboards den Bereich **API und MCP**.
+  </Step>
+  <Step title="Erstellen Sie einen neuen Schlüssel">
+    Erstellen Sie einen Schlüssel und wählen Sie den Zugriff, den er haben soll.
+    Jeder Schlüssel beginnt mit `lzk_`, damit er leicht zu erkennen ist.
+  </Step>
+  <Step title="Kopieren Sie ihn sofort">
+    Kopieren Sie den Schlüssel, solange er angezeigt wird, und bewahren Sie ihn
+    an einem sicheren Ort auf — behandeln Sie ihn wie ein Passwort. Fügen Sie ihn
+    in das Tool oder den Agenten ein, das bzw. den Sie verbinden möchten.
+  </Step>
+</Steps>
+
+## Berechtigungen
+
+Jeder Schlüssel trägt eine **Berechtigung**, die festlegt, was er tun darf:
+
+| Berechtigung | Was sie erlaubt |
+| --- | --- |
+| **read** | Ihre Daten auflisten und lesen |
+| **write** | Erstellen, aktualisieren und löschen |
+
+Geben Sie einem Schlüssel nur den Zugriff, den er braucht. Wenn ein Tool Ihre
+Daten nur anzeigt, reicht ein **read**-Schlüssel; ein Schlüssel, der Ihre Seite
+oder Produkte ändert, braucht **write**.
+
+## Einen Schlüssel widerrufen
+
+Sie können einen Schlüssel jederzeit im selben Bereich **API und MCP**
+widerrufen. Das Widerrufen wird sofort wirksam und stoppt umgehend jedes Tool,
+das diesen Schlüssel noch verwendet — es ist also der schnellste Weg, den
+Zugriff zu kappen, falls ein Schlüssel jemals offengelegt wird oder nicht mehr
+benötigt wird.
+
+<Warning>
+  Geben Sie Ihren Schlüssel niemals weiter und fügen Sie ihn nicht in
+  öffentlichen Code ein — wer ihn hat, kann in Ihrem Konto handeln. Wenn ein
+  Schlüssel durchsickert, widerrufen Sie ihn sofort und erstellen Sie einen
+  neuen.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Öffentliche API" icon="plug" href="/integrations/api/overview">
+    Sehen Sie, was Sie mit der Linkzee-API automatisieren können.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    So senden Sie Ihren Schlüssel mit jeder Anfrage.
+  </Card>
+</CardGroup>

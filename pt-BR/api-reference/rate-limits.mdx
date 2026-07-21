@@ -1,0 +1,111 @@
+---
+title: Limites de requisições
+icon: gauge
+description: "Como a API da Linkzee limita as requisições e como criar clientes que se mantêm dentro dos limites."
+---
+
+A API da Linkzee tem limites de requisições para que cada integração receba uma
+fatia justa e confiável da capacidade. Os limites são aplicados por chave de API
+e por IP do cliente, como rede de segurança. Se você enviar requisições em um
+ritmo normal e bem distribuído, dificilmente vai notá-los.
+
+## Quando você excede um limite
+
+Quando você envia requisições demais em um curto intervalo, a API para de aceitar
+novas por um instante e responde com HTTP `429 Too Many Requests`. A resposta usa
+o envelope de erro padrão:
+
+```json
+{
+  "error": true,
+  "message": "Rate limit exceeded. Please retry shortly.",
+  "data": null
+}
+```
+
+Um `429` é temporário. Espere um pequeno instante e a mesma requisição terá
+sucesso — nenhum dado é perdido e nada é cobrado da sua conta pela chamada
+rejeitada.
+
+<Note>
+Trate o `429` como "tente de novo em instantes", não como uma falha. Ele apenas
+significa que você atingiu o teto daquele curto intervalo.
+</Note>
+
+## Boas práticas
+
+Alguns hábitos mantêm sua integração confortavelmente abaixo dos limites e
+resiliente quando ela acaba sendo limitada.
+
+### Tente novamente com backoff
+
+Quando você receber um `429`, faça uma pausa antes de tentar de novo e aumente a
+pausa a cada falha consecutiva (backoff exponencial). Adicione um pouco de
+aleatoriedade ("jitter") para que muitos clientes não tentem novamente todos ao
+mesmo tempo.
+
+Um padrão simples e eficaz:
+
+```bash
+# Retry with growing delays: 1s, 2s, 4s, 8s...
+attempt=0
+until response=$(curl -sf -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products); do
+  attempt=$((attempt + 1))
+  [ "$attempt" -ge 5 ] && break
+  sleep $(( 2 ** (attempt - 1) ))
+done
+```
+
+### Distribua suas requisições
+
+Espalhe o trabalho em vez de disparar tudo de uma vez. Se você está sincronizando
+um catálogo grande, adicione um pequeno atraso entre as chamadas em vez de enviar
+centenas em paralelo. Constante é melhor que em rajadas.
+
+### Busque uma vez, reutilize localmente
+
+Os endpoints de leitura retornam o estado atual completo (por exemplo, sua lista
+de produtos ou de links). Busque isso uma vez, mantenha em memória e trabalhe a
+partir da sua cópia local em vez de requisitar os mesmos dados repetidamente em um
+loop.
+
+### Repita escritas com segurança usando uma chave de idempotência
+
+A criação de um produto aceita um cabeçalho opcional `Idempotency-Key`. Envie um
+valor único por criação lógica e, se ocorrer uma nova tentativa após um `429` ou
+uma falha de rede, a API retorna o produto que já havia sido criado em vez de
+criar uma duplicata.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+Isso permite que você tente novamente de forma agressiva sem se preocupar em criar
+o mesmo item duas vezes.
+
+<Warning>
+Os limites de requisições podem mudar ao longo do tempo conforme ajustamos a
+capacidade. Construa seu cliente para reagir a uma resposta `429` em vez de fixar
+um número fixo de requisições por segundo.
+</Warning>
+
+## Relacionados
+
+<CardGroup cols={2}>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    URL base, chaves, escopos e códigos de status.
+  </Card>
+  <Card title="Produtos" icon="box" href="/api-reference/products">
+    Crie, atualize e liste os produtos do seu catálogo.
+  </Card>
+  <Card title="Links e coleções" icon="link" href="/api-reference/links-collections">
+    Gerencie os links da sua bio.
+  </Card>
+</CardGroup>

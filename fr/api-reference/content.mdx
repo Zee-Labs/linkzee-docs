@@ -1,0 +1,251 @@
+---
+title: Contenu
+icon: table-cells
+description: "Lisez l'arborescence de contenu public d'une page et réordonnez ses liens et collections."
+---
+
+Les endpoints de contenu exposent tout ce qu'un visiteur voit dans la zone de
+liens d'une page — liens isolés, collections (groupes de liens) et éléments
+Concierge — ainsi qu'un bloc `meta` qui résume la vitrine de produits (compteurs,
+puces de catégories, produits en vedette et première page du catalogue).
+
+Toutes les requêtes sont adressées à `https://api.linkz.ee` et doivent inclure
+votre clé d'API :
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Les produits ne font pas partie de l'arborescence réordonnable. La vitrine est
+ordonnée automatiquement (les plus récents d'abord), le réordonnancement
+n'affecte donc que les liens, les collections et les éléments Concierge. Les
+entrées de produit envoyées à l'endpoint de réordonnancement sont ignorées.
+</Note>
+
+## Obtenir l'arborescence de contenu
+
+```
+GET /v1/content
+```
+
+Renvoie l'arborescence de contenu public de votre page, ainsi qu'un résumé `meta`
+de la vitrine de produits.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/content
+```
+
+### Réponse
+
+L'objet `data` comporte deux parties : `meta` (résumé de la vitrine) et `root`
+(la liste ordonnée des entrées de contenu). Chaque entrée de `root` est de type
+`link`, `collection` ou `concierge`.
+
+```json
+{
+  "error": false,
+  "message": "Conteúdo carregado com sucesso",
+  "data": {
+    "meta": {
+      "totalProducts": 42,
+      "newToday": 3,
+      "featured": [
+        {
+          "_id": "507f1f77bcf86cd799439051",
+          "categoryId": "507f1f77bcf86cd799439040",
+          "name": "Wireless Headphones",
+          "slug": "wireless-headphones",
+          "description": "Noise cancelling, 30h battery",
+          "price": 249.9,
+          "priceOriginal": 349.9,
+          "installments": "12x R$ 20,82",
+          "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
+          "externalLink": "https://shopee.com.br/product/...",
+          "affiliateSource": "shopee",
+          "buttonText": "Buy now",
+          "badge": "OFFER",
+          "isActive": true,
+          "isFeatured": true,
+          "highlightFx": false,
+          "clicks": 128,
+          "offerEndsAt": null,
+          "offerDurationMinutes": 120,
+          "showCountdown": true,
+          "cardSize": "large",
+          "imageRatio": "square",
+          "createdAt": "2026-07-18T12:00:00.000Z"
+        }
+      ],
+      "categories": [
+        { "id": "507f1f77bcf86cd799439040", "name": "Audio", "emoji": "🎧", "count": 8 }
+      ],
+      "catalog": {
+        "items": [
+          {
+            "_id": "507f1f77bcf86cd799439052",
+            "categoryId": "507f1f77bcf86cd799439040",
+            "name": "Bluetooth Speaker",
+            "price": 129.9,
+            "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
+            "externalLink": "https://amazon.com.br/dp/...",
+            "isActive": true,
+            "clicks": 44,
+            "createdAt": "2026-07-18T10:00:00.000Z"
+          }
+        ],
+        "nextCursor": "MTcyMTUwMDAwMDAwMDo1MDdm...",
+        "total": 42
+      }
+    },
+    "root": [
+      {
+        "type": "link",
+        "link": {
+          "_id": "507f1f77bcf86cd799439011",
+          "collectionId": null,
+          "title": "My latest video",
+          "url": "https://youtube.com/watch?v=...",
+          "thumbnailUrl": "https://cdn.linkz.ee/l/507f...webp",
+          "order": 0,
+          "isActive": true,
+          "highlightFx": false,
+          "mediaType": "video",
+          "mediaUrl": "https://youtube.com/watch?v=...",
+          "posterUrl": null,
+          "mediaProvider": "youtube"
+        }
+      },
+      {
+        "type": "collection",
+        "collection": {
+          "id": "507f1f77bcf86cd799439020",
+          "name": "Favorites",
+          "emoji": "⭐",
+          "description": "My top picks"
+        },
+        "children": [
+          {
+            "type": "link",
+            "item": {
+              "_id": "507f1f77bcf86cd799439012",
+              "collectionId": "507f1f77bcf86cd799439020",
+              "title": "Discount coupon",
+              "url": "https://linkz.ee/go/...",
+              "order": 0,
+              "isActive": true
+            }
+          }
+        ],
+        "childCount": 1
+      },
+      {
+        "type": "concierge",
+        "concierge": {
+          "id": "507f1f77bcf86cd799439030",
+          "title": "Ask me anything",
+          "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
+          "opening": "Hi! How can I help you shop today?",
+          "starterButtons": ["Best deals", "Track my order"],
+          "order": 2,
+          "leadCapture": {
+            "enabled": true,
+            "timing": "end",
+            "fields": [{ "key": "email", "enabled": true, "required": true }],
+            "introText": "Leave your email for exclusive offers",
+            "consentRequired": true,
+            "consentText": "I agree to receive messages",
+            "consentVersion": "v1",
+            "allowSkip": false
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+<Note>
+Lorsque la vitrine est masquée, les compteurs de `meta` renvoient `0` et
+`featured`, `categories` et `catalog.items` reviennent vides. Les collections
+vides (sans enfant actif) sont retirées de `root`.
+</Note>
+
+## Réordonner le contenu
+
+```
+PUT /v1/content/order
+```
+
+Définit l'ordre de toute la zone de liens en un seul appel. Envoyez l'arborescence
+complète dans l'ordre souhaité — la position de chaque entrée dans le tableau
+devient son nouvel ordre. Nécessite une clé disposant de la portée **write**.
+
+### Requête
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "root": [
+      { "type": "link", "id": "507f1f77bcf86cd799439011" },
+      {
+        "type": "collection",
+        "id": "507f1f77bcf86cd799439020",
+        "children": [
+          { "type": "link", "id": "507f1f77bcf86cd799439012" },
+          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+        ]
+      }
+    ]
+  }' \
+  https://api.linkz.ee/v1/content/order
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `root` | array | Oui | Entrées de premier niveau dans leur nouvel ordre. Peut être vide. |
+| `root[].type` | string | Oui | L'une des valeurs `link`, `collection`, `concierge` ou `product`. |
+| `root[].id` | string | Oui | L'ID de l'entrée. |
+| `root[].children` | array | Non | Éléments enfants, dans l'ordre. Utilisé uniquement lorsque `type` vaut `collection`. |
+| `root[].children[].type` | string | Oui | L'une des valeurs `link`, `concierge` ou `product`. |
+| `root[].children[].id` | string | Oui | L'ID de l'élément enfant. |
+
+<Warning>
+Les entrées de produit (à la racine ou dans une collection) sont acceptées mais
+ignorées — la vitrine s'ordonne d'elle-même. N'envoyez que des entrées `link`,
+`collection` et `concierge` pour modifier ce qui est réellement réordonné. Les
+ID inconnus sont ignorés silencieusement.
+</Warning>
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Conteúdo reordenado com sucesso",
+  "data": { "ok": true }
+}
+```
+
+<CardGroup cols={2}>
+  <Card title="Liens et collections" icon="link" href="/api-reference/links-collections">
+    Créez, mettez à jour et supprimez les liens et les groupes qui composent l'arborescence.
+  </Card>
+  <Card title="Produits" icon="box" href="/api-reference/products">
+    Gérez les produits qui alimentent la vitrine.
+  </Card>
+  <Card title="Boutique" icon="store" href="/api-reference/store">
+    Consultez le profil de la page, le catalogue de thèmes et le résumé des performances.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    URL de base, clés d'API, portées et format de réponse.
+  </Card>
+</CardGroup>

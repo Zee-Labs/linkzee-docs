@@ -1,0 +1,112 @@
+---
+title: Ratenbegrenzungen
+icon: gauge
+description: "Wie die Linkzee-API Anfragen drosselt und wie du Clients baust, die innerhalb der Limits bleiben."
+---
+
+Die Linkzee-API ist ratenbegrenzt, damit jede Integration einen fairen,
+zuverlässigen Anteil an der Kapazität erhält. Die Limits gelten pro API-Schlüssel
+und zusätzlich als Sicherheitsnetz pro Client-IP. Wenn du Anfragen in einem
+normalen, ausgewogenen Tempo sendest, wirst du sie kaum bemerken.
+
+## Wenn du ein Limit überschreitest
+
+Wenn du in einem kurzen Zeitfenster zu viele Anfragen sendest, nimmt die API
+für einen Moment keine neuen mehr an und antwortet mit HTTP `429 Too Many
+Requests`. Die Antwort verwendet das Standard-Fehlerformat:
+
+```json
+{
+  "error": true,
+  "message": "Rate limit exceeded. Please retry shortly.",
+  "data": null
+}
+```
+
+Ein `429` ist vorübergehend. Warte einen kurzen Moment, und dieselbe Anfrage
+wird erfolgreich sein – es gehen keine Daten verloren und für den abgelehnten
+Aufruf wird deinem Konto nichts berechnet.
+
+<Note>
+Behandle `429` als „gleich noch mal versuchen", nicht als Fehler. Es bedeutet
+lediglich, dass du die Obergrenze für dieses kurze Zeitfenster erreicht hast.
+</Note>
+
+## Bewährte Vorgehensweisen
+
+Ein paar Gewohnheiten sorgen dafür, dass deine Integration bequem unter den
+Limits bleibt und widerstandsfähig ist, wenn sie doch einmal gedrosselt wird.
+
+### Erneut versuchen mit Backoff
+
+Wenn du einen `429` erhältst, pausiere vor dem erneuten Versuch und verlängere
+die Pause bei jedem aufeinanderfolgenden Fehler (exponentielles Backoff). Füge
+etwas Zufälligkeit hinzu („Jitter"), damit nicht viele Clients gleichzeitig im
+Gleichschritt erneut versuchen.
+
+Ein einfaches, wirksames Muster:
+
+```bash
+# Retry with growing delays: 1s, 2s, 4s, 8s...
+attempt=0
+until response=$(curl -sf -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products); do
+  attempt=$((attempt + 1))
+  [ "$attempt" -ge 5 ] && break
+  sleep $(( 2 ** (attempt - 1) ))
+done
+```
+
+### Verteile deine Anfragen
+
+Verteile die Arbeit, anstatt alles auf einmal abzufeuern. Wenn du einen großen
+Katalog synchronisierst, füge eine kleine Verzögerung zwischen den Aufrufen ein,
+statt Hunderte parallel zu senden. Gleichmäßig schlägt stoßweise.
+
+### Einmal abrufen, lokal wiederverwenden
+
+Lese-Endpunkte geben den vollständigen aktuellen Zustand zurück (zum Beispiel
+deine Produkt- oder Linkliste). Rufe ihn einmal ab, halte ihn im Speicher und
+arbeite mit deiner lokalen Kopie, anstatt dieselben Daten in einer Schleife
+erneut anzufragen.
+
+### Schreibvorgänge sicher wiederholen mit einem Idempotency-Key
+
+Beim Erstellen eines Produkts wird ein optionaler `Idempotency-Key`-Header
+akzeptiert. Sende pro logischer Erstellung einen eindeutigen Wert, und wenn nach
+einem `429` oder einem Netzwerkaussetzer ein erneuter Versuch erfolgt, gibt die
+API das bereits erstellte Produkt zurück, anstatt ein Duplikat anzulegen.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+So kannst du aggressiv erneut versuchen, ohne dir Sorgen zu machen, dasselbe
+Element zweimal zu erstellen.
+
+<Warning>
+Die Schwellenwerte der Ratenbegrenzung können sich im Laufe der Zeit ändern,
+während wir die Kapazität feinjustieren. Baue deinen Client so, dass er auf eine
+`429`-Antwort reagiert, statt eine feste Anzahl von Anfragen pro Sekunde fest zu
+codieren.
+</Warning>
+
+## Verwandt
+
+<CardGroup cols={2}>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    Basis-URL, Schlüssel, Scopes und Statuscodes.
+  </Card>
+  <Card title="Produkte" icon="box" href="/api-reference/products">
+    Produkte in deinem Katalog erstellen, aktualisieren und auflisten.
+  </Card>
+  <Card title="Links & Sammlungen" icon="link" href="/api-reference/links-collections">
+    Verwalte die Links in deiner Bio.
+  </Card>
+</CardGroup>

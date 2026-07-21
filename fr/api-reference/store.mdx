@@ -1,0 +1,275 @@
+---
+title: Boutique
+icon: store
+description: "Lisez et modifiez le profil de la boutique, parcourez le catalogue de thèmes et récupérez un résumé des performances."
+---
+
+La boutique est le cœur d'un compte Linkzee : son nom, sa bio, ses identifiants
+de réseaux sociaux, son thème, ses champs SEO, ses pixels de suivi et ses
+paramètres marketing. Ces endpoints vous permettent de lire le profil complet,
+d'appliquer des modifications, de lister les thèmes prêts à l'emploi et de
+récupérer un résumé rapide des performances.
+
+Toutes les requêtes sont adressées à `https://api.linkz.ee` et doivent inclure
+votre clé d'API :
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+  Les lectures fonctionnent avec n'importe quelle clé. Les modifications
+  nécessitent une clé disposant du scope **write**.
+</Note>
+
+## Récupérer le profil de la boutique
+
+```
+GET /v1/store
+```
+
+Renvoie le profil complet de la boutique à laquelle appartient la clé —
+identité, thème, réseaux sociaux, SEO et paramètres marketing.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Loja carregada com sucesso",
+  "data": {
+    "id": "665f1c9a4b2e8a0012a3c9d1",
+    "slug": "achadinhos-da-gabi",
+    "name": "Achadinhos da Gabi",
+    "bio": "As melhores ofertas dos marketplaces, todo dia.",
+    "titleStyle": "text",
+    "themeId": "aurora",
+    "themeMode": "dark",
+    "socialsPosition": "top",
+    "socialOrder": ["instagram", "tiktok", "whatsapp"],
+    "productsPosition": "top",
+    "social": {
+      "instagram": "achadinhosdagabi",
+      "tiktok": "achadinhosdagabi"
+    },
+    "seoTitle": "Achadinhos da Gabi",
+    "seoDescription": "Ofertas selecionadas de Shopee, Amazon e Mercado Livre.",
+    "gtmId": "GTM-ABC123",
+    "capiTokenConfigured": true,
+    "capiTokenPreview": "9f3a",
+    "isActive": true
+  }
+}
+```
+
+<Note>
+  Le token de l'API Conversions n'est jamais renvoyé en entier — vous ne voyez
+  que `capiTokenConfigured` et les quatre derniers caractères dans
+  `capiTokenPreview`.
+</Note>
+
+## Modifier le profil de la boutique
+
+```
+PATCH /v1/store
+```
+
+Modifie un ou plusieurs champs de la boutique. N'envoyez que les champs que vous
+souhaitez changer — tout ce que vous omettez reste inchangé. Les modifications
+sont appliquées immédiatement sur la page publique.
+
+### Requête
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "Achadinhos da Gabi",
+        "bio": "As melhores ofertas dos marketplaces.",
+        "themeId": "aurora",
+        "socialsPosition": "top",
+        "seoTitle": "Achadinhos da Gabi"
+      }' \
+  https://api.linkz.ee/v1/store
+```
+
+### Paramètres
+
+Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
+
+| Paramètre | Type | Description |
+| --- | --- | --- |
+| `name` | string | Nom d'affichage de la boutique (120 caractères max). |
+| `bio` | string | Courte description affichée sous le nom (500 caractères max). |
+| `titleStyle` | string | Style du titre de l'en-tête : `text` ou `logo`. |
+| `logoUrl` | string | URL de l'image du logo (http/https). |
+| `bannerUrl` | string | URL de l'image de bannière (http/https). |
+| `themeId` | string | Id d'un thème prêt à l'emploi (voir [thèmes](#browse-the-theme-catalog)) ; une chaîne vide signifie un design personnalisé. |
+| `themeMode` | string | Mode de couleur : `dark` ou `light`. |
+| `socialsPosition` | string | Emplacement de la rangée de réseaux sociaux : `top` ou `bottom`. |
+| `socialOrder` | string[] | Ordre d'affichage des réseaux sociaux. |
+| `productsPosition` | string | Position de la vitrine par rapport aux liens : `top` ou `bottom`. |
+| `social` | object | Identifiants de réseaux sociaux, ex. `{ "instagram": "handle", "tiktok": "handle" }`. |
+| `mainLink` | string | Lien principal de la boutique (http/https). |
+| `seoTitle` | string | Titre de la page publique pour les moteurs de recherche (70 caractères max). |
+| `seoDescription` | string | Méta-description de la page publique (160 caractères max). |
+| `gtmId` | string | Id du conteneur Google Tag Manager, ex. `GTM-ABC123`. |
+| `utmSource` | string | Source UTM par défaut ajoutée aux liens sortants. |
+| `utmMedium` | string | Medium UTM par défaut. |
+| `utmCampaign` | string | Campagne UTM par défaut. |
+| `pixels` | object | Ids des pixels de suivi : `metaPixelId`, `tiktokPixelId`, `gaMeasurementId`. |
+| `capiToken` | string | Token de l'API Conversions Meta. Envoyé en clair, stocké chiffré. Une valeur vide signifie « conserver l'actuel ». |
+| `isActive` | boolean | Indique si la page est publiée et en ligne. |
+
+<Warning>
+  Le `slug` de la boutique ne peut pas être modifié via l'API. L'envoyer n'a
+  aucun effet — il est ignoré afin que votre lien de bio publié ne soit jamais
+  cassé.
+</Warning>
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Loja atualizada com sucesso",
+  "data": {
+    "id": "665f1c9a4b2e8a0012a3c9d1",
+    "slug": "achadinhos-da-gabi",
+    "name": "Achadinhos da Gabi",
+    "bio": "As melhores ofertas dos marketplaces.",
+    "themeId": "aurora",
+    "socialsPosition": "top",
+    "seoTitle": "Achadinhos da Gabi",
+    "isActive": true
+  }
+}
+```
+
+## Parcourir le catalogue de thèmes
+
+```
+GET /v1/themes
+```
+
+Liste les thèmes prêts à l'emploi que vous pouvez appliquer avec `themeId`.
+Chaque entrée inclut une courte description pour vous aider à associer un style
+à l'esprit d'une boutique.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/themes
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Temas carregados",
+  "data": [
+    {
+      "id": "pure",
+      "name": "Puro",
+      "mode": "light",
+      "description": "Claro minimalista, fundo quase branco, foco total nos produtos."
+    },
+    {
+      "id": "noir",
+      "name": "Noir",
+      "mode": "dark",
+      "description": "Escuro sóbrio, cinza-grafite, elegante e neutro."
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora",
+      "mode": "dark",
+      "description": "Gradiente violeta/azul animado, moderno e premium."
+    }
+  ]
+}
+```
+
+<Note>
+  Utilisez n'importe quel `id` de cette liste comme `themeId` lorsque vous
+  modifiez la boutique.
+</Note>
+
+## Récupérer un résumé des performances
+
+```
+GET /v1/analytics/summary
+```
+
+Renvoie les indicateurs clés de la vitrine — les totaux ainsi que les produits
+les plus populaires et les plus récents.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/analytics/summary
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Dashboard carregado",
+  "data": {
+    "totalProducts": 42,
+    "totalCategories": 6,
+    "totalClicks": 1873,
+    "topProducts": [
+      {
+        "id": "665f2a114b2e8a0012a3ca07",
+        "name": "Fone Bluetooth TWS",
+        "price": 79.9,
+        "clicks": 312
+      }
+    ],
+    "latestProducts": [
+      {
+        "id": "665f2b884b2e8a0012a3ca19",
+        "name": "Luminária de mesa articulada",
+        "price": 129.9,
+        "clicks": 4
+      }
+    ]
+  }
+}
+```
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `totalProducts` | number | Nombre total de produits dans la vitrine. |
+| `totalCategories` | number | Nombre total de catégories. |
+| `totalClicks` | number | Somme de tous les clics sur les produits. |
+| `topProducts` | array | Jusqu'à 5 produits les plus cliqués. |
+| `latestProducts` | array | Jusqu'à 5 produits ajoutés le plus récemment. |
+
+<CardGroup cols={2}>
+  <Card title="Contenu" icon="table-cells" href="/api-reference/content">
+    Lisez l'arborescence de contenu public et réorganisez les liens, collections et produits.
+  </Card>
+  <Card title="Produits" icon="box" href="/api-reference/products">
+    Listez, créez, modifiez et supprimez les produits de la vitrine.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    URL de base, clés d'API, scopes et le format de réponse standard.
+  </Card>
+</CardGroup>

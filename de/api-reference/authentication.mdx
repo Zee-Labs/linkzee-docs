@@ -1,0 +1,159 @@
+---
+title: Authentifizierung
+icon: lock
+description: "Wie du dich bei der Linkzee-API mit einem Bearer-Schlüssel authentifizierst, plus die Basis-URL, das Response-Envelope und die Statuscodes, mit denen du arbeitest."
+---
+
+Mit der Linkzee-API kannst du deine Seite, deine Produktvitrine, deine Links, deine Buchungen und
+mehr direkt aus deinem eigenen Code verwalten. Jede Anfrage ist ein einfacher HTTPS-Aufruf, der JSON zurückgibt
+und mit einem API-Schlüssel authentifiziert wird.
+
+## Basis-URL
+
+Alle Endpunkte liegen unter `/v1` auf einem einzigen Host:
+
+```
+https://api.linkz.ee/v1
+```
+
+Sende Bodies als `application/json`. Jede Antwort kommt ebenfalls als JSON zurück.
+
+## Dein API-Schlüssel
+
+Authentifiziere jede Anfrage mit einem Bearer-Token im `Authorization`-Header:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+Linkzee-Schlüssel beginnen immer mit dem Präfix `lzk_`. Erstelle und verwalte Schlüssel über den
+API-Schlüssel-Bildschirm in deinem Konto.
+
+<Warning>
+  Behandle deinen Schlüssel wie ein Passwort. Er gewährt vollen Zugriff auf die Daten deines Kontos —
+  bewahre ihn serverseitig auf, committe ihn niemals in ein Repository und rotiere ihn, falls er nach außen gelangt.
+</Warning>
+
+### Scopes
+
+Jeder Schlüssel hat einen Scope, der steuert, was er tun darf:
+
+| Scope | Gewährt |
+| --- | --- |
+| `read` | Nur-Lese-Zugriff. Alle `GET`-Anfragen. |
+| `write` | Alles, was `read` erlaubt, plus Erstellen, Aktualisieren, Löschen und Neuanordnen (`POST`, `PATCH`, `PUT`, `DELETE`). |
+
+Ein `read`-Schlüssel, der für eine Schreiboperation gesendet wird, wird mit `403 Forbidden` abgelehnt. Gib jeder
+Integration den engsten Scope, den sie benötigt.
+
+## Eine Anfrage stellen
+
+Hier ist ein schneller Health-Check, den du ausführen kannst, um deine Einrichtung zu bestätigen — er benötigt keinen Schlüssel
+und gibt das Standard-Envelope zurück:
+
+```bash
+curl https://api.linkz.ee/health
+```
+
+```json
+{
+  "error": false,
+  "message": "API is up",
+  "data": { "status": "ok" }
+}
+```
+
+Ein authentifizierter Aufruf sieht genauso aus, nur mit deinem angehängten Schlüssel:
+
+```bash
+curl -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+## Response-Envelope
+
+Jede Antwort verwendet eine einheitliche Struktur, sodass du Erfolg und Fehler auf dieselbe
+Weise verarbeiten kannst.
+
+### Erfolg
+
+Erfolgreiche Antworten haben immer `error: false`, eine menschenlesbare `message` und eine
+`data`-Nutzlast (die für Aktionen wie Löschen auch `null` sein kann):
+
+```json
+{
+  "error": false,
+  "message": "Store loaded",
+  "data": { }
+}
+```
+
+### Fehler
+
+Fehlschläge setzen `error: true` und fügen ein paar Felder hinzu, die dir beim Debuggen helfen:
+
+```json
+{
+  "error": true,
+  "statusCode": 401,
+  "message": "Missing or invalid API key",
+  "path": "/v1/store",
+  "timestamp": "2026-07-21T14:03:11.482Z"
+}
+```
+
+| Feld | Beschreibung |
+| --- | --- |
+| `error` | Bei Fehlschlägen immer `true`. |
+| `statusCode` | Der HTTP-Status, im Body wiederholt. |
+| `message` | Eine lesbare Erklärung, was schiefgelaufen ist. |
+| `fields` | Bei Validierungsfehlern vorhanden: eine Zuordnung von `{ field: reason }`. |
+| `code` | Optionaler Kurzcode, um zwei Fehler zu unterscheiden, die sich einen Status teilen. |
+| `path` | Der Anfragepfad, der fehlgeschlagen ist. |
+| `timestamp` | Wann der Fehler aufgetreten ist (ISO 8601). |
+
+<Note>
+  Bei Validierungsfehlern sagt dir das `fields`-Objekt genau, welche Eingaben
+  abgelehnt wurden und warum, sodass du in deiner eigenen App präzise Meldungen anzeigen kannst.
+</Note>
+
+## Statuscodes
+
+| Status | Bedeutung |
+| --- | --- |
+| `200 OK` | Die Anfrage war erfolgreich. |
+| `201 Created` | Eine neue Ressource wurde erstellt. |
+| `400 Bad Request` | Der Anfrage-Body oder die Parameter waren ungültig — prüfe `fields`. |
+| `401 Unauthorized` | Der Schlüssel fehlt, ist fehlerhaft, widerrufen oder ungültig. |
+| `403 Forbidden` | Der Schlüssel ist gültig, aber sein Scope erlaubt diese Operation nicht. |
+| `404 Not Found` | Die Ressource existiert nicht oder gehört nicht dir. |
+| `429 Too Many Requests` | Du hast das Ratenlimit erreicht — warte ab und versuche es erneut. |
+
+## Endpunktgruppen
+
+Sobald du authentifiziert bist, erkunde den Rest der API nach Bereich:
+
+| Bereich | Was er abdeckt |
+| --- | --- |
+| [Store](/api-reference/store) | Store-Profil, Themen-Katalog und Leistungsübersicht. |
+| [Content](/api-reference/content) | Den öffentlichen Inhaltsbaum lesen und neu anordnen. |
+| [Products](/api-reference/products) | Vitrinenprodukte auflisten, lesen, erstellen, aktualisieren und löschen. |
+| [Categories](/api-reference/categories) | Produktkategorien und ihre Reihenfolge verwalten. |
+| [Links & collections](/api-reference/links-collections) | Links, Sammlungen und ihre Reihenfolge verwalten. |
+| [Agenda](/api-reference/agenda) | Dienstleistungen, Mitarbeiter, Sperren, Termine und Verfügbarkeit. |
+| [Leads](/api-reference/leads) | Erfasste Leads auflisten und als CSV exportieren. |
+| [Uploads](/api-reference/uploads) | Bilder für deine Seite und Produkte hochladen. |
+| [Knowledge](/api-reference/knowledge) | Die PDFs hinter deinem KI-Assistenten verwalten. |
+| [Rate limits](/api-reference/rate-limits) | Wie die Drosselung funktioniert und wie du damit umgehst. |
+
+<CardGroup cols={2}>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Verstehe die Drosselung und wie du elegant erneut versuchst.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Lies dein Store-Profil, deine Themen und deine Leistung.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Verwalte deine Affiliate-Produktvitrine.
+  </Card>
+</CardGroup>

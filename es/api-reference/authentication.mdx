@@ -1,0 +1,159 @@
+---
+title: Autenticación
+icon: lock
+description: "Cómo autenticarte con la API de Linkzee usando una clave de tipo bearer, además de la URL base, el envoltorio de respuesta y los códigos de estado con los que trabajarás."
+---
+
+La API de Linkzee te permite gestionar tu página, tu vitrina de productos, tus
+enlaces, tus reservas y mucho más desde tu propio código. Cada petición es una
+simple llamada HTTPS que devuelve JSON, autenticada con una clave de API.
+
+## URL base
+
+Todos los endpoints viven bajo `/v1` en un único host:
+
+```
+https://api.linkz.ee/v1
+```
+
+Envía los cuerpos como `application/json`. Cada respuesta también llega como JSON.
+
+## Tu clave de API
+
+Autentica cada petición con un token bearer en la cabecera `Authorization`:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+Las claves de Linkzee siempre empiezan con el prefijo `lzk_`. Crea y administra
+tus claves desde la pantalla de claves de API de tu cuenta.
+
+<Warning>
+  Trata tu clave como una contraseña. Da acceso completo a los datos de tu cuenta:
+  guárdala en el servidor, nunca la subas a un repositorio y rótala si se filtra.
+</Warning>
+
+### Ámbitos
+
+Cada clave tiene un ámbito que controla lo que puede hacer:
+
+| Ámbito | Concede |
+| --- | --- |
+| `read` | Acceso de solo lectura. Todas las peticiones `GET`. |
+| `write` | Todo lo que permite `read`, además de crear, actualizar, eliminar y reordenar (`POST`, `PATCH`, `PUT`, `DELETE`). |
+
+Una clave `read` enviada a una operación de escritura se rechaza con `403 Forbidden`.
+Dale a cada integración el ámbito más reducido que necesite.
+
+## Cómo hacer una petición
+
+Aquí tienes una comprobación de estado rápida que puedes ejecutar para confirmar
+tu configuración: no necesita ninguna clave y devuelve el envoltorio estándar:
+
+```bash
+curl https://api.linkz.ee/health
+```
+
+```json
+{
+  "error": false,
+  "message": "API is up",
+  "data": { "status": "ok" }
+}
+```
+
+Una llamada autenticada tiene el mismo aspecto, con tu clave adjunta:
+
+```bash
+curl -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+## Envoltorio de respuesta
+
+Cada respuesta usa una forma consistente, de modo que puedes procesar el éxito y el
+fallo de la misma manera.
+
+### Éxito
+
+Las respuestas correctas siempre tienen `error: false`, un `message` legible y una
+carga útil `data` (que puede ser `null` en acciones como eliminar):
+
+```json
+{
+  "error": false,
+  "message": "Store loaded",
+  "data": { }
+}
+```
+
+### Errores
+
+Los fallos establecen `error: true` y añaden algunos campos para ayudarte a depurar:
+
+```json
+{
+  "error": true,
+  "statusCode": 401,
+  "message": "Missing or invalid API key",
+  "path": "/v1/store",
+  "timestamp": "2026-07-21T14:03:11.482Z"
+}
+```
+
+| Campo | Descripción |
+| --- | --- |
+| `error` | Siempre `true` en los fallos. |
+| `statusCode` | El estado HTTP, repetido en el cuerpo. |
+| `message` | Una explicación legible de lo que salió mal. |
+| `fields` | Presente en errores de validación: un mapa de `{ field: reason }`. |
+| `code` | Código corto opcional para distinguir dos errores que comparten un estado. |
+| `path` | La ruta de la petición que falló. |
+| `timestamp` | Cuándo ocurrió el error (ISO 8601). |
+
+<Note>
+  En los fallos de validación, el objeto `fields` te indica exactamente qué entradas
+  se rechazaron y por qué, para que puedas mostrar mensajes precisos en tu propia app.
+</Note>
+
+## Códigos de estado
+
+| Estado | Significado |
+| --- | --- |
+| `200 OK` | La petición tuvo éxito. |
+| `201 Created` | Se creó un nuevo recurso. |
+| `400 Bad Request` | El cuerpo o los parámetros de la petición no eran válidos: revisa `fields`. |
+| `401 Unauthorized` | La clave falta, está malformada, fue revocada o no es válida. |
+| `403 Forbidden` | La clave es válida, pero su ámbito no permite esta operación. |
+| `404 Not Found` | El recurso no existe o no es tuyo. |
+| `429 Too Many Requests` | Alcanzaste el límite de peticiones: espera y reintenta. |
+
+## Grupos de endpoints
+
+Una vez autenticado, explora el resto de la API por área:
+
+| Área | Qué cubre |
+| --- | --- |
+| [Store](/api-reference/store) | Perfil de la tienda, catálogo de temas y resumen de rendimiento. |
+| [Content](/api-reference/content) | Lee el árbol de contenido público y reordénalo. |
+| [Products](/api-reference/products) | Lista, lee, crea, actualiza y elimina productos de la vitrina. |
+| [Categories](/api-reference/categories) | Administra las categorías de productos y su orden. |
+| [Links & collections](/api-reference/links-collections) | Administra enlaces, colecciones y su orden. |
+| [Agenda](/api-reference/agenda) | Servicios, personal, bloqueos, citas y disponibilidad. |
+| [Leads](/api-reference/leads) | Lista los leads capturados y expórtalos como CSV. |
+| [Uploads](/api-reference/uploads) | Sube imágenes para tu página y tus productos. |
+| [Knowledge](/api-reference/knowledge) | Administra los PDF detrás de tu asistente de IA. |
+| [Rate limits](/api-reference/rate-limits) | Cómo funciona la limitación de peticiones y cómo gestionarla. |
+
+<CardGroup cols={2}>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Entiende la limitación de peticiones y cómo reintentar con elegancia.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Lee el perfil de tu tienda, sus temas y su rendimiento.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Administra la vitrina de tus productos de afiliado.
+  </Card>
+</CardGroup>

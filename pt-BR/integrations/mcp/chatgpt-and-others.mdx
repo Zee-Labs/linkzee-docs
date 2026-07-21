@@ -1,0 +1,59 @@
+---
+title: ChatGPT e outros clientes MCP
+icon: plug
+description: "Conecte o Linkzee ao ChatGPT, ao Cursor e a qualquer agente compatível com MCP para gerenciar sua página em linguagem natural."
+---
+
+O Linkzee funciona com **qualquer agente compatível com MCP** — não só o Claude. Se
+a sua ferramenta tem suporte a MCP, você pode conectá-la ao Linkzee e gerenciar sua
+página em linguagem natural: **ChatGPT**, **Cursor** e muito mais.
+
+A configuração é a mesma em qualquer lugar. Você aponta o seu cliente para o endpoint
+MCP do Linkzee e faz login com a sua chave de API. Depois disso, é só pedir.
+
+## Conecte o seu cliente
+
+<Steps>
+  <Step title="Crie uma chave de API">
+    No seu painel, abra as configurações de **API e MCP** e crie uma chave de API.
+    Você vai usá-la para autenticar o seu agente. Veja
+    [Chaves de API](/integrations/api/api-keys) para o passo a passo completo.
+  </Step>
+  <Step title="Adicione um servidor MCP">
+    No seu cliente, adicione um novo servidor MCP apontando para o endpoint do Linkzee:
+
+    ```
+    https://api.linkz.ee/mcp
+    ```
+  </Step>
+  <Step title="Informe a sua chave de API">
+    Autentique-se com a sua chave como autorização:
+
+    ```
+    Bearer lzk_...
+    ```
+  </Step>
+  <Step title="Peça em linguagem natural">
+    Depois de conectado, converse com o seu agente como você conversaria com um assistente:
+    "adiciona esse produto", "o que está agendado esta semana?" ou "muda o meu tema."
+  </Step>
+</Steps>
+
+<Note>
+  Cada cliente adiciona servidores MCP de um jeito um pouco diferente. Consulte a
+  documentação do próprio cliente para saber exatamente onde colar o endpoint e a
+  sua chave.
+</Note>
+
+As ações disponíveis são as mesmas em todos os clientes. Veja a
+[referência de ferramentas](/integrations/mcp/tools-reference) para tudo o que um
+agente pode fazer via MCP.
+
+<CardGroup cols={2}>
+  <Card title="Conectar o Claude" icon="comment" href="/integrations/mcp/claude">
+    Configuração passo a passo para usar o Linkzee com o Claude.
+  </Card>
+  <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    Veja todas as ações que um agente de IA pode executar no seu Linkzee.
+  </Card>
+</CardGroup>

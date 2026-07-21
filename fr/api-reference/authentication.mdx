@@ -1,0 +1,164 @@
+---
+title: Authentification
+icon: lock
+description: "Comment vous authentifier auprès de l'API Linkzee à l'aide d'une clé bearer, ainsi que l'URL de base, l'enveloppe de réponse et les codes de statut que vous utiliserez."
+---
+
+L'API Linkzee vous permet de gérer votre page, votre vitrine de produits, vos
+liens, vos réservations et bien plus depuis votre propre code. Chaque requête est
+un simple appel HTTPS qui renvoie du JSON, authentifié par une clé d'API.
+
+## URL de base
+
+Tous les endpoints se trouvent sous `/v1` sur un seul hôte :
+
+```
+https://api.linkz.ee/v1
+```
+
+Envoyez les corps de requête en `application/json`. Chaque réponse est également
+renvoyée en JSON.
+
+## Votre clé d'API
+
+Authentifiez chaque requête avec un token bearer dans l'en-tête `Authorization` :
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+Les clés Linkzee commencent toujours par le préfixe `lzk_`. Créez et gérez vos
+clés depuis l'écran des clés d'API de votre compte.
+
+<Warning>
+  Traitez votre clé comme un mot de passe. Elle donne un accès complet aux données
+  de votre compte — conservez-la côté serveur, ne la validez jamais dans un dépôt,
+  et faites-la tourner en cas de fuite.
+</Warning>
+
+### Portées
+
+Chaque clé possède une portée qui contrôle ce qu'elle peut faire :
+
+| Portée | Accorde |
+| --- | --- |
+| `read` | Accès en lecture seule. Toutes les requêtes `GET`. |
+| `write` | Tout ce que `read` permet, plus créer, mettre à jour, supprimer et réordonner (`POST`, `PATCH`, `PUT`, `DELETE`). |
+
+Une clé `read` envoyée à une opération d'écriture est rejetée avec `403 Forbidden`.
+Attribuez à chaque intégration la portée la plus restreinte dont elle a besoin.
+
+## Effectuer une requête
+
+Voici un contrôle de santé rapide que vous pouvez exécuter pour confirmer votre
+configuration — il ne nécessite aucune clé et renvoie l'enveloppe standard :
+
+```bash
+curl https://api.linkz.ee/health
+```
+
+```json
+{
+  "error": false,
+  "message": "API is up",
+  "data": { "status": "ok" }
+}
+```
+
+Un appel authentifié se présente de la même manière, avec votre clé jointe :
+
+```bash
+curl -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+## Enveloppe de réponse
+
+Chaque réponse utilise une seule et même structure, pour que vous puissiez analyser
+succès et échec de la même façon.
+
+### Succès
+
+Les réponses réussies ont toujours `error: false`, un `message` lisible par un
+humain et une charge utile `data` (qui peut être `null` pour des actions comme la
+suppression) :
+
+```json
+{
+  "error": false,
+  "message": "Store loaded",
+  "data": { }
+}
+```
+
+### Erreurs
+
+Les échecs définissent `error: true` et ajoutent quelques champs pour vous aider à
+déboguer :
+
+```json
+{
+  "error": true,
+  "statusCode": 401,
+  "message": "Missing or invalid API key",
+  "path": "/v1/store",
+  "timestamp": "2026-07-21T14:03:11.482Z"
+}
+```
+
+| Champ | Description |
+| --- | --- |
+| `error` | Toujours `true` en cas d'échec. |
+| `statusCode` | Le statut HTTP, répété dans le corps. |
+| `message` | Une explication lisible de ce qui s'est mal passé. |
+| `fields` | Présent lors des erreurs de validation : une correspondance de `{ field: reason }`. |
+| `code` | Code court optionnel pour distinguer deux erreurs partageant un même statut. |
+| `path` | Le chemin de la requête ayant échoué. |
+| `timestamp` | Quand l'erreur s'est produite (ISO 8601). |
+
+<Note>
+  Lors des échecs de validation, l'objet `fields` vous indique exactement quelles
+  entrées ont été rejetées et pourquoi, afin que vous puissiez afficher des
+  messages précis dans votre propre application.
+</Note>
+
+## Codes de statut
+
+| Statut | Signification |
+| --- | --- |
+| `200 OK` | La requête a réussi. |
+| `201 Created` | Une nouvelle ressource a été créée. |
+| `400 Bad Request` | Le corps ou les paramètres de la requête étaient invalides — vérifiez `fields`. |
+| `401 Unauthorized` | La clé est manquante, mal formée, révoquée ou invalide. |
+| `403 Forbidden` | La clé est valide mais sa portée n'autorise pas cette opération. |
+| `404 Not Found` | La ressource n'existe pas ou ne vous appartient pas. |
+| `429 Too Many Requests` | Vous avez atteint la limite de débit — patientez et réessayez. |
+
+## Groupes d'endpoints
+
+Une fois authentifié, explorez le reste de l'API par domaine :
+
+| Domaine | Ce qu'il couvre |
+| --- | --- |
+| [Store](/api-reference/store) | Profil de la boutique, catalogue de thèmes et résumé des performances. |
+| [Content](/api-reference/content) | Lire l'arborescence de contenu public et la réordonner. |
+| [Products](/api-reference/products) | Lister, lire, créer, mettre à jour et supprimer les produits de la vitrine. |
+| [Categories](/api-reference/categories) | Gérer les catégories de produits et leur ordre. |
+| [Links & collections](/api-reference/links-collections) | Gérer les liens, les collections et leur ordre. |
+| [Agenda](/api-reference/agenda) | Services, personnel, blocages, rendez-vous et disponibilités. |
+| [Leads](/api-reference/leads) | Lister les leads capturés et les exporter au format CSV. |
+| [Uploads](/api-reference/uploads) | Téléverser des images pour votre page et vos produits. |
+| [Knowledge](/api-reference/knowledge) | Gérer les PDF derrière votre assistant IA. |
+| [Rate limits](/api-reference/rate-limits) | Comment fonctionne la limitation de débit et comment la gérer. |
+
+<CardGroup cols={2}>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Comprendre la limitation de débit et comment réessayer sans à-coups.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Consultez le profil de votre boutique, vos thèmes et vos performances.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Gérez votre vitrine de produits d'affiliation.
+  </Card>
+</CardGroup>

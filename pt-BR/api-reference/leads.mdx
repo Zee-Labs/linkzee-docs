@@ -1,0 +1,134 @@
+---
+title: Leads
+icon: address-book
+description: "Consulte os leads capturados pela sua loja e exporte-os como um arquivo CSV."
+---
+
+Todo contato que sua loja captura — pelo formulário da vitrine ou pelo concierge
+de IA — vira um **lead**. Esses endpoints permitem consultar a lista completa e
+exportá-la como CSV, para você sincronizar contatos com suas ferramentas de
+e-mail ou WhatsApp.
+
+<Note>
+Ambos os endpoints são somente leitura e exigem uma chave com o escopo **read**.
+Eles sempre ficam restritos à loja dona da chave, então você só vê os seus
+próprios leads.
+</Note>
+
+## Listar leads
+
+```
+GET /v1/leads
+```
+
+Retorna todos os leads que sua loja capturou, dos mais recentes aos mais antigos.
+Não há paginação — você sempre recebe a lista completa.
+
+### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/leads
+```
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Leads listados com sucesso",
+  "data": [
+    {
+      "id": "665f1a2b9c4e7d0012ab34cd",
+      "name": "Ana Ribeiro",
+      "phone": "5511998877665",
+      "email": "ana.ribeiro@example.com",
+      "instagram": "anaribeiro",
+      "source": "instagram",
+      "consent": true,
+      "captureTiming": "storefront",
+      "consentVersion": "2026-05-01",
+      "consentAt": "2026-07-18T14:22:05.120Z",
+      "utmSource": "instagram",
+      "utmMedium": "bio",
+      "utmCampaign": "winter-sale",
+      "createdAt": "2026-07-18T14:22:05.118Z"
+    }
+  ]
+}
+```
+
+Cada lead inclui os campos abaixo. Um contato sempre tem pelo menos um entre
+`phone`, `email` ou `instagram`; os demais podem ser strings vazias.
+
+| Campo | Tipo | Descrição |
+| --- | --- | --- |
+| `id` | string | Identificador único do lead. |
+| `name` | string | Nome informado pelo visitante (pode estar vazio). |
+| `phone` | string | Número de telefone apenas com dígitos (país + DDD + número). |
+| `email` | string | Endereço de e-mail, em letras minúsculas. |
+| `instagram` | string | Usuário do Instagram sem o `@`. |
+| `source` | string | De onde o lead veio (por exemplo `instagram`, `whatsapp`, `direct`). |
+| `consent` | boolean | Se o visitante marcou a caixa de consentimento. |
+| `captureTiming` | string | Em que ponto do fluxo o lead foi capturado: `storefront`, `start` ou `end`. |
+| `consentVersion` | string | Versão do texto de consentimento aceito, quando registrada. |
+| `consentAt` | string | Quando o consentimento foi dado (ISO 8601). |
+| `utmSource` | string | UTM source registrada no momento da captura. |
+| `utmMedium` | string | UTM medium registrada no momento da captura. |
+| `utmCampaign` | string | UTM campaign registrada no momento da captura. |
+| `createdAt` | string | Quando o lead foi capturado (ISO 8601). |
+
+## Exportar leads como CSV
+
+```
+GET /v1/leads/export.csv
+```
+
+Retorna os mesmos leads como um arquivo CSV para download — prático para importar
+em uma planilha, plataforma de e-mail ou ferramenta de disparo no WhatsApp.
+
+### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/leads/export.csv \
+  -o leads.csv
+```
+
+### Resposta
+
+Diferente dos outros endpoints, este retorna CSV puro (não o envelope JSON), com
+`Content-Type: text/csv; charset=utf-8` e nome de arquivo de anexo `leads.csv`. O
+arquivo é UTF-8 com marca de ordem de byte (BOM), para que os acentos abram
+corretamente no Excel.
+
+```csv
+nome,telefone,email,instagram,origem,consentimento,data
+Ana Ribeiro,5511998877665,ana.ribeiro@example.com,anaribeiro,instagram,sim,2026-07-18T14:22:05.118Z
+```
+
+As colunas correspondem aos campos do lead: nome, telefone, e-mail, Instagram,
+origem, consentimento (`sim`/`não`) e data de captura.
+
+<Note>
+Trate os leads com responsabilidade. Os contatos consentiram em receber
+mensagens da sua loja, então mantenha a comunicação relevante e respeite os
+pedidos de descadastro.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Loja" icon="store" href="/api-reference/store">
+    Consulte o perfil da sua loja e o resumo de desempenho.
+  </Card>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Envie imagens para usar em toda a sua página.
+  </Card>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    URL base, chaves de API, escopos e códigos de status.
+  </Card>
+  <Card title="Limites de taxa" icon="gauge" href="/api-reference/rate-limits">
+    Fique dentro dos limites e tente novamente com elegância.
+  </Card>
+</CardGroup>

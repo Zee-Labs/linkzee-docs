@@ -1,0 +1,262 @@
+---
+title: Catégories
+icon: layer-group
+description: "Listez, créez, modifiez, supprimez et réordonnez les catégories qui regroupent vos produits."
+---
+
+Les catégories constituent la taxonomie de votre vitrine de produits. Utilisez-les pour
+regrouper vos produits en sections (par exemple **Cuisine** ou **Beauté**) qui apparaissent
+sous forme de puces de filtre sur votre page publique.
+
+Tous les endpoints se trouvent sous l'URL de base `https://api.linkz.ee` et nécessitent
+l'en-tête `Authorization: Bearer lzk_your_key`. Les opérations de lecture fonctionnent avec
+n'importe quelle clé ; la création, la modification, la suppression et la réorganisation
+nécessitent une clé avec la portée **write**.
+
+## Lister les catégories
+
+```
+GET /v1/categories
+```
+
+Renvoie toutes les catégories de votre boutique, ordonnées pour l'affichage.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Categorias listadas",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "name": "Kitchen",
+      "slug": "kitchen",
+      "emoji": "🍳",
+      "description": "Everything for your kitchen",
+      "isActive": true,
+      "order": 0,
+      "kind": "product"
+    },
+    {
+      "id": "507f1f77bcf86cd799439012",
+      "name": "Beauty",
+      "slug": "beauty",
+      "emoji": "💄",
+      "description": null,
+      "isActive": true,
+      "order": 1,
+      "kind": "product"
+    }
+  ]
+}
+```
+
+## Créer une catégorie
+
+```
+POST /v1/categories
+```
+
+Crée une nouvelle catégorie de produits. Nécessite la portée **write**.
+
+### Requête
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen"
+  }' \
+  https://api.linkz.ee/v1/categories
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `name` | string | Non | Nom affiché, jusqu'à 80 caractères. En cas d'omission, un slug est généré automatiquement. |
+| `slug` | string | Non | Identifiant adapté aux URL, jusqu'à 60 caractères. Dérivé de `name` en cas d'omission. |
+| `emoji` | string | Non | Un seul emoji affiché à côté de la catégorie, jusqu'à 16 caractères. |
+| `description` | string | Non | Description courte, jusqu'à 280 caractères. |
+| `isActive` | boolean | Non | Indique si la catégorie est visible. Active par défaut. |
+| `order` | integer | Non | Ordre d'affichage parmi vos catégories. |
+| `kind` | string | Non | L'une des valeurs `product`, `link` ou `collection`. Par défaut `product` pour les catégories créées via l'API, afin qu'elles apparaissent comme filtres de la vitrine. |
+
+<Note>
+Laissez `kind` non défini pour les catégories de produits. L'API le règle sur `product`
+automatiquement afin que la catégorie apparaisse dans la navigation de votre vitrine.
+</Note>
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Categoria criada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen",
+    "slug": "kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Modifier une catégorie
+
+```
+PATCH /v1/categories/:id
+```
+
+Met à jour un ou plusieurs champs d'une catégorie existante. N'envoyez que les champs que
+vous souhaitez modifier. Nécessite la portée **write**.
+
+### Requête
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Kitchen & dining", "emoji": "🍽️" }' \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `id` | string | Oui | L'ID de la catégorie, transmis dans le chemin. |
+| `name` | string | Non | Nouveau nom affiché, jusqu'à 80 caractères. |
+| `slug` | string | Non | Nouvel identifiant adapté aux URL, jusqu'à 60 caractères. |
+| `emoji` | string | Non | Nouvel emoji, jusqu'à 16 caractères. |
+| `description` | string | Non | Nouvelle description, jusqu'à 280 caractères. |
+| `isActive` | boolean | Non | Affiche ou masque la catégorie. |
+| `order` | integer | Non | Nouvel ordre d'affichage. |
+| `kind` | string | Non | L'une des valeurs `product`, `link` ou `collection`. |
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Categoria atualizada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen & dining",
+    "slug": "kitchen",
+    "emoji": "🍽️",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Supprimer une catégorie
+
+```
+DELETE /v1/categories/:id
+```
+
+Supprime une catégorie. Les produits restent dans votre boutique ; ils ne sont simplement
+plus regroupés sous cette catégorie. Nécessite la portée **write**.
+
+### Requête
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `id` | string | Oui | L'ID de la catégorie, transmis dans le chemin. |
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Categoria removida",
+  "data": { "id": "507f1f77bcf86cd799439011" }
+}
+```
+
+## Réordonner les catégories
+
+```
+PUT /v1/categories/order
+```
+
+Définit un nouvel ordre d'affichage pour vos catégories en un seul appel. Nécessite la
+portée **write**.
+
+### Requête
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "507f1f77bcf86cd799439012", "order": 0 },
+      { "id": "507f1f77bcf86cd799439011", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/categories/order
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `items` | array | Oui | Liste des catégories avec leur nouvel ordre. Au moins un élément est requis. |
+| `items[].id` | string | Oui | L'ID de la catégorie. |
+| `items[].order` | integer | Oui | Le nouvel ordre d'affichage pour cette catégorie. |
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Categorias reordenadas",
+  "data": { "updated": 2 }
+}
+```
+
+<Note>
+Chaque modification effectuée via l'API apparaît automatiquement sur votre page publique et
+dans l'aperçu en temps réel de l'éditeur. Il n'y a rien à publier.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Produits" icon="box" href="/api-reference/products">
+    Créez et gérez les produits que ces catégories regroupent.
+  </Card>
+  <Card title="Liens et collections" icon="link" href="/api-reference/links-collections">
+    Regroupez les liens de votre page bio.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    URL de base, clés, portées et formats de réponse.
+  </Card>
+</CardGroup>

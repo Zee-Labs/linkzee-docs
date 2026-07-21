@@ -1,0 +1,727 @@
+---
+title: Agenda
+icon: calendar
+description: "Gerencie serviços, equipe, bloqueios de horário, disponibilidade e agendamentos na sua agenda de reservas do Linkzee."
+---
+
+Os endpoints de Agenda permitem operar sua agenda de reservas de forma
+programática: definir os **serviços** que as pessoas podem reservar, sua
+**equipe**, os **bloqueios** de quando você está indisponível e consultar a
+**disponibilidade** real para criar e gerenciar **agendamentos**.
+
+Todos os caminhos ficam sob `https://api.linkz.ee/v1/agenda`. Toda requisição
+precisa do cabeçalho `Authorization: Bearer lzk_your_key`, e as operações de
+escrita (POST/PATCH/DELETE) exigem uma chave com o escopo **write**.
+
+<Note>
+As leituras (`GET`) funcionam com qualquer chave válida. Criar, atualizar,
+transicionar, remarcar ou excluir qualquer coisa exige o escopo **write**.
+</Note>
+
+## Serviços
+
+Um serviço (oferta) é algo que as pessoas podem reservar — um corte de cabelo,
+uma consultoria, uma chamada. Cada serviço tem uma duração e, opcionalmente, um
+preço.
+
+### Listar serviços
+
+```
+GET /v1/agenda/offerings
+```
+
+Retorna todos os serviços da sua agenda, na ordem de exibição.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/offerings
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Serviços carregados",
+  "data": [
+    {
+      "_id": "665f0a1b2c3d4e5f60718293",
+      "name": "Strategy call",
+      "durationMin": 45,
+      "price": 150,
+      "description": "A focused 45-minute planning session.",
+      "color": "#2f80ed",
+      "bufferAfterMin": 15,
+      "meetEnabled": true,
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+### Criar um serviço
+
+```
+POST /v1/agenda/offerings
+```
+
+Adiciona um novo serviço reservável.
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Strategy call","durationMin":45,"price":150,"meetEnabled":true}' \
+  https://api.linkz.ee/v1/agenda/offerings
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `name` | string | Sim | Nome do serviço (máx. 80 caracteres). |
+| `durationMin` | integer | Sim | Duração em minutos (5–720). |
+| `price` | number | Não | Preço em R$. Omita ou envie `null` para gratuito. |
+| `description` | string | Não | Descrição curta (máx. 300 caracteres). |
+| `color` | string | Não | Cor em hexadecimal para a agenda, ex.: `#2f80ed`. |
+| `bufferAfterMin` | integer | Não | Intervalo em minutos após cada reserva (0–240). |
+| `meetEnabled` | boolean | Não | Cria um link do Google Meet para cada reserva. |
+| `isActive` | boolean | Não | Se o serviço está reservável. O padrão é `true`. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Serviço criado",
+  "data": {
+    "_id": "665f0a1b2c3d4e5f60718293",
+    "name": "Strategy call",
+    "durationMin": 45,
+    "price": 150,
+    "bufferAfterMin": 0,
+    "meetEnabled": true,
+    "order": 0,
+    "isActive": true
+  }
+}
+```
+
+### Atualizar um serviço
+
+```
+PATCH /v1/agenda/offerings/{id}
+```
+
+Atualiza um serviço. Envie o conjunto completo de campos, como ao criar.
+
+#### Requisição
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Strategy call","durationMin":60,"price":180}' \
+  https://api.linkz.ee/v1/agenda/offerings/665f0a1b2c3d4e5f60718293
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | string | Sim | O ID do serviço (no caminho). |
+
+O corpo aceita os mesmos campos de [Criar um serviço](#create-a-service).
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Serviço atualizado",
+  "data": {
+    "_id": "665f0a1b2c3d4e5f60718293",
+    "name": "Strategy call",
+    "durationMin": 60,
+    "price": 180,
+    "isActive": true
+  }
+}
+```
+
+### Excluir um serviço
+
+```
+DELETE /v1/agenda/offerings/{id}
+```
+
+Remove um serviço. Ele deixa de ser reservável; os agendamentos existentes não
+são afetados.
+
+#### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/offerings/665f0a1b2c3d4e5f60718293
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Serviço removido",
+  "data": { "id": "665f0a1b2c3d4e5f60718293" }
+}
+```
+
+## Equipe
+
+A equipe são as pessoas que realizam seus serviços. Cada uma pode ter os
+próprios horários de trabalho e o conjunto de serviços que atende.
+
+### Listar a equipe
+
+```
+GET /v1/agenda/staff
+```
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/staff
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": [
+    {
+      "_id": "665f0c9a8b7d6e5f40312a11",
+      "name": "Ana Souza",
+      "title": "Senior consultant",
+      "avatarUrl": "https://cdn.linkz.ee/staff/ana.webp",
+      "hours": null,
+      "offeringIds": ["665f0a1b2c3d4e5f60718293"],
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+### Criar um atendente
+
+```
+POST /v1/agenda/staff
+```
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana Souza","title":"Senior consultant","offeringIds":["665f0a1b2c3d4e5f60718293"]}' \
+  https://api.linkz.ee/v1/agenda/staff
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `name` | string | Sim | Nome do atendente (máx. 80 caracteres). |
+| `title` | string | Não | Função ou cargo (máx. 80 caracteres). |
+| `avatarUrl` | string | Não | URL da foto (máx. 500 caracteres). |
+| `hours` | array | Não | Horários semanais de trabalho (veja abaixo). Envie `null` para herdar o horário do seu negócio. |
+| `offeringIds` | array of string | Não | Serviços que esta pessoa atende. `null` significa todos os serviços. |
+| `isActive` | boolean | Não | Se a pessoa está reservável. O padrão é `true`. |
+
+Cada entrada em `hours` descreve um dia da semana:
+
+| Campo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `day` | integer | Sim | Dia da semana, `0` = domingo até `6` = sábado. |
+| `closed` | boolean | Não | Defina `true` para marcar o dia como folga. |
+| `ranges` | array | Não | Janelas de trabalho, cada uma com `startMin` e `endMin` (minutos a partir da meia-noite, 0–1440). |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": {
+    "_id": "665f0c9a8b7d6e5f40312a11",
+    "name": "Ana Souza",
+    "title": "Senior consultant",
+    "hours": null,
+    "offeringIds": ["665f0a1b2c3d4e5f60718293"],
+    "isActive": true
+  }
+}
+```
+
+### Atualizar um atendente
+
+```
+PATCH /v1/agenda/staff/{id}
+```
+
+Substitui o registro do atendente. Envie o conjunto completo de campos, como ao
+criar.
+
+#### Requisição
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana Souza","hours":[{"day":1,"ranges":[{"startMin":540,"endMin":1020}]}]}' \
+  https://api.linkz.ee/v1/agenda/staff/665f0c9a8b7d6e5f40312a11
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | string | Sim | O ID do atendente (no caminho). |
+
+O corpo aceita os mesmos campos de [Criar um atendente](#create-a-staff-member).
+
+### Excluir um atendente
+
+```
+DELETE /v1/agenda/staff/{id}
+```
+
+#### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/staff/665f0c9a8b7d6e5f40312a11
+```
+
+#### Resposta
+
+```json
+{ "error": false, "message": "ok", "data": { "id": "665f0c9a8b7d6e5f40312a11" } }
+```
+
+## Bloqueios
+
+Um bloqueio é um período em que você (ou um atendente) está indisponível — um
+feriado, férias ou folga. Nenhuma reserva pode cair dentro de um bloqueio.
+
+<Note>
+Bloqueios não têm endpoint de atualização. Para alterar um, exclua-o e crie um
+novo.
+</Note>
+
+### Listar bloqueios
+
+```
+GET /v1/agenda/blocks
+```
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/blocks
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": [
+    {
+      "_id": "665f0e5511aa22bb33cc44dd",
+      "staffId": null,
+      "startDate": "2026-12-24",
+      "endDate": "2026-12-26",
+      "allDay": true,
+      "reason": "Holidays"
+    }
+  ]
+}
+```
+
+### Criar um bloqueio
+
+```
+POST /v1/agenda/blocks
+```
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"startDate":"2026-12-24","endDate":"2026-12-26","allDay":true,"reason":"Holidays"}' \
+  https://api.linkz.ee/v1/agenda/blocks
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `startDate` | string | Sim | Primeiro dia bloqueado, `YYYY-MM-DD`. |
+| `endDate` | string | Sim | Último dia bloqueado, `YYYY-MM-DD`. |
+| `staffId` | string | Não | Bloqueia um atendente. Omitir ou `null` bloqueia o estabelecimento inteiro. |
+| `allDay` | boolean | Não | Se o bloqueio cobre o dia inteiro. O padrão é `true`. |
+| `startMin` | integer | Não | Minuto de início a partir da meia-noite para um bloqueio parcial (0–1440). |
+| `endMin` | integer | Não | Minuto de fim a partir da meia-noite para um bloqueio parcial (0–1440). |
+| `reason` | string | Não | Rótulo curto (máx. 120 caracteres). |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": {
+    "_id": "665f0e5511aa22bb33cc44dd",
+    "startDate": "2026-12-24",
+    "endDate": "2026-12-26",
+    "allDay": true,
+    "reason": "Holidays"
+  }
+}
+```
+
+### Excluir um bloqueio
+
+```
+DELETE /v1/agenda/blocks/{id}
+```
+
+#### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/blocks/665f0e5511aa22bb33cc44dd
+```
+
+#### Resposta
+
+```json
+{ "error": false, "message": "ok", "data": { "id": "665f0e5511aa22bb33cc44dd" } }
+```
+
+## Disponibilidade
+
+```
+GET /v1/agenda/availability
+```
+
+Retorna os dias abertos e horários reais de um serviço ao longo de um intervalo
+de datas — o mesmo mecanismo que alimenta sua página pública de reservas, então
+já considera os horários de trabalho, os agendamentos existentes e os bloqueios.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  "https://api.linkz.ee/v1/agenda/availability?offeringId=665f0a1b2c3d4e5f60718293&from=2026-07-21&to=2026-07-25&detail=slots"
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `offeringId` | string | Sim | O serviço a consultar. |
+| `from` | string | Sim | Data inicial, `YYYY-MM-DD` (no fuso horário da sua agenda). |
+| `to` | string | Sim | Data final, `YYYY-MM-DD`. |
+| `staffId` | string | Não | Limita a disponibilidade a um atendente. |
+| `detail` | string | Não | `days` (padrão) retorna apenas o estado por dia; `slots` também retorna os horários de início reserváveis. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Disponibilidade carregada",
+  "data": {
+    "days": [
+      { "date": "2026-07-21", "state": "free" },
+      { "date": "2026-07-22", "state": "full" },
+      { "date": "2026-07-23", "state": "closed" }
+    ],
+    "slots": [
+      { "startAt": "2026-07-21T12:00:00.000Z" },
+      { "startAt": "2026-07-21T12:45:00.000Z" }
+    ],
+    "stepMin": 15,
+    "timezone": "America/Sao_Paulo"
+  }
+}
+```
+
+O `state` de cada dia é `free` (tem horários abertos), `full` (totalmente
+reservado) ou `closed` (não é dia de trabalho). Os horários são retornados em
+UTC (`Z`).
+
+## Agendamentos
+
+### Listar agendamentos
+
+```
+GET /v1/agenda/appointments
+```
+
+Retorna todos os agendamentos cujo início cai dentro do intervalo de datas.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  "https://api.linkz.ee/v1/agenda/appointments?from=2026-07-21&to=2026-07-27"
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `from` | string | Sim | Data inicial, `YYYY-MM-DD`. |
+| `to` | string | Sim | Data final, `YYYY-MM-DD`. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Agendamentos carregados",
+  "data": {
+    "timezone": "America/Sao_Paulo",
+    "appointments": [
+      {
+        "id": "665f1122aa33bb44cc55dd66",
+        "staffId": "665f0c9a8b7d6e5f40312a11",
+        "offeringId": "665f0a1b2c3d4e5f60718293",
+        "offeringName": "Strategy call",
+        "price": 150,
+        "durationMin": 45,
+        "startAt": "2026-07-21T13:00:00.000Z",
+        "endAt": "2026-07-21T13:45:00.000Z",
+        "status": "confirmed",
+        "confirmedByVisitor": true,
+        "meetUrl": "https://meet.google.com/abc-defg-hij",
+        "visitor": { "name": "João Lima", "phone": "+5511999998888", "email": "joao@example.com" },
+        "source": "public",
+        "notes": ""
+      }
+    ]
+  }
+}
+```
+
+### Criar um agendamento
+
+```
+POST /v1/agenda/appointments
+```
+
+Cria um agendamento manualmente, usando as mesmas regras da reserva pública — o
+horário precisa estar realmente disponível ou a requisição é rejeitada.
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"offeringId":"665f0a1b2c3d4e5f60718293","startAt":"2026-07-21T13:00:00.000Z","name":"João Lima","phone":"+5511999998888"}' \
+  https://api.linkz.ee/v1/agenda/appointments
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `offeringId` | string | Sim | O serviço sendo reservado. |
+| `startAt` | string | Sim | Horário de início em ISO 8601, ex.: `2026-07-21T13:00:00.000Z`. |
+| `name` | string | Sim | Nome do visitante (máx. 120 caracteres). |
+| `phone` | string | Sim | Telefone do visitante (máx. 30 caracteres). |
+| `email` | string | Não | E-mail do visitante (máx. 160 caracteres). |
+| `notes` | string | Não | Notas internas (máx. 500 caracteres). |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Agendamento criado",
+  "data": {
+    "id": "665f1122aa33bb44cc55dd66",
+    "manageToken": "8f3a1c22b90e4d1f",
+    "status": "confirmed",
+    "startAt": "2026-07-21T13:00:00.000Z",
+    "endAt": "2026-07-21T13:45:00.000Z",
+    "offeringName": "Strategy call",
+    "timezone": "America/Sao_Paulo"
+  }
+}
+```
+
+### Alterar o status de um agendamento
+
+```
+POST /v1/agenda/appointments/{id}/transition
+```
+
+Move um agendamento para um novo status.
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"status":"completed"}' \
+  https://api.linkz.ee/v1/agenda/appointments/665f1122aa33bb44cc55dd66/transition
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | string | Sim | O ID do agendamento (no caminho). |
+| `status` | string | Sim | Novo status: `confirmed`, `completed`, `no_show` ou `cancelled`. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Status atualizado",
+  "data": { "status": "completed" }
+}
+```
+
+### Remarcar um agendamento
+
+```
+POST /v1/agenda/appointments/{id}/reschedule
+```
+
+Move um agendamento para um novo horário de início e notifica o visitante com o
+horário atualizado (e um novo link do Meet, quando o serviço usa um).
+
+#### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"startAt":"2026-07-22T15:00:00.000Z"}' \
+  https://api.linkz.ee/v1/agenda/appointments/665f1122aa33bb44cc55dd66/reschedule
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | string | Sim | O ID do agendamento (no caminho). |
+| `startAt` | string | Sim | Novo horário de início em ISO 8601. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Agendamento remarcado",
+  "data": { "startAt": "2026-07-22T15:00:00.000Z" }
+}
+```
+
+## Google Calendar
+
+### Status da conexão
+
+```
+GET /v1/agenda/google
+```
+
+Informa se a sincronização com o Google Calendar está disponível e se sua agenda
+está conectada.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/google
+```
+
+#### Resposta
+
+```json
+{ "enabled": true, "connected": true }
+```
+
+### Desconectar o Google Calendar
+
+```
+DELETE /v1/agenda/google
+```
+
+Desconecta seu Google Calendar. A sincronização para; os agendamentos
+existentes permanecem.
+
+#### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/google
+```
+
+#### Resposta
+
+```json
+{ "error": false, "message": "ok", "data": { "connected": false } }
+```
+
+<Warning>
+Conectar um Google Calendar acontece por um fluxo de login no painel do Linkzee
+e não pode ser feito pela API. A API só consegue ler o status e desconectar.
+</Warning>
+
+## Relacionados
+
+<CardGroup cols={2}>
+  <Card title="Autenticação" icon="lock" href="/api-reference/authentication">
+    URL base, chaves, escopos e códigos de status.
+  </Card>
+  <Card title="Leads" icon="address-book" href="/api-reference/leads">
+    Liste e exporte os contatos que você coleta.
+  </Card>
+  <Card title="Loja" icon="store" href="/api-reference/store">
+    Consulte o perfil, os temas e o desempenho da sua loja.
+  </Card>
+  <Card title="Limites de requisição" icon="gauge" href="/api-reference/rate-limits">
+    Fique dentro dos limites e trate os erros 429.
+  </Card>
+</CardGroup>

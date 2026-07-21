@@ -1,0 +1,189 @@
+---
+title: Wissensdatenbank
+icon: file-pdf
+description: "Verwalte die PDF-Wissensdatenbank, die den KI-Concierge deines Shops speist."
+---
+
+Die Wissensdatenbank ist eine Sammlung von PDF-Dokumenten, die dein KI-Concierge
+liest, um Fragen von Besuchern zu beantworten. Lade Produkthandbücher, FAQs,
+Kataloge oder Richtlinien hoch, und der Concierge zieht seine Antworten daraus.
+
+Hochgeladener Text wird sofort extrahiert und anschließend asynchron indexiert,
+damit der Concierge ihn durchsuchen kann. Ein Shop kann standardmäßig bis zu
+**10 PDFs** enthalten (jeweils bis zu **10&nbsp;MB**).
+
+<Note>
+Alle Anfragen verwenden die Basis-URL `https://api.linkz.ee` und senden den Header
+`Authorization: Bearer lzk_your_key`. Hochladen, Löschen und Neuindexieren
+erfordern einen Schlüssel mit dem **write**-Scope.
+</Note>
+
+## PDFs auflisten
+
+```
+GET /v1/knowledge/files
+```
+
+Gibt jedes PDF in deiner Wissensdatenbank zurück, zusammen mit dem aktuellen
+Dateilimit.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Arquivos listados",
+  "data": {
+    "files": [
+      {
+        "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+        "name": "product-catalog-2026.pdf",
+        "sizeBytes": 482133,
+        "pages": 12,
+        "status": "ready",
+        "createdAt": "2026-07-18T14:22:05.113Z"
+      }
+    ],
+    "maxFiles": 10
+  }
+}
+```
+
+Jede Datei meldet einen `status`: `ready`, sobald ihr Text extrahiert wurde, oder
+`pending`, solange sie noch verarbeitet wird.
+
+## Ein PDF hochladen
+
+```
+POST /v1/knowledge/files
+```
+
+Füge ein PDF zu deiner Wissensdatenbank hinzu. Sende es als `multipart/form-data`
+mit einem einzelnen `file`-Feld.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@product-catalog-2026.pdf" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `file` | Datei (PDF) | Ja | Das hochzuladende PDF. Maximale Größe 10&nbsp;MB. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Arquivo processado",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+    "status": "ready",
+    "pages": 12
+  }
+}
+```
+
+<Warning>
+Uploads sind auf einige wenige pro Minute und Schlüssel begrenzt, da das
+Extrahieren eines PDFs aufwendig ist. Eine Datei über 10&nbsp;MB oder eine Anfrage,
+die dein Dateilimit überschreitet, gibt `400 Bad Request` zurück. Verteile Uploads
+zeitlich und wiederhole sie bei `429` mit Backoff.
+</Warning>
+
+## Ein PDF löschen
+
+```
+DELETE /v1/knowledge/files/:fileId
+```
+
+Entferne ein PDF aus deiner Wissensdatenbank. Sein Text wird ebenfalls aus dem
+Index entfernt.
+
+### Anfrage
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files/8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `fileId` | String (Pfad) | Ja | Die `fileId` des zu entfernenden PDFs. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Arquivo removido",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11"
+  }
+}
+```
+
+## Wissensdatenbank neu indexieren
+
+```
+POST /v1/knowledge/reindex
+```
+
+Plane einen Neuaufbau des Suchindex des Concierge. Das Neuindexieren läuft
+asynchron und Anfrageschübe werden zu einem einzigen Job zusammengefasst, sodass
+es sicher ist, es nach einer Reihe von Uploads oder Löschungen aufzurufen.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/reindex
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Reindex agendado",
+  "data": {
+    "queued": true
+  }
+}
+```
+
+<Note>
+Uploads lösen die Indexierung bereits von selbst aus. Rufe dies nur auf, wenn du
+eine Aktualisierung erzwingen möchtest, zum Beispiel nach dem Löschen mehrerer
+Dateien.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Lade Bilder für deine Produkte und deinen Header hoch.
+  </Card>
+  <Card title="Produkte" icon="box" href="/api-reference/products">
+    Verwalte die Produkte in deiner Vitrine.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    Basis-URL, API-Schlüssel, Scopes und Statuscodes.
+  </Card>
+</CardGroup>

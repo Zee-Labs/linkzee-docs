@@ -1,0 +1,51 @@
+---
+title: Conecte o Linkzee no Claude
+icon: comment
+description: "Deixe o Claude gerenciar seu Linkzee em linguagem natural via MCP."
+---
+
+Conecte o Linkzee ao **Claude** e gerencie sua página simplesmente pedindo —
+"adiciona esse produto", "o que eu tenho agendado essa semana?", "troca meu tema". O Claude
+conversa com o Linkzee através do MCP usando sua chave de API, então você nunca sai do chat.
+
+## Configuração
+
+<Steps>
+  <Step title="Crie uma chave de API">
+    No seu painel, abra a seção **API e MCP** e crie uma chave. Copie-a
+    quando ela for exibida e guarde em um lugar seguro. Veja [Chaves de API](/integrations/api/api-keys)
+    para o passo a passo completo.
+  </Step>
+  <Step title="Adicione um novo servidor MCP no Claude">
+    No **Claude Code**, no **app desktop do Claude** ou no **claude.ai**, adicione um novo
+    servidor MCP apontando para `https://api.linkz.ee/mcp`.
+  </Step>
+  <Step title="Informe sua chave de API">
+    Defina sua chave como autorização do servidor, no formato
+    `Bearer lzk_...`. É assim que o Claude comprova que está agindo na sua conta.
+  </Step>
+  <Step title="Peça ao Claude em linguagem natural">
+    Depois de conectado, basta descrever o que você quer — "adiciona meu novo produto em promoção",
+    "reordena meus links", "muda minhas cores" — e o Claude cuida disso.
+  </Step>
+</Steps>
+
+<Note>
+  O Claude trabalha com o mesmo conjunto de ações listado na
+  [referência de ferramentas](/integrations/mcp/tools-reference), então tudo que um agente consegue
+  fazer via MCP, você pode pedir no chat.
+</Note>
+
+<Warning>
+  Sua chave de API age na sua conta. Nunca cole ela em um chat público nem compartilhe
+  — trate-a como uma senha.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    Veja tudo que o Claude pode fazer com seu Linkzee via MCP.
+  </Card>
+  <Card title="Chaves de API" icon="key" href="/integrations/api/api-keys">
+    Crie, defina escopos e revogue as chaves que conectam o Claude à sua conta.
+  </Card>
+</CardGroup>

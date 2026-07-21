@@ -1,0 +1,54 @@
+---
+title: Suivi
+icon: chart-simple
+description: "Mesurez les conversions avec vos propres outils — connectez le Meta Pixel, la Conversion API, Google Tag Manager et des UTM par défaut."
+---
+
+Linkzee dispose de son propre écran [Performance](/analytics/overview), mais vous
+pouvez aussi mesurer les conversions avec vos **propres** outils marketing.
+Connectez-les une fois et Linkzee envoie les données au fur et à mesure que les
+visiteurs interagissent avec votre page.
+
+Tout ici s'enregistre automatiquement à mesure que vous saisissez — il n'y a pas
+de bouton Enregistrer.
+
+## Meta Pixel
+
+Ajoutez votre ID **Meta Pixel** pour suivre les visiteurs et les conversions dans
+le Gestionnaire d'événements Meta. Ajoutez ensuite également le token de sa
+**Conversion API**.
+
+Le token est important : les navigateurs et iOS bloquent souvent le script du
+pixel, ce qui peut faire disparaître des événements. La Conversion API envoie la
+conversion directement depuis Linkzee, donc elle reste enregistrée même quand le
+script est bloqué. Ajouter les deux vous offre le suivi le plus complet.
+
+## Google Tag Manager
+
+Ajoutez l'ID de conteneur **Google Tag Manager** pour charger votre conteneur GTM
+sur votre page publique. De là, vous pouvez gérer vos propres balises et
+déclencheurs dans Google Tag Manager.
+
+## Paramètres UTM
+
+Définissez des paramètres **UTM** par défaut — comme la source, le support et la
+campagne — que Linkzee ajoute automatiquement à vos liens sortants. Cela étiquette
+le trafic que vous envoyez pour que vos statistiques l'attribuent à la bonne source
+et à la bonne campagne.
+
+<Note>
+  Vous trouverez ces valeurs dans vos outils marketing — votre ID de Pixel et le
+  token de la Conversion API dans le **Gestionnaire d'événements Meta**, et votre
+  ID de conteneur dans **Google Tag Manager**.
+</Note>
+
+## Étapes suivantes
+
+<CardGroup cols={2}>
+  <Card title="Performance" icon="chart-line" href="/analytics/overview">
+    Consultez les clics, les vues et vos meilleurs éléments directement dans Linkzee.
+  </Card>
+  <Card title="Paramètres du compte" icon="gear" href="/account/account">
+    Configurez votre langue, votre région, votre apparence et vos options d'accessibilité.
+  </Card>
+</CardGroup>

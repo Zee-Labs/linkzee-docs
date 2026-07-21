@@ -1,0 +1,111 @@
+---
+title: Limites de débit
+icon: gauge
+description: "Comment l'API Linkzee limite le débit des requêtes et comment concevoir des clients qui restent dans les limites."
+---
+
+L'API Linkzee applique une limite de débit afin que chaque intégration bénéficie
+d'une part de capacité équitable et fiable. Les limites s'appliquent par clé API,
+ainsi que par IP client comme filet de sécurité. Si vous envoyez vos requêtes à
+un rythme normal et bien réparti, vous les remarquerez rarement.
+
+## Lorsque vous dépassez une limite
+
+Lorsque vous envoyez trop de requêtes dans un court laps de temps, l'API cesse
+d'en accepter de nouvelles pendant un instant et répond avec le code HTTP
+`429 Too Many Requests`. La réponse utilise l'enveloppe d'erreur standard :
+
+```json
+{
+  "error": true,
+  "message": "Rate limit exceeded. Please retry shortly.",
+  "data": null
+}
+```
+
+Un `429` est temporaire. Attendez un court instant et la même requête aboutira —
+aucune donnée n'est perdue et rien n'est facturé à votre compte pour l'appel
+rejeté.
+
+<Note>
+Considérez un `429` comme un « réessayez dans un instant », et non comme un échec.
+Cela signifie simplement que vous avez atteint le plafond pour ce court laps de
+temps.
+</Note>
+
+## Bonnes pratiques
+
+Quelques habitudes permettent de garder votre intégration confortablement sous
+les limites et résiliente lorsqu'elle est tout de même limitée.
+
+### Réessayer avec un délai croissant
+
+Lorsque vous recevez un `429`, faites une pause avant de réessayer, et augmentez
+la pause à chaque échec consécutif (délai exponentiel). Ajoutez un peu d'aléatoire
+(« jitter ») pour que de nombreux clients ne réessaient pas tous en même temps.
+
+Un modèle simple et efficace :
+
+```bash
+# Retry with growing delays: 1s, 2s, 4s, 8s...
+attempt=0
+until response=$(curl -sf -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products); do
+  attempt=$((attempt + 1))
+  [ "$attempt" -ge 5 ] && break
+  sleep $(( 2 ** (attempt - 1) ))
+done
+```
+
+### Espacez vos requêtes
+
+Répartissez le travail au lieu de tout déclencher d'un coup. Si vous synchronisez
+un grand catalogue, ajoutez un petit délai entre les appels plutôt que d'en
+envoyer des centaines en parallèle. La régularité vaut mieux que les rafales.
+
+### Récupérez une fois, réutilisez localement
+
+Les points de terminaison de lecture renvoient l'intégralité de l'état actuel
+(par exemple, votre liste de produits ou de liens). Récupérez-la une seule fois,
+conservez-la en mémoire et travaillez à partir de votre copie locale plutôt que
+de redemander les mêmes données en boucle.
+
+### Réessayez les écritures en toute sécurité avec une clé d'idempotence
+
+La création d'un produit accepte un en-tête facultatif `Idempotency-Key`. Envoyez
+une valeur unique par création logique : si un nouvel essai a lieu après un `429`
+ou un incident réseau, l'API renvoie le produit déjà créé au lieu d'en créer un
+doublon.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+Cela vous permet de réessayer de manière agressive sans craindre de créer deux
+fois le même élément.
+
+<Warning>
+Les seuils de limite de débit peuvent évoluer au fil du temps à mesure que nous
+ajustons la capacité. Concevez votre client pour qu'il réagisse à une réponse
+`429` plutôt que de coder en dur un nombre fixe de requêtes par seconde.
+</Warning>
+
+## À voir aussi
+
+<CardGroup cols={2}>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    URL de base, clés, portées et codes de statut.
+  </Card>
+  <Card title="Produits" icon="box" href="/api-reference/products">
+    Créez, mettez à jour et listez les produits de votre catalogue.
+  </Card>
+  <Card title="Liens et collections" icon="link" href="/api-reference/links-collections">
+    Gérez les liens de votre bio.
+  </Card>
+</CardGroup>

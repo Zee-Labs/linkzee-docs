@@ -1,0 +1,53 @@
+---
+title: Seguimiento
+icon: chart-simple
+description: "Mide conversiones con tus propias herramientas: conecta Meta Pixel, la Conversion API, Google Tag Manager y las UTM predeterminadas."
+---
+
+Linkzee tiene su propia pantalla de [Rendimiento](/analytics/overview), pero
+también puedes medir conversiones con tus **propias** herramientas de marketing.
+Conéctalas una vez y Linkzee envía los datos a medida que las visitas interactúan
+con tu página.
+
+Todo lo que hay aquí se guarda automáticamente mientras escribes: no hay botón de
+Guardar.
+
+## Meta Pixel
+
+Añade el ID de tu **Meta Pixel** para hacer seguimiento de visitas y conversiones
+en el Administrador de eventos de Meta. Después, añade también el token de su
+**Conversion API**.
+
+El token es importante: los navegadores e iOS suelen bloquear el script del pixel,
+por lo que se pueden perder eventos. La Conversion API envía la conversión
+directamente desde Linkzee, así que se registra igualmente aunque el script esté
+bloqueado. Añadir ambos te da el seguimiento más completo.
+
+## Google Tag Manager
+
+Añade el ID de tu contenedor de **Google Tag Manager** para cargar tu contenedor
+de GTM en tu página pública. Desde ahí puedes gestionar tus propias etiquetas y
+activadores en Google Tag Manager.
+
+## Parámetros UTM
+
+Define parámetros **UTM** predeterminados —como source, medium y campaign— que
+Linkzee añade automáticamente a tus enlaces de salida. Esto etiqueta el tráfico
+que envías para que tus analíticas lo atribuyan a la fuente y la campaña correctas.
+
+<Note>
+  Encontrarás estos valores en tus herramientas de marketing: el ID del Pixel y
+  el token de la Conversion API en el **Administrador de eventos de Meta**, y el
+  ID del contenedor en **Google Tag Manager**.
+</Note>
+
+## Próximos pasos
+
+<CardGroup cols={2}>
+  <Card title="Rendimiento" icon="chart-line" href="/analytics/overview">
+    Consulta clics, visualizaciones y tus mejores elementos dentro de Linkzee.
+  </Card>
+  <Card title="Ajustes de la cuenta" icon="gear" href="/account/account">
+    Configura tu idioma, región, apariencia y opciones de accesibilidad.
+  </Card>
+</CardGroup>

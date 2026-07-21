@@ -1,0 +1,124 @@
+---
+title: Uploads
+icon: image
+description: "Lade ein Bild hoch und erhalte eine gehostete URL zurück, die du für dein Logo, Produkte, Links und mehr verwenden kannst."
+---
+
+Verwende den Uploads-Endpunkt, um ein Bild an Linkzee zu senden und eine dauerhafte,
+über ein CDN gehostete URL zurückzuerhalten. Jedes Bild wird in **WebP** umgewandelt,
+auf maximal 1600&nbsp;px skaliert und mit langfristigem Caching ausgeliefert, sodass die
+URL, die du erhältst, sofort in ein Produkt, einen Link oder dein Store-Profil eingefügt
+werden kann.
+
+Der Endpunkt befindet sich unter der Basis-URL `https://api.linkz.ee` und erfordert den
+Header `Authorization: Bearer lzk_your_key`. Ein Upload verändert deinen Storefront und
+benötigt daher einen Schlüssel mit dem **write**-Scope.
+
+## Ein Bild hochladen
+
+```
+POST /v1/uploads/image
+```
+
+Lädt ein einzelnes Bild hoch und gibt dessen gehostete URL zurück. Sende die Anfrage als
+`multipart/form-data`, nicht als JSON.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/photo.jpg" \
+  -F "kind=product" \
+  -F "productId=507f1f77bcf86cd799439011" \
+  https://api.linkz.ee/v1/uploads/image
+```
+
+### Parameter
+
+Sende diese als Multipart-Formularfelder.
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `file` | file | Ja | Das hochzuladende Bild. Jedes gängige Format (JPEG, PNG, WebP usw.), bis zu **8&nbsp;MB**. Es wird automatisch in WebP umgewandelt. |
+| `kind` | string | Nein | Wohin das Bild gehört. Legt einen stabilen Speicherort fest, sodass ein erneuter Upload derselben Art das vorherige Bild überschreibt, statt sich anzuhäufen. Siehe die Tabelle unten. |
+| `productId` | string | Nein | Erforderlich, wenn `kind` gleich `product` ist. Das Produkt, zu dem dieses Bild gehört. Es muss ein Produkt in deinem eigenen Store sein. |
+| `linkId` | string | Nein | Erforderlich, wenn `kind` gleich `link`, `linkMedia` oder `linkPoster` ist. Der Link, zu dem das Bild gehört. Es muss ein Link in deinem eigenen Store sein. |
+| `staffId` | string | Nein | Erforderlich, wenn `kind` gleich `staffAvatar` ist. Das Teammitglied, zu dem der Avatar gehört. |
+
+#### Werte für `kind`
+
+| `kind` | Verwendung für | Zusätzlich senden |
+| --- | --- | --- |
+| `logo` | Dein Store-Logo | — |
+| `product` | Ein Produktbild | `productId` |
+| `wallpaper` | Der Hintergrund deiner Seite | — |
+| `banner` | Dein Header-Banner | — |
+| `cutout` | Ein Header-Freistellerbild | — |
+| `link` | Ein Link-Vorschaubild | `linkId` |
+| `linkMedia` | Ein Link-Karten-Cover | `linkId` |
+| `linkPoster` | Ein Link-Video-Poster | `linkId` |
+| `conciergeAvatar` | Der Avatar deines KI-Assistenten | — |
+| `staffAvatar` | Das Foto eines Teammitglieds | `staffId` |
+
+<Note>
+Wenn du ein `kind` (und die passende ID) sendest, wird das Bild an einem festen
+Speicherort für diese Ressource abgelegt, sodass ein neuer Upload den alten ersetzt.
+Lässt du `kind` weg, erhält jeder Upload stattdessen seine eigene, eindeutige URL.
+</Note>
+
+<Warning>
+Dateien über 8&nbsp;MB werden abgelehnt. Es werden nur Bilddateien akzeptiert — andere
+Dateitypen liefern einen `400 Bad Request`. Wenn du `kind` auf `product` oder `link`
+setzt, muss die passende `productId` bzw. `linkId` auf eine Ressource in deinem eigenen
+Store verweisen.
+</Warning>
+
+### Antwort
+
+Die `url` ist dein gehostetes Bild. Da gespeicherte Bilder aggressiv gecacht werden,
+endet die URL mit einem `?v=`-Versionsmarker, der sich bei jedem Upload ändert —
+verwende immer genau die URL, die du zurückerhältst.
+
+```json
+{
+  "error": false,
+  "message": "Upload realizado com sucesso",
+  "data": {
+    "url": "https://cdn.linkz.ee/linkzee/users/64a1.../products/507f1f77bcf86cd799439011?v=1721577600000",
+    "width": 1200,
+    "height": 1200,
+    "format": "webp",
+    "hasAlpha": false
+  }
+}
+```
+
+| Feld | Typ | Beschreibung |
+| --- | --- | --- |
+| `url` | string | Die gehostete, cache-invalidierte Bild-URL. |
+| `width` | integer | Breite des verarbeiteten Bildes in Pixeln. |
+| `height` | integer | Höhe des verarbeiteten Bildes in Pixeln. |
+| `format` | string | Immer `webp`. |
+| `hasAlpha` | boolean | Ob das Bild einen transparenten Kanal hat. |
+
+<Note>
+Um ein hochgeladenes Bild an eine Ressource anzuhängen, nimm die zurückgegebene `url`
+und setze sie am Produkt oder Link — übergib sie zum Beispiel als `image` des Produkts,
+wenn du es erstellst oder aktualisierst.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Produkte" icon="box" href="/api-reference/products">
+    Erstelle Produkte und setze deren Bilder auf eine hochgeladene URL.
+  </Card>
+  <Card title="Links & Kollektionen" icon="link" href="/api-reference/links-collections">
+    Füge deinen Links Vorschaubilder und Cover hinzu.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Aktualisiere dein Logo, deinen Hintergrund und deinen Header.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    Basis-URL, Schlüssel, Scopes und Antwortstrukturen.
+  </Card>
+</CardGroup>

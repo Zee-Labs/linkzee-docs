@@ -1,0 +1,190 @@
+---
+title: Base de connaissances
+icon: file-pdf
+description: "Gérez la base de connaissances PDF qui alimente le concierge IA de votre boutique."
+---
+
+La base de connaissances est un ensemble de documents PDF que votre concierge IA
+lit pour répondre aux questions des visiteurs. Importez des manuels de produits,
+des FAQ, des catalogues ou des politiques, et le concierge y puise ses réponses.
+
+Le texte importé est extrait immédiatement, puis indexé de façon asynchrone afin
+que le concierge puisse le rechercher. Une boutique peut contenir jusqu'à
+**10 PDF** par défaut (chacun jusqu'à **10&nbsp;Mo**).
+
+<Note>
+Toutes les requêtes utilisent l'URL de base `https://api.linkz.ee` et envoient
+l'en-tête `Authorization: Bearer lzk_your_key`. L'import, la suppression et la
+réindexation nécessitent une clé avec la portée **write**.
+</Note>
+
+## Lister les PDF
+
+```
+GET /v1/knowledge/files
+```
+
+Renvoie tous les PDF de votre base de connaissances, ainsi que la limite de
+fichiers actuelle.
+
+### Requête
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Arquivos listados",
+  "data": {
+    "files": [
+      {
+        "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+        "name": "product-catalog-2026.pdf",
+        "sizeBytes": 482133,
+        "pages": 12,
+        "status": "ready",
+        "createdAt": "2026-07-18T14:22:05.113Z"
+      }
+    ],
+    "maxFiles": 10
+  }
+}
+```
+
+Chaque fichier indique un `status` : `ready` une fois son texte extrait, ou
+`pending` tant qu'il est encore en cours de traitement.
+
+## Importer un PDF
+
+```
+POST /v1/knowledge/files
+```
+
+Ajoute un PDF à votre base de connaissances. Envoyez-le en tant que
+`multipart/form-data` avec un seul champ `file`.
+
+### Requête
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@product-catalog-2026.pdf" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `file` | fichier (PDF) | Oui | Le PDF à importer. Taille maximale 10&nbsp;Mo. |
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Arquivo processado",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+    "status": "ready",
+    "pages": 12
+  }
+}
+```
+
+<Warning>
+Les imports sont limités à quelques-uns par minute et par clé, car l'extraction
+d'un PDF est une opération lourde. Un fichier de plus de 10&nbsp;Mo, ou une
+requête qui dépasse votre limite de fichiers, renvoie `400 Bad Request`. Espacez
+les imports et réessayez avec un délai progressif en cas de `429`.
+</Warning>
+
+## Supprimer un PDF
+
+```
+DELETE /v1/knowledge/files/:fileId
+```
+
+Retire un PDF de votre base de connaissances. Son texte est également supprimé de
+l'index.
+
+### Requête
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files/8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11
+```
+
+### Paramètres
+
+| Paramètre | Type | Requis | Description |
+| --- | --- | --- | --- |
+| `fileId` | chaîne (chemin) | Oui | L'identifiant `fileId` du PDF à retirer. |
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Arquivo removido",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11"
+  }
+}
+```
+
+## Réindexer la base de connaissances
+
+```
+POST /v1/knowledge/reindex
+```
+
+Planifie une reconstruction de l'index de recherche du concierge. La
+réindexation s'exécute de façon asynchrone et les rafales de requêtes se
+regroupent en une seule tâche, ce qui rend l'opération sûre après un lot d'imports
+ou de suppressions.
+
+### Requête
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/reindex
+```
+
+### Réponse
+
+```json
+{
+  "error": false,
+  "message": "Reindex agendado",
+  "data": {
+    "queued": true
+  }
+}
+```
+
+<Note>
+Les imports déclenchent déjà l'indexation par eux-mêmes. N'appelez ceci que
+lorsque vous souhaitez forcer une actualisation, par exemple après avoir supprimé
+plusieurs fichiers.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Imports" icon="image" href="/api-reference/uploads">
+    Importez des images pour vos produits et votre en-tête.
+  </Card>
+  <Card title="Produits" icon="box" href="/api-reference/products">
+    Gérez les produits de votre vitrine.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/api-reference/authentication">
+    URL de base, clés API, portées et codes de statut.
+  </Card>
+</CardGroup>

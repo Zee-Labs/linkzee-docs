@@ -1,0 +1,251 @@
+---
+title: Inhalt
+icon: table-cells
+description: "Lies den öffentlichen Inhaltsbaum einer Seite und ordne ihre Links und Sammlungen neu an."
+---
+
+Die Inhalts-Endpunkte legen alles offen, was ein Besucher in der Link-Zone einer
+Seite sieht — lose Links, Sammlungen (Gruppen von Links) und Concierge-Elemente —
+sowie einen `meta`-Block, der die Produktvitrine zusammenfasst (Zähler,
+Kategorie-Chips, hervorgehobene Produkte und die erste Katalogseite).
+
+Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel enthalten:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Produkte sind nicht Teil des neu anordenbaren Baums. Die Vitrine wird automatisch
+sortiert (neueste zuerst), sodass das Neuanordnen nur Links, Sammlungen und
+Concierge-Elemente betrifft. An den Reorder-Endpunkt gesendete Produkteinträge
+werden ignoriert.
+</Note>
+
+## Inhaltsbaum abrufen
+
+```
+GET /v1/content
+```
+
+Gibt den öffentlichen Inhaltsbaum deiner Seite zurück, dazu eine `meta`-Zusammenfassung
+der Produktvitrine.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/content
+```
+
+### Antwort
+
+Das `data`-Objekt hat zwei Teile: `meta` (Vitrinen-Zusammenfassung) und `root` (die
+geordnete Liste der Inhaltseinträge). Jeder `root`-Eintrag ist entweder `link`,
+`collection` oder `concierge`.
+
+```json
+{
+  "error": false,
+  "message": "Conteúdo carregado com sucesso",
+  "data": {
+    "meta": {
+      "totalProducts": 42,
+      "newToday": 3,
+      "featured": [
+        {
+          "_id": "507f1f77bcf86cd799439051",
+          "categoryId": "507f1f77bcf86cd799439040",
+          "name": "Wireless Headphones",
+          "slug": "wireless-headphones",
+          "description": "Noise cancelling, 30h battery",
+          "price": 249.9,
+          "priceOriginal": 349.9,
+          "installments": "12x R$ 20,82",
+          "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
+          "externalLink": "https://shopee.com.br/product/...",
+          "affiliateSource": "shopee",
+          "buttonText": "Buy now",
+          "badge": "OFFER",
+          "isActive": true,
+          "isFeatured": true,
+          "highlightFx": false,
+          "clicks": 128,
+          "offerEndsAt": null,
+          "offerDurationMinutes": 120,
+          "showCountdown": true,
+          "cardSize": "large",
+          "imageRatio": "square",
+          "createdAt": "2026-07-18T12:00:00.000Z"
+        }
+      ],
+      "categories": [
+        { "id": "507f1f77bcf86cd799439040", "name": "Audio", "emoji": "🎧", "count": 8 }
+      ],
+      "catalog": {
+        "items": [
+          {
+            "_id": "507f1f77bcf86cd799439052",
+            "categoryId": "507f1f77bcf86cd799439040",
+            "name": "Bluetooth Speaker",
+            "price": 129.9,
+            "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
+            "externalLink": "https://amazon.com.br/dp/...",
+            "isActive": true,
+            "clicks": 44,
+            "createdAt": "2026-07-18T10:00:00.000Z"
+          }
+        ],
+        "nextCursor": "MTcyMTUwMDAwMDAwMDo1MDdm...",
+        "total": 42
+      }
+    },
+    "root": [
+      {
+        "type": "link",
+        "link": {
+          "_id": "507f1f77bcf86cd799439011",
+          "collectionId": null,
+          "title": "My latest video",
+          "url": "https://youtube.com/watch?v=...",
+          "thumbnailUrl": "https://cdn.linkz.ee/l/507f...webp",
+          "order": 0,
+          "isActive": true,
+          "highlightFx": false,
+          "mediaType": "video",
+          "mediaUrl": "https://youtube.com/watch?v=...",
+          "posterUrl": null,
+          "mediaProvider": "youtube"
+        }
+      },
+      {
+        "type": "collection",
+        "collection": {
+          "id": "507f1f77bcf86cd799439020",
+          "name": "Favorites",
+          "emoji": "⭐",
+          "description": "My top picks"
+        },
+        "children": [
+          {
+            "type": "link",
+            "item": {
+              "_id": "507f1f77bcf86cd799439012",
+              "collectionId": "507f1f77bcf86cd799439020",
+              "title": "Discount coupon",
+              "url": "https://linkz.ee/go/...",
+              "order": 0,
+              "isActive": true
+            }
+          }
+        ],
+        "childCount": 1
+      },
+      {
+        "type": "concierge",
+        "concierge": {
+          "id": "507f1f77bcf86cd799439030",
+          "title": "Ask me anything",
+          "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
+          "opening": "Hi! How can I help you shop today?",
+          "starterButtons": ["Best deals", "Track my order"],
+          "order": 2,
+          "leadCapture": {
+            "enabled": true,
+            "timing": "end",
+            "fields": [{ "key": "email", "enabled": true, "required": true }],
+            "introText": "Leave your email for exclusive offers",
+            "consentRequired": true,
+            "consentText": "I agree to receive messages",
+            "consentVersion": "v1",
+            "allowSkip": false
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+<Note>
+Wenn die Vitrine ausgeblendet ist, geben die `meta`-Zähler `0` zurück, und
+`featured`, `categories` sowie `catalog.items` kommen leer zurück. Leere Sammlungen
+(ohne aktive Kinder) werden aus `root` entfernt.
+</Note>
+
+## Inhalt neu anordnen
+
+```
+PUT /v1/content/order
+```
+
+Legt die Reihenfolge der gesamten Link-Zone in einem einzigen Aufruf fest. Sende den
+vollständigen Baum in der gewünschten Reihenfolge — die Position jedes Eintrags im
+Array wird zu seiner neuen Reihenfolge. Erfordert einen Schlüssel mit dem
+**write**-Scope.
+
+### Anfrage
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "root": [
+      { "type": "link", "id": "507f1f77bcf86cd799439011" },
+      {
+        "type": "collection",
+        "id": "507f1f77bcf86cd799439020",
+        "children": [
+          { "type": "link", "id": "507f1f77bcf86cd799439012" },
+          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+        ]
+      }
+    ]
+  }' \
+  https://api.linkz.ee/v1/content/order
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `root` | array | Ja | Einträge der obersten Ebene in ihrer neuen Reihenfolge. Darf leer sein. |
+| `root[].type` | string | Ja | Einer von `link`, `collection`, `concierge` oder `product`. |
+| `root[].id` | string | Ja | Die ID des Eintrags. |
+| `root[].children` | array | Nein | Untergeordnete Elemente, in Reihenfolge. Nur verwendet, wenn `type` gleich `collection` ist. |
+| `root[].children[].type` | string | Ja | Einer von `link`, `concierge` oder `product`. |
+| `root[].children[].id` | string | Ja | Die ID des untergeordneten Elements. |
+
+<Warning>
+Produkteinträge (auf der Wurzelebene oder innerhalb einer Sammlung) werden akzeptiert,
+aber ignoriert — die Vitrine ordnet sich selbst. Sende nur `link`-, `collection`- und
+`concierge`-Einträge, um das zu ändern, was tatsächlich neu angeordnet wird. Unbekannte
+IDs werden stillschweigend übersprungen.
+</Warning>
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Conteúdo reordenado com sucesso",
+  "data": { "ok": true }
+}
+```
+
+<CardGroup cols={2}>
+  <Card title="Links und Sammlungen" icon="link" href="/api-reference/links-collections">
+    Erstelle, aktualisiere und lösche die Links und Gruppen, aus denen der Baum besteht.
+  </Card>
+  <Card title="Produkte" icon="box" href="/api-reference/products">
+    Verwalte die Produkte, die die Vitrine füllen.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Lies das Seitenprofil, den Theme-Katalog und die Leistungsübersicht.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/api-reference/authentication">
+    Basis-URL, API-Schlüssel, Scopes und Antwortformat.
+  </Card>
+</CardGroup>

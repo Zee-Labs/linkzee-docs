@@ -1,0 +1,187 @@
+---
+title: Base de conocimiento
+icon: file-pdf
+description: "Gestiona la base de conocimiento en PDF que alimenta al conserje de IA de tu tienda."
+---
+
+La base de conocimiento es un conjunto de documentos PDF que tu conserje de IA lee
+para responder las preguntas de los visitantes. Sube manuales de productos,
+preguntas frecuentes, catálogos o políticas, y el conserje extraerá sus
+respuestas de ellos.
+
+El texto subido se extrae de inmediato y luego se indexa de forma asíncrona para
+que el conserje pueda buscarlo. Una tienda puede contener hasta **10 PDF** de
+forma predeterminada (cada uno de hasta **10&nbsp;MB**).
+
+<Note>
+Todas las solicitudes usan la URL base `https://api.linkz.ee` y envían la cabecera
+`Authorization: Bearer lzk_your_key`. Subir, eliminar y reindexar requieren una
+clave con el ámbito **write**.
+</Note>
+
+## Listar PDF
+
+```
+GET /v1/knowledge/files
+```
+
+Devuelve todos los PDF de tu base de conocimiento, junto con el límite actual de archivos.
+
+### Solicitud
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Arquivos listados",
+  "data": {
+    "files": [
+      {
+        "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+        "name": "product-catalog-2026.pdf",
+        "sizeBytes": 482133,
+        "pages": 12,
+        "status": "ready",
+        "createdAt": "2026-07-18T14:22:05.113Z"
+      }
+    ],
+    "maxFiles": 10
+  }
+}
+```
+
+Cada archivo informa un `status`: `ready` una vez que se ha extraído su texto, o
+`pending` mientras aún se está procesando.
+
+## Subir un PDF
+
+```
+POST /v1/knowledge/files
+```
+
+Añade un PDF a tu base de conocimiento. Envíalo como `multipart/form-data` con un
+único campo `file`.
+
+### Solicitud
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@product-catalog-2026.pdf" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `file` | archivo (PDF) | Sí | El PDF que se va a subir. Tamaño máximo 10&nbsp;MB. |
+
+### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Arquivo processado",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+    "status": "ready",
+    "pages": 12
+  }
+}
+```
+
+<Warning>
+Las subidas están limitadas a unas pocas por minuto por clave, ya que extraer un
+PDF es un trabajo pesado. Un archivo de más de 10&nbsp;MB, o una solicitud que
+supere tu límite de archivos, devuelve `400 Bad Request`. Espacia las subidas y
+reintenta con backoff en `429`.
+</Warning>
+
+## Eliminar un PDF
+
+```
+DELETE /v1/knowledge/files/:fileId
+```
+
+Elimina un PDF de tu base de conocimiento. Su texto también se descarta del índice.
+
+### Solicitud
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files/8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `fileId` | string (ruta) | Sí | El `fileId` del PDF que se va a eliminar. |
+
+### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Arquivo removido",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11"
+  }
+}
+```
+
+## Reindexar la base de conocimiento
+
+```
+POST /v1/knowledge/reindex
+```
+
+Programa una reconstrucción del índice de búsqueda del conserje. La reindexación
+se ejecuta de forma asíncrona y las ráfagas de solicitudes se agrupan en un único
+trabajo, por lo que es seguro llamarla después de un lote de subidas o eliminaciones.
+
+### Solicitud
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/reindex
+```
+
+### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Reindex agendado",
+  "data": {
+    "queued": true
+  }
+}
+```
+
+<Note>
+Las subidas ya activan la indexación por sí solas. Llama a esto solo cuando quieras
+forzar una actualización, por ejemplo después de eliminar varios archivos.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Subidas" icon="image" href="/api-reference/uploads">
+    Sube imágenes para tus productos y tu encabezado.
+  </Card>
+  <Card title="Productos" icon="box" href="/api-reference/products">
+    Gestiona los productos de tu vitrina.
+  </Card>
+  <Card title="Autenticación" icon="lock" href="/api-reference/authentication">
+    URL base, claves de API, ámbitos y códigos de estado.
+  </Card>
+</CardGroup>
