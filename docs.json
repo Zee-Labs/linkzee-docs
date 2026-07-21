@@ -1,72 +1,361 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "name": "Linkzee Docs",
   "colors": {
     "primary": "#16A34A",
-    "light": "#07C983",
+    "light": "#22C55E",
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "seo": {
+    "metatags": {
+      "og:site_name": "Linkzee Docs",
+      "og:type": "website",
+      "author": "Zee Labs LLC",
+      "keywords": "Linkzee, link in bio, affiliate, marketplace, Shopee, Amazon, Mercado Livre, scheduling, bio page"
+    },
+    "indexing": "all"
+  },
+  "navbar": {
+    "links": [
       {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
+        "label": "Support",
+        "href": "mailto:support@linkz.ee"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://linkz.ee/dashboard"
+    }
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "tabs": [
+          {
+            "tab": "Learn",
+            "groups": [
+              {
+                "group": "Get started",
+                "pages": [
+                  "get-started/introduction",
+                  "get-started/quickstart",
+                  "get-started/create-account",
+                  "get-started/your-username"
+                ]
+              },
+              {
+                "group": "Your page",
+                "pages": [
+                  "your-page/overview",
+                  "your-page/links",
+                  "your-page/collections",
+                  "your-page/social-networks",
+                  "your-page/header"
+                ]
+              },
+              {
+                "group": "Product showcase",
+                "pages": [
+                  "products/overview",
+                  "products/adding-products",
+                  "products/pricing-promotions",
+                  "products/scarcity-counter",
+                  "products/categories"
+                ]
+              },
+              {
+                "group": "Design & themes",
+                "pages": [
+                  "design/overview"
+                ]
+              },
+              {
+                "group": "Scheduling",
+                "pages": [
+                  "scheduling/overview",
+                  "scheduling/services",
+                  "scheduling/business-hours",
+                  "scheduling/team",
+                  "scheduling/blocks",
+                  "scheduling/google-calendar",
+                  "scheduling/team-google-calendar",
+                  "scheduling/reminders",
+                  "scheduling/reschedule-cancel",
+                  "scheduling/booking-link",
+                  "scheduling/ai-scheduling"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "pt-BR",
+        "tabs": [
+          {
+            "tab": "Aprender",
+            "groups": [
+              {
+                "group": "Primeiros passos",
+                "pages": [
+                  "pt-BR/get-started/introduction",
+                  "pt-BR/get-started/quickstart",
+                  "pt-BR/get-started/create-account",
+                  "pt-BR/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Sua página",
+                "pages": [
+                  "pt-BR/your-page/overview",
+                  "pt-BR/your-page/links",
+                  "pt-BR/your-page/collections",
+                  "pt-BR/your-page/social-networks",
+                  "pt-BR/your-page/header"
+                ]
+              },
+              {
+                "group": "Vitrine de produtos",
+                "pages": [
+                  "pt-BR/products/overview",
+                  "pt-BR/products/adding-products",
+                  "pt-BR/products/pricing-promotions",
+                  "pt-BR/products/scarcity-counter",
+                  "pt-BR/products/categories"
+                ]
+              },
+              {
+                "group": "Design e temas",
+                "pages": [
+                  "pt-BR/design/overview"
+                ]
+              },
+              {
+                "group": "Agenda",
+                "pages": [
+                  "pt-BR/scheduling/overview",
+                  "pt-BR/scheduling/services",
+                  "pt-BR/scheduling/business-hours",
+                  "pt-BR/scheduling/team",
+                  "pt-BR/scheduling/blocks",
+                  "pt-BR/scheduling/google-calendar",
+                  "pt-BR/scheduling/team-google-calendar",
+                  "pt-BR/scheduling/reminders",
+                  "pt-BR/scheduling/reschedule-cancel",
+                  "pt-BR/scheduling/booking-link",
+                  "pt-BR/scheduling/ai-scheduling"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "es",
+        "tabs": [
+          {
+            "tab": "Aprender",
+            "groups": [
+              {
+                "group": "Primeros pasos",
+                "pages": [
+                  "es/get-started/introduction",
+                  "es/get-started/quickstart",
+                  "es/get-started/create-account",
+                  "es/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Tu página",
+                "pages": [
+                  "es/your-page/overview",
+                  "es/your-page/links",
+                  "es/your-page/collections",
+                  "es/your-page/social-networks",
+                  "es/your-page/header"
+                ]
+              },
+              {
+                "group": "Escaparate de productos",
+                "pages": [
+                  "es/products/overview",
+                  "es/products/adding-products",
+                  "es/products/pricing-promotions",
+                  "es/products/scarcity-counter",
+                  "es/products/categories"
+                ]
+              },
+              {
+                "group": "Diseño y temas",
+                "pages": [
+                  "es/design/overview"
+                ]
+              },
+              {
+                "group": "Agenda",
+                "pages": [
+                  "es/scheduling/overview",
+                  "es/scheduling/services",
+                  "es/scheduling/business-hours",
+                  "es/scheduling/team",
+                  "es/scheduling/blocks",
+                  "es/scheduling/google-calendar",
+                  "es/scheduling/team-google-calendar",
+                  "es/scheduling/reminders",
+                  "es/scheduling/reschedule-cancel",
+                  "es/scheduling/booking-link",
+                  "es/scheduling/ai-scheduling"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "fr",
+        "tabs": [
+          {
+            "tab": "Apprendre",
+            "groups": [
+              {
+                "group": "Premiers pas",
+                "pages": [
+                  "fr/get-started/introduction",
+                  "fr/get-started/quickstart",
+                  "fr/get-started/create-account",
+                  "fr/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Votre page",
+                "pages": [
+                  "fr/your-page/overview",
+                  "fr/your-page/links",
+                  "fr/your-page/collections",
+                  "fr/your-page/social-networks",
+                  "fr/your-page/header"
+                ]
+              },
+              {
+                "group": "Vitrine de produits",
+                "pages": [
+                  "fr/products/overview",
+                  "fr/products/adding-products",
+                  "fr/products/pricing-promotions",
+                  "fr/products/scarcity-counter",
+                  "fr/products/categories"
+                ]
+              },
+              {
+                "group": "Design et thèmes",
+                "pages": [
+                  "fr/design/overview"
+                ]
+              },
+              {
+                "group": "Agenda",
+                "pages": [
+                  "fr/scheduling/overview",
+                  "fr/scheduling/services",
+                  "fr/scheduling/business-hours",
+                  "fr/scheduling/team",
+                  "fr/scheduling/blocks",
+                  "fr/scheduling/google-calendar",
+                  "fr/scheduling/team-google-calendar",
+                  "fr/scheduling/reminders",
+                  "fr/scheduling/reschedule-cancel",
+                  "fr/scheduling/booking-link",
+                  "fr/scheduling/ai-scheduling"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "de",
+        "tabs": [
+          {
+            "tab": "Lernen",
+            "groups": [
+              {
+                "group": "Erste Schritte",
+                "pages": [
+                  "de/get-started/introduction",
+                  "de/get-started/quickstart",
+                  "de/get-started/create-account",
+                  "de/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Deine Seite",
+                "pages": [
+                  "de/your-page/overview",
+                  "de/your-page/links",
+                  "de/your-page/collections",
+                  "de/your-page/social-networks",
+                  "de/your-page/header"
+                ]
+              },
+              {
+                "group": "Produkt-Schaufenster",
+                "pages": [
+                  "de/products/overview",
+                  "de/products/adding-products",
+                  "de/products/pricing-promotions",
+                  "de/products/scarcity-counter",
+                  "de/products/categories"
+                ]
+              },
+              {
+                "group": "Design & Themes",
+                "pages": [
+                  "de/design/overview"
+                ]
+              },
+              {
+                "group": "Terminplanung",
+                "pages": [
+                  "de/scheduling/overview",
+                  "de/scheduling/services",
+                  "de/scheduling/business-hours",
+                  "de/scheduling/team",
+                  "de/scheduling/blocks",
+                  "de/scheduling/google-calendar",
+                  "de/scheduling/team-google-calendar",
+                  "de/scheduling/reminders",
+                  "de/scheduling/reschedule-cancel",
+                  "de/scheduling/booking-link",
+                  "de/scheduling/ai-scheduling"
+                ]
+              }
+            ]
+          }
         ]
       }
     ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Website",
+          "href": "https://linkz.ee",
+          "icon": "globe"
         }
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
-  },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://linkz.ee"
     }
   }
 }
