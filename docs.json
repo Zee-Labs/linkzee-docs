@@ -197,7 +197,21 @@
               }
             ]
           }
-        ]
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "API Reference",
+              "href": "/api-reference/authentication",
+              "icon": "code"
+            },
+            {
+              "anchor": "Website",
+              "href": "https://linkz.ee",
+              "icon": "globe"
+            }
+          ]
+        }
       },
       {
         "language": "pt-BR",
@@ -357,7 +371,21 @@
               }
             ]
           }
-        ]
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Referência da API",
+              "href": "/pt-BR/api-reference/authentication",
+              "icon": "code"
+            },
+            {
+              "anchor": "Site",
+              "href": "https://linkz.ee",
+              "icon": "globe"
+            }
+          ]
+        }
       },
       {
         "language": "es",
@@ -517,7 +545,21 @@
               }
             ]
           }
-        ]
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Referencia de la API",
+              "href": "/es/api-reference/authentication",
+              "icon": "code"
+            },
+            {
+              "anchor": "Sitio web",
+              "href": "https://linkz.ee",
+              "icon": "globe"
+            }
+          ]
+        }
       },
       {
         "language": "fr",
@@ -677,7 +719,21 @@
               }
             ]
           }
-        ]
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Référence API",
+              "href": "/fr/api-reference/authentication",
+              "icon": "code"
+            },
+            {
+              "anchor": "Site web",
+              "href": "https://linkz.ee",
+              "icon": "globe"
+            }
+          ]
+        }
       },
       {
         "language": "de",
@@ -837,23 +893,23 @@
               }
             ]
           }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "API Reference",
-          "href": "/api-reference/authentication",
-          "icon": "code"
-        },
-        {
-          "anchor": "Website",
-          "href": "https://linkz.ee",
-          "icon": "globe"
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "API-Referenz",
+              "href": "/de/api-reference/authentication",
+              "icon": "code"
+            },
+            {
+              "anchor": "Website",
+              "href": "https://linkz.ee",
+              "icon": "globe"
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   },
   "footer": {
     "socials": {
