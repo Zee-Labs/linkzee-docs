@@ -1,0 +1,159 @@
+---
+title: Authentication
+icon: lock
+description: "How to authenticate with the Linkzee API using a bearer key, plus the base URL, response envelope, and status codes you'll work with."
+---
+
+The Linkzee API lets you manage your page, product showcase, links, bookings and
+more from your own code. Every request is a plain HTTPS call that returns JSON,
+authenticated with an API key.
+
+## Base URL
+
+All endpoints live under `/v1` on a single host:
+
+```
+https://api.linkz.ee/v1
+```
+
+Send bodies as `application/json`. Every response comes back as JSON too.
+
+## Your API key
+
+Authenticate every request with a bearer token in the `Authorization` header:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+Linkzee keys always start with the `lzk_` prefix. Create and manage keys from the
+API keys screen in your account.
+
+<Warning>
+  Treat your key like a password. It carries full access to your account's data —
+  keep it server-side, never commit it to a repository, and rotate it if it leaks.
+</Warning>
+
+### Scopes
+
+Each key has a scope that controls what it can do:
+
+| Scope | Grants |
+| --- | --- |
+| `read` | Read-only access. All `GET` requests. |
+| `write` | Everything `read` allows, plus create, update, delete and reorder (`POST`, `PATCH`, `PUT`, `DELETE`). |
+
+A `read` key sent to a write operation is rejected with `403 Forbidden`. Give each
+integration the narrowest scope it needs.
+
+## Making a request
+
+Here's a quick health check you can run to confirm your setup — it needs no key
+and returns the standard envelope:
+
+```bash
+curl https://api.linkz.ee/health
+```
+
+```json
+{
+  "error": false,
+  "message": "API is up",
+  "data": { "status": "ok" }
+}
+```
+
+An authenticated call looks the same, with your key attached:
+
+```bash
+curl -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/store
+```
+
+## Response envelope
+
+Every response uses one consistent shape, so you can parse success and failure the
+same way.
+
+### Success
+
+Successful responses always have `error: false`, a human-readable `message`, and a
+`data` payload (which may be `null` for actions like delete):
+
+```json
+{
+  "error": false,
+  "message": "Store loaded",
+  "data": { }
+}
+```
+
+### Errors
+
+Failures set `error: true` and add a few fields to help you debug:
+
+```json
+{
+  "error": true,
+  "statusCode": 401,
+  "message": "Missing or invalid API key",
+  "path": "/v1/store",
+  "timestamp": "2026-07-21T14:03:11.482Z"
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `error` | Always `true` on failures. |
+| `statusCode` | The HTTP status, repeated in the body. |
+| `message` | A readable explanation of what went wrong. |
+| `fields` | Present on validation errors: a map of `{ field: reason }`. |
+| `code` | Optional short code to distinguish two errors that share a status. |
+| `path` | The request path that failed. |
+| `timestamp` | When the error occurred (ISO 8601). |
+
+<Note>
+  On validation failures the `fields` object tells you exactly which inputs were
+  rejected and why, so you can surface precise messages in your own app.
+</Note>
+
+## Status codes
+
+| Status | Meaning |
+| --- | --- |
+| `200 OK` | The request succeeded. |
+| `201 Created` | A new resource was created. |
+| `400 Bad Request` | The request body or parameters were invalid — check `fields`. |
+| `401 Unauthorized` | The key is missing, malformed, revoked or invalid. |
+| `403 Forbidden` | The key is valid but its scope doesn't allow this operation. |
+| `404 Not Found` | The resource doesn't exist or isn't yours. |
+| `429 Too Many Requests` | You've hit the rate limit — back off and retry. |
+
+## Endpoint groups
+
+Once you're authenticated, explore the rest of the API by area:
+
+| Area | What it covers |
+| --- | --- |
+| [Store](/api-reference/store) | Store profile, themes catalog and performance summary. |
+| [Content](/api-reference/content) | Read the public content tree and reorder it. |
+| [Products](/api-reference/products) | List, read, create, update and delete showcase products. |
+| [Categories](/api-reference/categories) | Manage product categories and their order. |
+| [Links & collections](/api-reference/links-collections) | Manage links, collections and their order. |
+| [Agenda](/api-reference/agenda) | Services, staff, blocks, appointments and availability. |
+| [Leads](/api-reference/leads) | List captured leads and export them as CSV. |
+| [Uploads](/api-reference/uploads) | Upload images for your page and products. |
+| [Knowledge](/api-reference/knowledge) | Manage the PDFs behind your AI assistant. |
+| [Rate limits](/api-reference/rate-limits) | How throttling works and how to handle it. |
+
+<CardGroup cols={2}>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Understand throttling and how to retry gracefully.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Read your store profile, themes and performance.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Manage your affiliate product showcase.
+  </Card>
+</CardGroup>

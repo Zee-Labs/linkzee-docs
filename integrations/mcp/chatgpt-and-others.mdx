@@ -1,0 +1,58 @@
+---
+title: ChatGPT and other MCP clients
+icon: plug
+description: "Connect Linkzee to ChatGPT, Cursor, and any MCP-compatible agent so you can manage your page in plain language."
+---
+
+Linkzee works with **any MCP-compatible agent** — not just Claude. If your tool
+supports MCP, you can connect it to Linkzee and manage your page in natural
+language: **ChatGPT**, **Cursor**, and more.
+
+The setup is the same everywhere. You point your client at Linkzee's MCP
+endpoint and sign in with your API key. After that, you just ask.
+
+## Connect your client
+
+<Steps>
+  <Step title="Create an API key">
+    In your dashboard, open the **API & MCP** settings and create an API key.
+    You'll use it to authenticate your agent. See
+    [API keys](/integrations/api/api-keys) for the full walkthrough.
+  </Step>
+  <Step title="Add an MCP server">
+    In your client, add a new MCP server pointing to the Linkzee endpoint:
+
+    ```
+    https://api.linkz.ee/mcp
+    ```
+  </Step>
+  <Step title="Provide your API key">
+    Authenticate with your key as the authorization:
+
+    ```
+    Bearer lzk_...
+    ```
+  </Step>
+  <Step title="Ask in natural language">
+    Once connected, talk to your agent the way you'd talk to an assistant:
+    "add this product", "what's booked this week?", or "change my theme."
+  </Step>
+</Steps>
+
+<Note>
+  Every client adds MCP servers a little differently. Check your client's own
+  documentation for exactly where to paste the endpoint and your key.
+</Note>
+
+The available actions are the same across every client. See the
+[tools reference](/integrations/mcp/tools-reference) for everything an agent can
+do through MCP.
+
+<CardGroup cols={2}>
+  <Card title="Connect Claude" icon="comment" href="/integrations/mcp/claude">
+    Step-by-step setup for using Linkzee with Claude.
+  </Card>
+  <Card title="Tools reference" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    See every action an AI agent can take on your Linkzee.
+  </Card>
+</CardGroup>

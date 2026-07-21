@@ -1,0 +1,290 @@
+---
+title: Products
+icon: box
+description: "List, read, create, update and delete the products in your Linkzee showcase."
+---
+
+Products are the items in your public showcase. Each product has a name, an
+optional price, an image and an affiliate link. Use these endpoints to keep your
+catalog in sync from your own systems.
+
+All requests go to `https://api.linkz.ee` and must include your API key:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Reading products (`GET`) works with any key. Creating, updating or deleting a
+product requires a key with the **write** scope.
+</Note>
+
+## List products
+
+```
+GET /v1/products
+```
+
+Returns every product in your store, in showcase order.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Produtos listados",
+  "data": [
+    {
+      "id": "665f1a2b9c4e1f0012a3b4c5",
+      "name": "Wireless Headphones XYZ",
+      "slug": "wireless-headphones-xyz",
+      "description": "Bluetooth 5.3, 30h battery",
+      "price": 99.9,
+      "priceOriginal": 149.9,
+      "installments": "3x of R$ 33.30",
+      "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+      "externalLink": "https://shopee.com.br/product/123",
+      "badge": "Deal",
+      "isActive": true,
+      "isFeatured": false,
+      "categoryId": "665f0000aa11bb22cc33dd44",
+      "clicks": 128,
+      "createdAt": "2026-07-10T12:04:55.000Z"
+    }
+  ]
+}
+```
+
+## Get a product
+
+```
+GET /v1/products/{id}
+```
+
+Returns a single product by its ID.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string (path) | Yes | The product ID. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Produto encontrado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "slug": "wireless-headphones-xyz",
+    "description": "Bluetooth 5.3, 30h battery",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "installments": "3x of R$ 33.30",
+    "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+    "gallery": [],
+    "externalLink": "https://shopee.com.br/product/123",
+    "buttonText": "Buy",
+    "badge": "Deal",
+    "isActive": true,
+    "isFeatured": false,
+    "categoryId": "665f0000aa11bb22cc33dd44",
+    "showCountdown": false,
+    "clicks": 128,
+    "createdAt": "2026-07-10T12:04:55.000Z"
+  }
+}
+```
+
+## Create a product
+
+```
+POST /v1/products
+```
+
+Creates a product in your showcase. Requires the **write** scope.
+
+You can either send the product fields directly, or send just a marketplace
+`url` and let Linkzee fetch the name, price and image for you. If the automatic
+lookup comes back incomplete, send at least `name` so the product can be saved.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Wireless Headphones XYZ",
+    "description": "Bluetooth 5.3, 30h battery",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "imageUrl": "https://example.com/headphones.jpg",
+    "externalLink": "https://shopee.com.br/product/123",
+    "badge": "Deal",
+    "isFeatured": true
+  }' \
+  https://api.linkz.ee/v1/products
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Conditional | Product name (max 160). Optional when `url` is sent — it is filled from the marketplace lookup. |
+| `url` | string | No | Marketplace URL. When sent without `name`/`price`, Linkzee tries to fill them automatically. |
+| `slug` | string | No | Custom slug (max 80). Derived from the name when omitted; unique per store. |
+| `description` | string | No | Short description (max 2000). |
+| `price` | number | No | Current price in R$. Leave empty for a "no price" product. |
+| `priceOriginal` | number | No | Original price, used to show a discount. |
+| `installments` | string | No | Installment text, e.g. `3x of R$ 33.30` (max 80). |
+| `imageUrl` | string | No | Main image URL (http/https). External URLs are re-hosted on the CDN. |
+| `gallery` | string[] | No | Up to 10 extra image URLs. |
+| `externalLink` | string | No | Affiliate/marketplace link (http/https). |
+| `buttonText` | string | No | Call-to-action label (max 60), e.g. `Buy`. |
+| `badge` | string | No | Short promo tag (max 40), e.g. `Deal`. |
+| `categoryId` | string | No | ID of the category this product belongs to. |
+| `isActive` | boolean | No | Whether the product is visible in the showcase. Defaults to `true`. |
+| `isFeatured` | boolean | No | Show the product larger, at the top of the showcase. |
+| `cardSize` | string | No | `normal` or `wide` (a `wide` card spans both grid columns). |
+| `offerDurationMinutes` | number | No | Scarcity countdown duration, in minutes. |
+| `showCountdown` | boolean | No | Show the countdown timer on the card. |
+
+<Note>
+To avoid creating the same product twice on a retry, send an
+`Idempotency-Key` header. If a create with that key already succeeded, the
+original product is returned instead of a duplicate.
+</Note>
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Produto criado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "slug": "wireless-headphones-xyz",
+    "price": 99.9,
+    "priceOriginal": 149.9,
+    "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
+    "externalLink": "https://shopee.com.br/product/123",
+    "badge": "Deal",
+    "isActive": true,
+    "isFeatured": true,
+    "clicks": 0,
+    "createdAt": "2026-07-21T09:15:00.000Z"
+  }
+}
+```
+
+## Update a product
+
+```
+PATCH /v1/products/{id}
+```
+
+Updates any subset of a product's fields. Requires the **write** scope. Only the
+fields you send are changed.
+
+### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "price": 89.9,
+    "badge": "Flash sale",
+    "isActive": false
+  }' \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string (path) | Yes | The product ID. |
+
+The body accepts the same fields as **Create a product**, except `url` (the
+automatic lookup only runs on creation). All fields are optional. Send
+`categoryId: null` to remove the product from its category.
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Produto atualizado",
+  "data": {
+    "id": "665f1a2b9c4e1f0012a3b4c5",
+    "name": "Wireless Headphones XYZ",
+    "price": 89.9,
+    "badge": "Flash sale",
+    "isActive": false
+  }
+}
+```
+
+## Delete a product
+
+```
+DELETE /v1/products/{id}
+```
+
+Removes a product from your showcase. Requires the **write** scope.
+
+### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products/665f1a2b9c4e1f0012a3b4c5
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string (path) | Yes | The product ID. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Produto removido"
+}
+```
+
+<CardGroup cols={2}>
+  <Card title="Categories" icon="layer-group" href="/api-reference/categories">
+    Organize products into categories.
+  </Card>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Upload product images to the CDN.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    API keys, scopes and response format.
+  </Card>
+</CardGroup>

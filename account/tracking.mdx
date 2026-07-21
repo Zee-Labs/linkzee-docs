@@ -1,0 +1,50 @@
+---
+title: Tracking
+icon: chart-simple
+description: "Measure conversions with your own tools — connect Meta Pixel, the Conversions API, Google Tag Manager and default UTMs."
+---
+
+Linkzee has its own [Performance](/analytics/overview) screen, but you can also
+measure conversions with your **own** marketing tools. Connect them once and
+Linkzee sends the data as visitors interact with your page.
+
+Everything here auto-saves as you type — there's no Save button.
+
+## Meta Pixel
+
+Add your **Meta Pixel** ID to track visitors and conversions in Meta Events
+Manager. Then add its **Conversions API** token as well.
+
+The token matters: browsers and iOS often block the pixel script, so events can
+go missing. The Conversions API sends the conversion straight from Linkzee, so it
+still gets recorded even when the script is blocked. Adding both gives you the
+most complete tracking.
+
+## Google Tag Manager
+
+Add your **Google Tag Manager** container ID to load your GTM container on your
+public page. From there you can manage your own tags and triggers in Google Tag
+Manager.
+
+## UTM parameters
+
+Set default **UTM** parameters — such as source, medium and campaign — that
+Linkzee automatically adds to your outgoing links. This tags the traffic you send
+out so your analytics attribute it to the right source and campaign.
+
+<Note>
+  You'll find these values in your marketing tools — your Pixel ID and
+  Conversions API token in **Meta Events Manager**, and your container ID in
+  **Google Tag Manager**.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Performance" icon="chart-line" href="/analytics/overview">
+    See clicks, views and your top items right inside Linkzee.
+  </Card>
+  <Card title="Account settings" icon="gear" href="/account/account">
+    Set your language, region, appearance and accessibility options.
+  </Card>
+</CardGroup>

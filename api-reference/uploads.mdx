@@ -1,0 +1,122 @@
+---
+title: Uploads
+icon: image
+description: "Upload an image and get back a hosted URL you can use for your logo, products, links, and more."
+---
+
+Use the uploads endpoint to send an image to Linkzee and get back a permanent,
+CDN-hosted URL. Every image is converted to **WebP**, resized to fit within
+1600&nbsp;px, and served with long-lived caching, so the URL you receive is ready
+to drop straight into a product, link, or your store profile.
+
+The endpoint lives under the base URL `https://api.linkz.ee` and requires the
+`Authorization: Bearer lzk_your_key` header. Uploading changes your storefront,
+so it needs a key with the **write** scope.
+
+## Upload an image
+
+```
+POST /v1/uploads/image
+```
+
+Uploads a single image and returns its hosted URL. Send the request as
+`multipart/form-data`, not JSON.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/photo.jpg" \
+  -F "kind=product" \
+  -F "productId=507f1f77bcf86cd799439011" \
+  https://api.linkz.ee/v1/uploads/image
+```
+
+### Parameters
+
+Send these as multipart form fields.
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `file` | file | Yes | The image to upload. Any common format (JPEG, PNG, WebP, etc.), up to **8&nbsp;MB**. It is converted to WebP automatically. |
+| `kind` | string | No | Where the image belongs. Determines a stable storage location so re-uploading the same kind overwrites the previous image instead of piling up. See the table below. |
+| `productId` | string | No | Required when `kind` is `product`. The product this image belongs to. It must be a product in your own store. |
+| `linkId` | string | No | Required when `kind` is `link`, `linkMedia`, or `linkPoster`. The link the image belongs to. It must be a link in your own store. |
+| `staffId` | string | No | Required when `kind` is `staffAvatar`. The team member the avatar belongs to. |
+
+#### Values for `kind`
+
+| `kind` | Use it for | Also send |
+| --- | --- | --- |
+| `logo` | Your store logo | — |
+| `product` | A product image | `productId` |
+| `wallpaper` | Your page wallpaper | — |
+| `banner` | Your header banner | — |
+| `cutout` | A header cutout image | — |
+| `link` | A link thumbnail | `linkId` |
+| `linkMedia` | A link card cover | `linkId` |
+| `linkPoster` | A link video poster | `linkId` |
+| `conciergeAvatar` | Your AI assistant avatar | — |
+| `staffAvatar` | A team member's photo | `staffId` |
+
+<Note>
+When you send a `kind` (and its matching ID), the image is stored at a fixed
+location for that resource, so a new upload replaces the old one. Omit `kind`
+and each upload gets its own unique URL instead.
+</Note>
+
+<Warning>
+Files over 8&nbsp;MB are rejected. Only image files are accepted — other file
+types return a `400 Bad Request`. If you set `kind` to `product` or `link`, the
+matching `productId` or `linkId` must reference a resource in your own store.
+</Warning>
+
+### Response
+
+The `url` is your hosted image. Because stored images are cached aggressively,
+the URL ends with a `?v=` version marker that changes on every upload — always
+use the exact URL you get back.
+
+```json
+{
+  "error": false,
+  "message": "Upload realizado com sucesso",
+  "data": {
+    "url": "https://cdn.linkz.ee/linkzee/users/64a1.../products/507f1f77bcf86cd799439011?v=1721577600000",
+    "width": 1200,
+    "height": 1200,
+    "format": "webp",
+    "hasAlpha": false
+  }
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `url` | string | The hosted, cache-busted image URL. |
+| `width` | integer | Width of the processed image, in pixels. |
+| `height` | integer | Height of the processed image, in pixels. |
+| `format` | string | Always `webp`. |
+| `hasAlpha` | boolean | Whether the image has a transparent channel. |
+
+<Note>
+To attach an uploaded image to a resource, take the returned `url` and set it on
+the product or link — for example, pass it as the product's `image` when you
+create or update it.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Create products and set their images to an uploaded URL.
+  </Card>
+  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
+    Add thumbnails and covers to your links.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Update your logo, wallpaper, and header.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, keys, scopes, and response shapes.
+  </Card>
+</CardGroup>

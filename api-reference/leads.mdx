@@ -1,0 +1,132 @@
+---
+title: Leads
+icon: address-book
+description: "Read the leads captured by your store and export them as a CSV file."
+---
+
+Every contact your store captures — from the storefront form or the AI
+concierge — becomes a **lead**. These endpoints let you read the full list and
+export it as a CSV, so you can sync contacts into your email or WhatsApp tools.
+
+<Note>
+Both endpoints are read-only and need a key with the **read** scope. They are
+always scoped to the store that owns the key, so you only ever see your own
+leads.
+</Note>
+
+## List leads
+
+```
+GET /v1/leads
+```
+
+Returns every lead your store has captured, most recent first. There is no
+pagination — you always get the complete list.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/leads
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Leads listados com sucesso",
+  "data": [
+    {
+      "id": "665f1a2b9c4e7d0012ab34cd",
+      "name": "Ana Ribeiro",
+      "phone": "5511998877665",
+      "email": "ana.ribeiro@example.com",
+      "instagram": "anaribeiro",
+      "source": "instagram",
+      "consent": true,
+      "captureTiming": "storefront",
+      "consentVersion": "2026-05-01",
+      "consentAt": "2026-07-18T14:22:05.120Z",
+      "utmSource": "instagram",
+      "utmMedium": "bio",
+      "utmCampaign": "winter-sale",
+      "createdAt": "2026-07-18T14:22:05.118Z"
+    }
+  ]
+}
+```
+
+Each lead includes the fields below. A contact always has at least one of
+`phone`, `email`, or `instagram`; the others may be empty strings.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Unique identifier for the lead. |
+| `name` | string | Name the visitor provided (may be empty). |
+| `phone` | string | Phone number in digits only (country + area + number). |
+| `email` | string | Email address, lowercased. |
+| `instagram` | string | Instagram handle without the `@`. |
+| `source` | string | Where the lead came from (for example `instagram`, `whatsapp`, `direct`). |
+| `consent` | boolean | Whether the visitor accepted the consent checkbox. |
+| `captureTiming` | string | Where in the flow the lead was captured: `storefront`, `start`, or `end`. |
+| `consentVersion` | string | Version of the consent text accepted, when recorded. |
+| `consentAt` | string | When consent was given (ISO 8601). |
+| `utmSource` | string | UTM source recorded at capture time. |
+| `utmMedium` | string | UTM medium recorded at capture time. |
+| `utmCampaign` | string | UTM campaign recorded at capture time. |
+| `createdAt` | string | When the lead was captured (ISO 8601). |
+
+## Export leads as CSV
+
+```
+GET /v1/leads/export.csv
+```
+
+Returns the same leads as a downloadable CSV file — handy for importing into a
+spreadsheet, email platform, or WhatsApp broadcast tool.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/leads/export.csv \
+  -o leads.csv
+```
+
+### Response
+
+Unlike the other endpoints, this one returns raw CSV (not the JSON envelope),
+with `Content-Type: text/csv; charset=utf-8` and a `leads.csv` attachment
+filename. The file is UTF-8 with a byte-order mark so accents open correctly in
+Excel.
+
+```csv
+nome,telefone,email,instagram,origem,consentimento,data
+Ana Ribeiro,5511998877665,ana.ribeiro@example.com,anaribeiro,instagram,sim,2026-07-18T14:22:05.118Z
+```
+
+The columns map to the lead fields: name, phone, email, Instagram, source,
+consent (`sim`/`não`), and capture date.
+
+<Note>
+Handle leads responsibly. Contacts consent to hearing from your store, so keep
+your messaging relevant and honor opt-outs.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Read your store profile and performance summary.
+  </Card>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Upload images to use across your page.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, API keys, scopes, and status codes.
+  </Card>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Stay within the limits and retry gracefully.
+  </Card>
+</CardGroup>

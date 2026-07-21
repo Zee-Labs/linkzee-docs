@@ -1,0 +1,721 @@
+---
+title: Scheduling
+icon: calendar
+description: "Manage services, staff, time blocks, availability and appointments in your Linkzee booking calendar."
+---
+
+The Scheduling endpoints let you run your booking calendar programmatically:
+define the **services** people can book, your **staff**, the **blocks** when
+you're off, and read real **availability** to create and manage **appointments**.
+
+All paths live under `https://api.linkz.ee/v1/agenda`. Every request needs the
+`Authorization: Bearer lzk_your_key` header, and write operations
+(POST/PATCH/DELETE) require a key with the **write** scope.
+
+<Note>
+Reads (`GET`) work with any valid key. Creating, updating, transitioning,
+rescheduling or deleting anything requires the **write** scope.
+</Note>
+
+## Services
+
+A service (offering) is something people can book — a haircut, a consultation,
+a call. Each service has a duration and, optionally, a price.
+
+### List services
+
+```
+GET /v1/agenda/offerings
+```
+
+Returns every service in your calendar, in display order.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/offerings
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Serviços carregados",
+  "data": [
+    {
+      "_id": "665f0a1b2c3d4e5f60718293",
+      "name": "Strategy call",
+      "durationMin": 45,
+      "price": 150,
+      "description": "A focused 45-minute planning session.",
+      "color": "#2f80ed",
+      "bufferAfterMin": 15,
+      "meetEnabled": true,
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+### Create a service
+
+```
+POST /v1/agenda/offerings
+```
+
+Adds a new bookable service.
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Strategy call","durationMin":45,"price":150,"meetEnabled":true}' \
+  https://api.linkz.ee/v1/agenda/offerings
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Service name (max 80 characters). |
+| `durationMin` | integer | Yes | Duration in minutes (5–720). |
+| `price` | number | No | Price in R$. Omit or send `null` for free. |
+| `description` | string | No | Short description (max 300 characters). |
+| `color` | string | No | Hex color for the calendar, e.g. `#2f80ed`. |
+| `bufferAfterMin` | integer | No | Cushion in minutes after each booking (0–240). |
+| `meetEnabled` | boolean | No | Create a Google Meet link for each booking. |
+| `isActive` | boolean | No | Whether the service is bookable. Defaults to `true`. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Serviço criado",
+  "data": {
+    "_id": "665f0a1b2c3d4e5f60718293",
+    "name": "Strategy call",
+    "durationMin": 45,
+    "price": 150,
+    "bufferAfterMin": 0,
+    "meetEnabled": true,
+    "order": 0,
+    "isActive": true
+  }
+}
+```
+
+### Update a service
+
+```
+PATCH /v1/agenda/offerings/{id}
+```
+
+Updates a service. Send the full set of fields, just like when creating.
+
+#### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Strategy call","durationMin":60,"price":180}' \
+  https://api.linkz.ee/v1/agenda/offerings/665f0a1b2c3d4e5f60718293
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The service ID (in the path). |
+
+The body accepts the same fields as [Create a service](#create-a-service).
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Serviço atualizado",
+  "data": {
+    "_id": "665f0a1b2c3d4e5f60718293",
+    "name": "Strategy call",
+    "durationMin": 60,
+    "price": 180,
+    "isActive": true
+  }
+}
+```
+
+### Delete a service
+
+```
+DELETE /v1/agenda/offerings/{id}
+```
+
+Removes a service. It stops being bookable; existing appointments are untouched.
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/offerings/665f0a1b2c3d4e5f60718293
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Serviço removido",
+  "data": { "id": "665f0a1b2c3d4e5f60718293" }
+}
+```
+
+## Staff
+
+Staff are the people who deliver your services. Each can have their own working
+hours and the set of services they offer.
+
+### List staff
+
+```
+GET /v1/agenda/staff
+```
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/staff
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": [
+    {
+      "_id": "665f0c9a8b7d6e5f40312a11",
+      "name": "Ana Souza",
+      "title": "Senior consultant",
+      "avatarUrl": "https://cdn.linkz.ee/staff/ana.webp",
+      "hours": null,
+      "offeringIds": ["665f0a1b2c3d4e5f60718293"],
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+### Create a staff member
+
+```
+POST /v1/agenda/staff
+```
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana Souza","title":"Senior consultant","offeringIds":["665f0a1b2c3d4e5f60718293"]}' \
+  https://api.linkz.ee/v1/agenda/staff
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Staff name (max 80 characters). |
+| `title` | string | No | Role or title (max 80 characters). |
+| `avatarUrl` | string | No | Photo URL (max 500 characters). |
+| `hours` | array | No | Weekly working hours (see below). Send `null` to inherit your business hours. |
+| `offeringIds` | array of string | No | Services this person delivers. `null` means all services. |
+| `isActive` | boolean | No | Whether the person is bookable. Defaults to `true`. |
+
+Each entry in `hours` describes one weekday:
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `day` | integer | Yes | Weekday, `0` = Sunday through `6` = Saturday. |
+| `closed` | boolean | No | Set `true` to mark the day off. |
+| `ranges` | array | No | Working windows, each with `startMin` and `endMin` (minutes from midnight, 0–1440). |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": {
+    "_id": "665f0c9a8b7d6e5f40312a11",
+    "name": "Ana Souza",
+    "title": "Senior consultant",
+    "hours": null,
+    "offeringIds": ["665f0a1b2c3d4e5f60718293"],
+    "isActive": true
+  }
+}
+```
+
+### Update a staff member
+
+```
+PATCH /v1/agenda/staff/{id}
+```
+
+Replaces the staff record. Send the full set of fields, as when creating.
+
+#### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ana Souza","hours":[{"day":1,"ranges":[{"startMin":540,"endMin":1020}]}]}' \
+  https://api.linkz.ee/v1/agenda/staff/665f0c9a8b7d6e5f40312a11
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The staff ID (in the path). |
+
+The body accepts the same fields as [Create a staff member](#create-a-staff-member).
+
+### Delete a staff member
+
+```
+DELETE /v1/agenda/staff/{id}
+```
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/staff/665f0c9a8b7d6e5f40312a11
+```
+
+#### Response
+
+```json
+{ "error": false, "message": "ok", "data": { "id": "665f0c9a8b7d6e5f40312a11" } }
+```
+
+## Blocks
+
+A block is a stretch of time when you (or one staff member) are unavailable —
+a holiday, vacation or day off. Bookings can't land inside a block.
+
+<Note>
+Blocks have no update endpoint. To change one, delete it and create a new one.
+</Note>
+
+### List blocks
+
+```
+GET /v1/agenda/blocks
+```
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/blocks
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": [
+    {
+      "_id": "665f0e5511aa22bb33cc44dd",
+      "staffId": null,
+      "startDate": "2026-12-24",
+      "endDate": "2026-12-26",
+      "allDay": true,
+      "reason": "Holidays"
+    }
+  ]
+}
+```
+
+### Create a block
+
+```
+POST /v1/agenda/blocks
+```
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"startDate":"2026-12-24","endDate":"2026-12-26","allDay":true,"reason":"Holidays"}' \
+  https://api.linkz.ee/v1/agenda/blocks
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `startDate` | string | Yes | First blocked day, `YYYY-MM-DD`. |
+| `endDate` | string | Yes | Last blocked day, `YYYY-MM-DD`. |
+| `staffId` | string | No | Block one staff member. Omit or `null` blocks the whole store. |
+| `allDay` | boolean | No | Whether the block covers the full day. Defaults to `true`. |
+| `startMin` | integer | No | Start minute from midnight for a partial-day block (0–1440). |
+| `endMin` | integer | No | End minute from midnight for a partial-day block (0–1440). |
+| `reason` | string | No | Short label (max 120 characters). |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "ok",
+  "data": {
+    "_id": "665f0e5511aa22bb33cc44dd",
+    "startDate": "2026-12-24",
+    "endDate": "2026-12-26",
+    "allDay": true,
+    "reason": "Holidays"
+  }
+}
+```
+
+### Delete a block
+
+```
+DELETE /v1/agenda/blocks/{id}
+```
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/blocks/665f0e5511aa22bb33cc44dd
+```
+
+#### Response
+
+```json
+{ "error": false, "message": "ok", "data": { "id": "665f0e5511aa22bb33cc44dd" } }
+```
+
+## Availability
+
+```
+GET /v1/agenda/availability
+```
+
+Returns the real open days and time slots for a service across a date range —
+the same engine that powers your public booking page, so it already accounts for
+working hours, existing appointments and blocks.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  "https://api.linkz.ee/v1/agenda/availability?offeringId=665f0a1b2c3d4e5f60718293&from=2026-07-21&to=2026-07-25&detail=slots"
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `offeringId` | string | Yes | The service to check. |
+| `from` | string | Yes | Start date, `YYYY-MM-DD` (in your calendar's time zone). |
+| `to` | string | Yes | End date, `YYYY-MM-DD`. |
+| `staffId` | string | No | Limit availability to one staff member. |
+| `detail` | string | No | `days` (default) returns per-day state only; `slots` also returns bookable start times. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Disponibilidade carregada",
+  "data": {
+    "days": [
+      { "date": "2026-07-21", "state": "free" },
+      { "date": "2026-07-22", "state": "full" },
+      { "date": "2026-07-23", "state": "closed" }
+    ],
+    "slots": [
+      { "startAt": "2026-07-21T12:00:00.000Z" },
+      { "startAt": "2026-07-21T12:45:00.000Z" }
+    ],
+    "stepMin": 15,
+    "timezone": "America/Sao_Paulo"
+  }
+}
+```
+
+Each day's `state` is `free` (has open slots), `full` (fully booked) or
+`closed` (not a working day). Times are returned in UTC (`Z`).
+
+## Appointments
+
+### List appointments
+
+```
+GET /v1/agenda/appointments
+```
+
+Returns every appointment whose start falls within the date range.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  "https://api.linkz.ee/v1/agenda/appointments?from=2026-07-21&to=2026-07-27"
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `from` | string | Yes | Start date, `YYYY-MM-DD`. |
+| `to` | string | Yes | End date, `YYYY-MM-DD`. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Agendamentos carregados",
+  "data": {
+    "timezone": "America/Sao_Paulo",
+    "appointments": [
+      {
+        "id": "665f1122aa33bb44cc55dd66",
+        "staffId": "665f0c9a8b7d6e5f40312a11",
+        "offeringId": "665f0a1b2c3d4e5f60718293",
+        "offeringName": "Strategy call",
+        "price": 150,
+        "durationMin": 45,
+        "startAt": "2026-07-21T13:00:00.000Z",
+        "endAt": "2026-07-21T13:45:00.000Z",
+        "status": "confirmed",
+        "confirmedByVisitor": true,
+        "meetUrl": "https://meet.google.com/abc-defg-hij",
+        "visitor": { "name": "João Lima", "phone": "+5511999998888", "email": "joao@example.com" },
+        "source": "public",
+        "notes": ""
+      }
+    ]
+  }
+}
+```
+
+### Create an appointment
+
+```
+POST /v1/agenda/appointments
+```
+
+Books an appointment manually, using the same rules as public booking — the
+slot must be genuinely available or the request is rejected.
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"offeringId":"665f0a1b2c3d4e5f60718293","startAt":"2026-07-21T13:00:00.000Z","name":"João Lima","phone":"+5511999998888"}' \
+  https://api.linkz.ee/v1/agenda/appointments
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `offeringId` | string | Yes | The service being booked. |
+| `startAt` | string | Yes | Start time in ISO 8601, e.g. `2026-07-21T13:00:00.000Z`. |
+| `name` | string | Yes | Visitor name (max 120 characters). |
+| `phone` | string | Yes | Visitor phone (max 30 characters). |
+| `email` | string | No | Visitor email (max 160 characters). |
+| `notes` | string | No | Internal notes (max 500 characters). |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Agendamento criado",
+  "data": {
+    "id": "665f1122aa33bb44cc55dd66",
+    "manageToken": "8f3a1c22b90e4d1f",
+    "status": "confirmed",
+    "startAt": "2026-07-21T13:00:00.000Z",
+    "endAt": "2026-07-21T13:45:00.000Z",
+    "offeringName": "Strategy call",
+    "timezone": "America/Sao_Paulo"
+  }
+}
+```
+
+### Change an appointment's status
+
+```
+POST /v1/agenda/appointments/{id}/transition
+```
+
+Moves an appointment to a new status.
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"status":"completed"}' \
+  https://api.linkz.ee/v1/agenda/appointments/665f1122aa33bb44cc55dd66/transition
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The appointment ID (in the path). |
+| `status` | string | Yes | New status: `confirmed`, `completed`, `no_show` or `cancelled`. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Status atualizado",
+  "data": { "status": "completed" }
+}
+```
+
+### Reschedule an appointment
+
+```
+POST /v1/agenda/appointments/{id}/reschedule
+```
+
+Moves an appointment to a new start time and notifies the visitor with the
+updated time (and a fresh Meet link, when the service uses one).
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"startAt":"2026-07-22T15:00:00.000Z"}' \
+  https://api.linkz.ee/v1/agenda/appointments/665f1122aa33bb44cc55dd66/reschedule
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The appointment ID (in the path). |
+| `startAt` | string | Yes | New start time in ISO 8601. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Agendamento remarcado",
+  "data": { "startAt": "2026-07-22T15:00:00.000Z" }
+}
+```
+
+## Google Calendar
+
+### Connection status
+
+```
+GET /v1/agenda/google
+```
+
+Tells you whether Google Calendar sync is available and whether your calendar is
+connected.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/google
+```
+
+#### Response
+
+```json
+{ "enabled": true, "connected": true }
+```
+
+### Disconnect Google Calendar
+
+```
+DELETE /v1/agenda/google
+```
+
+Disconnects your Google Calendar. Sync stops; existing appointments stay.
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/google
+```
+
+#### Response
+
+```json
+{ "error": false, "message": "ok", "data": { "connected": false } }
+```
+
+<Warning>
+Connecting a Google Calendar happens through a sign-in flow in the Linkzee
+dashboard and can't be done from the API. The API can only read status and
+disconnect.
+</Warning>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, keys, scopes and status codes.
+  </Card>
+  <Card title="Leads" icon="address-book" href="/api-reference/leads">
+    List and export the contacts you collect.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Read your store profile, themes and performance.
+  </Card>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Stay within the limits and handle 429s.
+  </Card>
+</CardGroup>

@@ -1,0 +1,261 @@
+---
+title: Categories
+icon: layer-group
+description: "List, create, update, delete, and reorder the categories that group your products."
+---
+
+Categories are the taxonomy behind your product storefront. Use them to group
+products into sections (for example **Kitchen** or **Beauty**) that show up as
+filter chips on your public page.
+
+All endpoints live under the base URL `https://api.linkz.ee` and require the
+`Authorization: Bearer lzk_your_key` header. Read operations work with any key;
+create, update, delete, and reorder need a key with the **write** scope.
+
+## List categories
+
+```
+GET /v1/categories
+```
+
+Returns every category in your store, ordered for display.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Categorias listadas",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "name": "Kitchen",
+      "slug": "kitchen",
+      "emoji": "🍳",
+      "description": "Everything for your kitchen",
+      "isActive": true,
+      "order": 0,
+      "kind": "product"
+    },
+    {
+      "id": "507f1f77bcf86cd799439012",
+      "name": "Beauty",
+      "slug": "beauty",
+      "emoji": "💄",
+      "description": null,
+      "isActive": true,
+      "order": 1,
+      "kind": "product"
+    }
+  ]
+}
+```
+
+## Create a category
+
+```
+POST /v1/categories
+```
+
+Creates a new product category. Requires the **write** scope.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen"
+  }' \
+  https://api.linkz.ee/v1/categories
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | No | Display name, up to 80 characters. When omitted, a slug is generated automatically. |
+| `slug` | string | No | URL-friendly identifier, up to 60 characters. Derived from `name` when omitted. |
+| `emoji` | string | No | A single emoji shown next to the category, up to 16 characters. |
+| `description` | string | No | Short description, up to 280 characters. |
+| `isActive` | boolean | No | Whether the category is visible. Defaults to active. |
+| `order` | integer | No | Display order among your categories. |
+| `kind` | string | No | One of `product`, `link`, or `collection`. Defaults to `product` for categories created through the API, so they show up as storefront filters. |
+
+<Note>
+Leave `kind` unset for product categories. The API sets it to `product`
+automatically so the category appears in your storefront navigation.
+</Note>
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Categoria criada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen",
+    "slug": "kitchen",
+    "emoji": "🍳",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Update a category
+
+```
+PATCH /v1/categories/:id
+```
+
+Updates one or more fields of an existing category. Send only the fields you
+want to change. Requires the **write** scope.
+
+### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Kitchen & dining", "emoji": "🍽️" }' \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The category ID, passed in the path. |
+| `name` | string | No | New display name, up to 80 characters. |
+| `slug` | string | No | New URL-friendly identifier, up to 60 characters. |
+| `emoji` | string | No | New emoji, up to 16 characters. |
+| `description` | string | No | New description, up to 280 characters. |
+| `isActive` | boolean | No | Show or hide the category. |
+| `order` | integer | No | New display order. |
+| `kind` | string | No | One of `product`, `link`, or `collection`. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Categoria atualizada",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Kitchen & dining",
+    "slug": "kitchen",
+    "emoji": "🍽️",
+    "description": "Everything for your kitchen",
+    "isActive": true,
+    "order": 0,
+    "kind": "product"
+  }
+}
+```
+
+## Delete a category
+
+```
+DELETE /v1/categories/:id
+```
+
+Removes a category. Products stay in your store; they are simply no longer
+grouped under this category. Requires the **write** scope.
+
+### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/categories/507f1f77bcf86cd799439011
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The category ID, passed in the path. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Categoria removida",
+  "data": { "id": "507f1f77bcf86cd799439011" }
+}
+```
+
+## Reorder categories
+
+```
+PUT /v1/categories/order
+```
+
+Sets a new display order for your categories in a single call. Requires the
+**write** scope.
+
+### Request
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "507f1f77bcf86cd799439012", "order": 0 },
+      { "id": "507f1f77bcf86cd799439011", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/categories/order
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | array | Yes | List of categories with their new order. At least one item is required. |
+| `items[].id` | string | Yes | The category ID. |
+| `items[].order` | integer | Yes | The new display order for that category. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Categorias reordenadas",
+  "data": { "updated": 2 }
+}
+```
+
+<Note>
+Every change you make through the API appears on your public page and in the
+editor's live preview automatically. There is nothing to publish.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Create and manage the products these categories group.
+  </Card>
+  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
+    Group the links on your bio page.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, keys, scopes, and response shapes.
+  </Card>
+</CardGroup>

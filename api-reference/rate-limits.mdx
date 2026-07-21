@@ -1,0 +1,109 @@
+---
+title: Rate limits
+icon: gauge
+description: "How the Linkzee API throttles requests and how to build clients that stay within the limits."
+---
+
+The Linkzee API is rate limited so that every integration gets a fair, reliable
+share of capacity. Limits are applied per API key, and per client IP as a
+safety net. If you send requests at a normal, well-paced rate you will rarely
+notice them.
+
+## When you exceed a limit
+
+When you send too many requests in a short window, the API stops accepting new
+ones for a moment and responds with HTTP `429 Too Many Requests`. The response
+uses the standard error envelope:
+
+```json
+{
+  "error": true,
+  "message": "Rate limit exceeded. Please retry shortly.",
+  "data": null
+}
+```
+
+A `429` is temporary. Wait a short moment and the same request will succeed —
+no data is lost and nothing is charged against your account for the rejected
+call.
+
+<Note>
+Treat `429` as "try again in a bit", not as a failure. It simply means you
+reached the ceiling for that short window.
+</Note>
+
+## Best practices
+
+A few habits keep your integration comfortably under the limits and resilient
+when it does get throttled.
+
+### Retry with backoff
+
+When you receive a `429`, pause before retrying, and increase the pause on each
+consecutive failure (exponential backoff). Add a little randomness ("jitter") so
+that many clients don't retry in lockstep.
+
+A simple, effective pattern:
+
+```bash
+# Retry with growing delays: 1s, 2s, 4s, 8s...
+attempt=0
+until response=$(curl -sf -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products); do
+  attempt=$((attempt + 1))
+  [ "$attempt" -ge 5 ] && break
+  sleep $(( 2 ** (attempt - 1) ))
+done
+```
+
+### Pace your requests
+
+Spread work out instead of firing everything at once. If you are syncing a large
+catalog, add a small delay between calls rather than sending hundreds in
+parallel. Steady beats bursty.
+
+### Fetch once, reuse locally
+
+Read endpoints return the full current state (for example, your product or link
+list). Fetch that once, keep it in memory, and work from your local copy instead
+of re-requesting the same data in a loop.
+
+### Retry writes safely with an idempotency key
+
+Creating a product accepts an optional `Idempotency-Key` header. Send a unique
+value per logical creation, and if a retry happens after a `429` or a network
+hiccup, the API returns the product that was already created instead of making a
+duplicate.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+This lets you retry aggressively without worrying about creating the same item
+twice.
+
+<Warning>
+Rate limit thresholds may change over time as we tune capacity. Build your
+client to react to a `429` response rather than hard-coding a fixed
+requests-per-second number.
+</Warning>
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, keys, scopes and status codes.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Create, update and list products in your catalog.
+  </Card>
+  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
+    Manage the links in your bio.
+  </Card>
+</CardGroup>

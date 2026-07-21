@@ -1,0 +1,57 @@
+---
+title: API keys
+icon: key
+description: "Create and manage the API keys that let your tools and scripts securely act on your Linkzee account."
+---
+
+An **API key** is how your tools, scripts and AI agents prove they're allowed
+to act on your Linkzee account. You create keys yourself, give each one the
+access it needs, and revoke any key the moment you no longer trust it.
+
+## Create a key
+
+<Steps>
+  <Step title="Open your settings">
+    In your dashboard settings, open the **API & MCP** section.
+  </Step>
+  <Step title="Create a new key">
+    Create a key and choose the access it should have. Every key starts with
+    `lzk_` so it's easy to recognize.
+  </Step>
+  <Step title="Copy it right away">
+    Copy the key while it's shown and store it somewhere safe — treat it like a
+    password. Paste it into the tool or agent you want to connect.
+  </Step>
+</Steps>
+
+## Scopes
+
+Each key carries a **scope** that decides what it can do:
+
+| Scope | What it allows |
+| --- | --- |
+| **read** | List and read your data |
+| **write** | Create, update and delete |
+
+Give a key only the access it needs. If a tool just displays your data, a
+**read** key is enough; a key that changes your page or products needs **write**.
+
+## Revoke a key
+
+You can revoke a key anytime from the same **API & MCP** section. Revoking takes
+effect immediately and instantly stops any tool still using that key, so it's
+the fastest way to cut off access if a key is ever exposed or no longer needed.
+
+<Warning>
+  Never share your key or put it in public code — anyone who has it can act on
+  your account. If a key leaks, revoke it right away and create a new one.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="plug" href="/integrations/api/overview">
+    See what you can automate with the Linkzee API.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    How to send your key with each request.
+  </Card>
+</CardGroup>

@@ -1,0 +1,51 @@
+---
+title: Connect Linkzee in Claude
+icon: comment
+description: "Let Claude manage your Linkzee in plain language over MCP."
+---
+
+Connect Linkzee to **Claude** and you can manage your page by simply asking —
+"add this product", "what do I have booked this week?", "switch my theme". Claude
+talks to Linkzee through MCP using your API key, so you never leave the chat.
+
+## Set it up
+
+<Steps>
+  <Step title="Create an API key">
+    In your dashboard, open the **API & MCP** section and create a key. Copy it
+    when it's shown and keep it somewhere safe. See [API keys](/integrations/api/api-keys)
+    for the full steps.
+  </Step>
+  <Step title="Add a new MCP server in Claude">
+    In **Claude Code**, the **Claude desktop app**, or **claude.ai**, add a new
+    MCP server pointing to `https://api.linkz.ee/mcp`.
+  </Step>
+  <Step title="Provide your API key">
+    Set your key as the authorization for the server, in the form
+    `Bearer lzk_...`. This is how Claude proves it's acting on your account.
+  </Step>
+  <Step title="Ask Claude in plain language">
+    Once connected, just describe what you want — "add my new sale product",
+    "reorder my links", "change my colors" — and Claude takes care of it.
+  </Step>
+</Steps>
+
+<Note>
+  Claude works with the same set of actions listed in the
+  [tools reference](/integrations/mcp/tools-reference), so anything an agent can
+  do through MCP, you can ask for in the chat.
+</Note>
+
+<Warning>
+  Your API key acts on your account. Never paste it into a public chat or share
+  it — treat it like a password.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Tools reference" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
+    See everything Claude can do with your Linkzee through MCP.
+  </Card>
+  <Card title="API keys" icon="key" href="/integrations/api/api-keys">
+    Create, scope and revoke the keys that connect Claude to your account.
+  </Card>
+</CardGroup>

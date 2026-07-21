@@ -1,0 +1,185 @@
+---
+title: Knowledge base
+icon: file-pdf
+description: "Manage the PDF knowledge base that powers your store's AI concierge."
+---
+
+The knowledge base is a set of PDF documents your AI concierge reads to answer
+visitor questions. Upload product manuals, FAQs, catalogs or policies, and the
+concierge draws its answers from them.
+
+Uploaded text is extracted right away, then indexed asynchronously so the
+concierge can search it. A store can hold up to **10 PDFs** by default (each up
+to **10&nbsp;MB**).
+
+<Note>
+All requests use the base URL `https://api.linkz.ee` and send the header
+`Authorization: Bearer lzk_your_key`. Upload, delete and reindex need a key with
+the **write** scope.
+</Note>
+
+## List PDFs
+
+```
+GET /v1/knowledge/files
+```
+
+Return every PDF in your knowledge base, plus the current file limit.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Arquivos listados",
+  "data": {
+    "files": [
+      {
+        "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+        "name": "product-catalog-2026.pdf",
+        "sizeBytes": 482133,
+        "pages": 12,
+        "status": "ready",
+        "createdAt": "2026-07-18T14:22:05.113Z"
+      }
+    ],
+    "maxFiles": 10
+  }
+}
+```
+
+Each file reports a `status`: `ready` once its text has been extracted, or
+`pending` while it is still being processed.
+
+## Upload a PDF
+
+```
+POST /v1/knowledge/files
+```
+
+Add a PDF to your knowledge base. Send it as `multipart/form-data` with a single
+`file` field.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@product-catalog-2026.pdf" \
+  https://api.linkz.ee/v1/knowledge/files
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `file` | file (PDF) | Yes | The PDF to upload. Max size 10&nbsp;MB. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Arquivo processado",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11",
+    "status": "ready",
+    "pages": 12
+  }
+}
+```
+
+<Warning>
+Uploads are rate limited to a handful per minute per key, since extracting a PDF
+is heavy work. A file over 10&nbsp;MB, or a request that exceeds your file limit,
+returns `400 Bad Request`. Space uploads out and retry with backoff on `429`.
+</Warning>
+
+## Delete a PDF
+
+```
+DELETE /v1/knowledge/files/:fileId
+```
+
+Remove a PDF from your knowledge base. Its text is dropped from the index too.
+
+### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/files/8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `fileId` | string (path) | Yes | The `fileId` of the PDF to remove. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Arquivo removido",
+  "data": {
+    "fileId": "8f3c1a7e-2b64-49d0-9d1e-5a2f0b7c4e11"
+  }
+}
+```
+
+## Reindex the knowledge base
+
+```
+POST /v1/knowledge/reindex
+```
+
+Schedule a rebuild of the concierge's search index. Reindexing runs
+asynchronously and bursts of requests collapse into a single job, so it is safe
+to call after a batch of uploads or deletes.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/knowledge/reindex
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Reindex agendado",
+  "data": {
+    "queued": true
+  }
+}
+```
+
+<Note>
+Uploads already trigger indexing on their own. Call this only when you want to
+force a refresh, for example after deleting several files.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Upload images for your products and header.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Manage the products in your showcase.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Base URL, API keys, scopes and status codes.
+  </Card>
+</CardGroup>

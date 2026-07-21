@@ -1,0 +1,485 @@
+---
+title: Links & collections
+icon: link
+description: "Manage the links on your bio page and group them into collections."
+---
+
+Links are the buttons on your bio page. Collections are the named groups you can
+sort those buttons into (for example "Cozinha" or "Favoritos"). This page covers
+the read and write operations for both.
+
+**Base URL:** `https://api.linkz.ee` · every path lives under `/v1`.
+Send your key on every request:
+
+```bash
+Authorization: Bearer lzk_your_key
+```
+
+<Note>
+Reads (`GET`) work with any key. Writes (`POST`, `PATCH`, `DELETE`, `PUT`) need a
+key with the **write** scope. Send bodies as `application/json`.
+</Note>
+
+## Links
+
+### List links
+
+```
+GET /v1/links
+```
+
+Returns every link on your page, in display order.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/links
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Links listados com sucesso",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "collectionId": "66a3c0f2e1b2a40012ab34cd",
+      "title": "Meu Instagram",
+      "url": "https://instagram.com/minhaloja",
+      "thumbnailUrl": "",
+      "mediaType": "",
+      "mediaUrl": "",
+      "isFeatured": false,
+      "highlightFx": "",
+      "order": 0,
+      "isActive": true,
+      "clicks": 128,
+      "createdAt": "2026-07-01T14:02:11.000Z",
+      "updatedAt": "2026-07-18T09:41:55.000Z"
+    }
+  ]
+}
+```
+
+### Create a link
+
+```
+POST /v1/links
+```
+
+Adds a new button to the end of your page.
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Meu Instagram",
+    "url": "https://instagram.com/minhaloja",
+    "collectionId": "66a3c0f2e1b2a40012ab34cd"
+  }' \
+  https://api.linkz.ee/v1/links
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `title` | string | Yes | Button label. Up to 120 characters. |
+| `url` | string | Yes | Destination URL, including `https://`. |
+| `collectionId` | string | No | ID of the collection this link belongs to. Leave it out to keep the link ungrouped. |
+| `thumbnailUrl` | string | No | Thumbnail image URL. Upload the image first, then pass the returned URL. |
+| `isActive` | boolean | No | Whether the link is visible on your page. Defaults to `true`. |
+| `isFeatured` | boolean | No | Show the link with extra prominence. Defaults to `false`. |
+| `highlightFx` | string | No | Animated highlight (Premium): `""` (none) or `"shake"`. |
+| `mediaType` | string | No | Cover media style: `""`, `"image"`, `"video"`, or `"embed"`. |
+| `mediaUrl` | string | No | Cover media URL for the chosen `mediaType`. |
+| `posterUrl` | string | No | Poster image URL for a video cover. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Link criado com sucesso",
+  "data": {
+    "id": "66b8f1aa77bcf86cd7994400",
+    "collectionId": "66a3c0f2e1b2a40012ab34cd",
+    "title": "Meu Instagram",
+    "url": "https://instagram.com/minhaloja",
+    "isActive": true,
+    "isFeatured": false,
+    "order": 4,
+    "clicks": 0,
+    "createdAt": "2026-07-21T11:20:03.000Z",
+    "updatedAt": "2026-07-21T11:20:03.000Z"
+  }
+}
+```
+
+### Update a link
+
+```
+PATCH /v1/links/{id}
+```
+
+Changes one or more fields on an existing link. Send only what you want to update.
+
+#### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "title": "Sigo lá!", "isActive": false }' \
+  https://api.linkz.ee/v1/links/507f1f77bcf86cd799439011
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the link to update. |
+| `title` | string | No | New button label. Up to 120 characters. |
+| `url` | string | No | New destination URL, including `https://`. |
+| `collectionId` | string \| null | No | Move the link to a collection, or send `null` to remove it from its collection. |
+| `thumbnailUrl` | string | No | New thumbnail image URL. |
+| `isActive` | boolean | No | Show or hide the link. |
+| `isFeatured` | boolean | No | Toggle extra prominence. |
+| `highlightFx` | string | No | `""` (none) or `"shake"` (Premium). |
+| `mediaType` | string | No | `""`, `"image"`, `"video"`, or `"embed"`. |
+| `mediaUrl` | string | No | Cover media URL. |
+| `posterUrl` | string | No | Poster image URL for a video cover. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Link atualizado com sucesso",
+  "data": {
+    "id": "507f1f77bcf86cd799439011",
+    "title": "Sigo lá!",
+    "url": "https://instagram.com/minhaloja",
+    "isActive": false,
+    "order": 0,
+    "updatedAt": "2026-07-21T11:32:47.000Z"
+  }
+}
+```
+
+### Delete a link
+
+```
+DELETE /v1/links/{id}
+```
+
+Removes a link from your page.
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/links/507f1f77bcf86cd799439011
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the link to delete. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Link removido com sucesso"
+}
+```
+
+### Reorder links
+
+```
+PUT /v1/links/order
+```
+
+Sets the display order of your links. Send each link ID with its new position.
+
+#### Request
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "507f1f77bcf86cd799439011", "order": 0 },
+      { "id": "66b8f1aa77bcf86cd7994400", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/links/order
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | array | Yes | List of items to reorder. At least one entry. |
+| `items[].id` | string | Yes | ID of the link. |
+| `items[].order` | integer | Yes | New position (lower shows first). |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Links reordenados com sucesso"
+}
+```
+
+## Collections
+
+Collections group your links into named sections on the page. A collection can
+carry a name, emoji and short description.
+
+<Note>
+Collections group **links** only. To organize products, use categories instead —
+see the Categories reference.
+</Note>
+
+### List collections
+
+```
+GET /v1/collections
+```
+
+Returns every collection on your page, in display order.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/collections
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Coleções listadas com sucesso",
+  "data": [
+    {
+      "id": "66a3c0f2e1b2a40012ab34cd",
+      "name": "Cozinha",
+      "slug": "cozinha",
+      "emoji": "🍳",
+      "description": "Meus achados para a cozinha",
+      "isActive": true,
+      "order": 0,
+      "createdAt": "2026-06-28T18:10:00.000Z",
+      "updatedAt": "2026-07-10T08:22:13.000Z"
+    }
+  ]
+}
+```
+
+### Create a collection
+
+```
+POST /v1/collections
+```
+
+Adds a new group your links can be sorted into.
+
+#### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Cozinha", "emoji": "🍳" }' \
+  https://api.linkz.ee/v1/collections
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | No | Display name, 1–80 characters. When omitted, a slug is generated for you. |
+| `slug` | string | No | URL-friendly identifier, up to 60 characters. Derived from `name` when omitted. |
+| `emoji` | string | No | An emoji shown next to the name. Up to 16 characters. |
+| `description` | string | No | Short description. Up to 280 characters. |
+| `isActive` | boolean | No | Whether the collection is visible. Defaults to `true`. |
+| `order` | integer | No | Display position. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Coleção criada com sucesso",
+  "data": {
+    "id": "66a3c0f2e1b2a40012ab34cd",
+    "name": "Cozinha",
+    "slug": "cozinha",
+    "emoji": "🍳",
+    "description": "",
+    "isActive": true,
+    "order": 3,
+    "createdAt": "2026-07-21T11:40:52.000Z",
+    "updatedAt": "2026-07-21T11:40:52.000Z"
+  }
+}
+```
+
+### Update a collection
+
+```
+PATCH /v1/collections/{id}
+```
+
+Changes one or more fields on a collection. Send only what you want to update.
+
+#### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "name": "Cozinha & Casa", "emoji": "🏠" }' \
+  https://api.linkz.ee/v1/collections/66a3c0f2e1b2a40012ab34cd
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the collection to update. |
+| `name` | string | No | New display name, 1–80 characters. |
+| `slug` | string | No | New slug, up to 60 characters. |
+| `emoji` | string | No | New emoji. Up to 16 characters. |
+| `description` | string | No | New description. Up to 280 characters. |
+| `isActive` | boolean | No | Show or hide the collection. |
+| `order` | integer | No | New display position. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Coleção atualizada com sucesso",
+  "data": {
+    "id": "66a3c0f2e1b2a40012ab34cd",
+    "name": "Cozinha & Casa",
+    "slug": "cozinha",
+    "emoji": "🏠",
+    "isActive": true,
+    "order": 0,
+    "updatedAt": "2026-07-21T11:45:09.000Z"
+  }
+}
+```
+
+### Delete a collection
+
+```
+DELETE /v1/collections/{id}
+```
+
+Removes a collection. Links inside it are not deleted — they simply become
+ungrouped until you reassign them.
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/collections/66a3c0f2e1b2a40012ab34cd
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the collection to delete. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Coleção removida com sucesso"
+}
+```
+
+### Reorder collections
+
+```
+PUT /v1/collections/order
+```
+
+Sets the display order of your collections.
+
+#### Request
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "66a3c0f2e1b2a40012ab34cd", "order": 0 },
+      { "id": "66a3c0f2e1b2a40012ab34ce", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/collections/order
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | array | Yes | List of items to reorder. At least one entry. |
+| `items[].id` | string | Yes | ID of the collection. |
+| `items[].order` | integer | Yes | New position (lower shows first). |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Coleções reordenadas com sucesso"
+}
+```
+
+<Warning>
+IDs are unique to your account. A request for a link or collection that doesn't
+exist on your page returns `404 Not Found`.
+</Warning>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Create and manage the products in your showcase.
+  </Card>
+  <Card title="Categories" icon="layer-group" href="/api-reference/categories">
+    Organize products with product categories.
+  </Card>
+  <Card title="Content tree" icon="table-cells" href="/api-reference/content">
+    Read your full page content and reorder it.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    Keys, scopes, response shape and status codes.
+  </Card>
+</CardGroup>
