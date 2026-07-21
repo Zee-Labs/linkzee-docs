@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Linkzee Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#22C55E",
-    "dark": "#15803D"
+    "primary": "#0C8C5E",
+    "light": "#18E299",
+    "dark": "#0A6E4A"
   },
   "favicon": "/favicon.svg",
   "logo": {
