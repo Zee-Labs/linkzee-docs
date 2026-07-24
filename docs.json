@@ -55,6 +55,13 @@
                 ]
               },
               {
+                "group": "Plans & pricing",
+                "icon": "crown",
+                "pages": [
+                  "billing/plans"
+                ]
+              },
+              {
                 "group": "Your page",
                 "pages": [
                   "your-page/overview",
@@ -227,6 +234,13 @@
                   "pt-BR/get-started/quickstart",
                   "pt-BR/get-started/create-account",
                   "pt-BR/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Planos e preços",
+                "icon": "crown",
+                "pages": [
+                  "pt-BR/billing/plans"
                 ]
               },
               {
@@ -405,6 +419,13 @@
                 ]
               },
               {
+                "group": "Planes y precios",
+                "icon": "crown",
+                "pages": [
+                  "es/billing/plans"
+                ]
+              },
+              {
                 "group": "Tu página",
                 "pages": [
                   "es/your-page/overview",
@@ -580,6 +601,13 @@
                 ]
               },
               {
+                "group": "Forfaits et tarifs",
+                "icon": "crown",
+                "pages": [
+                  "fr/billing/plans"
+                ]
+              },
+              {
                 "group": "Votre page",
                 "pages": [
                   "fr/your-page/overview",
@@ -752,6 +780,13 @@
                   "de/get-started/quickstart",
                   "de/get-started/create-account",
                   "de/get-started/your-username"
+                ]
+              },
+              {
+                "group": "Tarife und Preise",
+                "icon": "crown",
+                "pages": [
+                  "de/billing/plans"
                 ]
               },
               {
