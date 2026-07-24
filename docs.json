@@ -9,8 +9,8 @@
   },
   "favicon": "/favicon.png",
   "logo": {
-    "light": "/logo/mark.svg",
-    "dark": "/logo/mark.svg"
+    "light": "/logo/wordmark-light.svg",
+    "dark": "/logo/wordmark-dark.svg"
   },
   "seo": {
     "metatags": {
@@ -94,6 +94,7 @@
                   "scheduling/team-google-calendar",
                   "scheduling/reminders",
                   "scheduling/reschedule-cancel",
+                  "scheduling/dashboard",
                   "scheduling/booking-link",
                   "scheduling/ai-scheduling"
                 ]
@@ -268,6 +269,7 @@
                   "pt-BR/scheduling/team-google-calendar",
                   "pt-BR/scheduling/reminders",
                   "pt-BR/scheduling/reschedule-cancel",
+                  "pt-BR/scheduling/dashboard",
                   "pt-BR/scheduling/booking-link",
                   "pt-BR/scheduling/ai-scheduling"
                 ]
@@ -442,6 +444,7 @@
                   "es/scheduling/team-google-calendar",
                   "es/scheduling/reminders",
                   "es/scheduling/reschedule-cancel",
+                  "es/scheduling/dashboard",
                   "es/scheduling/booking-link",
                   "es/scheduling/ai-scheduling"
                 ]
@@ -616,6 +619,7 @@
                   "fr/scheduling/team-google-calendar",
                   "fr/scheduling/reminders",
                   "fr/scheduling/reschedule-cancel",
+                  "fr/scheduling/dashboard",
                   "fr/scheduling/booking-link",
                   "fr/scheduling/ai-scheduling"
                 ]
@@ -790,6 +794,7 @@
                   "de/scheduling/team-google-calendar",
                   "de/scheduling/reminders",
                   "de/scheduling/reschedule-cancel",
+                  "de/scheduling/dashboard",
                   "de/scheduling/booking-link",
                   "de/scheduling/ai-scheduling"
                 ]
