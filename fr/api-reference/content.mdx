@@ -44,7 +44,7 @@ curl -X GET \
 
 L'objet `data` comporte deux parties : `meta` (résumé de la vitrine) et `root`
 (la liste ordonnée des entrées de contenu). Chaque entrée de `root` est de type
-`link`, `collection` ou `concierge`.
+`link`, `collection` ou `ai_assistant`.
 
 ```json
 {
@@ -144,8 +144,8 @@ L'objet `data` comporte deux parties : `meta` (résumé de la vitrine) et `root`
         "childCount": 1
       },
       {
-        "type": "concierge",
-        "concierge": {
+        "type": "ai_assistant",
+        "aiAssistant": {
           "id": "507f1f77bcf86cd799439030",
           "title": "Ask me anything",
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
@@ -199,7 +199,7 @@ curl -X PUT \
         "id": "507f1f77bcf86cd799439020",
         "children": [
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
-          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+          { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
       }
     ]
@@ -212,16 +212,16 @@ curl -X PUT \
 | Paramètre | Type | Requis | Description |
 | --- | --- | --- | --- |
 | `root` | array | Oui | Entrées de premier niveau dans leur nouvel ordre. Peut être vide. |
-| `root[].type` | string | Oui | L'une des valeurs `link`, `collection`, `concierge` ou `product`. |
+| `root[].type` | string | Oui | L'une des valeurs `link`, `collection`, `ai_assistant` ou `product`. |
 | `root[].id` | string | Oui | L'ID de l'entrée. |
 | `root[].children` | array | Non | Éléments enfants, dans l'ordre. Utilisé uniquement lorsque `type` vaut `collection`. |
-| `root[].children[].type` | string | Oui | L'une des valeurs `link`, `concierge` ou `product`. |
+| `root[].children[].type` | string | Oui | L'une des valeurs `link`, `ai_assistant` ou `product`. |
 | `root[].children[].id` | string | Oui | L'ID de l'élément enfant. |
 
 <Warning>
 Les entrées de produit (à la racine ou dans une collection) sont acceptées mais
 ignorées — la vitrine s'ordonne d'elle-même. N'envoyez que des entrées `link`,
-`collection` et `concierge` pour modifier ce qui est réellement réordonné. Les
+`collection` et `ai_assistant` pour modifier ce qui est réellement réordonné. Les
 ID inconnus sont ignorés silencieusement.
 </Warning>
 

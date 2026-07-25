@@ -43,7 +43,7 @@ curl -X GET \
 
 Das `data`-Objekt hat zwei Teile: `meta` (Vitrinen-Zusammenfassung) und `root` (die
 geordnete Liste der Inhaltseinträge). Jeder `root`-Eintrag ist entweder `link`,
-`collection` oder `concierge`.
+`collection` oder `ai_assistant`.
 
 ```json
 {
@@ -143,8 +143,8 @@ geordnete Liste der Inhaltseinträge). Jeder `root`-Eintrag ist entweder `link`,
         "childCount": 1
       },
       {
-        "type": "concierge",
-        "concierge": {
+        "type": "ai_assistant",
+        "aiAssistant": {
           "id": "507f1f77bcf86cd799439030",
           "title": "Ask me anything",
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
@@ -199,7 +199,7 @@ curl -X PUT \
         "id": "507f1f77bcf86cd799439020",
         "children": [
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
-          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+          { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
       }
     ]
@@ -212,16 +212,16 @@ curl -X PUT \
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
 | `root` | array | Ja | Einträge der obersten Ebene in ihrer neuen Reihenfolge. Darf leer sein. |
-| `root[].type` | string | Ja | Einer von `link`, `collection`, `concierge` oder `product`. |
+| `root[].type` | string | Ja | Einer von `link`, `collection`, `ai_assistant` oder `product`. |
 | `root[].id` | string | Ja | Die ID des Eintrags. |
 | `root[].children` | array | Nein | Untergeordnete Elemente, in Reihenfolge. Nur verwendet, wenn `type` gleich `collection` ist. |
-| `root[].children[].type` | string | Ja | Einer von `link`, `concierge` oder `product`. |
+| `root[].children[].type` | string | Ja | Einer von `link`, `ai_assistant` oder `product`. |
 | `root[].children[].id` | string | Ja | Die ID des untergeordneten Elements. |
 
 <Warning>
 Produkteinträge (auf der Wurzelebene oder innerhalb einer Sammlung) werden akzeptiert,
 aber ignoriert — die Vitrine ordnet sich selbst. Sende nur `link`-, `collection`- und
-`concierge`-Einträge, um das zu ändern, was tatsächlich neu angeordnet wird. Unbekannte
+`ai_assistant`-Einträge, um das zu ändern, was tatsächlich neu angeordnet wird. Unbekannte
 IDs werden stillschweigend übersprungen.
 </Warning>
 

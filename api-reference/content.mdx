@@ -42,7 +42,7 @@ curl -X GET \
 
 The `data` object has two parts: `meta` (showcase summary) and `root` (the
 ordered list of content entries). Each `root` entry is one of `link`,
-`collection`, or `concierge`.
+`collection`, or `ai_assistant`.
 
 ```json
 {
@@ -142,8 +142,8 @@ ordered list of content entries). Each `root` entry is one of `link`,
         "childCount": 1
       },
       {
-        "type": "concierge",
-        "concierge": {
+        "type": "ai_assistant",
+        "aiAssistant": {
           "id": "507f1f77bcf86cd799439030",
           "title": "Ask me anything",
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
@@ -197,7 +197,7 @@ curl -X PUT \
         "id": "507f1f77bcf86cd799439020",
         "children": [
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
-          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+          { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
       }
     ]
@@ -210,15 +210,15 @@ curl -X PUT \
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `root` | array | Yes | Top-level entries in their new order. May be empty. |
-| `root[].type` | string | Yes | One of `link`, `collection`, `concierge`, or `product`. |
+| `root[].type` | string | Yes | One of `link`, `collection`, `ai_assistant`, or `product`. |
 | `root[].id` | string | Yes | The entry's ID. |
 | `root[].children` | array | No | Child items, in order. Only used when `type` is `collection`. |
-| `root[].children[].type` | string | Yes | One of `link`, `concierge`, or `product`. |
+| `root[].children[].type` | string | Yes | One of `link`, `ai_assistant`, or `product`. |
 | `root[].children[].id` | string | Yes | The child item's ID. |
 
 <Warning>
 Product entries (at the root or inside a collection) are accepted but ignored —
-the showcase orders itself. Send only `link`, `collection`, and `concierge`
+the showcase orders itself. Send only `link`, `collection`, and `ai_assistant`
 entries to change what actually reorders. Unknown IDs are silently skipped.
 </Warning>
 

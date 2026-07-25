@@ -43,7 +43,7 @@ curl -X GET \
 
 O objeto `data` tem duas partes: `meta` (resumo da vitrine) e `root` (a lista
 ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
-`collection` ou `concierge`.
+`collection` ou `ai_assistant`.
 
 ```json
 {
@@ -143,8 +143,8 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
         "childCount": 1
       },
       {
-        "type": "concierge",
-        "concierge": {
+        "type": "ai_assistant",
+        "aiAssistant": {
           "id": "507f1f77bcf86cd799439030",
           "title": "Ask me anything",
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
@@ -198,7 +198,7 @@ curl -X PUT \
         "id": "507f1f77bcf86cd799439020",
         "children": [
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
-          { "type": "concierge", "id": "507f1f77bcf86cd799439030" }
+          { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
       }
     ]
@@ -211,15 +211,15 @@ curl -X PUT \
 | Parâmetro | Tipo | Obrigatório | Descrição |
 | --- | --- | --- | --- |
 | `root` | array | Sim | Entradas de nível superior na sua nova ordem. Pode ser vazio. |
-| `root[].type` | string | Sim | Um dos valores `link`, `collection`, `concierge` ou `product`. |
+| `root[].type` | string | Sim | Um dos valores `link`, `collection`, `ai_assistant` ou `product`. |
 | `root[].id` | string | Sim | O ID da entrada. |
 | `root[].children` | array | Não | Itens filhos, em ordem. Usado apenas quando `type` é `collection`. |
-| `root[].children[].type` | string | Sim | Um dos valores `link`, `concierge` ou `product`. |
+| `root[].children[].type` | string | Sim | Um dos valores `link`, `ai_assistant` ou `product`. |
 | `root[].children[].id` | string | Sim | O ID do item filho. |
 
 <Warning>
 Entradas de produto (na raiz ou dentro de uma coleção) são aceitas, mas ignoradas —
-a vitrine se ordena sozinha. Envie apenas entradas `link`, `collection` e `concierge`
+a vitrine se ordena sozinha. Envie apenas entradas `link`, `collection` e `ai_assistant`
 para alterar o que realmente é reordenado. IDs desconhecidos são ignorados
 silenciosamente.
 </Warning>
