@@ -1,0 +1,137 @@
+---
+title: Webhook de leads
+icon: webhook
+description: "Receba cada lead capturado na sua Linkzee direto no seu próprio endpoint, em tempo real — assinado, verificável e pronto para cair no seu CRM ou automação."
+---
+
+O **webhook de leads** entrega cada lead capturado na sua página Linkzee direto
+para um endpoint que você controla, no exato momento em que acontece. Em vez de
+exportar leads na mão, a Linkzee faz um `POST` com um evento JSON assinado para
+a sua URL, para você enviar o lead ao seu CRM, a uma planilha ou a qualquer
+automação que você já usa.
+
+<Note>
+  O webhook de leads é um recurso **Pro**. No plano gratuito a seção mostra um
+  convite de upgrade no lugar do formulário de configuração.
+</Note>
+
+## Como ativar
+
+<Steps>
+  <Step title="Abra as configurações">
+    No seu painel, vá em **Configurações → Webhook de leads**.
+  </Step>
+  <Step title="Informe a URL do endpoint">
+    Cole a URL `https://` que deve receber os eventos. Só URLs HTTPS são aceitas.
+  </Step>
+  <Step title="Ative e salve">
+    Ative a entrega e salve. A Linkzee gera uma **chave de assinatura** — copie e
+    guarde em local seguro; você vai usá-la para validar cada requisição.
+  </Step>
+  <Step title="Envie um evento de teste">
+    Use **Enviar evento de teste** para disparar um evento `lead.test` no seu
+    endpoint e confirmar que está tudo conectado.
+  </Step>
+</Steps>
+
+## Tipos de evento
+
+| Tipo | Quando dispara |
+| --- | --- |
+| `lead.created` | Um visitante envia um novo lead na sua página. |
+| `lead.test` | Você clica em **Enviar evento de teste** nas configurações. |
+
+## Payload
+
+Cada entrega é um `POST` com um corpo JSON neste envelope:
+
+```json
+{
+  "id": "evt_...",
+  "type": "lead.created",
+  "apiVersion": "2026-07-01",
+  "createdAt": "2026-07-25T14:03:11Z",
+  "store": { "id": "...", "slug": "...", "name": "..." },
+  "data": {
+    "lead": {
+      "id": "...",
+      "name": "...",
+      "email": "...",
+      "phone": "...",
+      "instagram": "...",
+      "message": "...",
+      "source": "instagram",
+      "channel": "concierge",
+      "consent": { "given": true, "version": "v2", "at": "..." },
+      "utm": { "source": "...", "medium": "...", "campaign": "..." },
+      "createdAt": "..."
+    }
+  }
+}
+```
+
+## Verifique a assinatura
+
+Toda requisição traz um cabeçalho `X-Linkzee-Signature` para você provar que ela
+realmente veio da Linkzee e não foi adulterada:
+
+```
+X-Linkzee-Signature: t=<unix>,v1=<hex>
+```
+
+- `t` é o timestamp Unix de quando o evento foi assinado.
+- `v1` é `HMAC-SHA256(secret, "<t>.<rawBody>")` em hexadecimal — onde `rawBody`
+  são os bytes exatos do corpo da requisição e `secret` é a sua chave de
+  assinatura.
+
+Calcule o mesmo HMAC do seu lado e compare com `v1` usando uma verificação de
+tempo constante. Use sempre o **corpo bruto da requisição**, antes de qualquer
+parse de JSON.
+
+```js
+import crypto from 'node:crypto';
+
+function verifyLinkzeeSignature(rawBody, header, secret) {
+  const parts = Object.fromEntries(
+    header.split(',').map((p) => p.split('='))
+  );
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${parts.t}.${rawBody}`)
+    .digest('hex');
+
+  const a = Buffer.from(expected);
+  const b = Buffer.from(parts.v1 || '');
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+```
+
+<Warning>
+  Nunca exponha sua chave de assinatura em código no cliente ou em repositórios
+  públicos. Quem tiver a chave pode forjar eventos que parecem válidos.
+</Warning>
+
+## Retentativas
+
+Responda com um status **2xx** o mais rápido possível para confirmar o
+recebimento. Se o seu endpoint falhar, a Linkzee tenta de novo com backoff:
+
+| Tentativa | Espera |
+| --- | --- |
+| 1 | imediatamente |
+| 2 | após 30s |
+| 3 | após 2min |
+| 4 | após 10min |
+
+Uma resposta **2xx** conta como sucesso. Qualquer resposta **4xx** (exceto
+**429**) interrompe as retentativas — a Linkzee trata como rejeição definitiva e
+não tenta de novo. Um **429** ou **5xx** é retentado conforme a tabela acima.
+
+<CardGroup cols={2}>
+  <Card title="API pública" icon="plug" href="/pt-BR/integrations/api/overview">
+    Automatize o resto da sua Linkzee a partir das suas próprias ferramentas.
+  </Card>
+  <Card title="Autenticação" icon="lock" href="/pt-BR/api-reference/authentication">
+    Como autenticar suas requisições à API.
+  </Card>
+</CardGroup>

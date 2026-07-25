@@ -1,0 +1,135 @@
+---
+title: Lead webhook
+icon: webhook
+description: "Get every lead captured on your Linkzee delivered to your own endpoint in real time — signed, verifiable, and ready to drop into your CRM or automation."
+---
+
+The **lead webhook** delivers every lead captured on your Linkzee page straight
+to an endpoint you control, the moment it happens. Instead of exporting leads by
+hand, Linkzee `POST`s a signed JSON event to your URL so you can push it into
+your CRM, a spreadsheet, or any automation you already run.
+
+<Note>
+  The lead webhook is a **Pro** feature. On a free plan the section shows an
+  upgrade prompt instead of the configuration form.
+</Note>
+
+## Enable it
+
+<Steps>
+  <Step title="Open your settings">
+    In your dashboard, go to **Settings → Lead webhook**.
+  </Step>
+  <Step title="Add your endpoint URL">
+    Paste the `https://` URL that should receive the events. Only HTTPS URLs are
+    accepted.
+  </Step>
+  <Step title="Turn it on and save">
+    Enable delivery and save. Linkzee generates a **signing secret** — copy it
+    and keep it safe; you'll use it to verify every request.
+  </Step>
+  <Step title="Send a test event">
+    Use **Send test event** to fire a `lead.test` event at your endpoint and
+    confirm it's wired up correctly.
+  </Step>
+</Steps>
+
+## Event types
+
+| Type | When it fires |
+| --- | --- |
+| `lead.created` | A visitor submits a new lead on your page. |
+| `lead.test` | You click **Send test event** in settings. |
+
+## Payload
+
+Every delivery is a `POST` with a JSON body in this envelope:
+
+```json
+{
+  "id": "evt_...",
+  "type": "lead.created",
+  "apiVersion": "2026-07-01",
+  "createdAt": "2026-07-25T14:03:11Z",
+  "store": { "id": "...", "slug": "...", "name": "..." },
+  "data": {
+    "lead": {
+      "id": "...",
+      "name": "...",
+      "email": "...",
+      "phone": "...",
+      "instagram": "...",
+      "message": "...",
+      "source": "instagram",
+      "channel": "concierge",
+      "consent": { "given": true, "version": "v2", "at": "..." },
+      "utm": { "source": "...", "medium": "...", "campaign": "..." },
+      "createdAt": "..."
+    }
+  }
+}
+```
+
+## Verify the signature
+
+Every request carries an `X-Linkzee-Signature` header so you can prove it really
+came from Linkzee and wasn't tampered with:
+
+```
+X-Linkzee-Signature: t=<unix>,v1=<hex>
+```
+
+- `t` is the Unix timestamp when the event was signed.
+- `v1` is `HMAC-SHA256(secret, "<t>.<rawBody>")` in hex — where `rawBody` is the
+  exact request body bytes and `secret` is your signing secret.
+
+Compute the same HMAC on your side and compare it to `v1` with a constant-time
+check. Always use the **raw request body**, before any JSON parsing.
+
+```js
+import crypto from 'node:crypto';
+
+function verifyLinkzeeSignature(rawBody, header, secret) {
+  const parts = Object.fromEntries(
+    header.split(',').map((p) => p.split('='))
+  );
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${parts.t}.${rawBody}`)
+    .digest('hex');
+
+  const a = Buffer.from(expected);
+  const b = Buffer.from(parts.v1 || '');
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+```
+
+<Warning>
+  Never expose your signing secret in client-side code or public repositories.
+  Anyone with it can forge valid-looking events.
+</Warning>
+
+## Retries
+
+Respond with a **2xx** status as fast as you can to acknowledge receipt. If your
+endpoint fails, Linkzee retries with backoff:
+
+| Attempt | Delay |
+| --- | --- |
+| 1 | immediately |
+| 2 | after 30s |
+| 3 | after 2m |
+| 4 | after 10m |
+
+A **2xx** response counts as success. Any **4xx** response (except **429**)
+stops retries — Linkzee treats it as a permanent rejection and won't try again.
+A **429** or **5xx** is retried on the schedule above.
+
+<CardGroup cols={2}>
+  <Card title="Public API" icon="plug" href="/integrations/api/overview">
+    Automate the rest of your Linkzee from your own tools.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
+    How to authenticate your API requests.
+  </Card>
+</CardGroup>

@@ -1,0 +1,141 @@
+---
+title: Webhook de leads
+icon: webhook
+description: "Recevez chaque lead capturé sur votre Linkzee directement sur votre propre endpoint, en temps réel — signé, vérifiable et prêt pour votre CRM ou votre automatisation."
+---
+
+Le **webhook de leads** livre chaque lead capturé sur votre page Linkzee
+directement à un endpoint que vous contrôlez, à l'instant où il arrive. Au lieu
+d'exporter les leads à la main, Linkzee envoie un `POST` avec un événement JSON
+signé vers votre URL, pour que vous puissiez le pousser vers votre CRM, un
+tableur ou toute automatisation que vous utilisez déjà.
+
+<Note>
+  Le webhook de leads est une fonctionnalité **Pro**. Sur l'offre gratuite, la
+  section affiche une invitation à passer à un plan supérieur au lieu du
+  formulaire de configuration.
+</Note>
+
+## Comment l'activer
+
+<Steps>
+  <Step title="Ouvrez vos paramètres">
+    Dans votre tableau de bord, allez dans **Paramètres → Webhook de leads**.
+  </Step>
+  <Step title="Ajoutez l'URL de l'endpoint">
+    Collez l'URL `https://` qui doit recevoir les événements. Seules les URL
+    HTTPS sont acceptées.
+  </Step>
+  <Step title="Activez et enregistrez">
+    Activez la livraison et enregistrez. Linkzee génère une **clé de signature** —
+    copiez-la et conservez-la en lieu sûr ; elle vous servira à vérifier chaque
+    requête.
+  </Step>
+  <Step title="Envoyez un événement de test">
+    Utilisez **Envoyer un événement de test** pour déclencher un événement
+    `lead.test` vers votre endpoint et confirmer que tout est bien branché.
+  </Step>
+</Steps>
+
+## Types d'événement
+
+| Type | Quand il se déclenche |
+| --- | --- |
+| `lead.created` | Un visiteur envoie un nouveau lead sur votre page. |
+| `lead.test` | Vous cliquez sur **Envoyer un événement de test** dans les paramètres. |
+
+## Payload
+
+Chaque livraison est un `POST` avec un corps JSON dans cette enveloppe :
+
+```json
+{
+  "id": "evt_...",
+  "type": "lead.created",
+  "apiVersion": "2026-07-01",
+  "createdAt": "2026-07-25T14:03:11Z",
+  "store": { "id": "...", "slug": "...", "name": "..." },
+  "data": {
+    "lead": {
+      "id": "...",
+      "name": "...",
+      "email": "...",
+      "phone": "...",
+      "instagram": "...",
+      "message": "...",
+      "source": "instagram",
+      "channel": "concierge",
+      "consent": { "given": true, "version": "v2", "at": "..." },
+      "utm": { "source": "...", "medium": "...", "campaign": "..." },
+      "createdAt": "..."
+    }
+  }
+}
+```
+
+## Vérifiez la signature
+
+Chaque requête porte un en-tête `X-Linkzee-Signature` pour vous permettre de
+prouver qu'elle provient bien de Linkzee et n'a pas été altérée :
+
+```
+X-Linkzee-Signature: t=<unix>,v1=<hex>
+```
+
+- `t` est l'horodatage Unix du moment où l'événement a été signé.
+- `v1` est `HMAC-SHA256(secret, "<t>.<rawBody>")` en hexadécimal — où `rawBody`
+  correspond aux octets exacts du corps de la requête et `secret` à votre clé de
+  signature.
+
+Calculez le même HMAC de votre côté et comparez-le à `v1` avec une vérification à
+temps constant. Utilisez toujours le **corps brut de la requête**, avant toute
+analyse JSON.
+
+```js
+import crypto from 'node:crypto';
+
+function verifyLinkzeeSignature(rawBody, header, secret) {
+  const parts = Object.fromEntries(
+    header.split(',').map((p) => p.split('='))
+  );
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${parts.t}.${rawBody}`)
+    .digest('hex');
+
+  const a = Buffer.from(expected);
+  const b = Buffer.from(parts.v1 || '');
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+```
+
+<Warning>
+  N'exposez jamais votre clé de signature dans du code côté client ou dans des
+  dépôts publics. Quiconque la possède peut forger des événements qui semblent
+  valides.
+</Warning>
+
+## Nouvelles tentatives
+
+Répondez avec un statut **2xx** le plus vite possible pour accuser réception. Si
+votre endpoint échoue, Linkzee réessaie avec un délai croissant :
+
+| Tentative | Délai |
+| --- | --- |
+| 1 | immédiatement |
+| 2 | après 30s |
+| 3 | après 2min |
+| 4 | après 10min |
+
+Une réponse **2xx** compte comme un succès. Toute réponse **4xx** (sauf **429**)
+arrête les tentatives — Linkzee la considère comme un rejet définitif et ne
+réessaie pas. Un **429** ou un **5xx** est réessayé selon le tableau ci-dessus.
+
+<CardGroup cols={2}>
+  <Card title="API publique" icon="plug" href="/fr/integrations/api/overview">
+    Automatisez le reste de votre Linkzee depuis vos propres outils.
+  </Card>
+  <Card title="Authentification" icon="lock" href="/fr/api-reference/authentication">
+    Comment authentifier vos requêtes à l'API.
+  </Card>
+</CardGroup>

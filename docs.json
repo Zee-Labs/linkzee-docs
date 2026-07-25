@@ -165,7 +165,8 @@
                 "group": "Public API",
                 "pages": [
                   "integrations/api/overview",
-                  "integrations/api/api-keys"
+                  "integrations/api/api-keys",
+                  "integrations/lead-webhook"
                 ]
               },
               {
@@ -347,7 +348,8 @@
                 "group": "API pública",
                 "pages": [
                   "pt-BR/integrations/api/overview",
-                  "pt-BR/integrations/api/api-keys"
+                  "pt-BR/integrations/api/api-keys",
+                  "pt-BR/integrations/lead-webhook"
                 ]
               },
               {
@@ -529,7 +531,8 @@
                 "group": "API pública",
                 "pages": [
                   "es/integrations/api/overview",
-                  "es/integrations/api/api-keys"
+                  "es/integrations/api/api-keys",
+                  "es/integrations/lead-webhook"
                 ]
               },
               {
@@ -711,7 +714,8 @@
                 "group": "API publique",
                 "pages": [
                   "fr/integrations/api/overview",
-                  "fr/integrations/api/api-keys"
+                  "fr/integrations/api/api-keys",
+                  "fr/integrations/lead-webhook"
                 ]
               },
               {
@@ -893,7 +897,8 @@
                 "group": "Öffentliche API",
                 "pages": [
                   "de/integrations/api/overview",
-                  "de/integrations/api/api-keys"
+                  "de/integrations/api/api-keys",
+                  "de/integrations/lead-webhook"
                 ]
               },
               {

@@ -1,0 +1,140 @@
+---
+title: Lead-Webhook
+icon: webhook
+description: "Erhalte jeden auf deiner Linkzee erfassten Lead in Echtzeit direkt an deinem eigenen Endpoint — signiert, überprüfbar und bereit für dein CRM oder deine Automatisierung."
+---
+
+Der **Lead-Webhook** liefert jeden auf deiner Linkzee-Seite erfassten Lead
+direkt an einen Endpoint, den du kontrollierst — in dem Moment, in dem er
+entsteht. Statt Leads von Hand zu exportieren, sendet Linkzee ein signiertes
+JSON-Ereignis per `POST` an deine URL, damit du es in dein CRM, eine Tabelle
+oder eine bereits genutzte Automatisierung übernehmen kannst.
+
+<Note>
+  Der Lead-Webhook ist eine **Pro**-Funktion. Im kostenlosen Tarif zeigt der
+  Bereich statt des Konfigurationsformulars einen Hinweis zum Upgrade.
+</Note>
+
+## Aktivieren
+
+<Steps>
+  <Step title="Öffne deine Einstellungen">
+    Gehe in deinem Dashboard zu **Einstellungen → Lead-Webhook**.
+  </Step>
+  <Step title="Endpoint-URL hinzufügen">
+    Füge die `https://`-URL ein, die die Ereignisse empfangen soll. Es werden nur
+    HTTPS-URLs akzeptiert.
+  </Step>
+  <Step title="Einschalten und speichern">
+    Aktiviere die Zustellung und speichere. Linkzee erzeugt einen
+    **Signaturschlüssel** — kopiere ihn und bewahre ihn sicher auf; du brauchst
+    ihn, um jede Anfrage zu überprüfen.
+  </Step>
+  <Step title="Testereignis senden">
+    Nutze **Testereignis senden**, um ein `lead.test`-Ereignis an deinen Endpoint
+    auszulösen und zu bestätigen, dass alles korrekt verbunden ist.
+  </Step>
+</Steps>
+
+## Ereignistypen
+
+| Typ | Wann er ausgelöst wird |
+| --- | --- |
+| `lead.created` | Ein Besucher sendet einen neuen Lead auf deiner Seite. |
+| `lead.test` | Du klickst in den Einstellungen auf **Testereignis senden**. |
+
+## Payload
+
+Jede Zustellung ist ein `POST` mit einem JSON-Body in diesem Umschlag:
+
+```json
+{
+  "id": "evt_...",
+  "type": "lead.created",
+  "apiVersion": "2026-07-01",
+  "createdAt": "2026-07-25T14:03:11Z",
+  "store": { "id": "...", "slug": "...", "name": "..." },
+  "data": {
+    "lead": {
+      "id": "...",
+      "name": "...",
+      "email": "...",
+      "phone": "...",
+      "instagram": "...",
+      "message": "...",
+      "source": "instagram",
+      "channel": "concierge",
+      "consent": { "given": true, "version": "v2", "at": "..." },
+      "utm": { "source": "...", "medium": "...", "campaign": "..." },
+      "createdAt": "..."
+    }
+  }
+}
+```
+
+## Signatur überprüfen
+
+Jede Anfrage trägt einen `X-Linkzee-Signature`-Header, mit dem du nachweisen
+kannst, dass sie wirklich von Linkzee stammt und nicht manipuliert wurde:
+
+```
+X-Linkzee-Signature: t=<unix>,v1=<hex>
+```
+
+- `t` ist der Unix-Zeitstempel, zu dem das Ereignis signiert wurde.
+- `v1` ist `HMAC-SHA256(secret, "<t>.<rawBody>")` in Hex — wobei `rawBody` die
+  exakten Bytes des Anfrage-Bodys sind und `secret` dein Signaturschlüssel ist.
+
+Berechne denselben HMAC auf deiner Seite und vergleiche ihn mit `v1` über einen
+zeitkonstanten Vergleich. Verwende immer den **rohen Anfrage-Body**, vor jeglichem
+JSON-Parsing.
+
+```js
+import crypto from 'node:crypto';
+
+function verifyLinkzeeSignature(rawBody, header, secret) {
+  const parts = Object.fromEntries(
+    header.split(',').map((p) => p.split('='))
+  );
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${parts.t}.${rawBody}`)
+    .digest('hex');
+
+  const a = Buffer.from(expected);
+  const b = Buffer.from(parts.v1 || '');
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+```
+
+<Warning>
+  Gib deinen Signaturschlüssel niemals in clientseitigem Code oder in
+  öffentlichen Repositories preis. Wer ihn besitzt, kann täuschend echte
+  Ereignisse fälschen.
+</Warning>
+
+## Wiederholungen
+
+Antworte so schnell wie möglich mit einem **2xx**-Status, um den Empfang zu
+bestätigen. Wenn dein Endpoint fehlschlägt, wiederholt Linkzee mit Backoff:
+
+| Versuch | Wartezeit |
+| --- | --- |
+| 1 | sofort |
+| 2 | nach 30s |
+| 3 | nach 2min |
+| 4 | nach 10min |
+
+Eine **2xx**-Antwort gilt als Erfolg. Jede **4xx**-Antwort (außer **429**)
+stoppt die Wiederholungen — Linkzee behandelt sie als endgültige Ablehnung und
+versucht es nicht erneut. Ein **429** oder **5xx** wird gemäß der Tabelle oben
+wiederholt.
+
+<CardGroup cols={2}>
+  <Card title="Öffentliche API" icon="plug" href="/de/integrations/api/overview">
+    Automatisiere den Rest deiner Linkzee aus deinen eigenen Tools.
+  </Card>
+  <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
+    So authentifizierst du deine API-Anfragen.
+  </Card>
+</CardGroup>
