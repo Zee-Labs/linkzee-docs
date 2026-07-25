@@ -1,0 +1,98 @@
+---
+title: Verificação em duas etapas
+icon: shield-check
+description: "Adicione uma segunda etapa ao seu login com um app autenticador e guarde códigos de backup caso perca o celular."
+---
+
+A verificação em duas etapas (2FA) adiciona uma camada extra de segurança à sua conta.
+Além da senha, você digita um **código de 6 dígitos** de um app autenticador no seu
+celular — assim, mesmo que alguém descubra sua senha, não entra sem o seu celular.
+
+É totalmente **opcional** e vem desligada. Você mesmo ativa e pode desativar quando
+quiser.
+
+## Ative a verificação em duas etapas
+
+Você vai precisar de um app autenticador gratuito, como **Google Authenticator**,
+**Authy** ou **1Password**.
+
+<Steps>
+  <Step title="Abra as configurações de Segurança">
+    Vá em **Configurações → Segurança** e, em **Verificação em duas etapas**, toque em
+    **Ativar**.
+  </Step>
+  <Step title="Escaneie o QR code">
+    Abra seu app autenticador e escaneie o QR code na tela. Não consegue escanear?
+    Copie a chave exibida abaixo do código e cole no app manualmente.
+  </Step>
+  <Step title="Digite o código de 6 dígitos">
+    O app mostra um código de 6 dígitos que muda a cada 30 segundos. Digite o código
+    atual para confirmar a configuração.
+  </Step>
+  <Step title="Guarde seus códigos de backup">
+    O Linkzee mostra **10 códigos de backup**. Copie ou baixe e guarde em um lugar
+    seguro — eles só aparecem uma vez.
+  </Step>
+</Steps>
+
+<Warning>
+  Guarde seus códigos de backup antes de concluir. Eles são a sua forma de voltar
+  caso perca o celular, e só são exibidos uma vez.
+</Warning>
+
+## Entrar com a 2FA
+
+Com a 2FA ativa, entrar leva duas etapas rápidas:
+
+<Steps>
+  <Step title="Digite e-mail e senha">
+    Entre normalmente.
+  </Step>
+  <Step title="Digite seu código">
+    Na tela seguinte, digite o código de 6 dígitos atual do seu app autenticador.
+  </Step>
+</Steps>
+
+## Códigos de backup
+
+Códigos de backup são códigos de uso único que funcionam no lugar do app autenticador.
+Cada um funciona **uma vez** e depois é consumido.
+
+- Use um sempre que o app pedir um código — toque em **Usar código de backup** e
+  digite.
+- Está acabando? Vá em **Configurações → Segurança** e escolha **Gerar novos códigos
+  de backup**. Gerar um novo conjunto **substitui** todos os antigos.
+
+## Perdeu o celular?
+
+Sem pânico — você tem duas formas de voltar:
+
+- **Use um código de backup** na tela de código ao entrar.
+- Depois de voltar, vá em **Configurações → Segurança**, desative a 2FA e configure de
+  novo no seu novo celular.
+
+<Note>
+  Se você perdeu o celular e também os códigos de backup, fale com o
+  [suporte](mailto:support@linkz.ee) para recuperar sua conta.
+</Note>
+
+## Cadastrou-se com o Google?
+
+Se você entra com o **Google** e ativou a 2FA, o Linkzee ainda pede o código de 6
+dígitos depois do Google — então sua conta fica protegida dos dois jeitos.
+
+## Desative a verificação em duas etapas
+
+Vá em **Configurações → Segurança** e toque em **Desativar**. Por segurança, você
+precisa digitar um código válido (do app ou de backup) para confirmar.
+
+## Páginas relacionadas
+
+<CardGroup cols={2}>
+  <Card title="Senha e segurança" icon="lock" href="/pt-BR/account/password-security">
+    Troque sua senha e entre com segurança.
+  </Card>
+  <Card title="Ajuda com acesso à conta" icon="key" href="/pt-BR/troubleshooting/account-access">
+    Resolva problemas de login, ativação e acesso.
+  </Card>
+</CardGroup>

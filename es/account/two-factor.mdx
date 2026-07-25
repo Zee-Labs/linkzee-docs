@@ -1,0 +1,101 @@
+---
+title: Verificación en dos pasos
+icon: shield-check
+description: "Añade un segundo paso a tu inicio de sesión con una app de autenticación y guarda códigos de respaldo por si pierdes el teléfono."
+---
+
+La verificación en dos pasos (2FA) añade una capa extra de seguridad a tu cuenta.
+Además de tu contraseña, introduces un **código de 6 dígitos** de una app de
+autenticación en tu teléfono — así, aunque alguien descubra tu contraseña, no puede
+entrar sin tu teléfono.
+
+Es totalmente **opcional** y viene desactivada. Tú mismo la activas y puedes
+desactivarla cuando quieras.
+
+## Activa la verificación en dos pasos
+
+Necesitarás una app de autenticación gratuita como **Google Authenticator**, **Authy**
+o **1Password**.
+
+<Steps>
+  <Step title="Abre los ajustes de Seguridad">
+    Ve a **Ajustes → Seguridad** y, en **Verificación en dos pasos**, toca **Activar**.
+  </Step>
+  <Step title="Escanea el código QR">
+    Abre tu app de autenticación y escanea el código QR de la pantalla. ¿No puedes
+    escanear? Copia la clave que aparece debajo del código y pégala en la app
+    manualmente.
+  </Step>
+  <Step title="Introduce el código de 6 dígitos">
+    La app muestra un código de 6 dígitos que cambia cada 30 segundos. Escribe el
+    código actual para confirmar la configuración.
+  </Step>
+  <Step title="Guarda tus códigos de respaldo">
+    Linkzee muestra **10 códigos de respaldo**. Cópialos o descárgalos y guárdalos en
+    un lugar seguro — solo se muestran una vez.
+  </Step>
+</Steps>
+
+<Warning>
+  Guarda tus códigos de respaldo antes de terminar. Son tu forma de volver a entrar si
+  pierdes el teléfono, y solo se muestran una vez.
+</Warning>
+
+## Iniciar sesión con 2FA
+
+Con la 2FA activada, iniciar sesión son dos pasos rápidos:
+
+<Steps>
+  <Step title="Introduce tu correo y contraseña">
+    Inicia sesión como siempre.
+  </Step>
+  <Step title="Introduce tu código">
+    En la siguiente pantalla, escribe el código de 6 dígitos actual de tu app de
+    autenticación.
+  </Step>
+</Steps>
+
+## Códigos de respaldo
+
+Los códigos de respaldo son códigos de un solo uso que funcionan en lugar de la app de
+autenticación. Cada uno funciona **una vez** y luego se consume.
+
+- Usa uno cuando la app te pida un código — toca **Usar un código de respaldo** e
+  introdúcelo.
+- ¿Se te acaban? Ve a **Ajustes → Seguridad** y elige **Generar nuevos códigos de
+  respaldo**. Generar un conjunto nuevo **reemplaza** todos los anteriores.
+
+## ¿Perdiste tu teléfono?
+
+Tranquilo — tienes dos formas de volver a entrar:
+
+- **Usa un código de respaldo** en la pantalla del código al iniciar sesión.
+- Una vez dentro, ve a **Ajustes → Seguridad**, desactiva la 2FA y vuelve a
+  configurarla en tu nuevo teléfono.
+
+<Note>
+  Si perdiste el teléfono y también tus códigos de respaldo, contacta con
+  [soporte](mailto:support@linkz.ee) para recuperar tu cuenta.
+</Note>
+
+## ¿Te registraste con Google?
+
+Si inicias sesión con **Google** y activaste la 2FA, Linkzee te sigue pidiendo tu
+código de 6 dígitos después de Google — así tu cuenta queda protegida de cualquier
+forma.
+
+## Desactiva la verificación en dos pasos
+
+Ve a **Ajustes → Seguridad** y toca **Desactivar**. Por tu seguridad, deberás
+introducir un código válido (de la app o de respaldo) para confirmar.
+
+## Páginas relacionadas
+
+<CardGroup cols={2}>
+  <Card title="Contraseña y seguridad" icon="lock" href="/es/account/password-security">
+    Cambia tu contraseña e inicia sesión de forma segura.
+  </Card>
+  <Card title="Ayuda con el acceso a la cuenta" icon="key" href="/es/troubleshooting/account-access">
+    Resuelve problemas de inicio de sesión, activación y acceso.
+  </Card>
+</CardGroup>

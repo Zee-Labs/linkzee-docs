@@ -1,0 +1,103 @@
+---
+title: Zwei-Faktor-Authentifizierung
+icon: shield-check
+description: "Fügen Sie Ihrer Anmeldung mit einer Authenticator-App einen zweiten Schritt hinzu und bewahren Sie Backup-Codes auf, falls Sie Ihr Telefon verlieren."
+---
+
+Die Zwei-Faktor-Authentifizierung (2FA) fügt Ihrem Konto eine zusätzliche
+Sicherheitsebene hinzu. Zusätzlich zu Ihrem Passwort geben Sie einen **6-stelligen
+Code** aus einer Authenticator-App auf Ihrem Telefon ein — selbst wenn jemand Ihr
+Passwort herausfindet, kommt er ohne Ihr Telefon nicht hinein.
+
+Sie ist völlig **optional** und standardmäßig deaktiviert. Sie aktivieren sie selbst
+und können sie jederzeit wieder deaktivieren.
+
+## Zwei-Faktor-Authentifizierung aktivieren
+
+Sie benötigen eine kostenlose Authenticator-App wie **Google Authenticator**,
+**Authy** oder **1Password**.
+
+<Steps>
+  <Step title="Öffnen Sie die Sicherheitseinstellungen">
+    Gehen Sie zu **Einstellungen → Sicherheit** und tippen Sie unter
+    **Bestätigung in zwei Schritten** auf **Aktivieren**.
+  </Step>
+  <Step title="Scannen Sie den QR-Code">
+    Öffnen Sie Ihre Authenticator-App und scannen Sie den QR-Code auf dem Bildschirm.
+    Können Sie nicht scannen? Kopieren Sie den unter dem Code angezeigten Schlüssel und
+    fügen Sie ihn manuell in die App ein.
+  </Step>
+  <Step title="Geben Sie den 6-stelligen Code ein">
+    Die App zeigt einen 6-stelligen Code, der sich alle 30 Sekunden ändert. Geben Sie
+    den aktuellen Code ein, um die Einrichtung zu bestätigen.
+  </Step>
+  <Step title="Speichern Sie Ihre Backup-Codes">
+    Linkzee zeigt **10 Backup-Codes**. Kopieren oder laden Sie sie herunter und
+    bewahren Sie sie sicher auf — sie werden nur einmal angezeigt.
+  </Step>
+</Steps>
+
+<Warning>
+  Speichern Sie Ihre Backup-Codes, bevor Sie fertig sind. Sie sind Ihr Weg zurück,
+  falls Sie Ihr Telefon verlieren, und werden nur einmal angezeigt.
+</Warning>
+
+## Mit 2FA anmelden
+
+Mit aktivierter 2FA erfolgt die Anmeldung in zwei schnellen Schritten:
+
+<Steps>
+  <Step title="Geben Sie E-Mail und Passwort ein">
+    Melden Sie sich wie gewohnt an.
+  </Step>
+  <Step title="Geben Sie Ihren Code ein">
+    Geben Sie auf dem nächsten Bildschirm den aktuellen 6-stelligen Code aus Ihrer
+    Authenticator-App ein.
+  </Step>
+</Steps>
+
+## Backup-Codes
+
+Backup-Codes sind Einmal-Codes, die anstelle der Authenticator-App funktionieren. Jeder
+funktioniert **einmal** und wird dann verbraucht.
+
+- Verwenden Sie einen, wenn die App nach einem Code fragt — tippen Sie auf **Backup-Code
+  verwenden** und geben Sie ihn ein.
+- Gehen sie zur Neige? Gehen Sie zu **Einstellungen → Sicherheit** und wählen Sie
+  **Neue Backup-Codes generieren**. Ein neuer Satz **ersetzt** alle alten Codes.
+
+## Telefon verloren?
+
+Keine Sorge — Sie haben zwei Wege zurück:
+
+- **Verwenden Sie einen Backup-Code** auf dem Code-Bildschirm bei der Anmeldung.
+- Sobald Sie wieder drin sind, gehen Sie zu **Einstellungen → Sicherheit**,
+  deaktivieren Sie die 2FA und richten Sie sie auf Ihrem neuen Telefon erneut ein.
+
+<Note>
+  Wenn Sie sowohl Ihr Telefon als auch Ihre Backup-Codes verloren haben, wenden Sie
+  sich an den [Support](mailto:support@linkz.ee), um Ihr Konto wiederherzustellen.
+</Note>
+
+## Mit Google registriert?
+
+Wenn Sie sich mit **Google** anmelden und die 2FA aktiviert haben, fragt Linkzee nach
+Google trotzdem nach Ihrem 6-stelligen Code — so bleibt Ihr Konto in jedem Fall
+geschützt.
+
+## Zwei-Faktor-Authentifizierung deaktivieren
+
+Gehen Sie zu **Einstellungen → Sicherheit** und tippen Sie auf **Deaktivieren**. Zu
+Ihrer Sicherheit müssen Sie einen gültigen Code (aus der App oder einen Backup-Code)
+eingeben, um zu bestätigen.
+
+## Verwandte Seiten
+
+<CardGroup cols={2}>
+  <Card title="Passwort und Sicherheit" icon="lock" href="/de/account/password-security">
+    Ändern Sie Ihr Passwort und melden Sie sich sicher an.
+  </Card>
+  <Card title="Hilfe beim Kontozugriff" icon="key" href="/de/troubleshooting/account-access">
+    Beheben Sie Probleme bei Anmeldung, Aktivierung und Zugriff.
+  </Card>
+</CardGroup>

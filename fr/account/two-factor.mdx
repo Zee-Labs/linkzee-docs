@@ -1,0 +1,103 @@
+---
+title: Authentification à deux facteurs
+icon: shield-check
+description: "Ajoutez une deuxième étape à votre connexion avec une application d'authentification et conservez des codes de secours en cas de perte du téléphone."
+---
+
+L'authentification à deux facteurs (2FA) ajoute une couche de sécurité supplémentaire à
+votre compte. En plus de votre mot de passe, vous saisissez un **code à 6 chiffres**
+depuis une application d'authentification sur votre téléphone — ainsi, même si
+quelqu'un découvre votre mot de passe, il ne peut pas entrer sans votre téléphone.
+
+C'est entièrement **facultatif** et désactivé par défaut. Vous l'activez vous-même et
+pouvez le désactiver à tout moment.
+
+## Activer l'authentification à deux facteurs
+
+Il vous faut une application d'authentification gratuite comme **Google
+Authenticator**, **Authy** ou **1Password**.
+
+<Steps>
+  <Step title="Ouvrez les paramètres de Sécurité">
+    Allez dans **Paramètres → Sécurité** et, sous **Vérification en deux étapes**,
+    touchez **Activer**.
+  </Step>
+  <Step title="Scannez le QR code">
+    Ouvrez votre application d'authentification et scannez le QR code à l'écran.
+    Impossible de scanner ? Copiez la clé affichée sous le code et collez-la dans
+    l'application manuellement.
+  </Step>
+  <Step title="Saisissez le code à 6 chiffres">
+    L'application affiche un code à 6 chiffres qui change toutes les 30 secondes. Tapez
+    le code actuel pour confirmer la configuration.
+  </Step>
+  <Step title="Conservez vos codes de secours">
+    Linkzee affiche **10 codes de secours**. Copiez-les ou téléchargez-les et
+    conservez-les en lieu sûr — ils ne s'affichent qu'une seule fois.
+  </Step>
+</Steps>
+
+<Warning>
+  Conservez vos codes de secours avant de terminer. Ils sont votre moyen de revenir si
+  vous perdez votre téléphone, et ils ne s'affichent qu'une seule fois.
+</Warning>
+
+## Se connecter avec la 2FA
+
+Une fois la 2FA activée, la connexion se fait en deux étapes rapides :
+
+<Steps>
+  <Step title="Saisissez votre e-mail et votre mot de passe">
+    Connectez-vous comme d'habitude.
+  </Step>
+  <Step title="Saisissez votre code">
+    Sur l'écran suivant, tapez le code à 6 chiffres actuel de votre application
+    d'authentification.
+  </Step>
+</Steps>
+
+## Codes de secours
+
+Les codes de secours sont des codes à usage unique qui remplacent l'application
+d'authentification. Chacun fonctionne **une seule fois**, puis il est consommé.
+
+- Utilisez-en un chaque fois que l'application demande un code — touchez **Utiliser un
+  code de secours** et saisissez-le.
+- Il vous en reste peu ? Allez dans **Paramètres → Sécurité** et choisissez **Générer
+  de nouveaux codes de secours**. Générer un nouveau jeu **remplace** tous les
+  anciens.
+
+## Vous avez perdu votre téléphone ?
+
+Pas de panique — vous avez deux façons de revenir :
+
+- **Utilisez un code de secours** sur l'écran du code lors de la connexion.
+- Une fois de retour, allez dans **Paramètres → Sécurité**, désactivez la 2FA et
+  reconfigurez-la sur votre nouveau téléphone.
+
+<Note>
+  Si vous avez perdu à la fois votre téléphone et vos codes de secours, contactez le
+  [support](mailto:support@linkz.ee) pour récupérer votre compte.
+</Note>
+
+## Vous vous êtes inscrit avec Google ?
+
+Si vous vous connectez avec **Google** et que vous avez activé la 2FA, Linkzee vous
+demande quand même votre code à 6 chiffres après Google — votre compte reste donc
+protégé dans tous les cas.
+
+## Désactiver l'authentification à deux facteurs
+
+Allez dans **Paramètres → Sécurité** et touchez **Désactiver**. Pour votre sécurité,
+vous devrez saisir un code valide (de l'application ou de secours) pour confirmer.
+
+## Pages associées
+
+<CardGroup cols={2}>
+  <Card title="Mot de passe et sécurité" icon="lock" href="/fr/account/password-security">
+    Changez votre mot de passe et connectez-vous en toute sécurité.
+  </Card>
+  <Card title="Aide sur l'accès au compte" icon="key" href="/fr/troubleshooting/account-access">
+    Résolvez les problèmes de connexion, d'activation et d'accès.
+  </Card>
+</CardGroup>

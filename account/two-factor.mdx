@@ -1,0 +1,96 @@
+---
+title: Two-factor authentication
+icon: shield-check
+description: "Add a second step to your login with an authenticator app, and keep backup codes in case you lose your phone."
+---
+
+Two-factor authentication (2FA) adds a second layer of security to your account. On
+top of your password, you enter a **6-digit code** from an authenticator app on your
+phone — so even if someone learns your password, they can't get in without your phone.
+
+It's completely **optional** and off by default. You turn it on yourself, and you can
+turn it off anytime.
+
+## Turn on two-factor authentication
+
+You'll need a free authenticator app such as **Google Authenticator**, **Authy** or
+**1Password**.
+
+<Steps>
+  <Step title="Open Security settings">
+    Go to **Settings → Security** and, under **Two-step verification**, tap **Turn on**.
+  </Step>
+  <Step title="Scan the QR code">
+    Open your authenticator app and scan the QR code on screen. Can't scan? Copy the
+    setup key shown below the code and paste it into the app manually.
+  </Step>
+  <Step title="Enter the 6-digit code">
+    Your app now shows a 6-digit code that changes every 30 seconds. Type the current
+    code to confirm the setup.
+  </Step>
+  <Step title="Save your backup codes">
+    Linkzee shows **10 backup codes**. Copy or download them and keep them somewhere
+    safe — this is the only time they're shown.
+  </Step>
+</Steps>
+
+<Warning>
+  Save your backup codes before you finish. They're your way back in if you ever lose
+  your phone, and they're shown only once.
+</Warning>
+
+## Signing in with 2FA
+
+Once 2FA is on, signing in takes two quick steps:
+
+<Steps>
+  <Step title="Enter your email and password">
+    Sign in as usual.
+  </Step>
+  <Step title="Enter your code">
+    On the next screen, type the current 6-digit code from your authenticator app.
+  </Step>
+</Steps>
+
+## Backup codes
+
+Backup codes are single-use codes that work in place of your authenticator app. Each
+one works **once**, then it's used up.
+
+- Use one anytime the app asks for a code — tap **Use a backup code** and enter it.
+- Running low? Go to **Settings → Security** and choose **Generate new backup codes**.
+  Generating a fresh set **replaces** all your old codes.
+
+## Lost your phone?
+
+Don't panic — you have two ways back in:
+
+- **Use a backup code** on the code screen when you sign in.
+- Once you're back in, go to **Settings → Security**, turn 2FA off, and set it up
+  again on your new phone.
+
+<Note>
+  If you've lost both your phone and your backup codes, contact
+  [support](mailto:support@linkz.ee) to recover your account.
+</Note>
+
+## Signed up with Google?
+
+If you sign in with **Google** and you've turned on 2FA, Linkzee still asks for your
+6-digit code after Google — so your account stays protected either way.
+
+## Turn off two-factor authentication
+
+Go to **Settings → Security** and tap **Turn off**. For your safety, you'll need to
+enter a valid code (from your app or a backup code) to confirm.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Password & security" icon="lock" href="/account/password-security">
+    Change your password and sign in securely.
+  </Card>
+  <Card title="Account access help" icon="key" href="/troubleshooting/account-access">
+    Fix sign-in, activation and login problems.
+  </Card>
+</CardGroup>
