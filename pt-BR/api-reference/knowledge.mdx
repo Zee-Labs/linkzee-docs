@@ -1,15 +1,15 @@
 ---
 title: Base de conhecimento
 icon: file-pdf
-description: "Gerencie a base de conhecimento em PDF que alimenta o concierge de IA da sua loja."
+description: "Gerencie a base de conhecimento em PDF que alimenta o assistente de IA da sua loja."
 ---
 
-A base de conhecimento é um conjunto de documentos PDF que o concierge de IA lê
+A base de conhecimento é um conjunto de documentos PDF que o assistente de IA lê
 para responder às perguntas dos visitantes. Envie manuais de produtos, FAQs,
-catálogos ou políticas, e o concierge extrai as respostas deles.
+catálogos ou políticas, e o assistente extrai as respostas deles.
 
 O texto enviado é extraído na hora e depois indexado de forma assíncrona, para
-que o concierge possa pesquisá-lo. Por padrão, uma loja pode ter até **10 PDFs**
+que o assistente possa pesquisá-lo. Por padrão, uma loja pode ter até **10 PDFs**
 (cada um com até **10&nbsp;MB**).
 
 <Note>
@@ -144,7 +144,7 @@ curl -X DELETE \
 POST /v1/knowledge/reindex
 ```
 
-Agenda uma reconstrução do índice de busca do concierge. A reindexação roda de
+Agenda uma reconstrução do índice de busca do assistente de IA. A reindexação roda de
 forma assíncrona e rajadas de requisições se agrupam em um único job, então é
 seguro chamá-la depois de um lote de envios ou exclusões.
 

@@ -1,15 +1,15 @@
 ---
 title: Base de connaissances
 icon: file-pdf
-description: "Gérez la base de connaissances PDF qui alimente le concierge IA de votre boutique."
+description: "Gérez la base de connaissances PDF qui alimente l'assistant IA de votre boutique."
 ---
 
-La base de connaissances est un ensemble de documents PDF que votre concierge IA
+La base de connaissances est un ensemble de documents PDF que votre assistant IA
 lit pour répondre aux questions des visiteurs. Importez des manuels de produits,
-des FAQ, des catalogues ou des politiques, et le concierge y puise ses réponses.
+des FAQ, des catalogues ou des politiques, et l'assistant y puise ses réponses.
 
 Le texte importé est extrait immédiatement, puis indexé de façon asynchrone afin
-que le concierge puisse le rechercher. Une boutique peut contenir jusqu'à
+que l'assistant puisse le rechercher. Une boutique peut contenir jusqu'à
 **10 PDF** par défaut (chacun jusqu'à **10&nbsp;Mo**).
 
 <Note>
@@ -146,7 +146,7 @@ curl -X DELETE \
 POST /v1/knowledge/reindex
 ```
 
-Planifie une reconstruction de l'index de recherche du concierge. La
+Planifie une reconstruction de l'index de recherche de l'assistant IA. La
 réindexation s'exécute de façon asynchrone et les rafales de requêtes se
 regroupent en une seule tâche, ce qui rend l'opération sûre après un lot d'imports
 ou de suppressions.

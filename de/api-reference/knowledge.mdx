@@ -1,15 +1,15 @@
 ---
 title: Wissensdatenbank
 icon: file-pdf
-description: "Verwalte die PDF-Wissensdatenbank, die den KI-Concierge deines Shops speist."
+description: "Verwalte die PDF-Wissensdatenbank, die den KI-Assistenten deines Shops speist."
 ---
 
-Die Wissensdatenbank ist eine Sammlung von PDF-Dokumenten, die dein KI-Concierge
+Die Wissensdatenbank ist eine Sammlung von PDF-Dokumenten, die dein KI-Assistent
 liest, um Fragen von Besuchern zu beantworten. Lade Produkthandbücher, FAQs,
-Kataloge oder Richtlinien hoch, und der Concierge zieht seine Antworten daraus.
+Kataloge oder Richtlinien hoch, und der Assistent zieht seine Antworten daraus.
 
 Hochgeladener Text wird sofort extrahiert und anschließend asynchron indexiert,
-damit der Concierge ihn durchsuchen kann. Ein Shop kann standardmäßig bis zu
+damit der Assistent ihn durchsuchen kann. Ein Shop kann standardmäßig bis zu
 **10 PDFs** enthalten (jeweils bis zu **10&nbsp;MB**).
 
 <Note>
@@ -146,7 +146,7 @@ curl -X DELETE \
 POST /v1/knowledge/reindex
 ```
 
-Plane einen Neuaufbau des Suchindex des Concierge. Das Neuindexieren läuft
+Plane einen Neuaufbau des Suchindex des KI-Assistenten. Das Neuindexieren läuft
 asynchron und Anfrageschübe werden zu einem einzigen Job zusammengefasst, sodass
 es sicher ist, es nach einer Reihe von Uploads oder Löschungen aufzurufen.
 

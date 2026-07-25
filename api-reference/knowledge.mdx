@@ -1,15 +1,15 @@
 ---
 title: Knowledge base
 icon: file-pdf
-description: "Manage the PDF knowledge base that powers your store's AI concierge."
+description: "Manage the PDF knowledge base that powers your store's AI assistant."
 ---
 
-The knowledge base is a set of PDF documents your AI concierge reads to answer
+The knowledge base is a set of PDF documents your AI assistant reads to answer
 visitor questions. Upload product manuals, FAQs, catalogs or policies, and the
-concierge draws its answers from them.
+assistant draws its answers from them.
 
 Uploaded text is extracted right away, then indexed asynchronously so the
-concierge can search it. A store can hold up to **10 PDFs** by default (each up
+assistant can search it. A store can hold up to **10 PDFs** by default (each up
 to **10&nbsp;MB**).
 
 <Note>
@@ -143,7 +143,7 @@ curl -X DELETE \
 POST /v1/knowledge/reindex
 ```
 
-Schedule a rebuild of the concierge's search index. Reindexing runs
+Schedule a rebuild of the assistant's search index. Reindexing runs
 asynchronously and bursts of requests collapse into a single job, so it is safe
 to call after a batch of uploads or deletes.
 
