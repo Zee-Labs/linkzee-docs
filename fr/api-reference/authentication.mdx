@@ -60,7 +60,7 @@ curl https://api.linkz.ee/health
 ```json
 {
   "error": false,
-  "message": "API no ar",
+  "message": "API is up",
   "data": { "status": "ok" }
 }
 ```
@@ -78,10 +78,11 @@ Chaque réponse utilise une seule et même structure, pour que vous puissiez ana
 succès et échec de la même façon.
 
 <Note>
-  Le champ `message` est un libellé lisible par un humain, actuellement renvoyé en
-  **portugais** quelle que soit la langue (par ex. `"Loja carregada"`) ; traitez-le
-  uniquement comme un texte d'affichage — faites brancher votre code sur `error`,
-  `statusCode` et `code`, jamais sur la chaîne `message`.
+  Le champ `message` est un libellé lisible par un humain. Les messages de
+  **succès** sont en anglais (ils font partie du contrat stable de l'API) ; les
+  messages d'**erreur** sont localisés selon votre requête (envoyez l'en-tête
+  `x-lang` ; pt-BR par défaut). Basez votre code sur `error`, `statusCode` et
+  `code`, jamais sur la chaîne `message`.
 </Note>
 
 ### Succès
@@ -93,7 +94,7 @@ suppression) :
 ```json
 {
   "error": false,
-  "message": "Loja carregada",
+  "message": "Store loaded successfully",
   "data": { }
 }
 ```
