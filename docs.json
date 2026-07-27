@@ -118,6 +118,14 @@
                 ]
               },
               {
+                "group": "Zee",
+                "icon": "sparkles",
+                "pages": [
+                  "zee/overview",
+                  "zee/using-zee"
+                ]
+              },
+              {
                 "group": "Analytics",
                 "pages": [
                   "analytics/overview"
@@ -301,6 +309,14 @@
                   "pt-BR/ai-assistant/lead-capture",
                   "pt-BR/ai-assistant/knowledge-base",
                   "pt-BR/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Zee",
+                "icon": "sparkles",
+                "pages": [
+                  "pt-BR/zee/overview",
+                  "pt-BR/zee/using-zee"
                 ]
               },
               {
@@ -490,6 +506,14 @@
                 ]
               },
               {
+                "group": "Zee",
+                "icon": "sparkles",
+                "pages": [
+                  "es/zee/overview",
+                  "es/zee/using-zee"
+                ]
+              },
+              {
                 "group": "Rendimiento",
                 "pages": [
                   "es/analytics/overview"
@@ -676,6 +700,14 @@
                 ]
               },
               {
+                "group": "Zee",
+                "icon": "sparkles",
+                "pages": [
+                  "fr/zee/overview",
+                  "fr/zee/using-zee"
+                ]
+              },
+              {
                 "group": "Performances",
                 "pages": [
                   "fr/analytics/overview"
@@ -859,6 +891,14 @@
                   "de/ai-assistant/lead-capture",
                   "de/ai-assistant/knowledge-base",
                   "de/ai-assistant/voice-input"
+                ]
+              },
+              {
+                "group": "Zee",
+                "icon": "sparkles",
+                "pages": [
+                  "de/zee/overview",
+                  "de/zee/using-zee"
                 ]
               },
               {

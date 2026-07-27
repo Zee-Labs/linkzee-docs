@@ -37,10 +37,20 @@ quase nunca precisa digitar nada.
 | **Imagem** | Obrigatória — preenchida automaticamente a partir do link, ou envie a sua. |
 | **Link do produto** | A URL do marketplace para onde o seu botão leva os visitantes. |
 | **Preço** | Opcional, em R$. |
+| **Referência externa** | Opcional. Sua própria referência para este produto (um id de CRM/ERP ou SKU) para casar com seus sistemas. |
+| **Código de barras** | Opcional. O código de barras do produto (EAN, GTIN ou UPC). |
 
 <Note>
   Se o preenchimento automático não conseguir ler uma loja, é só informar o **Nome**
   e enviar uma **Imagem** você mesmo — é tudo o que um produto precisa.
+</Note>
+
+<Note>
+  A **referência externa** e o **código de barras** são opcionais e nunca aparecem
+  na sua página pública — são só pra você. Também ficam disponíveis pela
+  [API pública](/pt-BR/api-reference/products) e pelo
+  [MCP](/pt-BR/integrations/mcp/overview), para agentes e suas próprias
+  ferramentas lerem e gravarem.
 </Note>
 
 Tudo o que você edita é salvo automaticamente, e o preview ao vivo atualiza conforme

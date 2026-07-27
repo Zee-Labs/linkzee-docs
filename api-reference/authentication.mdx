@@ -58,7 +58,7 @@ curl https://api.linkz.ee/health
 ```json
 {
   "error": false,
-  "message": "API is up",
+  "message": "API no ar",
   "data": { "status": "ok" }
 }
 ```
@@ -75,6 +75,13 @@ curl -H "Authorization: Bearer lzk_your_key" \
 Every response uses one consistent shape, so you can parse success and failure the
 same way.
 
+<Note>
+  The `message` field is a human-readable label, currently returned in
+  **Portuguese** regardless of your locale (e.g. `"Loja carregada"`). Treat it as
+  display text only — branch your code on `error`, `statusCode` and `code`, never
+  on the `message` string.
+</Note>
+
 ### Success
 
 Successful responses always have `error: false`, a human-readable `message`, and a
@@ -83,7 +90,7 @@ Successful responses always have `error: false`, a human-readable `message`, and
 ```json
 {
   "error": false,
-  "message": "Store loaded",
+  "message": "Loja carregada",
   "data": { }
 }
 ```
@@ -96,7 +103,7 @@ Failures set `error: true` and add a few fields to help you debug:
 {
   "error": true,
   "statusCode": 401,
-  "message": "Missing or invalid API key",
+  "message": "Chave de API ausente.",
   "path": "/v1/store",
   "timestamp": "2026-07-21T14:03:11.482Z"
 }

@@ -58,7 +58,7 @@ curl https://api.linkz.ee/health
 ```json
 {
   "error": false,
-  "message": "API is up",
+  "message": "API no ar",
   "data": { "status": "ok" }
 }
 ```
@@ -75,6 +75,13 @@ curl -H "Authorization: Bearer lzk_your_key" \
 Toda resposta usa um formato consistente, para que você possa tratar sucesso e falha da
 mesma maneira.
 
+<Note>
+  O campo `message` é um rótulo legível, atualmente retornado em **português**
+  independentemente do idioma (ex.: `"Loja carregada"`). Trate-o como texto de
+  exibição — decida no seu código por `error`, `statusCode` e `code`, nunca pela
+  string `message`.
+</Note>
+
 ### Sucesso
 
 Respostas bem-sucedidas sempre têm `error: false`, uma `message` legível e um
@@ -83,7 +90,7 @@ payload `data` (que pode ser `null` para ações como exclusão):
 ```json
 {
   "error": false,
-  "message": "Store loaded",
+  "message": "Loja carregada",
   "data": { }
 }
 ```
@@ -96,7 +103,7 @@ Falhas definem `error: true` e adicionam alguns campos para ajudar você a depur
 {
   "error": true,
   "statusCode": 401,
-  "message": "Missing or invalid API key",
+  "message": "Chave de API ausente.",
   "path": "/v1/store",
   "timestamp": "2026-07-21T14:03:11.482Z"
 }

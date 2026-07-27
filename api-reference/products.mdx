@@ -56,6 +56,8 @@ curl -X GET \
       "isActive": true,
       "isFeatured": false,
       "categoryId": "665f0000aa11bb22cc33dd44",
+      "externalId": "SKU-1042",
+      "barcode": "7891234567895",
       "clicks": 128,
       "createdAt": "2026-07-10T12:04:55.000Z"
     }
@@ -107,6 +109,8 @@ curl -X GET \
     "isActive": true,
     "isFeatured": false,
     "categoryId": "665f0000aa11bb22cc33dd44",
+    "externalId": "SKU-1042",
+    "barcode": "7891234567895",
     "showCountdown": false,
     "clicks": 128,
     "createdAt": "2026-07-10T12:04:55.000Z"
@@ -167,6 +171,16 @@ curl -X POST \
 | `cardSize` | string | No | `normal` or `wide` (a `wide` card spans both grid columns). |
 | `offerDurationMinutes` | number | No | Scarcity countdown duration, in minutes. |
 | `showCountdown` | boolean | No | Show the countdown timer on the card. |
+| `externalId` | string | No | Your own reference for this product — a CRM/ERP id or SKU — to match it with your systems (max 64). Stored and returned as-is; never shown on your public page. |
+| `barcode` | string | No | Product barcode: EAN, GTIN or UPC (max 32). Never shown publicly. |
+
+<Note>
+`externalId` and `barcode` are optional and never appear on your public page.
+They're returned by `list`/`get` and accepted by `create`/`update` here and
+through [MCP](/integrations/mcp/tools-reference) (`create_product`,
+`update_product`, `list_products`), so agents and your own systems can keep them
+in sync.
+</Note>
 
 <Note>
 To avoid creating the same product twice on a retry, send an

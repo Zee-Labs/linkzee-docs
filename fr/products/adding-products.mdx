@@ -37,11 +37,21 @@ les détails, si bien que vous n'avez presque rien à saisir.
 | **Image** | Obligatoire — remplie automatiquement depuis le lien, ou téléversez la vôtre. |
 | **Lien du produit** | L'URL de la marketplace vers laquelle votre bouton envoie les visiteurs. |
 | **Prix** | Facultatif, en R$. |
+| **Référence externe** | Facultative. Votre propre référence pour ce produit (un identifiant CRM/ERP ou un SKU) afin de le faire correspondre à vos systèmes. |
+| **Code-barres** | Facultatif. Le code-barres du produit (EAN, GTIN ou UPC). |
 
 <Note>
   Si le remplissage automatique n'arrive pas à lire une boutique, renseignez
   simplement le **Nom** et téléversez une **Image** vous-même — c'est tout ce dont
   un produit a besoin.
+</Note>
+
+<Note>
+  La référence externe et le code-barres sont facultatifs et ne sont jamais
+  affichés sur votre page publique — ils sont réservés à votre usage. Ils sont
+  également accessibles via l'[API publique](/fr/api-reference/products) et le
+  [MCP](/fr/integrations/mcp/overview), pour que les agents et vos propres outils
+  puissent les lire et les écrire.
 </Note>
 
 Tout ce que vous modifiez est enregistré automatiquement, et l'aperçu en direct se

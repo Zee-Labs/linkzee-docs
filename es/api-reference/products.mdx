@@ -56,6 +56,8 @@ curl -X GET \
       "isActive": true,
       "isFeatured": false,
       "categoryId": "665f0000aa11bb22cc33dd44",
+      "externalId": "SKU-1042",
+      "barcode": "7891234567895",
       "clicks": 128,
       "createdAt": "2026-07-10T12:04:55.000Z"
     }
@@ -107,6 +109,8 @@ curl -X GET \
     "isActive": true,
     "isFeatured": false,
     "categoryId": "665f0000aa11bb22cc33dd44",
+    "externalId": "SKU-1042",
+    "barcode": "7891234567895",
     "showCountdown": false,
     "clicks": 128,
     "createdAt": "2026-07-10T12:04:55.000Z"
@@ -168,6 +172,16 @@ curl -X POST \
 | `cardSize` | string | No | `normal` o `wide` (una tarjeta `wide` ocupa ambas columnas de la cuadrícula). |
 | `offerDurationMinutes` | number | No | Duración del contador de escasez, en minutos. |
 | `showCountdown` | boolean | No | Muestra el contador regresivo en la tarjeta. |
+| `externalId` | string | No | Tu propia referencia para este producto — un id de CRM/ERP o SKU — para relacionarlo con tus sistemas (máx. 64). Se almacena y se devuelve tal cual; nunca se muestra en tu página pública. |
+| `barcode` | string | No | Código de barras del producto: EAN, GTIN o UPC (máx. 32). Nunca se muestra públicamente. |
+
+<Note>
+La referencia externa (`externalId`) y el código de barras (`barcode`) son
+opcionales, nunca se muestran públicamente, se devuelven en las llamadas de
+listado y consulta, y se aceptan al crear y actualizar tanto aquí como a través
+de [MCP](/es/integrations/mcp/tools-reference) mediante `create_product`,
+`update_product` y `list_products`.
+</Note>
 
 <Note>
 Para evitar crear el mismo producto dos veces en un reintento, envía un

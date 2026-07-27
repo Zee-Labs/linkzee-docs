@@ -37,10 +37,19 @@ have to type anything.
 | **Image** | Required — auto‑filled from the link, or upload your own. |
 | **Product link** | The marketplace URL your button sends visitors to. |
 | **Price** | Optional, in R$. |
+| **External reference** | Optional. Your own reference for this product — a CRM/ERP id or SKU — to match it with your systems. |
+| **Barcode** | Optional. The product barcode (EAN, GTIN or UPC). |
 
 <Note>
   If auto‑fill can't read a store, just fill in the **Name** and upload an
   **Image** yourself — that's all a product needs.
+</Note>
+
+<Note>
+  **External reference** and **barcode** are optional and never shown on your
+  public page — they're just for you. They're also available through the
+  [public API](/api-reference/products) and [MCP](/integrations/mcp/overview),
+  so agents and your own tools can read and write them too.
 </Note>
 
 Everything you edit auto‑saves, and the live preview updates as you go — on the
