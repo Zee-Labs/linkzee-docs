@@ -90,7 +90,7 @@ Espelha a profundidade do Postzee, adaptado ao Linkzee. **~66 páginas por idiom
 - `reminders` — lembrete de confirmação (horas antes, WhatsApp/e-mail) (bell)
 - `reschedule-cancel` — reagendar e cancelar (dono e visitante) (calendar-check)
 - `booking-link` — link direto de agendamento compartilhável (share)
-- `ai-scheduling` — a Ana (assistente) agenda, remarca e cancela pelo chat (robot)
+- `ai-scheduling` — a Anna (assistente) agenda, remarca e cancela pelo chat (robot)
 
 **Assistente de IA** (`ai-assistant/`)
 - `overview` — o assistente de vendas na bio (robot)
