@@ -69,6 +69,8 @@
                   "your-page/links",
                   "your-page/collections",
                   "your-page/social-networks",
+                  "your-page/spotify",
+                  "your-page/share-and-support",
                   "your-page/header"
                 ]
               },
@@ -95,6 +97,8 @@
                 "pages": [
                   "scheduling/overview",
                   "scheduling/services",
+                  "scheduling/payments",
+                  "scheduling/earnings",
                   "scheduling/business-hours",
                   "scheduling/team",
                   "scheduling/blocks",
@@ -102,6 +106,8 @@
                   "scheduling/team-google-calendar",
                   "scheduling/reminders",
                   "scheduling/reschedule-cancel",
+                  "scheduling/reviews",
+                  "scheduling/waitlist",
                   "scheduling/dashboard",
                   "scheduling/booking-link",
                   "scheduling/ai-scheduling"
@@ -263,6 +269,8 @@
                   "pt-BR/your-page/links",
                   "pt-BR/your-page/collections",
                   "pt-BR/your-page/social-networks",
+                  "pt-BR/your-page/spotify",
+                  "pt-BR/your-page/share-and-support",
                   "pt-BR/your-page/header"
                 ]
               },
@@ -289,6 +297,8 @@
                 "pages": [
                   "pt-BR/scheduling/overview",
                   "pt-BR/scheduling/services",
+                  "pt-BR/scheduling/payments",
+                  "pt-BR/scheduling/earnings",
                   "pt-BR/scheduling/business-hours",
                   "pt-BR/scheduling/team",
                   "pt-BR/scheduling/blocks",
@@ -296,6 +306,8 @@
                   "pt-BR/scheduling/team-google-calendar",
                   "pt-BR/scheduling/reminders",
                   "pt-BR/scheduling/reschedule-cancel",
+                  "pt-BR/scheduling/reviews",
+                  "pt-BR/scheduling/waitlist",
                   "pt-BR/scheduling/dashboard",
                   "pt-BR/scheduling/booking-link",
                   "pt-BR/scheduling/ai-scheduling"
@@ -457,6 +469,8 @@
                   "es/your-page/links",
                   "es/your-page/collections",
                   "es/your-page/social-networks",
+                  "es/your-page/spotify",
+                  "es/your-page/share-and-support",
                   "es/your-page/header"
                 ]
               },
@@ -483,6 +497,8 @@
                 "pages": [
                   "es/scheduling/overview",
                   "es/scheduling/services",
+                  "es/scheduling/payments",
+                  "es/scheduling/earnings",
                   "es/scheduling/business-hours",
                   "es/scheduling/team",
                   "es/scheduling/blocks",
@@ -490,6 +506,8 @@
                   "es/scheduling/team-google-calendar",
                   "es/scheduling/reminders",
                   "es/scheduling/reschedule-cancel",
+                  "es/scheduling/reviews",
+                  "es/scheduling/waitlist",
                   "es/scheduling/dashboard",
                   "es/scheduling/booking-link",
                   "es/scheduling/ai-scheduling"
@@ -651,6 +669,8 @@
                   "fr/your-page/links",
                   "fr/your-page/collections",
                   "fr/your-page/social-networks",
+                  "fr/your-page/spotify",
+                  "fr/your-page/share-and-support",
                   "fr/your-page/header"
                 ]
               },
@@ -677,6 +697,8 @@
                 "pages": [
                   "fr/scheduling/overview",
                   "fr/scheduling/services",
+                  "fr/scheduling/payments",
+                  "fr/scheduling/earnings",
                   "fr/scheduling/business-hours",
                   "fr/scheduling/team",
                   "fr/scheduling/blocks",
@@ -684,6 +706,8 @@
                   "fr/scheduling/team-google-calendar",
                   "fr/scheduling/reminders",
                   "fr/scheduling/reschedule-cancel",
+                  "fr/scheduling/reviews",
+                  "fr/scheduling/waitlist",
                   "fr/scheduling/dashboard",
                   "fr/scheduling/booking-link",
                   "fr/scheduling/ai-scheduling"
@@ -845,6 +869,8 @@
                   "de/your-page/links",
                   "de/your-page/collections",
                   "de/your-page/social-networks",
+                  "de/your-page/spotify",
+                  "de/your-page/share-and-support",
                   "de/your-page/header"
                 ]
               },
@@ -871,6 +897,8 @@
                 "pages": [
                   "de/scheduling/overview",
                   "de/scheduling/services",
+                  "de/scheduling/payments",
+                  "de/scheduling/earnings",
                   "de/scheduling/business-hours",
                   "de/scheduling/team",
                   "de/scheduling/blocks",
@@ -878,6 +906,8 @@
                   "de/scheduling/team-google-calendar",
                   "de/scheduling/reminders",
                   "de/scheduling/reschedule-cancel",
+                  "de/scheduling/reviews",
+                  "de/scheduling/waitlist",
                   "de/scheduling/dashboard",
                   "de/scheduling/booking-link",
                   "de/scheduling/ai-scheduling"

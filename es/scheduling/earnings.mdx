@@ -1,0 +1,64 @@
+---
+title: Cobros y transferencias
+icon: sack-dollar
+description: "Todo lo que recibiste de las reservas — quién pagó, cómo, por qué servicio — y cómo llega el dinero a tu banco."
+---
+
+La pestaña **Cobros** de la Agenda es tu visión financiera: qué entró, de
+quién, con qué forma de pago, por qué servicio — con gráficos, una lista de
+transacciones con buscador y tus transferencias justo debajo.
+
+## Los números
+
+Elige el periodo — **Hoy**, **7 días**, **30 días** o **90 días** — y verás:
+
+<CardGroup cols={2}>
+  <Card title="Recibido" icon="wallet">
+    Total pagado por los clientes en el periodo, menos reembolsos.
+  </Card>
+  <Card title="Reembolsos" icon="rotate-left">
+    Importes devueltos a clientes (cancelaciones dentro de tu política).
+  </Card>
+  <Card title="Pagos" icon="circle-check">
+    Cuántos pagos de reserva hubo.
+  </Card>
+  <Card title="Ticket medio" icon="chart-line">
+    Recibido dividido por el número de pagos.
+  </Card>
+</CardGroup>
+
+Debajo de las tarjetas: un **gráfico diario** de lo recibido, el desglose por
+**forma de pago** (tarjeta, PIX…) y tus **servicios que más facturan**.
+
+## Transacciones
+
+Cada pago, uno por línea: cliente, servicio, forma de pago, fecha e importe
+(los reembolsos aparecen en otro color). Usa el buscador para encontrar un
+pago por **nombre, teléfono, correo o servicio**.
+
+## Transparencia de tarifas
+
+Si tu plan tiene tarifa de Linkzee en los pagos de reserva, el importe exacto y
+el porcentaje del periodo se muestran justo bajo los números — y en el plan
+**Scale** esa tarifa es **0%**. Mira la tabla en
+[Cobrar en las reservas](/es/scheduling/payments#tarifas).
+
+## Transferencias — cómo llega el dinero a tu banco
+
+La sección **Transferencias**, al final de la pestaña, explica el flujo del
+dinero y muestra los números oficiales, directo de Stripe:
+
+1. **El cliente paga** — el importe entra al instante en tu saldo de Stripe.
+2. **Descuentos transparentes** — Stripe descuenta su tarifa de procesamiento
+   y la tarifa de Linkzee de tu plan (cuando la hay).
+3. **Llega a tu banco** — la transferencia es automática, según el calendario
+   estándar de tu país y forma de pago (PIX liquida más rápido que tarjeta).
+
+Cada transferencia de la lista muestra el **neto exacto** que llega a tu banco,
+con cada descuento detallado — el mismo extracto oficial de Stripe.
+
+<Note>
+  Los números del panel son los importes brutos procesados en las reservas.
+  Las tarifas de Stripe se descuentan en la transferencia — la lista de
+  transferencias es donde ves los netos finales.
+</Note>

@@ -1,0 +1,65 @@
+---
+title: Earnings & payouts
+icon: sack-dollar
+description: "Everything you received from bookings — who paid, how, for which service — and how the money reaches your bank."
+---
+
+The **Earnings** tab in Scheduling is your financial overview: what came in,
+from whom, by which payment method, for which service — with charts, a
+searchable list of transactions, and your payouts right below.
+
+## The numbers
+
+Pick a window — **Today**, **7 days**, **30 days** or **90 days** — and you'll see:
+
+<CardGroup cols={2}>
+  <Card title="Received" icon="wallet">
+    Total paid by clients in the period, minus refunds.
+  </Card>
+  <Card title="Refunds" icon="rotate-left">
+    Amounts returned to clients (cancellations within your policy).
+  </Card>
+  <Card title="Payments" icon="circle-check">
+    How many booking payments happened.
+  </Card>
+  <Card title="Average ticket" icon="chart-line">
+    Received divided by the number of payments.
+  </Card>
+</CardGroup>
+
+Below the cards: a **daily chart** of what you received, a breakdown by
+**payment method** (card, PIX…), and your **top services** by revenue.
+
+## Transactions
+
+Every payment, one per line: client, service, payment method, date and amount
+(refunds show in a different color). Use the search box to find a payment by
+**name, phone, email or service**.
+
+## Fee transparency
+
+If your plan has a Linkzee fee on booking payments, the exact amount and
+percentage for the period is shown right under the numbers — and on the
+**Scale** plan that fee is **0%**. See the fee table in
+[Charge for bookings](/scheduling/payments#fees).
+
+## Payouts — how the money reaches your bank
+
+The **Payouts** section at the bottom explains the money flow and shows the
+official numbers, straight from Stripe:
+
+1. **Client pays** — the amount lands instantly in your Stripe balance.
+2. **Transparent deductions** — Stripe deducts its processing fee, plus the
+   Linkzee fee of your plan (when there is one).
+3. **It hits your bank** — payouts are automatic, on the standard schedule for
+   your country and payment method (PIX settles faster than cards).
+
+Each payout in the list shows the **exact net amount** that reaches your bank,
+with every deduction itemized — the same official statement you'd see in
+Stripe.
+
+<Note>
+  The dashboard numbers are the gross amounts processed through bookings.
+  Stripe's processing fees are deducted at payout — the payouts list is where
+  you see the final net values.
+</Note>

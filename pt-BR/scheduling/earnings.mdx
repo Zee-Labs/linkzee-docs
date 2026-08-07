@@ -1,0 +1,64 @@
+---
+title: Recebimentos e repasses
+icon: sack-dollar
+description: "Tudo o que você recebeu dos agendamentos — quem pagou, como, por qual serviço — e como o dinheiro chega no seu banco."
+---
+
+A aba **Recebimentos** da Agenda é a sua visão financeira: o que entrou, de
+quem, por qual forma de pagamento, por qual serviço — com gráficos, uma lista
+de transações com busca e os seus repasses logo abaixo.
+
+## Os números
+
+Escolha o período — **Hoje**, **7 dias**, **30 dias** ou **90 dias** — e veja:
+
+<CardGroup cols={2}>
+  <Card title="Recebido" icon="wallet">
+    Total pago pelos clientes no período, já descontando estornos.
+  </Card>
+  <Card title="Estornos" icon="rotate-left">
+    Valores devolvidos aos clientes (cancelamentos dentro da política).
+  </Card>
+  <Card title="Pagamentos" icon="circle-check">
+    Quantos pagamentos de agendamento aconteceram.
+  </Card>
+  <Card title="Ticket médio" icon="chart-line">
+    Recebido dividido pelo número de pagamentos.
+  </Card>
+</CardGroup>
+
+Abaixo dos cards: um **gráfico diário** do que você recebeu, o corte por
+**forma de pagamento** (cartão, PIX…) e os seus **serviços que mais rendem**.
+
+## Transações
+
+Cada pagamento, um por linha: cliente, serviço, forma de pagamento, data e
+valor (estornos aparecem em outra cor). Use a busca para achar um pagamento
+por **nome, telefone, e-mail ou serviço**.
+
+## Transparência das taxas
+
+Se o seu plano tem taxa Linkzee nos pagamentos de agendamento, o valor exato e
+o percentual do período aparecem logo abaixo dos números — e no plano
+**Scale** essa taxa é **0%**. Veja a tabela em
+[Cobrar nos agendamentos](/pt-BR/scheduling/payments#taxas).
+
+## Repasses — como o dinheiro chega no seu banco
+
+A seção **Repasses**, no fim da aba, explica o fluxo do dinheiro e mostra os
+números oficiais, direto do Stripe:
+
+1. **Cliente paga** — o valor entra na hora no seu saldo do Stripe.
+2. **Descontos transparentes** — o Stripe desconta a tarifa de processamento e
+   a taxa Linkzee do seu plano (quando houver).
+3. **Cai no seu banco** — o repasse é automático, no cronograma padrão do seu
+   país e forma de pagamento (PIX compensa mais rápido que cartão).
+
+Cada repasse da lista mostra o **líquido exato** que chega no seu banco, com
+todos os descontos detalhados — o mesmo extrato oficial do Stripe.
+
+<Note>
+  Os números do dashboard são os valores brutos processados nos agendamentos.
+  As tarifas do Stripe são descontadas no repasse — a lista de repasses é onde
+  você vê os valores líquidos finais.
+</Note>

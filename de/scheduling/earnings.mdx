@@ -1,0 +1,67 @@
+---
+title: Einnahmen & Auszahlungen
+icon: sack-dollar
+description: "Alles, was Sie aus Buchungen erhalten haben — wer wie und wofür gezahlt hat — und wie das Geld auf Ihre Bank kommt."
+---
+
+Der Tab **Einnahmen** im Kalender ist Ihre Finanzübersicht: was reinkam, von
+wem, mit welcher Zahlungsart, für welche Leistung — mit Diagrammen, einer
+durchsuchbaren Transaktionsliste und Ihren Auszahlungen direkt darunter.
+
+## Die Zahlen
+
+Wählen Sie den Zeitraum — **Heute**, **7 Tage**, **30 Tage** oder **90 Tage** —
+und Sie sehen:
+
+<CardGroup cols={2}>
+  <Card title="Erhalten" icon="wallet">
+    Von Kunden im Zeitraum gezahlter Gesamtbetrag, abzüglich Erstattungen.
+  </Card>
+  <Card title="Erstattungen" icon="rotate-left">
+    An Kunden zurückgezahlte Beträge (Stornierungen innerhalb Ihrer Richtlinie).
+  </Card>
+  <Card title="Zahlungen" icon="circle-check">
+    Wie viele Buchungszahlungen stattfanden.
+  </Card>
+  <Card title="Ø Ticket" icon="chart-line">
+    Erhalten geteilt durch die Anzahl der Zahlungen.
+  </Card>
+</CardGroup>
+
+Unter den Karten: ein **Tagesdiagramm** Ihrer Einnahmen, die Aufschlüsselung
+nach **Zahlungsart** (Karte, PIX…) und Ihre **umsatzstärksten Leistungen**.
+
+## Transaktionen
+
+Jede Zahlung, eine pro Zeile: Kunde, Leistung, Zahlungsart, Datum und Betrag
+(Erstattungen in anderer Farbe). Über die Suche finden Sie eine Zahlung nach
+**Name, Telefon, E-Mail oder Leistung**.
+
+## Gebühren-Transparenz
+
+Hat Ihr Plan eine Linkzee-Gebühr auf Buchungszahlungen, stehen der exakte
+Betrag und der Prozentsatz des Zeitraums direkt unter den Zahlen — und im
+**Scale**-Plan beträgt diese Gebühr **0 %**. Siehe die Tabelle unter
+[Buchungen kassieren](/de/scheduling/payments#geb%C3%BChren).
+
+## Auszahlungen — so kommt das Geld auf Ihre Bank
+
+Der Abschnitt **Auszahlungen** am Ende des Tabs erklärt den Geldfluss und
+zeigt die offiziellen Zahlen, direkt von Stripe:
+
+1. **Kunde zahlt** — der Betrag landet sofort in Ihrem Stripe-Guthaben.
+2. **Transparente Abzüge** — Stripe zieht die Verarbeitungsgebühr ab, plus die
+   Linkzee-Gebühr Ihres Plans (falls vorhanden).
+3. **Kommt auf Ihrer Bank an** — die Auszahlung erfolgt automatisch nach dem
+   üblichen Zeitplan Ihres Landes und der Zahlungsart (PIX ist schneller als
+   Karte).
+
+Jede Auszahlung in der Liste zeigt den **exakten Nettobetrag**, der auf Ihrer
+Bank ankommt — mit jedem Abzug im Detail, derselbe offizielle Kontoauszug wie
+bei Stripe.
+
+<Note>
+  Die Dashboard-Zahlen sind die brutto verarbeiteten Buchungsbeträge. Die
+  Stripe-Gebühren werden bei der Auszahlung abgezogen — die endgültigen
+  Nettowerte sehen Sie in der Auszahlungsliste.
+</Note>

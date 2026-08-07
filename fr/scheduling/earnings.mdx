@@ -1,0 +1,69 @@
+---
+title: Encaissements et virements
+icon: sack-dollar
+description: "Tout ce que vous avez reçu des réservations — qui a payé, comment, pour quel service — et comment l'argent arrive sur votre banque."
+---
+
+L'onglet **Encaissements** de l'Agenda est votre vue financière : ce qui est
+entré, de qui, par quel moyen de paiement, pour quel service — avec des
+graphiques, une liste de transactions avec recherche et vos virements juste en
+dessous.
+
+## Les chiffres
+
+Choisissez la période — **Aujourd'hui**, **7 jours**, **30 jours** ou
+**90 jours** — et vous verrez :
+
+<CardGroup cols={2}>
+  <Card title="Reçu" icon="wallet">
+    Total payé par les clients sur la période, remboursements déduits.
+  </Card>
+  <Card title="Remboursements" icon="rotate-left">
+    Montants rendus aux clients (annulations dans le cadre de votre politique).
+  </Card>
+  <Card title="Paiements" icon="circle-check">
+    Combien de paiements de réservation ont eu lieu.
+  </Card>
+  <Card title="Panier moyen" icon="chart-line">
+    Reçu divisé par le nombre de paiements.
+  </Card>
+</CardGroup>
+
+Sous les cartes : un **graphique quotidien** de ce que vous avez reçu, la
+répartition par **moyen de paiement** (carte, PIX…) et vos **services les plus
+rentables**.
+
+## Transactions
+
+Chaque paiement, un par ligne : client, service, moyen de paiement, date et
+montant (les remboursements s'affichent dans une autre couleur). Utilisez la
+recherche pour retrouver un paiement par **nom, téléphone, e-mail ou service**.
+
+## Transparence des frais
+
+Si votre offre comporte des frais Linkzee sur les paiements de réservation, le
+montant exact et le pourcentage de la période s'affichent juste sous les
+chiffres — et avec l'offre **Scale**, ces frais sont de **0 %**. Voir le
+tableau dans [Encaisser les réservations](/fr/scheduling/payments#frais).
+
+## Virements — comment l'argent arrive sur votre banque
+
+La section **Virements**, en bas de l'onglet, explique le parcours de l'argent
+et montre les chiffres officiels, directement depuis Stripe :
+
+1. **Le client paie** — le montant arrive instantanément sur votre solde
+   Stripe.
+2. **Déductions transparentes** — Stripe déduit ses frais de traitement, plus
+   les frais Linkzee de votre offre (le cas échéant).
+3. **Ça arrive sur votre banque** — le virement est automatique, selon le
+   calendrier standard de votre pays et du moyen de paiement (PIX est crédité
+   plus vite que la carte).
+
+Chaque virement de la liste affiche le **net exact** qui arrive sur votre
+banque, avec chaque déduction détaillée — le même relevé officiel que Stripe.
+
+<Note>
+  Les chiffres du tableau de bord sont les montants bruts traités via les
+  réservations. Les frais Stripe sont déduits au virement — la liste des
+  virements est l'endroit où vous voyez les nets finaux.
+</Note>
