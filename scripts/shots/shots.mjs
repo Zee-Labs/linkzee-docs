@@ -166,16 +166,45 @@ async function run() {
       }
       const page = await ctx.newPage();
       try {
-        const url = screen.url.replaceAll('{slug}', DEMO.slug);
+        // Mocks de rede por tela (ex.: slots vazios pro CTA da fila de espera
+        // — estado real da UI que seria intermitente de reproduzir ao vivo).
+        for (const r of screen.routes ?? []) {
+          await page.route(r.pattern, (route) =>
+            route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(r.json) }),
+          );
+        }
+        const url = screen.url
+          .replaceAll('{slug}', DEMO.slug)
+          .replaceAll('{manageToken}', DEMO.manageToken ?? '')
+          .replaceAll('{confirmToken}', DEMO.confirmToken ?? '');
         // domcontentloaded + settle: dashboards têm polling (networkidle nunca chega).
         await page.goto(`${WEB}${url}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
         for (const step of screen.steps ?? []) {
           if (step.waitMs) await page.waitForTimeout(step.waitMs);
           if (step.clickRole) await page.getByRole(step.clickRole.role, step.clickRole.opts ?? {}).nth(step.clickRole.nth ?? 0).click();
           if (step.clickText) await page.getByText(step.clickText, { exact: false }).first().click();
-          if (step.clickSel) await page.locator(step.clickSel).first().click();
+          if (step.clickSel) {
+            const nth = step.nth ?? 0;
+            await page.locator(step.clickSel).nth(nth).click();
+          }
+          if (step.clickFullDay) {
+            // Dia LOTADO gerado pelo demo-bookings (DEMO.fullDay = YYYY-MM-DD):
+            // clica na célula da régua pelo NÚMERO do dia (nth é frágil).
+            const dayNum = String(Number((DEMO.fullDay ?? '').slice(8)));
+            await page
+              .locator(step.clickFullDay)
+              .filter({ hasText: dayNum })
+              .first()
+              .click();
+          }
           if (step.waitSel) await page.waitForSelector(step.waitSel, { timeout: 15000 }).catch(() => {});
           if (step.scrollTo) await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView({ block: 'center' }), step.scrollTo);
+          if (step.scrollToNth) {
+            await page.evaluate(
+              ({ sel, nth }) => document.querySelectorAll(sel)[nth]?.scrollIntoView({ block: 'center' }),
+              step.scrollToNth,
+            );
+          }
           if (step.eval) await page.evaluate(step.eval);
         }
         await page.waitForTimeout(screen.settleMs ?? 1200);
