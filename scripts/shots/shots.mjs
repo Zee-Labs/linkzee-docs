@@ -17,7 +17,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import sharp from 'sharp';
+import { execSync } from 'node:child_process';
 import { SCREENS } from './screens.mjs';
+import { localizeContent } from './content.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WEB = process.env.WEB_BASE ?? 'https://dev.linkz.ee';
@@ -114,8 +116,19 @@ async function run() {
   for (const locale of LOCALES) {
     console.log(`\n=== ${locale} ===`);
     await setLocale(locale);
-    // ISR/no cache do público: pequena folga pro on-demand revalidate.
-    await new Promise((r) => setTimeout(r, 2500));
+    // CONTEÚDO da demo no idioma da doc (serviços/produtos/links/bio) — um
+    // print em inglês com "Corte Feminino" quebraria a imersão.
+    await localizeContent({ api: API, token: DEMO.token, locale });
+    // Dados de BANCO (nomes de clientes, avaliações, fila): hook opcional —
+    // ex.: LOCALIZE_DB_CMD='bash localize-db.sh' (recebe LOCALE no env).
+    if (process.env.LOCALIZE_DB_CMD) {
+      execSync(process.env.LOCALIZE_DB_CMD, {
+        stdio: 'inherit',
+        env: { ...process.env, LOCALE: locale },
+      });
+    }
+    // ISR/no cache do público: folga pro on-demand revalidate.
+    await new Promise((r) => setTimeout(r, 3000));
 
     for (const screen of SCREENS) {
       if (ONLY && !ONLY.has(screen.name)) continue;

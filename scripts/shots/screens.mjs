@@ -56,7 +56,8 @@ export const SCREENS = [
     url: '/{slug}?agenda=1',
     auth: false,
     viewport: { width: 390, height: 844 },
-    steps: [{ waitMs: 1800 }, { clickText: 'Corte Feminino' }, { waitMs: 1800 }],
+    // 1º card de serviço por ESTRUTURA (o nome muda por idioma — clickText quebrava)
+    steps: [{ waitMs: 1800 }, { clickSel: 'div[role=dialog] button.p-4[class*=ring-1]' }, { waitMs: 1800 }],
     highlights: [],
   },
   {
