@@ -97,8 +97,6 @@
                 "pages": [
                   "scheduling/overview",
                   "scheduling/services",
-                  "scheduling/payments",
-                  "scheduling/earnings",
                   "scheduling/business-hours",
                   "scheduling/team",
                   "scheduling/blocks",
@@ -111,6 +109,13 @@
                   "scheduling/dashboard",
                   "scheduling/booking-link",
                   "scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Earnings",
+                "pages": [
+                  "scheduling/earnings",
+                  "scheduling/payments"
                 ]
               },
               {
@@ -297,8 +302,6 @@
                 "pages": [
                   "pt-BR/scheduling/overview",
                   "pt-BR/scheduling/services",
-                  "pt-BR/scheduling/payments",
-                  "pt-BR/scheduling/earnings",
                   "pt-BR/scheduling/business-hours",
                   "pt-BR/scheduling/team",
                   "pt-BR/scheduling/blocks",
@@ -311,6 +314,13 @@
                   "pt-BR/scheduling/dashboard",
                   "pt-BR/scheduling/booking-link",
                   "pt-BR/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Recebimentos",
+                "pages": [
+                  "pt-BR/scheduling/earnings",
+                  "pt-BR/scheduling/payments"
                 ]
               },
               {
@@ -497,8 +507,6 @@
                 "pages": [
                   "es/scheduling/overview",
                   "es/scheduling/services",
-                  "es/scheduling/payments",
-                  "es/scheduling/earnings",
                   "es/scheduling/business-hours",
                   "es/scheduling/team",
                   "es/scheduling/blocks",
@@ -511,6 +519,13 @@
                   "es/scheduling/dashboard",
                   "es/scheduling/booking-link",
                   "es/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Ingresos",
+                "pages": [
+                  "es/scheduling/earnings",
+                  "es/scheduling/payments"
                 ]
               },
               {
@@ -697,8 +712,6 @@
                 "pages": [
                   "fr/scheduling/overview",
                   "fr/scheduling/services",
-                  "fr/scheduling/payments",
-                  "fr/scheduling/earnings",
                   "fr/scheduling/business-hours",
                   "fr/scheduling/team",
                   "fr/scheduling/blocks",
@@ -711,6 +724,13 @@
                   "fr/scheduling/dashboard",
                   "fr/scheduling/booking-link",
                   "fr/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Revenus",
+                "pages": [
+                  "fr/scheduling/earnings",
+                  "fr/scheduling/payments"
                 ]
               },
               {
@@ -897,8 +917,6 @@
                 "pages": [
                   "de/scheduling/overview",
                   "de/scheduling/services",
-                  "de/scheduling/payments",
-                  "de/scheduling/earnings",
                   "de/scheduling/business-hours",
                   "de/scheduling/team",
                   "de/scheduling/blocks",
@@ -911,6 +929,13 @@
                   "de/scheduling/dashboard",
                   "de/scheduling/booking-link",
                   "de/scheduling/ai-scheduling"
+                ]
+              },
+              {
+                "group": "Einnahmen",
+                "pages": [
+                  "de/scheduling/earnings",
+                  "de/scheduling/payments"
                 ]
               },
               {
