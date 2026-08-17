@@ -118,6 +118,8 @@ Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
 | `socialsPosition` | string | Emplacement de la rangée de réseaux sociaux : `top` ou `bottom`. |
 | `socialOrder` | string[] | Ordre d'affichage des réseaux sociaux. |
 | `productsPosition` | string | Position de la vitrine par rapport aux liens : `top` ou `bottom`. |
+| `vitrineLayout` | string | Mise en page de la vitrine : `grid` (grille classique), `masonry` (mosaïque) ou `carousel` (une étagère horizontale par catégorie avec un « Voir tout » intégré). |
+| `agenda` | object | Paramètres de réservation (activation, titre, fuseau horaire, horaires d'ouverture, rappels et plus). Fusionné partiellement — n'envoyez que les clés que vous souhaitez changer. Voir la [référence Agenda](/fr/api-reference/agenda). |
 | `social` | object | Identifiants de réseaux sociaux, ex. `{ "instagram": "handle", "tiktok": "handle" }`. |
 | `seoTitle` | string | Titre de la page publique pour les moteurs de recherche (70 caractères max). |
 | `seoDescription` | string | Méta-description de la page publique (160 caractères max). |
@@ -160,7 +162,7 @@ Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
 GET /v1/themes
 ```
 
-Liste les thèmes prêts à l'emploi que vous pouvez appliquer avec `themeId`.
+Liste les **15** thèmes prêts à l'emploi que vous pouvez appliquer avec `themeId`.
 Chaque entrée inclut une courte description pour vous aider à associer un style
 à l'esprit d'une boutique.
 
@@ -181,29 +183,34 @@ curl -X GET \
   "data": [
     {
       "id": "pure",
-      "name": "Puro",
+      "name": "Pure",
       "mode": "light",
-      "description": "Claro minimalista, fundo quase branco, foco total nos produtos."
+      "description": "Minimal light, near-white background, full focus on the products."
     },
     {
       "id": "noir",
       "name": "Noir",
       "mode": "dark",
-      "description": "Escuro sóbrio, cinza-grafite, elegante e neutro."
+      "description": "Sober dark, graphite grey, elegant and neutral."
     },
     {
       "id": "aurora",
       "name": "Aurora",
       "mode": "dark",
-      "description": "Gradiente violeta/azul animado, moderno e premium."
+      "description": "Animated violet/blue gradient, modern and premium."
     }
   ]
 }
 ```
 
+Le catalogue complet compte 15 thèmes : `pure`, `noir`, `gesso`, `solar`,
+`midnight`, `groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`,
+`brutalista`, `editorial` et `pista`.
+
 <Note>
   Utilisez n'importe quel `id` de cette liste comme `themeId` lorsque vous
-  modifiez la boutique.
+  modifiez la boutique. Les `id` sont stables — `name` et `description` sont
+  informatifs et renvoyés en anglais.
 </Note>
 
 ## Récupérer un résumé des performances

@@ -61,17 +61,18 @@ gruppiert, damit du weißt, worum du bitten kannst.
 | Tool-Bereich | Was der Agent tun kann |
 | --- | --- |
 | Analytics | Eine Zusammenfassung lesen, wie sich deine Seite entwickelt. |
-| Leads | Die von dir erfassten Leads auflisten. |
+| Leads | Die von dir erfassten Leads auflisten, einen Kunden suchen und einen neuen registrieren. |
 
 ## Terminplanung
 
 | Tool-Bereich | Was der Agent tun kann |
 | --- | --- |
 | Agenda | Deine Terminplanung einrichten. |
-| Dienstleistungen & Team | Deine Dienstleistungen, dein Personal und Sperrzeiten verwalten. |
-| Termine | Termine auflisten und erstellen sowie die Verfügbarkeit prüfen. |
+| Dienstleistungen & Team | Deine Dienstleistungen (einschließlich Combos und Online-Bezahlung), dein Personal und Sperrzeiten verwalten. |
+| Termine | Termine auflisten und erstellen — verknüpft mit einem Teammitglied oder einem bestehenden Kunden — und die echte Verfügbarkeit prüfen (pro Teammitglied und für einen Warenkorb zusätzlicher Leistungen). |
 | Änderungen | Termine verschieben und ihren Status ändern. |
-| Google | Den Verbindungsstatus von Google prüfen. |
+| Bewertungen & Warteliste | Deine Bewertungen lesen (einschließlich ausgeblendeter), eine Bewertung aus- oder einblenden und die Warteliste verwalten. |
+| Google | Den Verbindungsstatus von Google Calendar prüfen und die Verbindung trennen. |
 
 ## KI-Assistent
 
@@ -84,6 +85,61 @@ gruppiert, damit du weißt, worum du bitten kannst.
   deine Live-Seite in Echtzeit — genau so, als hättest du die Änderung selbst
   im Editor vorgenommen.
 </Note>
+
+## Tool-Namen
+
+Wenn du genau wissen möchtest, welche Tools dein Agent sieht, ist hier die
+vollständige Liste. Mit einem **read**-Schlüssel erhält der Agent die 11
+Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 28 Schreib-Tools hinzu.
+
+### Lese-Tools
+
+| Tool | Was es tut |
+| --- | --- |
+| `get_storefront` | Deine gesamte Seite lesen — Profil, Links und Produkte in einer Ansicht. |
+| `list_products` | Deine Produkte auflisten, mit optionaler Namenssuche und Limit. |
+| `list_themes` | Den Katalog der vorgefertigten Themes durchsuchen. |
+| `get_analytics_summary` | Die Leistungsübersicht deiner Seite lesen. |
+| `list_appointments` | Termine innerhalb eines Datumsbereichs auflisten. |
+| `list_leads` | Die von dir erfassten Leads auflisten. |
+| `get_agenda_availability` | Echte freie Zeiten für eine Leistung prüfen — optional pro Teammitglied (`staffId`) oder für einen Warenkorb zusätzlicher Leistungen (`extraOfferingIds`). |
+| `get_agenda_google` | Prüfen, ob Google Calendar verbunden ist. |
+| `list_reviews` | Die erhaltenen Bewertungen auflisten, einschließlich ausgeblendeter. |
+| `list_waitlist` | Besucher auflisten, die auf ein Zeitfenster warten. |
+| `search_leads` | Einen bestehenden Kunden per Name, Telefon, E-Mail oder Instagram finden. |
+
+### Schreib-Tools
+
+| Tool | Was es tut |
+| --- | --- |
+| `update_profile` | Deinen Namen, deine Bio und Profildetails aktualisieren. |
+| `set_appearance` | Ein vorgefertigtes Theme anwenden. |
+| `create_product` | Ein Produkt erstellen. |
+| `create_products_bulk` | Mehrere Produkte auf einmal erstellen. |
+| `update_product` | Ein bestehendes Produkt aktualisieren. |
+| `delete_product` | Ein Produkt löschen. |
+| `manage_category` | Eine Produktkategorie erstellen, aktualisieren oder löschen. |
+| `manage_collection` | Eine Link-Sammlung erstellen, aktualisieren oder löschen. |
+| `create_link` | Einen Link zu deiner Seite hinzufügen. |
+| `update_link` | Einen bestehenden Link aktualisieren. |
+| `delete_link` | Einen Link löschen. |
+| `reorder_content` | Deine Seiteninhalte neu anordnen. |
+| `configure_vitrine` | Die Vitrine konfigurieren — Sichtbarkeit, Spalten, Foto-Anpassung und Layout (`grid`, `masonry` oder `carousel`). |
+| `configure_tracking` | Pixel, Conversion API, GTM und Standard-UTMs festlegen. |
+| `update_design` | Das Design anpassen — Theme, Farben, Buttons, Schrift, Header und Hintergründe einschließlich `mesh` und `video` (über `wallpaperVideoUrl`). |
+| `update_map` | Die Kartenkarte auf deiner Seite konfigurieren. |
+| `update_socials` | Deine Handles in sozialen Netzwerken aktualisieren. |
+| `configure_agenda` | Deine Terminplanung einrichten. |
+| `manage_offering` | Eine Leistung erstellen, aktualisieren oder löschen — einschließlich Combos und Online-Bezahlung (Anzahlung oder volle Zahlung). |
+| `manage_staff` | Ein Teammitglied erstellen, aktualisieren oder löschen. |
+| `manage_block` | Eine Sperrzeit erstellen oder löschen. |
+| `create_appointment` | Einen Termin buchen — optional für ein bestimmtes Teammitglied (`staffId`) oder einen bestehenden Kunden (`leadId`). |
+| `transition_appointment` | Den Status eines Termins ändern. |
+| `reschedule_appointment` | Einen Termin auf eine neue Zeit verschieben. |
+| `disconnect_agenda_google` | Google Calendar trennen. |
+| `manage_ai_assistant` | Deinen KI-Assistenten verwalten — Persona, Begrüßung, Lead-Erfassung, Tonfall. |
+| `set_review_hidden` | Eine Bewertung auf deiner öffentlichen Seite aus- oder einblenden. |
+| `create_lead` | Einen Lead/Kunden in deinem Namen registrieren. |
 
 <CardGroup cols={2}>
   <Card title="MCP-Überblick" icon="robot" href="/de/integrations/mcp/overview">

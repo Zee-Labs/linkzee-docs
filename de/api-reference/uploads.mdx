@@ -45,6 +45,7 @@ Sende diese als Multipart-Formularfelder.
 | `productId` | string | Nein | Erforderlich, wenn `kind` gleich `product` ist. Das Produkt, zu dem dieses Bild gehört. Es muss ein Produkt in deinem eigenen Store sein. |
 | `linkId` | string | Nein | Erforderlich, wenn `kind` gleich `link`, `linkMedia` oder `linkPoster` ist. Der Link, zu dem das Bild gehört. Es muss ein Link in deinem eigenen Store sein. |
 | `staffId` | string | Nein | Erforderlich, wenn `kind` gleich `staffAvatar` ist. Das Teammitglied, zu dem der Avatar gehört. |
+| `socialKey` | string | Nein | Erforderlich, wenn `kind` gleich `socialCard` ist. Das soziale Netzwerk, zu dem das Karten-Cover gehört (z. B. `instagram`, `tiktok`, `youtube`). |
 
 #### Werte für `kind`
 
@@ -53,6 +54,7 @@ Sende diese als Multipart-Formularfelder.
 | `logo` | Dein Store-Logo | — |
 | `product` | Ein Produktbild | `productId` |
 | `wallpaper` | Der Hintergrund deiner Seite | — |
+| `wallpaperPoster` | Das Poster-Bild für einen Video-Hintergrund | — |
 | `banner` | Dein Header-Banner | — |
 | `cutout` | Ein Header-Freistellerbild | — |
 | `link` | Ein Link-Vorschaubild | `linkId` |
@@ -60,6 +62,8 @@ Sende diese als Multipart-Formularfelder.
 | `linkPoster` | Ein Link-Video-Poster | `linkId` |
 | `aiAssistantAvatar` | Der Avatar deines KI-Assistenten | — |
 | `staffAvatar` | Das Foto eines Teammitglieds | `staffId` |
+| `heroPoster` | Das Poster-Bild für ein Hero-Header-Video | — |
+| `socialCard` | Das Karten-Cover eines sozialen Netzwerks | `socialKey` |
 
 <Note>
 Wenn du ein `kind` (und die passende ID) sendest, wird das Bild an einem festen

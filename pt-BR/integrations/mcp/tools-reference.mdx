@@ -58,17 +58,18 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 | Área da ferramenta | O que o agente pode fazer |
 | --- | --- |
 | Análises | Ler um resumo de como sua página está indo. |
-| Leads | Listar os leads que você capturou. |
+| Leads | Listar os leads que você capturou, buscar um cliente e cadastrar um novo. |
 
 ## Agendamento
 
 | Área da ferramenta | O que o agente pode fazer |
 | --- | --- |
 | Agenda | Configurar sua estrutura de agendamento. |
-| Serviços e equipe | Gerenciar seus serviços, equipe e bloqueios. |
-| Agendamentos | Listar e criar agendamentos, e verificar disponibilidade. |
+| Serviços e equipe | Gerenciar seus serviços (incluindo combos e cobrança online), equipe e bloqueios. |
+| Agendamentos | Listar e criar agendamentos — vinculados a um atendente ou a um cliente existente — e verificar a disponibilidade real (por atendente e para um carrinho de serviços extras). |
 | Alterações | Reagendar agendamentos e alterar seu status. |
-| Google | Verificar o status da conexão com o Google. |
+| Avaliações e lista de espera | Ler suas avaliações (incluindo as ocultas), ocultar ou exibir uma avaliação e gerenciar a lista de espera. |
+| Google | Verificar o status da conexão com o Google Calendar e desconectá-lo. |
 
 ## Assistente de IA
 
@@ -80,6 +81,61 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
   Tudo o que um agente altera é salvo automaticamente e atualiza sua página no ar em
   tempo real, exatamente como se você mesmo tivesse feito a alteração no editor.
 </Note>
+
+## Nomes das ferramentas
+
+Se você quiser saber exatamente quais ferramentas seu agente vê, aqui está a
+lista completa. Com uma chave **read** o agente recebe as 11 ferramentas de
+leitura; uma chave **write** adiciona as 28 ferramentas de escrita por cima.
+
+### Ferramentas de leitura
+
+| Ferramenta | O que faz |
+| --- | --- |
+| `get_storefront` | Ler sua página inteira — perfil, links e produtos em uma única visão. |
+| `list_products` | Listar seus produtos, com busca por nome e limite opcionais. |
+| `list_themes` | Navegar pelo catálogo de temas prontos. |
+| `get_analytics_summary` | Ler o resumo de desempenho da sua página. |
+| `list_appointments` | Listar agendamentos dentro de um intervalo de datas. |
+| `list_leads` | Listar os leads que você capturou. |
+| `get_agenda_availability` | Verificar os horários realmente livres de um serviço — opcionalmente por atendente (`staffId`) ou para um carrinho de serviços extras (`extraOfferingIds`). |
+| `get_agenda_google` | Verificar se o Google Calendar está conectado. |
+| `list_reviews` | Listar as avaliações que você recebeu, incluindo as ocultas. |
+| `list_waitlist` | Listar os visitantes aguardando um horário. |
+| `search_leads` | Encontrar um cliente existente por nome, telefone, e-mail ou Instagram. |
+
+### Ferramentas de escrita
+
+| Ferramenta | O que faz |
+| --- | --- |
+| `update_profile` | Atualizar seu nome, bio e detalhes do perfil. |
+| `set_appearance` | Aplicar um tema pronto. |
+| `create_product` | Criar um produto. |
+| `create_products_bulk` | Criar vários produtos de uma vez. |
+| `update_product` | Atualizar um produto existente. |
+| `delete_product` | Excluir um produto. |
+| `manage_category` | Criar, atualizar ou excluir uma categoria de produtos. |
+| `manage_collection` | Criar, atualizar ou excluir uma coleção de links. |
+| `create_link` | Adicionar um link à sua página. |
+| `update_link` | Atualizar um link existente. |
+| `delete_link` | Excluir um link. |
+| `reorder_content` | Reordenar o conteúdo da sua página. |
+| `configure_vitrine` | Configurar a vitrine — visibilidade, colunas, ajuste da foto e layout (`grid`, `masonry` ou `carousel`). |
+| `configure_tracking` | Definir pixels, Conversion API, GTM e UTMs padrão. |
+| `update_design` | Ajustar o design — tema, cores, botões, fonte, cabeçalho e fundos, incluindo `mesh` e `video` (via `wallpaperVideoUrl`). |
+| `update_map` | Configurar o card de mapa da sua página. |
+| `update_socials` | Atualizar seus perfis de redes sociais. |
+| `configure_agenda` | Configurar sua estrutura de agendamento. |
+| `manage_offering` | Criar, atualizar ou excluir um serviço — incluindo combos e cobrança online (sinal ou pagamento integral). |
+| `manage_staff` | Criar, atualizar ou excluir um atendente. |
+| `manage_block` | Criar ou excluir um bloqueio de horário. |
+| `create_appointment` | Criar um agendamento — opcionalmente para um atendente específico (`staffId`) ou um cliente existente (`leadId`). |
+| `transition_appointment` | Alterar o status de um agendamento. |
+| `reschedule_appointment` | Mover um agendamento para um novo horário. |
+| `disconnect_agenda_google` | Desconectar o Google Calendar. |
+| `manage_ai_assistant` | Gerenciar seu assistente de IA — persona, saudação, captura de leads, tom de voz. |
+| `set_review_hidden` | Ocultar ou exibir uma avaliação na sua página pública. |
+| `create_lead` | Cadastrar um lead/cliente em seu nome. |
 
 <CardGroup cols={2}>
   <Card title="Visão geral do MCP" icon="robot" href="/pt-BR/integrations/mcp/overview">

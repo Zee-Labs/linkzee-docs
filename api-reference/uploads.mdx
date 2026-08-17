@@ -44,6 +44,7 @@ Send these as multipart form fields.
 | `productId` | string | No | Required when `kind` is `product`. The product this image belongs to. It must be a product in your own store. |
 | `linkId` | string | No | Required when `kind` is `link`, `linkMedia`, or `linkPoster`. The link the image belongs to. It must be a link in your own store. |
 | `staffId` | string | No | Required when `kind` is `staffAvatar`. The team member the avatar belongs to. |
+| `socialKey` | string | No | Required when `kind` is `socialCard`. The social network the card cover belongs to (e.g. `instagram`, `tiktok`, `youtube`). |
 
 #### Values for `kind`
 
@@ -52,6 +53,7 @@ Send these as multipart form fields.
 | `logo` | Your store logo | — |
 | `product` | A product image | `productId` |
 | `wallpaper` | Your page wallpaper | — |
+| `wallpaperPoster` | The poster frame for a video wallpaper | — |
 | `banner` | Your header banner | — |
 | `cutout` | A header cutout image | — |
 | `link` | A link thumbnail | `linkId` |
@@ -59,6 +61,8 @@ Send these as multipart form fields.
 | `linkPoster` | A link video poster | `linkId` |
 | `aiAssistantAvatar` | Your AI assistant avatar | — |
 | `staffAvatar` | A team member's photo | `staffId` |
+| `heroPoster` | The poster frame for a hero header video | — |
+| `socialCard` | A social network card cover | `socialKey` |
 
 <Note>
 When you send a `kind` (and its matching ID), the image is stored at a fixed

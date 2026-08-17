@@ -114,6 +114,8 @@ Every field is optional; send only what you want to change.
 | `socialsPosition` | string | Where the social row appears: `top` or `bottom`. |
 | `socialOrder` | string[] | Display order of social networks. |
 | `productsPosition` | string | Showcase position relative to links: `top` or `bottom`. |
+| `vitrineLayout` | string | Showcase layout: `grid` (classic grid), `masonry` (mosaic) or `carousel` (one horizontal shelf per category with an inline "See all"). |
+| `agenda` | object | Scheduling settings (enable/disable, title, timezone, business hours, reminders and more). Merged partially — send only the keys you want to change. See the [Scheduling reference](/api-reference/agenda). |
 | `social` | object | Social handles, e.g. `{ "instagram": "handle", "tiktok": "handle" }`. |
 | `seoTitle` | string | Public page title for search engines (max 70 chars). |
 | `seoDescription` | string | Public page meta description (max 160 chars). |
@@ -155,8 +157,8 @@ Every field is optional; send only what you want to change.
 GET /v1/themes
 ```
 
-Lists the ready‑made themes you can apply with `themeId`. Each entry includes a
-short description to help you match a look to a store's style.
+Lists the **15** ready‑made themes you can apply with `themeId`. Each entry
+includes a short description to help you match a look to a store's style.
 
 ### Request
 
@@ -175,28 +177,34 @@ curl -X GET \
   "data": [
     {
       "id": "pure",
-      "name": "Puro",
+      "name": "Pure",
       "mode": "light",
-      "description": "Claro minimalista, fundo quase branco, foco total nos produtos."
+      "description": "Minimal light, near-white background, full focus on the products."
     },
     {
       "id": "noir",
       "name": "Noir",
       "mode": "dark",
-      "description": "Escuro sóbrio, cinza-grafite, elegante e neutro."
+      "description": "Sober dark, graphite grey, elegant and neutral."
     },
     {
       "id": "aurora",
       "name": "Aurora",
       "mode": "dark",
-      "description": "Gradiente violeta/azul animado, moderno e premium."
+      "description": "Animated violet/blue gradient, modern and premium."
     }
   ]
 }
 ```
 
+The full catalog has 15 themes: `pure`, `noir`, `gesso`, `solar`, `midnight`,
+`groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`,
+`brutalista`, `editorial` and `pista`.
+
 <Note>
-  Use any `id` from this list as the `themeId` when you update the store.
+  Use any `id` from this list as the `themeId` when you update the store. The
+  `id`s are stable — `name` and `description` are informational and returned in
+  English.
 </Note>
 
 ## Get a performance summary

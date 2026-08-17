@@ -60,17 +60,18 @@ afin que vous sachiez quoi demander.
 | Domaine d'outils | Ce que l'agent peut faire |
 | --- | --- |
 | Statistiques | Lire un résumé des performances de votre page. |
-| Leads | Lister les leads que vous avez captés. |
+| Leads | Lister les leads que vous avez captés, rechercher un client et en enregistrer un nouveau. |
 
 ## Agenda
 
 | Domaine d'outils | Ce que l'agent peut faire |
 | --- | --- |
 | Agenda | Configurer votre système de prise de rendez-vous. |
-| Services et équipe | Gérer vos services, votre personnel et vos blocages. |
-| Rendez-vous | Lister et créer des rendez-vous, et vérifier les disponibilités. |
+| Services et équipe | Gérer vos services (y compris les combos et le paiement en ligne), votre personnel et vos blocages. |
+| Rendez-vous | Lister et créer des rendez-vous — liés à un membre de l'équipe ou à un client existant — et vérifier les disponibilités réelles (par membre de l'équipe, et pour un panier de services supplémentaires). |
 | Modifications | Reprogrammer des rendez-vous et modifier leur statut. |
-| Google | Vérifier l'état de la connexion à Google. |
+| Avis et liste d'attente | Lire vos avis (y compris les avis masqués), masquer ou afficher un avis, et gérer la liste d'attente. |
+| Google | Vérifier l'état de la connexion à Google Agenda, et la déconnecter. |
 
 ## Assistant IA
 
@@ -83,6 +84,61 @@ afin que vous sachiez quoi demander.
   page en direct en temps réel, exactement comme si vous aviez fait la
   modification vous-même dans l'éditeur.
 </Note>
+
+## Noms des outils
+
+Si vous voulez savoir exactement quels outils votre agent voit, voici la liste
+complète. Avec une clé **read**, l'agent obtient les 11 outils de lecture ; une
+clé **write** ajoute par-dessus les 28 outils d'écriture.
+
+### Outils de lecture
+
+| Outil | Ce qu'il fait |
+| --- | --- |
+| `get_storefront` | Lire toute votre page — profil, liens et produits en une seule vue. |
+| `list_products` | Lister vos produits, avec recherche par nom et limite optionnelles. |
+| `list_themes` | Parcourir le catalogue de thèmes prédéfinis. |
+| `get_analytics_summary` | Lire le résumé des performances de votre page. |
+| `list_appointments` | Lister les rendez-vous sur une plage de dates. |
+| `list_leads` | Lister les leads que vous avez captés. |
+| `get_agenda_availability` | Vérifier les créneaux réellement libres pour un service — optionnellement par membre de l'équipe (`staffId`) ou pour un panier de services supplémentaires (`extraOfferingIds`). |
+| `get_agenda_google` | Vérifier si Google Agenda est connecté. |
+| `list_reviews` | Lister les avis que vous avez reçus, y compris les avis masqués. |
+| `list_waitlist` | Lister les visiteurs en attente d'un créneau. |
+| `search_leads` | Trouver un client existant par nom, téléphone, e-mail ou Instagram. |
+
+### Outils d'écriture
+
+| Outil | Ce qu'il fait |
+| --- | --- |
+| `update_profile` | Mettre à jour votre nom, votre bio et les détails du profil. |
+| `set_appearance` | Appliquer un thème prédéfini. |
+| `create_product` | Créer un produit. |
+| `create_products_bulk` | Créer plusieurs produits d'un coup. |
+| `update_product` | Mettre à jour un produit existant. |
+| `delete_product` | Supprimer un produit. |
+| `manage_category` | Créer, mettre à jour ou supprimer une catégorie de produits. |
+| `manage_collection` | Créer, mettre à jour ou supprimer une collection de liens. |
+| `create_link` | Ajouter un lien à votre page. |
+| `update_link` | Mettre à jour un lien existant. |
+| `delete_link` | Supprimer un lien. |
+| `reorder_content` | Réordonner le contenu de votre page. |
+| `configure_vitrine` | Configurer la vitrine — visibilité, colonnes, cadrage des photos et mise en page (`grid`, `masonry` ou `carousel`). |
+| `configure_tracking` | Définir les pixels, l'API Conversions, GTM et les UTM par défaut. |
+| `update_design` | Ajuster le design — thème, couleurs, boutons, police, en-tête et fonds, y compris `mesh` et `video` (via `wallpaperVideoUrl`). |
+| `update_map` | Configurer la carte sur votre page. |
+| `update_socials` | Mettre à jour vos identifiants de réseaux sociaux. |
+| `configure_agenda` | Configurer votre système de prise de rendez-vous. |
+| `manage_offering` | Créer, mettre à jour ou supprimer un service — y compris les combos et le paiement en ligne (acompte ou paiement intégral). |
+| `manage_staff` | Créer, mettre à jour ou supprimer un membre de l'équipe. |
+| `manage_block` | Créer ou supprimer un blocage. |
+| `create_appointment` | Réserver un rendez-vous — optionnellement pour un membre précis de l'équipe (`staffId`) ou un client existant (`leadId`). |
+| `transition_appointment` | Modifier le statut d'un rendez-vous. |
+| `reschedule_appointment` | Déplacer un rendez-vous vers un nouvel horaire. |
+| `disconnect_agenda_google` | Déconnecter Google Agenda. |
+| `manage_ai_assistant` | Gérer votre assistant IA — persona, message d'accueil, capture de leads, ton de voix. |
+| `set_review_hidden` | Masquer ou afficher un avis sur votre page publique. |
+| `create_lead` | Enregistrer un lead/client en votre nom. |
 
 <CardGroup cols={2}>
   <Card title="Vue d'ensemble du MCP" icon="robot" href="/fr/integrations/mcp/overview">

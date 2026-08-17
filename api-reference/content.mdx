@@ -69,13 +69,13 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "badge": "OFFER",
           "isActive": true,
           "isFeatured": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "clicks": 128,
           "offerEndsAt": null,
           "offerDurationMinutes": 120,
           "showCountdown": true,
-          "cardSize": "large",
-          "imageRatio": "square",
+          "cardSize": "normal",
+          "imageRatio": 1,
           "createdAt": "2026-07-18T12:00:00.000Z"
         }
       ],
@@ -111,7 +111,7 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "thumbnailUrl": "https://cdn.linkz.ee/l/507f...webp",
           "order": 0,
           "isActive": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "mediaType": "video",
           "mediaUrl": "https://youtube.com/watch?v=...",
           "posterUrl": null,
@@ -172,6 +172,11 @@ When the showcase is hidden, `meta` counters return `0` and `featured`,
 `categories`, and `catalog.items` come back empty. Empty collections (no active
 children) are dropped from `root`.
 </Note>
+
+A few fields worth knowing: `highlightFx` is a string — `""` (none), `"shake"`,
+`"shine"`, `"pulse"`, or `"bounce"` (the Premium animated highlight);
+`cardSize` is `"normal"` or `"wide"` (a wide card spans both grid columns); and
+`imageRatio` is a number (image width divided by height, e.g. `1` for square).
 
 ## Reorder content
 

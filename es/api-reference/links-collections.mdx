@@ -97,10 +97,12 @@ curl -X POST \
 | `thumbnailUrl` | string | No | URL de la imagen en miniatura. Sube la imagen primero y luego pasa la URL devuelta. |
 | `isActive` | boolean | No | Si el link es visible en tu página. Por defecto es `true`. |
 | `isFeatured` | boolean | No | Muestra el link con mayor prominencia. Por defecto es `false`. |
-| `highlightFx` | string | No | Resaltado animado (Premium): `""` (ninguno) o `"shake"`. |
+| `highlightFx` | string | No | Resaltado animado (Premium): `""` (ninguno), `"shake"`, `"shine"`, `"pulse"` o `"bounce"`. |
 | `mediaType` | string | No | Estilo de portada: `""`, `"image"`, `"video"` o `"embed"`. |
 | `mediaUrl` | string | No | URL de la portada para el `mediaType` elegido. |
 | `posterUrl` | string | No | URL de la imagen de póster para una portada de video. |
+| `scheduledStartAt` | string \| null | No | Programación: instante (ISO 8601, UTC) a partir del cual el link aparece. `null` lo borra. Ambos en `null` significa siempre visible. |
+| `scheduledEndAt` | string \| null | No | Programación: instante (ISO 8601, UTC) en el que el link desaparece. Debe ser posterior a `scheduledStartAt`. `null` lo borra. |
 
 #### Respuesta
 
@@ -152,10 +154,12 @@ curl -X PATCH \
 | `thumbnailUrl` | string | No | Nueva URL de la imagen en miniatura. |
 | `isActive` | boolean | No | Muestra u oculta el link. |
 | `isFeatured` | boolean | No | Activa o desactiva la mayor prominencia. |
-| `highlightFx` | string | No | `""` (ninguno) o `"shake"` (Premium). |
+| `highlightFx` | string | No | `""` (ninguno), `"shake"`, `"shine"`, `"pulse"` o `"bounce"` (Premium). |
 | `mediaType` | string | No | `""`, `"image"`, `"video"` o `"embed"`. |
 | `mediaUrl` | string | No | URL de la portada. |
 | `posterUrl` | string | No | URL de la imagen de póster para una portada de video. |
+| `scheduledStartAt` | string \| null | No | Programación: instante (ISO 8601, UTC) a partir del cual el link aparece. `null` lo borra. |
+| `scheduledEndAt` | string \| null | No | Programación: instante (ISO 8601, UTC) en el que el link desaparece. Debe ser posterior a `scheduledStartAt`. `null` lo borra. |
 
 #### Respuesta
 

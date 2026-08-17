@@ -71,13 +71,13 @@ lista ordenada de entradas de contenido). Cada entrada de `root` es de tipo
           "badge": "OFFER",
           "isActive": true,
           "isFeatured": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "clicks": 128,
           "offerEndsAt": null,
           "offerDurationMinutes": 120,
           "showCountdown": true,
-          "cardSize": "large",
-          "imageRatio": "square",
+          "cardSize": "normal",
+          "imageRatio": 1,
           "createdAt": "2026-07-18T12:00:00.000Z"
         }
       ],
@@ -113,7 +113,7 @@ lista ordenada de entradas de contenido). Cada entrada de `root` es de tipo
           "thumbnailUrl": "https://cdn.linkz.ee/l/507f...webp",
           "order": 0,
           "isActive": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "mediaType": "video",
           "mediaUrl": "https://youtube.com/watch?v=...",
           "posterUrl": null,
@@ -174,6 +174,12 @@ Cuando la vitrina está oculta, los contadores de `meta` devuelven `0` y
 `featured`, `categories` y `catalog.items` regresan vacíos. Las colecciones
 vacías (sin hijos activos) se eliminan de `root`.
 </Note>
+
+Algunos campos que conviene conocer: `highlightFx` es una cadena — `""` (ninguno),
+`"shake"`, `"shine"`, `"pulse"` o `"bounce"` (el resaltado animado Premium);
+`cardSize` es `"normal"` o `"wide"` (una tarjeta ancha ocupa las dos columnas de
+la cuadrícula); e `imageRatio` es un número (el ancho de la imagen dividido por
+el alto, p. ej. `1` para cuadrada).
 
 ## Reordenar el contenido
 

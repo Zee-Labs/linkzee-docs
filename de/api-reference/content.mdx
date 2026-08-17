@@ -70,13 +70,13 @@ geordnete Liste der Inhaltseinträge). Jeder `root`-Eintrag ist entweder `link`,
           "badge": "OFFER",
           "isActive": true,
           "isFeatured": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "clicks": 128,
           "offerEndsAt": null,
           "offerDurationMinutes": 120,
           "showCountdown": true,
-          "cardSize": "large",
-          "imageRatio": "square",
+          "cardSize": "normal",
+          "imageRatio": 1,
           "createdAt": "2026-07-18T12:00:00.000Z"
         }
       ],
@@ -112,7 +112,7 @@ geordnete Liste der Inhaltseinträge). Jeder `root`-Eintrag ist entweder `link`,
           "thumbnailUrl": "https://cdn.linkz.ee/l/507f...webp",
           "order": 0,
           "isActive": true,
-          "highlightFx": false,
+          "highlightFx": "",
           "mediaType": "video",
           "mediaUrl": "https://youtube.com/watch?v=...",
           "posterUrl": null,
@@ -173,6 +173,12 @@ Wenn die Vitrine ausgeblendet ist, geben die `meta`-Zähler `0` zurück, und
 `featured`, `categories` sowie `catalog.items` kommen leer zurück. Leere Sammlungen
 (ohne aktive Kinder) werden aus `root` entfernt.
 </Note>
+
+Ein paar Felder, die man kennen sollte: `highlightFx` ist ein String — `""`
+(keiner), `"shake"`, `"shine"`, `"pulse"` oder `"bounce"` (die animierte
+Premium-Hervorhebung); `cardSize` ist `"normal"` oder `"wide"` (eine breite
+Karte erstreckt sich über beide Rasterspalten); und `imageRatio` ist eine Zahl
+(Bildbreite geteilt durch Höhe, z. B. `1` für quadratisch).
 
 ## Inhalt neu anordnen
 

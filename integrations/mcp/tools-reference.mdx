@@ -57,17 +57,18 @@ can do, grouped by area, so you know what to ask for.
 | Tool area | What the agent can do |
 | --- | --- |
 | Analytics | Read a summary of how your page is doing. |
-| Leads | List the leads you've captured. |
+| Leads | List the leads you've captured, search for a client, and register a new one. |
 
 ## Scheduling
 
 | Tool area | What the agent can do |
 | --- | --- |
 | Agenda | Configure your scheduling setup. |
-| Services & team | Manage your services, staff and blocks. |
-| Appointments | List and create appointments, and check availability. |
+| Services & team | Manage your services (including combos and online charging), staff and blocks. |
+| Appointments | List and create appointments — linked to a staff member or an existing client — and check real availability (per staff member, and for a cart of extra services). |
 | Changes | Reschedule appointments and change their status. |
-| Google | Check the connection status of Google. |
+| Reviews & waitlist | Read your reviews (including hidden ones), hide or show a review, and manage the waitlist. |
+| Google | Check the connection status of Google Calendar, and disconnect it. |
 
 ## AI assistant
 
@@ -79,6 +80,61 @@ can do, grouped by area, so you know what to ask for.
   Everything an agent changes auto-saves and updates your live page in real time,
   exactly as if you'd made the change yourself in the editor.
 </Note>
+
+## Tool names
+
+If you want to know exactly which tools your agent sees, here is the full list.
+With a **read** key the agent gets the 11 read tools; a **write** key adds the
+28 write tools on top.
+
+### Read tools
+
+| Tool | What it does |
+| --- | --- |
+| `get_storefront` | Read your whole page — profile, links and products in one view. |
+| `list_products` | List your products, with optional name search and limit. |
+| `list_themes` | Browse the catalog of preset themes. |
+| `get_analytics_summary` | Read your page's performance summary. |
+| `list_appointments` | List appointments within a date range. |
+| `list_leads` | List the leads you've captured. |
+| `get_agenda_availability` | Check real free times for a service — optionally per staff member (`staffId`) or for a cart of extra services (`extraOfferingIds`). |
+| `get_agenda_google` | Check whether Google Calendar is connected. |
+| `list_reviews` | List the reviews you've received, including hidden ones. |
+| `list_waitlist` | List visitors waiting for a slot. |
+| `search_leads` | Find an existing client by name, phone, email or Instagram. |
+
+### Write tools
+
+| Tool | What it does |
+| --- | --- |
+| `update_profile` | Update your name, bio and profile details. |
+| `set_appearance` | Apply a preset theme. |
+| `create_product` | Create a product. |
+| `create_products_bulk` | Create several products in one go. |
+| `update_product` | Update an existing product. |
+| `delete_product` | Delete a product. |
+| `manage_category` | Create, update or delete a product category. |
+| `manage_collection` | Create, update or delete a link collection. |
+| `create_link` | Add a link to your page. |
+| `update_link` | Update an existing link. |
+| `delete_link` | Delete a link. |
+| `reorder_content` | Reorder your page content. |
+| `configure_vitrine` | Configure the showcase — visibility, columns, photo fit, and layout (`grid`, `masonry` or `carousel`). |
+| `configure_tracking` | Set pixels, Conversion API, GTM and default UTMs. |
+| `update_design` | Adjust the design — theme, colors, buttons, font, header, and backgrounds including `mesh` and `video` (via `wallpaperVideoUrl`). |
+| `update_map` | Configure the map card on your page. |
+| `update_socials` | Update your social network handles. |
+| `configure_agenda` | Configure your scheduling setup. |
+| `manage_offering` | Create, update or delete a service — including combos and online charging (deposit or full payment). |
+| `manage_staff` | Create, update or delete a staff member. |
+| `manage_block` | Create or delete a time block. |
+| `create_appointment` | Book an appointment — optionally for a specific staff member (`staffId`) or an existing client (`leadId`). |
+| `transition_appointment` | Change an appointment's status. |
+| `reschedule_appointment` | Move an appointment to a new time. |
+| `disconnect_agenda_google` | Disconnect Google Calendar. |
+| `manage_ai_assistant` | Manage your AI assistant — persona, greeting, lead capture, tone of voice. |
+| `set_review_hidden` | Hide or show a review on your public page. |
+| `create_lead` | Register a lead/client on your behalf. |
 
 <CardGroup cols={2}>
   <Card title="MCP overview" icon="robot" href="/integrations/mcp/overview">

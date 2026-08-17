@@ -1,13 +1,14 @@
 ---
 title: Agenda
 icon: calendar
-description: "Gerencie serviços, equipe, bloqueios de horário, disponibilidade e agendamentos na sua agenda de reservas do Linkzee."
+description: "Gerencie serviços, equipe, bloqueios de horário, disponibilidade, agendamentos, avaliações e lista de espera na sua agenda de reservas do Linkzee."
 ---
 
 Os endpoints de Agenda permitem operar sua agenda de reservas de forma
 programática: definir os **serviços** que as pessoas podem reservar, sua
-**equipe**, os **bloqueios** de quando você está indisponível e consultar a
-**disponibilidade** real para criar e gerenciar **agendamentos**.
+**equipe**, os **bloqueios** de quando você está indisponível, consultar a
+**disponibilidade** real para criar e gerenciar **agendamentos**, moderar as
+**avaliações** que você recebe e gerenciar a **lista de espera**.
 
 Todos os caminhos ficam sob `https://api.linkz.ee/v1/agenda`. Toda requisição
 precisa do cabeçalho `Authorization: Bearer lzk_your_key`, e as operações de
@@ -93,6 +94,11 @@ curl -X POST \
 | `bufferAfterMin` | integer | Não | Intervalo em minutos após cada reserva (0–240). |
 | `meetEnabled` | boolean | Não | Cria um link do Google Meet para cada reserva. |
 | `isActive` | boolean | Não | Se o serviço está reservável. O padrão é `true`. |
+| `kind` | string | Não | `single` (padrão) ou `combo`. Um combo agrupa vários serviços individuais em um único pacote reservável. |
+| `comboItemIds` | array of string | Não | Obrigatório quando `kind` é `combo`: os IDs de 2–6 serviços individuais incluídos no combo. |
+| `chargeMode` | string | Não | Cobrança online: `none` (padrão, paga presencialmente), `deposit` (valor parcial adiantado) ou `full` (preço inteiro adiantado — exige um `price` maior que 0). |
+| `chargeDepositType` | string | Não | Como o sinal é calculado quando `chargeMode` é `deposit`: `percent` ou `fixed`. |
+| `chargeDepositValue` | number | Não | O valor do sinal: uma porcentagem de 1 a 100 quando `chargeDepositType` é `percent`, ou um valor fixo na moeda da sua loja quando é `fixed`. |
 
 #### Resposta
 
@@ -453,7 +459,8 @@ curl -X GET \
 | `offeringId` | string | Sim | O serviço a consultar. |
 | `from` | string | Sim | Data inicial, `YYYY-MM-DD` (no fuso horário da sua agenda). |
 | `to` | string | Sim | Data final, `YYYY-MM-DD`. |
-| `staffId` | string | Não | Limita a disponibilidade a um atendente. |
+| `staffId` | string | Não | Limita a disponibilidade a um atendente (modo equipe). |
+| `extraOfferingIds` | string | Não | IDs separados por vírgula de até 4 serviços extras reservados junto com o principal (um carrinho). A disponibilidade então considera a duração combinada. |
 | `detail` | string | Não | `days` (padrão) retorna apenas o estado por dia; `slots` também retorna os horários de início reserváveis. |
 
 #### Resposta
@@ -464,14 +471,20 @@ curl -X GET \
   "message": "Availability retrieved successfully",
   "data": {
     "days": [
-      { "date": "2026-07-21", "state": "free" },
-      { "date": "2026-07-22", "state": "full" },
-      { "date": "2026-07-23", "state": "closed" }
+      { "date": "2026-07-21", "state": "free", "density": "low" },
+      { "date": "2026-07-22", "state": "full", "density": "high" },
+      { "date": "2026-07-23", "state": "closed", "density": "none" }
     ],
     "slots": [
       { "startAt": "2026-07-21T12:00:00.000Z" },
       { "startAt": "2026-07-21T12:45:00.000Z" }
     ],
+    "charge": {
+      "mode": "deposit",
+      "amountDueCents": 5000,
+      "totalCents": 15000,
+      "currency": "brl"
+    },
     "stepMin": 15,
     "timezone": "America/Sao_Paulo"
   }
@@ -479,8 +492,15 @@ curl -X GET \
 ```
 
 O `state` de cada dia é `free` (tem horários abertos), `full` (totalmente
-reservado) ou `closed` (não é dia de trabalho). Os horários são retornados em
-UTC (`Z`).
+reservado) ou `closed` (não é dia de trabalho); `density` (`none`, `low`,
+`medium`, `high`) indica quão ocupado o dia já está. Os horários são retornados
+em UTC (`Z`).
+
+Quando o serviço tem cobrança online configurada, `charge` descreve o que o
+visitante paga ao reservar: `mode` (`none`, `deposit` ou `full`),
+`amountDueCents` (o valor devido no momento da reserva, em centavos),
+`totalCents` (o preço completo do serviço, em centavos) e `currency`. Sem
+cobrança configurada, `mode` é `none` e os valores são `0`.
 
 ## Agendamentos
 
@@ -566,6 +586,8 @@ curl -X POST \
 | `phone` | string | Sim | Telefone do visitante (máx. 30 caracteres). |
 | `email` | string | Não | E-mail do visitante (máx. 160 caracteres). |
 | `notes` | string | Não | Notas internas (máx. 500 caracteres). |
+| `leadId` | string | Não | Vincula o agendamento a um cliente (lead) existente em vez de criar um registro duplicado. |
+| `staffId` | string | Não | O atendente que vai realizar o agendamento (modo equipe). Ignorado nos modos solo/pool. |
 
 #### Resposta
 
@@ -708,6 +730,163 @@ curl -X DELETE \
 Conectar um Google Calendar acontece por um fluxo de login no painel do Linkzee
 e não pode ser feito pela API. A API só consegue ler o status e desconectar.
 </Warning>
+
+## Avaliações
+
+Depois de um agendamento concluído, os visitantes podem deixar uma avaliação.
+Avaliações **nunca são editadas ou excluídas** — a única ação de moderação é
+ocultar uma da sua página pública (ela continua visível para você, e você pode
+exibi-la de novo a qualquer momento).
+
+### Listar avaliações
+
+```
+GET /v1/agenda/reviews
+```
+
+Retorna todas as avaliações que sua agenda recebeu, **incluindo as ocultas**.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/reviews
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Reviews retrieved successfully",
+  "data": [
+    {
+      "id": "665f33aa11bb22cc33dd44ee",
+      "rating": 5,
+      "comment": "Great service, highly recommend!",
+      "visitorName": "João Lima",
+      "hidden": false,
+      "createdAt": "2026-07-22T18:30:00.000Z"
+    }
+  ]
+}
+```
+
+Retorna as 50 avaliações mais recentes, da mais nova para a mais antiga.
+
+### Ocultar ou exibir uma avaliação
+
+```
+PATCH /v1/agenda/reviews/{id}
+```
+
+Alterna a visibilidade de uma avaliação na sua página pública. Exige o escopo
+**write**.
+
+#### Requisição
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"hidden":true}' \
+  https://api.linkz.ee/v1/agenda/reviews/665f33aa11bb22cc33dd44ee
+```
+
+#### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `id` | string | Sim | O ID da avaliação (no caminho). |
+| `hidden` | boolean | Sim | `true` oculta a avaliação da página pública; `false` a exibe de novo. |
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Review updated successfully",
+  "data": { "id": "665f33aa11bb22cc33dd44ee", "hidden": true }
+}
+```
+
+<Note>
+Não existe endpoint para editar ou excluir uma avaliação — ocultar é a única
+ação de moderação, para que as notas continuem confiáveis.
+</Note>
+
+## Lista de espera
+
+Quando um período não tem horários livres, os visitantes podem entrar na lista
+de espera. Assim que um horário compatível abre, o sistema o oferece
+automaticamente à primeira entrada compatível.
+
+### Listar a lista de espera
+
+```
+GET /v1/agenda/waitlist
+```
+
+Retorna a fila atual de visitantes aguardando um horário.
+
+#### Requisição
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/waitlist
+```
+
+#### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Waitlist retrieved successfully",
+  "data": [
+    {
+      "id": "665f44bb55cc66dd77ee88ff",
+      "position": 1,
+      "name": "Maria Alves",
+      "phone": "+5511988887777",
+      "dateFrom": "2026-07-21",
+      "dateTo": "2026-07-25",
+      "periods": ["morning", "afternoon"],
+      "status": "waiting",
+      "offeringId": "665f0a1b2c3d4e5f60718293",
+      "createdAt": "2026-07-19T10:12:00.000Z"
+    }
+  ]
+}
+```
+
+As entradas são ordenadas por chegada (`position` começa em 1). `periods` lista
+as partes do dia preferidas pelo visitante (`morning`, `afternoon`, `evening`);
+`status` é `waiting` ou `offered` (um horário foi oferecido e aguarda
+resposta).
+
+### Remover uma entrada da lista de espera
+
+```
+DELETE /v1/agenda/waitlist/{id}
+```
+
+Remove uma entrada da fila. Exige o escopo **write**.
+
+#### Requisição
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/waitlist/665f44bb55cc66dd77ee88ff
+```
+
+#### Resposta
+
+```json
+{ "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
+```
 
 ## Relacionados
 

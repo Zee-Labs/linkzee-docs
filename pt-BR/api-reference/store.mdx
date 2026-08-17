@@ -114,6 +114,8 @@ Todos os campos são opcionais; envie apenas o que você quer alterar.
 | `socialsPosition` | string | Onde a linha de redes sociais aparece: `top` ou `bottom`. |
 | `socialOrder` | string[] | Ordem de exibição das redes sociais. |
 | `productsPosition` | string | Posição da vitrine em relação aos links: `top` ou `bottom`. |
+| `vitrineLayout` | string | Layout da vitrine: `grid` (grade clássica), `masonry` (mosaico) ou `carousel` (uma prateleira horizontal por categoria com "Ver todos" inline). |
+| `agenda` | object | Configurações da Agenda (ativar/desativar, título, fuso horário, horário de funcionamento, lembretes e mais). Mesclado parcialmente — envie apenas as chaves que você quer alterar. Veja a [referência da Agenda](/pt-BR/api-reference/agenda). |
 | `social` | object | Perfis de redes sociais, ex.: `{ "instagram": "handle", "tiktok": "handle" }`. |
 | `seoTitle` | string | Título da página pública para mecanismos de busca (máx. 70 caracteres). |
 | `seoDescription` | string | Meta description da página pública (máx. 160 caracteres). |
@@ -155,8 +157,9 @@ Todos os campos são opcionais; envie apenas o que você quer alterar.
 GET /v1/themes
 ```
 
-Lista os temas prontos que você pode aplicar com `themeId`. Cada entrada inclui
-uma descrição curta para ajudar você a combinar um visual com o estilo da loja.
+Lista os **15** temas prontos que você pode aplicar com `themeId`. Cada entrada
+inclui uma descrição curta para ajudar você a combinar um visual com o estilo da
+loja.
 
 ### Requisição
 
@@ -175,28 +178,33 @@ curl -X GET \
   "data": [
     {
       "id": "pure",
-      "name": "Puro",
+      "name": "Pure",
       "mode": "light",
-      "description": "Claro minimalista, fundo quase branco, foco total nos produtos."
+      "description": "Minimal light, near-white background, full focus on the products."
     },
     {
       "id": "noir",
       "name": "Noir",
       "mode": "dark",
-      "description": "Escuro sóbrio, cinza-grafite, elegante e neutro."
+      "description": "Sober dark, graphite grey, elegant and neutral."
     },
     {
       "id": "aurora",
       "name": "Aurora",
       "mode": "dark",
-      "description": "Gradiente violeta/azul animado, moderno e premium."
+      "description": "Animated violet/blue gradient, modern and premium."
     }
   ]
 }
 ```
 
+O catálogo completo tem 15 temas: `pure`, `noir`, `gesso`, `solar`, `midnight`,
+`groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`,
+`brutalista`, `editorial` e `pista`.
+
 <Note>
-  Use qualquer `id` desta lista como o `themeId` ao atualizar a loja.
+  Use qualquer `id` desta lista como o `themeId` ao atualizar a loja. Os `id`s
+  são estáveis — `name` e `description` são informativos e retornados em inglês.
 </Note>
 
 ## Obter um resumo de desempenho

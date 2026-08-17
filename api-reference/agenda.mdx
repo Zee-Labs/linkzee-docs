@@ -1,12 +1,13 @@
 ---
 title: Scheduling
 icon: calendar
-description: "Manage services, staff, time blocks, availability and appointments in your Linkzee booking calendar."
+description: "Manage services, staff, time blocks, availability, appointments, reviews and the waitlist in your Linkzee booking calendar."
 ---
 
 The Scheduling endpoints let you run your booking calendar programmatically:
 define the **services** people can book, your **staff**, the **blocks** when
-you're off, and read real **availability** to create and manage **appointments**.
+you're off, read real **availability** to create and manage **appointments**,
+moderate the **reviews** you receive, and manage the **waitlist**.
 
 All paths live under `https://api.linkz.ee/v1/agenda`. Every request needs the
 `Authorization: Bearer lzk_your_key` header, and write operations
@@ -54,6 +55,8 @@ curl -X GET \
       "color": "#2f80ed",
       "bufferAfterMin": 15,
       "meetEnabled": true,
+      "kind": "single",
+      "chargeMode": "none",
       "order": 0,
       "isActive": true
     }
@@ -91,6 +94,11 @@ curl -X POST \
 | `bufferAfterMin` | integer | No | Cushion in minutes after each booking (0–240). |
 | `meetEnabled` | boolean | No | Create a Google Meet link for each booking. |
 | `isActive` | boolean | No | Whether the service is bookable. Defaults to `true`. |
+| `kind` | string | No | `single` (default) or `combo`. A combo bundles several single services into one bookable package. |
+| `comboItemIds` | array of string | No | Required when `kind` is `combo`: the IDs of 2–6 single services included in the combo. |
+| `chargeMode` | string | No | Online charging: `none` (default, pay in person), `deposit` (partial amount upfront) or `full` (whole price upfront — requires a `price` greater than 0). |
+| `chargeDepositType` | string | No | How the deposit is calculated when `chargeMode` is `deposit`: `percent` or `fixed`. |
+| `chargeDepositValue` | number | No | The deposit amount: a percentage from 1 to 100 when `chargeDepositType` is `percent`, or a fixed amount in your store's currency when it is `fixed`. |
 
 #### Response
 
@@ -448,7 +456,8 @@ curl -X GET \
 | `offeringId` | string | Yes | The service to check. |
 | `from` | string | Yes | Start date, `YYYY-MM-DD` (in your calendar's time zone). |
 | `to` | string | Yes | End date, `YYYY-MM-DD`. |
-| `staffId` | string | No | Limit availability to one staff member. |
+| `staffId` | string | No | Limit availability to one staff member (team mode). |
+| `extraOfferingIds` | string | No | Comma-separated IDs of up to 4 extra services booked together with the main one (a cart). Availability then accounts for the combined duration. |
 | `detail` | string | No | `days` (default) returns per-day state only; `slots` also returns bookable start times. |
 
 #### Response
@@ -459,14 +468,20 @@ curl -X GET \
   "message": "Availability retrieved successfully",
   "data": {
     "days": [
-      { "date": "2026-07-21", "state": "free" },
-      { "date": "2026-07-22", "state": "full" },
-      { "date": "2026-07-23", "state": "closed" }
+      { "date": "2026-07-21", "state": "free", "density": "low" },
+      { "date": "2026-07-22", "state": "full", "density": "high" },
+      { "date": "2026-07-23", "state": "closed", "density": "none" }
     ],
     "slots": [
       { "startAt": "2026-07-21T12:00:00.000Z" },
       { "startAt": "2026-07-21T12:45:00.000Z" }
     ],
+    "charge": {
+      "mode": "deposit",
+      "amountDueCents": 5000,
+      "totalCents": 15000,
+      "currency": "brl"
+    },
     "stepMin": 15,
     "timezone": "America/Sao_Paulo"
   }
@@ -474,7 +489,14 @@ curl -X GET \
 ```
 
 Each day's `state` is `free` (has open slots), `full` (fully booked) or
-`closed` (not a working day). Times are returned in UTC (`Z`).
+`closed` (not a working day); `density` (`none`, `low`, `medium`, `high`)
+tells you how busy the day already is. Times are returned in UTC (`Z`).
+
+When the service has online charging configured, `charge` describes what the
+visitor pays when booking: `mode` (`none`, `deposit` or `full`),
+`amountDueCents` (the amount due at booking time, in cents), `totalCents`
+(the full service price, in cents) and `currency`. With no charging set up,
+`mode` is `none` and the amounts are `0`.
 
 ## Appointments
 
@@ -560,6 +582,8 @@ curl -X POST \
 | `phone` | string | Yes | Visitor phone (max 30 characters). |
 | `email` | string | No | Visitor email (max 160 characters). |
 | `notes` | string | No | Internal notes (max 500 characters). |
+| `leadId` | string | No | Link the appointment to an existing client (lead) instead of creating a duplicate record. |
+| `staffId` | string | No | The staff member who will handle the appointment (team mode). Ignored in solo/pool mode. |
 
 #### Response
 
@@ -702,6 +726,161 @@ Connecting a Google Calendar happens through a sign-in flow in the Linkzee
 dashboard and can't be done from the API. The API can only read status and
 disconnect.
 </Warning>
+
+## Reviews
+
+After a completed appointment, visitors can leave a review. Reviews are **never
+edited or deleted** — the only moderation action is hiding one from your public
+page (it stays visible to you, and you can show it again at any time).
+
+### List reviews
+
+```
+GET /v1/agenda/reviews
+```
+
+Returns every review your calendar has received, **including hidden ones**.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/reviews
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Reviews retrieved successfully",
+  "data": [
+    {
+      "id": "665f33aa11bb22cc33dd44ee",
+      "rating": 5,
+      "comment": "Great service, highly recommend!",
+      "visitorName": "João Lima",
+      "hidden": false,
+      "createdAt": "2026-07-22T18:30:00.000Z"
+    }
+  ]
+}
+```
+
+Returns the 50 most recent reviews, newest first.
+
+### Hide or show a review
+
+```
+PATCH /v1/agenda/reviews/{id}
+```
+
+Toggles a review's visibility on your public page. Requires the **write** scope.
+
+#### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"hidden":true}' \
+  https://api.linkz.ee/v1/agenda/reviews/665f33aa11bb22cc33dd44ee
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | The review ID (in the path). |
+| `hidden` | boolean | Yes | `true` hides the review from the public page; `false` shows it again. |
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Review updated successfully",
+  "data": { "id": "665f33aa11bb22cc33dd44ee", "hidden": true }
+}
+```
+
+<Note>
+There is no endpoint to edit or delete a review — hiding is the only moderation
+action, so ratings stay trustworthy.
+</Note>
+
+## Waitlist
+
+When a period has no free slots, visitors can join the waitlist. As soon as a
+matching slot opens, the system offers it automatically to the first compatible
+entry.
+
+### List the waitlist
+
+```
+GET /v1/agenda/waitlist
+```
+
+Returns the current queue of visitors waiting for a slot.
+
+#### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/waitlist
+```
+
+#### Response
+
+```json
+{
+  "error": false,
+  "message": "Waitlist retrieved successfully",
+  "data": [
+    {
+      "id": "665f44bb55cc66dd77ee88ff",
+      "position": 1,
+      "name": "Maria Alves",
+      "phone": "+5511988887777",
+      "dateFrom": "2026-07-21",
+      "dateTo": "2026-07-25",
+      "periods": ["morning", "afternoon"],
+      "status": "waiting",
+      "offeringId": "665f0a1b2c3d4e5f60718293",
+      "createdAt": "2026-07-19T10:12:00.000Z"
+    }
+  ]
+}
+```
+
+Entries are ordered by arrival (`position` starts at 1). `periods` lists the
+visitor's preferred parts of the day (`morning`, `afternoon`, `evening`);
+`status` is `waiting` or `offered` (a slot has been offered and is pending an
+answer).
+
+### Remove a waitlist entry
+
+```
+DELETE /v1/agenda/waitlist/{id}
+```
+
+Removes one entry from the queue. Requires the **write** scope.
+
+#### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/agenda/waitlist/665f44bb55cc66dd77ee88ff
+```
+
+#### Response
+
+```json
+{ "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
+```
 
 ## Related
 

@@ -97,10 +97,12 @@ curl -X POST \
 | `thumbnailUrl` | string | No | Thumbnail image URL. Upload the image first, then pass the returned URL. |
 | `isActive` | boolean | No | Whether the link is visible on your page. Defaults to `true`. |
 | `isFeatured` | boolean | No | Show the link with extra prominence. Defaults to `false`. |
-| `highlightFx` | string | No | Animated highlight (Premium): `""` (none) or `"shake"`. |
+| `highlightFx` | string | No | Animated highlight (Premium): `""` (none), `"shake"`, `"shine"`, `"pulse"`, or `"bounce"`. |
 | `mediaType` | string | No | Cover media style: `""`, `"image"`, `"video"`, or `"embed"`. |
 | `mediaUrl` | string | No | Cover media URL for the chosen `mediaType`. |
 | `posterUrl` | string | No | Poster image URL for a video cover. |
+| `scheduledStartAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) from which the link appears. `null` clears it. Both `null` means always visible. |
+| `scheduledEndAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) at which the link disappears. Must be after `scheduledStartAt`. `null` clears it. |
 
 #### Response
 
@@ -152,10 +154,12 @@ curl -X PATCH \
 | `thumbnailUrl` | string | No | New thumbnail image URL. |
 | `isActive` | boolean | No | Show or hide the link. |
 | `isFeatured` | boolean | No | Toggle extra prominence. |
-| `highlightFx` | string | No | `""` (none) or `"shake"` (Premium). |
+| `highlightFx` | string | No | `""` (none), `"shake"`, `"shine"`, `"pulse"`, or `"bounce"` (Premium). |
 | `mediaType` | string | No | `""`, `"image"`, `"video"`, or `"embed"`. |
 | `mediaUrl` | string | No | Cover media URL. |
 | `posterUrl` | string | No | Poster image URL for a video cover. |
+| `scheduledStartAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) from which the link appears. `null` clears it. |
+| `scheduledEndAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) at which the link disappears. Must be after `scheduledStartAt`. `null` clears it. |
 
 #### Response
 

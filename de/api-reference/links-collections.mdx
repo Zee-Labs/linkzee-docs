@@ -97,10 +97,12 @@ curl -X POST \
 | `thumbnailUrl` | string | Nein | URL des Vorschaubilds. Lade das Bild zuerst hoch und übergib dann die zurückgegebene URL. |
 | `isActive` | boolean | Nein | Ob der Link auf deiner Seite sichtbar ist. Standardwert ist `true`. |
 | `isFeatured` | boolean | Nein | Zeigt den Link mit zusätzlicher Hervorhebung an. Standardwert ist `false`. |
-| `highlightFx` | string | Nein | Animierte Hervorhebung (Premium): `""` (keine) oder `"shake"`. |
+| `highlightFx` | string | Nein | Animierte Hervorhebung (Premium): `""` (keine), `"shake"`, `"shine"`, `"pulse"` oder `"bounce"`. |
 | `mediaType` | string | Nein | Stil des Cover-Mediums: `""`, `"image"`, `"video"` oder `"embed"`. |
 | `mediaUrl` | string | Nein | URL des Cover-Mediums für den gewählten `mediaType`. |
 | `posterUrl` | string | Nein | URL des Poster-Bilds für ein Video-Cover. |
+| `scheduledStartAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), ab dem der Link erscheint. `null` löscht ihn. Beide `null` bedeutet immer sichtbar. |
+| `scheduledEndAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), zu dem der Link verschwindet. Muss nach `scheduledStartAt` liegen. `null` löscht ihn. |
 
 #### Antwort
 
@@ -152,10 +154,12 @@ curl -X PATCH \
 | `thumbnailUrl` | string | Nein | Neue URL des Vorschaubilds. |
 | `isActive` | boolean | Nein | Link ein- oder ausblenden. |
 | `isFeatured` | boolean | Nein | Zusätzliche Hervorhebung umschalten. |
-| `highlightFx` | string | Nein | `""` (keine) oder `"shake"` (Premium). |
+| `highlightFx` | string | Nein | `""` (keine), `"shake"`, `"shine"`, `"pulse"` oder `"bounce"` (Premium). |
 | `mediaType` | string | Nein | `""`, `"image"`, `"video"` oder `"embed"`. |
 | `mediaUrl` | string | Nein | URL des Cover-Mediums. |
 | `posterUrl` | string | Nein | URL des Poster-Bilds für ein Video-Cover. |
+| `scheduledStartAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), ab dem der Link erscheint. `null` löscht ihn. |
+| `scheduledEndAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), zu dem der Link verschwindet. Muss nach `scheduledStartAt` liegen. `null` löscht ihn. |
 
 #### Antwort
 

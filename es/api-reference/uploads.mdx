@@ -45,6 +45,7 @@ Envía estos como campos de formulario multipart.
 | `productId` | string | No | Obligatorio cuando `kind` es `product`. El producto al que pertenece esta imagen. Debe ser un producto de tu propia tienda. |
 | `linkId` | string | No | Obligatorio cuando `kind` es `link`, `linkMedia` o `linkPoster`. El link al que pertenece la imagen. Debe ser un link de tu propia tienda. |
 | `staffId` | string | No | Obligatorio cuando `kind` es `staffAvatar`. El miembro del equipo al que pertenece el avatar. |
+| `socialKey` | string | No | Obligatorio cuando `kind` es `socialCard`. La red social a la que pertenece la portada de la tarjeta (p. ej. `instagram`, `tiktok`, `youtube`). |
 
 #### Valores para `kind`
 
@@ -53,6 +54,7 @@ Envía estos como campos de formulario multipart.
 | `logo` | El logo de tu tienda | — |
 | `product` | La imagen de un producto | `productId` |
 | `wallpaper` | El fondo de tu página | — |
+| `wallpaperPoster` | El fotograma de póster para un fondo de video | — |
 | `banner` | El banner de tu perfil | — |
 | `cutout` | Una imagen recortada del perfil | — |
 | `link` | La miniatura de un link | `linkId` |
@@ -60,6 +62,8 @@ Envía estos como campos de formulario multipart.
 | `linkPoster` | El póster de un video de un link | `linkId` |
 | `aiAssistantAvatar` | El avatar de tu asistente de IA | — |
 | `staffAvatar` | La foto de un miembro del equipo | `staffId` |
+| `heroPoster` | El fotograma de póster para un video de encabezado hero | — |
+| `socialCard` | La portada de la tarjeta de una red social | `socialKey` |
 
 <Note>
 Cuando envías un `kind` (y su ID correspondiente), la imagen se almacena en una

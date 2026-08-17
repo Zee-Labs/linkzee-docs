@@ -45,6 +45,7 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `productId` | string | Non | Requis lorsque `kind` vaut `product`. Le produit auquel appartient cette image. Il doit s'agir d'un produit de votre propre boutique. |
 | `linkId` | string | Non | Requis lorsque `kind` vaut `link`, `linkMedia` ou `linkPoster`. Le lien auquel appartient l'image. Il doit s'agir d'un lien de votre propre boutique. |
 | `staffId` | string | Non | Requis lorsque `kind` vaut `staffAvatar`. Le membre de l'équipe auquel appartient l'avatar. |
+| `socialKey` | string | Non | Requis lorsque `kind` vaut `socialCard`. Le réseau social auquel appartient la couverture de carte (par ex. `instagram`, `tiktok`, `youtube`). |
 
 #### Valeurs de `kind`
 
@@ -53,6 +54,7 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `logo` | Le logo de votre boutique | — |
 | `product` | Une image de produit | `productId` |
 | `wallpaper` | Le fond d'écran de votre page | — |
+| `wallpaperPoster` | L'image d'aperçu d'un fond d'écran vidéo | — |
 | `banner` | La bannière de votre en-tête | — |
 | `cutout` | Une image découpée d'en-tête | — |
 | `link` | Une miniature de lien | `linkId` |
@@ -60,6 +62,8 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `linkPoster` | Une image d'aperçu de vidéo de lien | `linkId` |
 | `aiAssistantAvatar` | L'avatar de votre assistant IA | — |
 | `staffAvatar` | La photo d'un membre de l'équipe | `staffId` |
+| `heroPoster` | L'image d'aperçu d'une vidéo d'en-tête hero | — |
+| `socialCard` | Une couverture de carte de réseau social | `socialKey` |
 
 <Note>
 Lorsque vous envoyez un `kind` (et son identifiant correspondant), l'image est

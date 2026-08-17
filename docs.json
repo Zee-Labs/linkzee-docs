@@ -221,6 +221,7 @@
                   "api-reference/links-collections",
                   "api-reference/content",
                   "api-reference/agenda",
+                  "api-reference/ai-assistant",
                   "api-reference/leads",
                   "api-reference/uploads",
                   "api-reference/knowledge"
@@ -426,6 +427,7 @@
                   "pt-BR/api-reference/links-collections",
                   "pt-BR/api-reference/content",
                   "pt-BR/api-reference/agenda",
+                  "pt-BR/api-reference/ai-assistant",
                   "pt-BR/api-reference/leads",
                   "pt-BR/api-reference/uploads",
                   "pt-BR/api-reference/knowledge"
@@ -631,6 +633,7 @@
                   "es/api-reference/links-collections",
                   "es/api-reference/content",
                   "es/api-reference/agenda",
+                  "es/api-reference/ai-assistant",
                   "es/api-reference/leads",
                   "es/api-reference/uploads",
                   "es/api-reference/knowledge"
@@ -836,6 +839,7 @@
                   "fr/api-reference/links-collections",
                   "fr/api-reference/content",
                   "fr/api-reference/agenda",
+                  "fr/api-reference/ai-assistant",
                   "fr/api-reference/leads",
                   "fr/api-reference/uploads",
                   "fr/api-reference/knowledge"
@@ -1041,6 +1045,7 @@
                   "de/api-reference/links-collections",
                   "de/api-reference/content",
                   "de/api-reference/agenda",
+                  "de/api-reference/ai-assistant",
                   "de/api-reference/leads",
                   "de/api-reference/uploads",
                   "de/api-reference/knowledge"

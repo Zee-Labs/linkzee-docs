@@ -1,0 +1,236 @@
+---
+title: KI-Assistent
+icon: robot
+description: "Erstelle und verwalte die KI-Assistenten auf deiner Bio-Seite — Persona, Begrüßung, Starter-Buttons und Lead-Erfassung."
+---
+
+Ein KI-Assistent ist eine Chat-Karte auf deiner Bio-Seite: Besucher tippen sie
+an und sprechen mit einem Assistenten, der in der Stimme deines Shops antwortet,
+sie zu deinen Produkten und Leistungen führt und ihren Kontakt als Lead erfassen
+kann. Diese Endpunkte verwalten die Assistenten selbst — ihren Titel, Avatar,
+ihre Begrüßung, die Starter-Buttons und die Einstellungen zur Lead-Erfassung.
+
+Alle Pfade liegen unter `https://api.linkz.ee/v1/ai-assistant`. Jede Anfrage
+benötigt den Header `Authorization: Bearer lzk_your_key`, und Schreiboperationen
+(POST/PATCH/DELETE) erfordern einen Schlüssel mit dem **write**-Scope.
+
+<Note>
+Das globale Verhalten des Assistenten — der Tonfall (`aiAssistantTone`) und der
+Wissenstext „über dein Geschäft" (`aboutBusiness`) — liegt am Store, nicht an
+jedem einzelnen Assistenten. Setze diese über
+[`PATCH /v1/store`](/de/api-reference/store#update-the-store-profile). Die
+PDF-Wissensbasis hat eigene Endpunkte — siehe die
+[Knowledge-Referenz](/de/api-reference/knowledge).
+</Note>
+
+## KI-Assistenten auflisten
+
+```
+GET /v1/ai-assistant
+```
+
+Gibt jeden KI-Assistenten auf deiner Seite in der Anzeigereihenfolge zurück.
+
+### Anfrage
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/ai-assistant
+```
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Items listed successfully",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439030",
+      "collectionId": null,
+      "title": "Ask me anything",
+      "avatarUrl": "https://cdn.linkz.ee/u/abc/ai-assistant-avatar.webp?v=1721500000",
+      "opening": "Hi! How can I help you shop today?",
+      "personality": "Warm and to the point.",
+      "instructions": "Always suggest the featured products first.",
+      "starterButtons": ["Best deals", "Shipping questions"],
+      "leadCapture": {
+        "enabled": true,
+        "timing": "end",
+        "fields": [
+          { "key": "name", "enabled": true, "required": false },
+          { "key": "whatsapp", "enabled": true, "required": true }
+        ],
+        "introText": "Leave your contact for exclusive offers",
+        "consentRequired": true,
+        "consentText": "I agree to receive messages",
+        "allowSkip": true
+      },
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+## Einen KI-Assistenten erstellen
+
+```
+POST /v1/ai-assistant
+```
+
+Erstellt einen neuen Assistenten. Jedes Feld ist optional — du kannst ihn leer
+anlegen und später ausfüllen oder die gesamte Konfiguration in einem einzigen
+Aufruf senden. Neue Assistenten sind standardmäßig aktiv.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Ask me anything",
+    "opening": "Hi! How can I help you shop today?",
+    "starterButtons": ["Best deals", "Shipping questions"]
+  }' \
+  https://api.linkz.ee/v1/ai-assistant
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `title` | string | Nein | Name, der auf der Assistenten-Karte angezeigt wird (max. 80 Zeichen). |
+| `avatarUrl` | string | Nein | URL des Avatar-Bilds. Lade es zuerst mit [`POST /v1/uploads/image`](/de/api-reference/uploads) mit `kind=aiAssistantAvatar` hoch und übergib dann die zurückgegebene URL (max. 500 Zeichen). |
+| `opening` | string | Nein | Die Begrüßung, mit der der Assistent den Chat eröffnet (max. 2000 Zeichen). |
+| `personality` | string | Nein | Erweitert: wie der Assistent wirken soll — sein Stil im Umgang mit Menschen (max. 600 Zeichen). |
+| `instructions` | string | Nein | Erweitert: Regeln und Vorlieben, die der Assistent befolgen muss (max. 1500 Zeichen). |
+| `starterButtons` | array of string | Nein | Bis zu 6 Schnellstart-Buttons, die angezeigt werden, bevor der Besucher tippt (je max. 120 Zeichen). |
+| `leadCapture` | object | Nein | Einstellungen zur Lead-Erfassung (siehe unten). |
+| `collectionId` | string | Nein | Platziert den Assistenten innerhalb einer Sammlung auf deiner Seite. |
+
+Das `leadCapture`-Objekt steuert, wie der Assistent nach dem Kontakt des
+Besuchers fragt:
+
+| Feld | Typ | Beschreibung |
+| --- | --- | --- |
+| `enabled` | boolean | Lead-Erfassung ein- oder ausschalten. |
+| `timing` | string | Wann gefragt wird: `start` (vor dem Chat) oder `end` (danach). |
+| `fields` | array | Welche Kontaktfelder erfasst werden. Jeder Eintrag hat `key` (`name`, `whatsapp`, `email` oder `instagram`), `enabled` und `required` (beide boolesch). |
+| `introText` | string | Nachricht, die über dem Formular angezeigt wird (max. 500 Zeichen). |
+| `consentRequired` | boolean | Ob der Besucher ein Einwilligungskästchen ankreuzen muss. |
+| `consentText` | string | Der Einwilligungstext, der neben dem Kästchen angezeigt wird (max. 1000 Zeichen). |
+| `allowSkip` | boolean | Ob der Besucher das Formular überspringen und trotzdem chatten kann. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item created successfully",
+  "data": {
+    "id": "507f1f77bcf86cd799439030",
+    "title": "Ask me anything",
+    "opening": "Hi! How can I help you shop today?",
+    "starterButtons": ["Best deals", "Shipping questions"],
+    "order": 0,
+    "isActive": true
+  }
+}
+```
+
+## Einen KI-Assistenten aktualisieren
+
+```
+PATCH /v1/ai-assistant/{id}
+```
+
+Ändert ein oder mehrere Felder eines Assistenten. Sende nur das, was du
+aktualisieren möchtest.
+
+### Anfrage
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "title": "Shopping helper", "isActive": false }' \
+  https://api.linkz.ee/v1/ai-assistant/507f1f77bcf86cd799439030
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string | Ja | Pfadparameter. ID des zu aktualisierenden Assistenten. |
+| `isActive` | boolean | Nein | Assistenten auf deiner Seite ein- oder ausblenden. |
+| `collectionId` | string \| null | Nein | Verschiebt den Assistenten in eine Sammlung oder sende `null`, um ihn aus seiner Sammlung zu entfernen. |
+
+Der Body akzeptiert außerdem jedes Feld aus
+[Einen KI-Assistenten erstellen](#create-an-ai-assistant).
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item updated successfully",
+  "data": {
+    "id": "507f1f77bcf86cd799439030",
+    "title": "Shopping helper",
+    "isActive": false
+  }
+}
+```
+
+## Einen KI-Assistenten löschen
+
+```
+DELETE /v1/ai-assistant/{id}
+```
+
+Entfernt einen Assistenten von deiner Seite. Bereits erfasste Leads bleiben
+erhalten.
+
+### Anfrage
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/ai-assistant/507f1f77bcf86cd799439030
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `id` | string | Ja | Pfadparameter. ID des zu löschenden Assistenten. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item deleted successfully",
+  "data": { "id": "507f1f77bcf86cd799439030" }
+}
+```
+
+## Verwandt
+
+<CardGroup cols={2}>
+  <Card title="Leads" icon="address-book" href="/de/api-reference/leads">
+    Lies und exportiere die Kontakte, die deine Assistenten erfassen.
+  </Card>
+  <Card title="Knowledge" icon="book" href="/de/api-reference/knowledge">
+    Verwalte die PDFs, aus denen deine Assistenten antworten.
+  </Card>
+  <Card title="Store" icon="store" href="/de/api-reference/store">
+    Lege den Tonfall des Assistenten und die Geschäftsbeschreibung fest.
+  </Card>
+  <Card title="Uploads" icon="image" href="/de/api-reference/uploads">
+    Lade das Avatar-Bild des Assistenten hoch.
+  </Card>
+</CardGroup>

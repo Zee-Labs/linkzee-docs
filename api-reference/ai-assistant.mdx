@@ -1,0 +1,234 @@
+---
+title: AI assistant
+icon: robot
+description: "Create and manage the AI assistants on your bio page — persona, greeting, starter buttons and lead capture."
+---
+
+An AI assistant is a chat card on your bio page: visitors tap it and talk to an
+assistant that answers in your store's voice, guides them to your products and
+services, and can capture their contact as a lead. These endpoints manage the
+assistants themselves — their title, avatar, greeting, starter buttons and lead
+capture settings.
+
+All paths live under `https://api.linkz.ee/v1/ai-assistant`. Every request needs
+the `Authorization: Bearer lzk_your_key` header, and write operations
+(POST/PATCH/DELETE) require a key with the **write** scope.
+
+<Note>
+The assistant's global behavior — tone of voice (`aiAssistantTone`) and the
+"about your business" knowledge text (`aboutBusiness`) — lives on the store, not
+on each assistant. Set those through
+[`PATCH /v1/store`](/api-reference/store#update-the-store-profile). The PDF
+knowledge base has its own endpoints — see the
+[Knowledge reference](/api-reference/knowledge).
+</Note>
+
+## List AI assistants
+
+```
+GET /v1/ai-assistant
+```
+
+Returns every AI assistant on your page, in display order.
+
+### Request
+
+```bash
+curl -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/ai-assistant
+```
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Items listed successfully",
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439030",
+      "collectionId": null,
+      "title": "Ask me anything",
+      "avatarUrl": "https://cdn.linkz.ee/u/abc/ai-assistant-avatar.webp?v=1721500000",
+      "opening": "Hi! How can I help you shop today?",
+      "personality": "Warm and to the point.",
+      "instructions": "Always suggest the featured products first.",
+      "starterButtons": ["Best deals", "Shipping questions"],
+      "leadCapture": {
+        "enabled": true,
+        "timing": "end",
+        "fields": [
+          { "key": "name", "enabled": true, "required": false },
+          { "key": "whatsapp", "enabled": true, "required": true }
+        ],
+        "introText": "Leave your contact for exclusive offers",
+        "consentRequired": true,
+        "consentText": "I agree to receive messages",
+        "allowSkip": true
+      },
+      "order": 0,
+      "isActive": true
+    }
+  ]
+}
+```
+
+## Create an AI assistant
+
+```
+POST /v1/ai-assistant
+```
+
+Creates a new assistant. Every field is optional — you can create it empty and
+fill it in later, or send the whole configuration in one call. New assistants
+are active by default.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Ask me anything",
+    "opening": "Hi! How can I help you shop today?",
+    "starterButtons": ["Best deals", "Shipping questions"]
+  }' \
+  https://api.linkz.ee/v1/ai-assistant
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `title` | string | No | Name shown on the assistant card (max 80 characters). |
+| `avatarUrl` | string | No | Avatar image URL. Upload it first with [`POST /v1/uploads/image`](/api-reference/uploads) using `kind=aiAssistantAvatar`, then pass the returned URL (max 500 characters). |
+| `opening` | string | No | The greeting the assistant opens the chat with (max 2000 characters). |
+| `personality` | string | No | Advanced: how the assistant should come across — its style of serving people (max 600 characters). |
+| `instructions` | string | No | Advanced: rules and preferences the assistant must follow (max 1500 characters). |
+| `starterButtons` | array of string | No | Up to 6 quick-start buttons shown before the visitor types (each max 120 characters). |
+| `leadCapture` | object | No | Lead capture settings (see below). |
+| `collectionId` | string | No | Place the assistant inside a collection on your page. |
+
+The `leadCapture` object controls how the assistant asks for the visitor's
+contact:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | boolean | Turn lead capture on or off. |
+| `timing` | string | When to ask: `start` (before the chat) or `end` (after it). |
+| `fields` | array | Which contact fields to collect. Each entry has `key` (`name`, `whatsapp`, `email`, or `instagram`), `enabled`, and `required` (both booleans). |
+| `introText` | string | Message shown above the form (max 500 characters). |
+| `consentRequired` | boolean | Whether the visitor must tick a consent checkbox. |
+| `consentText` | string | The consent text shown next to the checkbox (max 1000 characters). |
+| `allowSkip` | boolean | Whether the visitor can skip the form and chat anyway. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item created successfully",
+  "data": {
+    "id": "507f1f77bcf86cd799439030",
+    "title": "Ask me anything",
+    "opening": "Hi! How can I help you shop today?",
+    "starterButtons": ["Best deals", "Shipping questions"],
+    "order": 0,
+    "isActive": true
+  }
+}
+```
+
+## Update an AI assistant
+
+```
+PATCH /v1/ai-assistant/{id}
+```
+
+Changes one or more fields on an assistant. Send only what you want to update.
+
+### Request
+
+```bash
+curl -X PATCH \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "title": "Shopping helper", "isActive": false }' \
+  https://api.linkz.ee/v1/ai-assistant/507f1f77bcf86cd799439030
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the assistant to update. |
+| `isActive` | boolean | No | Show or hide the assistant on your page. |
+| `collectionId` | string \| null | No | Move the assistant to a collection, or send `null` to remove it from its collection. |
+
+The body also accepts every field from
+[Create an AI assistant](#create-an-ai-assistant).
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item updated successfully",
+  "data": {
+    "id": "507f1f77bcf86cd799439030",
+    "title": "Shopping helper",
+    "isActive": false
+  }
+}
+```
+
+## Delete an AI assistant
+
+```
+DELETE /v1/ai-assistant/{id}
+```
+
+Removes an assistant from your page. Leads it already captured are kept.
+
+### Request
+
+```bash
+curl -X DELETE \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/ai-assistant/507f1f77bcf86cd799439030
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `id` | string | Yes | Path parameter. ID of the assistant to delete. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "AI assistant item deleted successfully",
+  "data": { "id": "507f1f77bcf86cd799439030" }
+}
+```
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Leads" icon="address-book" href="/api-reference/leads">
+    Read and export the contacts your assistants capture.
+  </Card>
+  <Card title="Knowledge" icon="book" href="/api-reference/knowledge">
+    Manage the PDFs your assistants answer from.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Set the assistant tone of voice and business description.
+  </Card>
+  <Card title="Uploads" icon="image" href="/api-reference/uploads">
+    Upload the assistant avatar image.
+  </Card>
+</CardGroup>

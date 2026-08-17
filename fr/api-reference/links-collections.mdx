@@ -99,10 +99,12 @@ curl -X POST \
 | `thumbnailUrl` | string | Non | URL de l'image miniature. Téléversez d'abord l'image, puis transmettez l'URL renvoyée. |
 | `isActive` | boolean | Non | Indique si le lien est visible sur votre page. Vaut `true` par défaut. |
 | `isFeatured` | boolean | Non | Affiche le lien avec une mise en avant supplémentaire. Vaut `false` par défaut. |
-| `highlightFx` | string | Non | Mise en avant animée (Premium) : `""` (aucune) ou `"shake"`. |
+| `highlightFx` | string | Non | Mise en avant animée (Premium) : `""` (aucune), `"shake"`, `"shine"`, `"pulse"` ou `"bounce"`. |
 | `mediaType` | string | Non | Style du média de couverture : `""`, `"image"`, `"video"` ou `"embed"`. |
 | `mediaUrl` | string | Non | URL du média de couverture pour le `mediaType` choisi. |
 | `posterUrl` | string | Non | URL de l'image d'affiche pour une couverture vidéo. |
+| `scheduledStartAt` | string \| null | Non | Programmation : instant (ISO 8601, UTC) à partir duquel le lien apparaît. `null` l'efface. Les deux à `null` signifie toujours visible. |
+| `scheduledEndAt` | string \| null | Non | Programmation : instant (ISO 8601, UTC) auquel le lien disparaît. Doit être postérieur à `scheduledStartAt`. `null` l'efface. |
 
 #### Réponse
 
@@ -155,10 +157,12 @@ curl -X PATCH \
 | `thumbnailUrl` | string | Non | Nouvelle URL de l'image miniature. |
 | `isActive` | boolean | Non | Affiche ou masque le lien. |
 | `isFeatured` | boolean | Non | Active ou désactive la mise en avant supplémentaire. |
-| `highlightFx` | string | Non | `""` (aucune) ou `"shake"` (Premium). |
+| `highlightFx` | string | Non | `""` (aucune), `"shake"`, `"shine"`, `"pulse"` ou `"bounce"` (Premium). |
 | `mediaType` | string | Non | `""`, `"image"`, `"video"` ou `"embed"`. |
 | `mediaUrl` | string | Non | URL du média de couverture. |
 | `posterUrl` | string | Non | URL de l'image d'affiche pour une couverture vidéo. |
+| `scheduledStartAt` | string \| null | Non | Programmation : instant (ISO 8601, UTC) à partir duquel le lien apparaît. `null` l'efface. |
+| `scheduledEndAt` | string \| null | Non | Programmation : instant (ISO 8601, UTC) auquel le lien disparaît. Doit être postérieur à `scheduledStartAt`. `null` l'efface. |
 
 #### Réponse
 
