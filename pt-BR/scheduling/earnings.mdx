@@ -46,9 +46,18 @@ Abaixo dos cards: um **gráfico diário** do que você recebeu, o corte por
 
 ## Transações
 
-Cada pagamento, um por linha: cliente, serviço, forma de pagamento, data e
-valor (estornos aparecem em outra cor). Use a busca para achar um pagamento
-por **nome, telefone, e-mail ou serviço**.
+A lista funciona como um extrato bancário. Um pagamento aparece como linha
+**positiva** — cliente, serviço, forma de pagamento, data e valor. Quando um
+pagamento é estornado, a linha original permanece e uma segunda linha,
+**negativa** e rotulada **Reembolso**, aparece na data do estorno — você
+sempre vê o movimento completo, não só o resultado final. Use a busca para
+achar um pagamento por **nome, telefone, e-mail ou serviço**.
+
+<Note>
+  Estornos feitos direto no seu dashboard do Stripe também aparecem aqui, em
+  instantes. Um estorno externo **não** cancela o agendamento — cancele
+  também na Agenda se o atendimento não for acontecer.
+</Note>
 
 ## Transparência das taxas
 

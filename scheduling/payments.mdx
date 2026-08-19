@@ -48,14 +48,34 @@ When a service charges, a **payment step** appears at the end of booking:
 3. The booking is **confirmed the moment the payment goes through** — that's
    when confirmations, reminders and the Google Meet link (if any) are sent.
 
-If they don't finish paying, the hold expires after 20 minutes and the slot
-opens up again automatically — no dead slots.
+A **countdown** on the payment form shows how long the slot is still held.
+If the time runs out, the form gives way to a clear notice with a **Book
+again** button — and the slot opens up automatically, so there are no dead
+slots.
+
+### After the payment
+
+The confirmation screen shows everything they booked — service, date and
+time, professional and the **amount paid** — plus their manage link. For
+online services, the **Google Meet link** appears right on that screen as
+soon as it's generated. Paid bookings also get a **View receipt** link to the
+Stripe receipt, which travels with the confirmation email and stays available
+on the booking's manage page.
 
 ## Refunds
 
 When a booking with payment is cancelled **within your cancellation policy**
 (by the visitor or by you), the payment is **refunded automatically in full**
 — including the Linkzee fee.
+
+Your client is kept in the loop: the **cancellation email** explains that the
+amount goes back to the original payment method, and the booking's manage
+page shows **Refund in progress** until it becomes **Payment refunded**.
+
+You can also refund a payment straight from your **Stripe dashboard**. It
+shows up in your Linkzee **Earnings** within moments — and it does **not**
+cancel the appointment: money and schedule are separate decisions, so cancel
+the booking too if the service won't happen.
 
 ## Fees
 

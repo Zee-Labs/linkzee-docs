@@ -52,14 +52,35 @@ agendamento:
 3. O agendamento é **confirmado no instante em que o pagamento aprova** — é aí
    que saem as confirmações, os lembretes e o link do Google Meet (se houver).
 
-Se ele não concluir o pagamento, a reserva expira em 20 minutos e o horário
-volta a ficar disponível automaticamente — nenhum horário morto.
+Um **cronômetro** no formulário de pagamento mostra por quanto tempo o
+horário ainda está reservado. Se o tempo esgotar, o formulário dá lugar a um
+aviso claro com o botão **Agendar novamente** — e o horário volta a ficar
+disponível automaticamente, sem horários mortos.
+
+### Depois do pagamento
+
+A tela de confirmação mostra tudo o que foi agendado — serviço, data e
+horário, profissional e o **valor pago** — além do link de gestão. Em
+serviços online, o **link do Google Meet** aparece ali mesmo assim que é
+gerado. Agendamentos pagos também ganham o link **Ver recibo**, com o recibo
+do Stripe — que vai junto no e-mail de confirmação e fica disponível na
+página de gestão do agendamento.
 
 ## Estornos
 
 Quando um agendamento pago é cancelado **dentro da sua política de
 cancelamento** (pelo visitante ou por você), o pagamento é **estornado
 automaticamente por inteiro** — incluindo a taxa do Linkzee.
+
+Seu cliente fica sabendo de tudo: o **e-mail de cancelamento** explica que o
+valor volta para a forma de pagamento original, e a página de gestão do
+agendamento mostra **Estorno em processamento** até virar **Pagamento
+estornado**.
+
+Você também pode estornar um pagamento direto pelo seu **dashboard do
+Stripe**. Ele aparece nos seus **Recebimentos** do Linkzee em instantes — e
+**não** cancela o agendamento: dinheiro e agenda são decisões separadas;
+cancele também o horário se o atendimento não for acontecer.
 
 ## Taxas
 

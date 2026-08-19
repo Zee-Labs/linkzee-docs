@@ -50,9 +50,20 @@ rentables**.
 
 ## Transactions
 
-Chaque paiement, un par ligne : client, service, moyen de paiement, date et
-montant (les remboursements s'affichent dans une autre couleur). Utilisez la
-recherche pour retrouver un paiement par **nom, téléphone, e-mail ou service**.
+La liste se lit comme un relevé bancaire. Un paiement apparaît en ligne
+**positive** — client, service, moyen de paiement, date et montant. Quand un
+paiement est remboursé, la ligne d'origine reste et une seconde ligne,
+**négative** et étiquetée **Remboursement**, apparaît à la date du
+remboursement — vous voyez toujours le mouvement complet, pas seulement le
+résultat final. Utilisez la recherche pour retrouver un paiement par **nom,
+téléphone, e-mail ou service**.
+
+<Note>
+  Les remboursements effectués directement dans votre dashboard Stripe
+  apparaissent ici aussi, en quelques instants. Un remboursement externe
+  n'annule **pas** le rendez-vous — annulez aussi la réservation dans
+  l'agenda si la prestation n'aura pas lieu.
+</Note>
 
 ## Transparence des frais
 

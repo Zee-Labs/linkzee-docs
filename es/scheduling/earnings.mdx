@@ -46,9 +46,18 @@ Debajo de las tarjetas: un **gráfico diario** de lo recibido, el desglose por
 
 ## Transacciones
 
-Cada pago, uno por línea: cliente, servicio, forma de pago, fecha e importe
-(los reembolsos aparecen en otro color). Usa el buscador para encontrar un
-pago por **nombre, teléfono, correo o servicio**.
+La lista funciona como un extracto bancario. Un pago aparece como línea
+**positiva** — cliente, servicio, forma de pago, fecha e importe. Cuando un
+pago se reembolsa, la línea original se mantiene y aparece una segunda línea,
+**negativa** y etiquetada **Reembolso**, en la fecha del reembolso — siempre
+ves el movimiento completo, no solo el resultado final. Usa el buscador para
+encontrar un pago por **nombre, teléfono, correo o servicio**.
+
+<Note>
+  Los reembolsos hechos directamente en tu dashboard de Stripe también
+  aparecen aquí, en unos instantes. Un reembolso externo **no** cancela la
+  cita — cancélala también en la agenda si el servicio no va a realizarse.
+</Note>
 
 ## Transparencia de tarifas
 

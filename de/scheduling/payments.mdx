@@ -55,14 +55,37 @@ Wenn die Leistung kassiert, erscheint am Ende der Buchung ein
    dann gehen Bestätigungen, Erinnerungen und der Google-Meet-Link (falls
    vorhanden) raus.
 
-Wird die Zahlung nicht abgeschlossen, verfällt die Reservierung nach
-20 Minuten und der Termin wird automatisch wieder frei — keine toten Slots.
+Ein **Countdown** im Zahlungsformular zeigt, wie lange der Termin noch
+reserviert ist. Läuft die Zeit ab, weicht das Formular einem klaren Hinweis
+mit der Schaltfläche **Erneut buchen** — und der Termin wird automatisch
+wieder frei, keine toten Slots.
+
+### Nach der Zahlung
+
+Der Bestätigungsbildschirm zeigt alles zur Buchung — Leistung, Datum und
+Uhrzeit, Teammitglied und den **bezahlten Betrag** — plus den
+Verwaltungslink. Bei Online-Leistungen erscheint der **Google-Meet-Link**
+direkt auf diesem Bildschirm, sobald er erzeugt wurde. Bezahlte Buchungen
+erhalten außerdem den Link **Beleg ansehen** mit dem Stripe-Beleg — er ist
+auch in der Bestätigungs-E-Mail enthalten und bleibt auf der
+Verwaltungsseite der Buchung verfügbar.
 
 ## Erstattungen
 
 Wird eine bezahlte Buchung **innerhalb Ihrer Stornierungsrichtlinie**
 storniert (vom Besucher oder von Ihnen), wird die Zahlung **automatisch
 vollständig erstattet** — inklusive der Linkzee-Gebühr.
+
+Ihr Kunde bleibt informiert: die **Storno-E-Mail** erklärt, dass der Betrag
+auf die ursprüngliche Zahlungsmethode zurückgeht, und die Verwaltungsseite
+der Buchung zeigt **Erstattung läuft**, bis daraus **Zahlung erstattet**
+wird.
+
+Sie können eine Zahlung auch direkt in Ihrem **Stripe-Dashboard** erstatten.
+Sie erscheint innerhalb weniger Augenblicke in Ihren Linkzee-**Einnahmen** —
+und der Termin wird dadurch **nicht** storniert: Geld und Kalender sind
+getrennte Entscheidungen; stornieren Sie die Buchung zusätzlich, wenn der
+Termin nicht stattfindet.
 
 ## Gebühren
 
