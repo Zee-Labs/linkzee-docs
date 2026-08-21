@@ -1,13 +1,13 @@
 ---
 title: Agenda
 icon: calendar
-description: "Gestiona servicios, equipo, bloqueos, disponibilidad, citas, reseñas y la lista de espera en tu calendario de reservas de Linkzee."
+description: "Gestiona servicios, equipo, bloqueos, disponibilidad, citas, valoraciones y la lista de espera en tu calendario de reservas de Linkzee."
 ---
 
 Los endpoints de Agenda te permiten gestionar tu calendario de reservas de forma
 programática: define los **servicios** que la gente puede reservar, tu **equipo**,
 los **bloqueos** de los días en que no estás disponible, consulta la
-**disponibilidad** real para crear y gestionar **citas**, modera las **reseñas**
+**disponibilidad** real para crear y gestionar **citas**, modera las **valoraciones**
 que recibes y gestiona la **lista de espera**.
 
 Todas las rutas están bajo `https://api.linkz.ee/v1/agenda`. Cada solicitud
@@ -728,20 +728,20 @@ panel de Linkzee y no se puede hacer desde la API. La API solo puede leer el est
 y desconectar.
 </Warning>
 
-## Reseñas
+## Valoraciones
 
-Tras una cita completada, los visitantes pueden dejar una reseña. Las reseñas
+Tras una cita completada, los visitantes pueden dejar una valoración. Las valoraciones
 **nunca se editan ni se eliminan**: la única acción de moderación es ocultar una
 de tu página pública (sigue siendo visible para ti y puedes volver a mostrarla
 en cualquier momento).
 
-### Listar reseñas
+### Listar valoraciones
 
 ```
 GET /v1/agenda/reviews
 ```
 
-Devuelve todas las reseñas que ha recibido tu agenda, **incluidas las ocultas**.
+Devuelve todas las valoraciones que ha recibido tu agenda, **incluidas las ocultas**.
 
 #### Solicitud
 
@@ -763,23 +763,53 @@ curl -X GET \
       "rating": 5,
       "comment": "Great service, highly recommend!",
       "visitorName": "João Lima",
+      "visitorPhone": "+5511999998888",
+      "visitorEmail": "joao@example.com",
+      "offeringId": "665e11bb22cc33dd44ee55ff",
+      "offeringName": "Corte",
+      "staffId": null,
+      "appointmentAt": "2026-07-22T14:00:00.000Z",
       "hidden": false,
+      "featured": false,
+      "followedUpAt": null,
       "createdAt": "2026-07-22T18:30:00.000Z"
     }
   ]
 }
 ```
 
-Devuelve las 50 reseñas más recientes, la más nueva primero.
+#### Campos
 
-### Ocultar o mostrar una reseña
+| Campo | Descripción |
+| --- | --- |
+| `rating` | De 1 a 5 estrellas. |
+| `comment` | Lo que escribió el cliente. Nunca editable. |
+| `visitorName` / `visitorPhone` / `visitorEmail` | El cliente que reservó, para que puedas darle seguimiento. Los mismos datos de la cita. |
+| `offeringId` / `offeringName` | El servicio que se reseñó. |
+| `staffId` | El profesional que atendió la cita, cuando tienes equipo. |
+| `appointmentAt` | Cuándo ocurrió la cita (ISO 8601, UTC). |
+| `hidden` | `true` significa que no cuenta en tu promedio público. |
+| `featured` | `true` significa que aparece primero en el bloque de valoraciones de tu página. |
+| `followedUpAt` | Cuándo marcaste la valoración como atendida, o `null`. |
+
+<Note>
+  `visitorPhone` y `visitorEmail` son los datos de contacto de tu cliente —
+  los mismos que devuelve el endpoint de citas. Trata la respuesta como dato
+  personal y mantén tu clave de API privada.
+</Note>
+
+### Ocultar o mostrar una valoración
 
 ```
 PATCH /v1/agenda/reviews/{id}
 ```
 
-Alterna la visibilidad de una reseña en tu página pública. Requiere el permiso
+Alterna la visibilidad de una valoración en tu página pública. Requiere el permiso
 **write**.
+
+Las valoraciones nunca se editan ni se eliminan a través de la API — ocultar es la
+única acción de moderación disponible aquí. Destacar una valoración y marcarla
+como atendida son acciones de tu panel.
 
 #### Solicitud
 
@@ -795,8 +825,8 @@ curl -X PATCH \
 
 | Parámetro | Tipo | Obligatorio | Descripción |
 | --- | --- | --- | --- |
-| `id` | string | Sí | El ID de la reseña (en la ruta). |
-| `hidden` | boolean | Sí | `true` oculta la reseña de la página pública; `false` la muestra de nuevo. |
+| `id` | string | Sí | El ID de la valoración (en la ruta). |
+| `hidden` | boolean | Sí | `true` oculta la valoración de la página pública; `false` la muestra de nuevo. |
 
 #### Respuesta
 
@@ -809,7 +839,7 @@ curl -X PATCH \
 ```
 
 <Note>
-No hay endpoint para editar o eliminar una reseña: ocultar es la única acción de
+No hay endpoint para editar o eliminar una valoración: ocultar es la única acción de
 moderación, para que las valoraciones sigan siendo confiables.
 </Note>
 

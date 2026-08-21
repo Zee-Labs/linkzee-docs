@@ -739,7 +739,8 @@ page (it stays visible to you, and you can show it again at any time).
 GET /v1/agenda/reviews
 ```
 
-Returns every review your calendar has received, **including hidden ones**.
+Returns the reviews your calendar has received, **including hidden ones**,
+newest first.
 
 #### Request
 
@@ -761,14 +762,40 @@ curl -X GET \
       "rating": 5,
       "comment": "Great service, highly recommend!",
       "visitorName": "João Lima",
+      "visitorPhone": "+5511999998888",
+      "visitorEmail": "joao@example.com",
+      "offeringId": "665e11bb22cc33dd44ee55ff",
+      "offeringName": "Haircut",
+      "staffId": null,
+      "appointmentAt": "2026-07-22T14:00:00.000Z",
       "hidden": false,
+      "featured": false,
+      "followedUpAt": null,
       "createdAt": "2026-07-22T18:30:00.000Z"
     }
   ]
 }
 ```
 
-Returns the 50 most recent reviews, newest first.
+#### Fields
+
+| Field | Description |
+| --- | --- |
+| `rating` | 1 to 5 stars. |
+| `comment` | What the client wrote. Never editable. |
+| `visitorName` / `visitorPhone` / `visitorEmail` | The client who booked, so you can follow up. Same data as the appointment. |
+| `offeringId` / `offeringName` | The service that was reviewed. |
+| `staffId` | The professional who took the appointment, when you have a team. |
+| `appointmentAt` | When the appointment happened (ISO 8601, UTC). |
+| `hidden` | `true` means it doesn't count toward your public average. |
+| `featured` | `true` means it comes first in the Reviews block on your page. |
+| `followedUpAt` | When you marked the review as handled, or `null`. |
+
+<Note>
+  `visitorPhone` and `visitorEmail` are your client's contact details — the same
+  ones returned by the appointments endpoint. Treat the response as personal
+  data and keep your API key private.
+</Note>
 
 ### Hide or show a review
 
@@ -777,6 +804,10 @@ PATCH /v1/agenda/reviews/{id}
 ```
 
 Toggles a review's visibility on your public page. Requires the **write** scope.
+
+Reviews are never edited or deleted through the API — hiding is the only
+moderation action available here. Featuring a review and marking it as handled
+are done in your dashboard.
 
 #### Request
 

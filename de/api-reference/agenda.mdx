@@ -749,7 +749,7 @@ GET /v1/agenda/reviews
 ```
 
 Gibt jede Bewertung zurück, die Ihr Kalender erhalten hat, **einschließlich der
-ausgeblendeten**.
+ausgeblendeten**, neueste zuerst.
 
 #### Anfrage
 
@@ -771,14 +771,40 @@ curl -X GET \
       "rating": 5,
       "comment": "Great service, highly recommend!",
       "visitorName": "João Lima",
+      "visitorPhone": "+5511999998888",
+      "visitorEmail": "joao@example.com",
+      "offeringId": "665e11bb22cc33dd44ee55ff",
+      "offeringName": "Haircut",
+      "staffId": null,
+      "appointmentAt": "2026-07-22T14:00:00.000Z",
       "hidden": false,
+      "featured": false,
+      "followedUpAt": null,
       "createdAt": "2026-07-22T18:30:00.000Z"
     }
   ]
 }
 ```
 
-Gibt die 50 neuesten Bewertungen zurück, die neueste zuerst.
+#### Felder
+
+| Feld | Beschreibung |
+| --- | --- |
+| `rating` | 1 bis 5 Sterne. |
+| `comment` | Was der Kunde geschrieben hat. Nie bearbeitbar. |
+| `visitorName` / `visitorPhone` / `visitorEmail` | Der Kunde, der gebucht hat, damit Sie nachfassen können. Dieselben Daten wie beim Termin. |
+| `offeringId` / `offeringName` | Die bewertete Leistung. |
+| `staffId` | Die Fachkraft, die den Termin übernommen hat, wenn Sie ein Team haben. |
+| `appointmentAt` | Wann der Termin stattgefunden hat (ISO 8601, UTC). |
+| `hidden` | `true` bedeutet, dass sie nicht in Ihren öffentlichen Durchschnitt einfließt. |
+| `featured` | `true` bedeutet, dass sie im Bewertungsblock auf Ihrer Seite zuerst erscheint. |
+| `followedUpAt` | Wann Sie die Bewertung als bearbeitet markiert haben, oder `null`. |
+
+<Note>
+  `visitorPhone` und `visitorEmail` sind die Kontaktdaten Ihres Kunden —
+  dieselben, die auch der Termine-Endpunkt liefert. Behandeln Sie die Antwort
+  als personenbezogene Daten und halten Sie Ihren API-Schlüssel privat.
+</Note>
 
 ### Bewertung aus- oder einblenden
 
@@ -788,6 +814,10 @@ PATCH /v1/agenda/reviews/{id}
 
 Schaltet die Sichtbarkeit einer Bewertung auf Ihrer öffentlichen Seite um.
 Erfordert den **write**-Scope.
+
+Bewertungen werden über die API nie bearbeitet oder gelöscht — Ausblenden ist
+die einzige hier verfügbare Moderationsaktion. Eine Bewertung hervorzuheben
+oder als bearbeitet zu markieren geschieht in Ihrem Dashboard.
 
 #### Anfrage
 

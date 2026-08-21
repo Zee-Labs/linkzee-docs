@@ -1,0 +1,103 @@
+---
+title: Commissions
+icon: percent
+description: "Définissez ce que gagne chaque professionnel(le) par rendez-vous, suivez le total en cours, et clôturez la période au moment de payer."
+---
+
+Si des personnes travaillent avec vous, Linkzee fait le calcul des commissions
+à votre place : une règle par professionnel(le), un relevé qui tourne tout
+seul, et un bouton **Clôturer la période** pour le moment où vous réglez les
+comptes.
+
+<Note>
+  Linkzee **enregistre** les commissions — il ne fait pas circuler d'argent.
+  Le paiement de votre équipe se fait comme aujourd'hui (virement, espèces,
+  paie). Ce qui change, c'est que vous arrêtez de faire ce calcul dans un
+  tableur.
+</Note>
+
+## Définir la règle de chaque professionnel(le)
+
+Allez dans **Agenda → Équipe** et ouvrez un(e) professionnel(le) :
+
+<Steps>
+  <Step title="Activez Touche une commission">
+    Le bouton d'activation active la commission pour cette personne.
+  </Step>
+  <Step title="Choisissez pourcentage ou montant fixe">
+    **Pourcentage** du prix du service, ou **montant fixe** par rendez-vous.
+  </Step>
+  <Step title="Définissez la valeur">
+    Un pourcentage entre 0 et 100, ou un montant dans votre devise.
+  </Step>
+</Steps>
+
+La base est toujours le **prix plein du service** — le montant de votre liste
+de services, avant toute remise.
+
+### Services qui ne génèrent pas de commission
+
+Certains services ne doivent pas entrer dans le calcul. Dans
+**Agenda → Services**, chaque service a un bouton **Génère une commission**.
+Désactivez-le et ce service reste hors de la base de commission de **toute
+l'équipe**.
+
+## Quand une commission est comptée
+
+Une commission s'accumule quand le rendez-vous est **honoré** — pas au moment
+de la réservation, ni au moment où le client paie.
+
+Ce choix est délibéré : c'est le moment où le travail a réellement eu lieu, la
+règle fonctionne donc de la même façon que le client ait payé en ligne, payé
+sur place, ou pas payé du tout via Linkzee.
+
+Si un rendez-vous honoré est ensuite **remboursé** ou passe en **absence**, la
+commission est **annulée** automatiquement — y compris quand la période était
+déjà clôturée, auquel cas elle revient sous forme d'écriture négative pour que
+votre prochain règlement soit exact.
+
+## Suivre les totaux
+
+La carte **Commissions de l'équipe** se trouve sur votre page **Revenus**.
+Choisissez une période — 7, 30 ou 90 jours — et vous obtenez, par
+professionnel(le) :
+
+| Colonne | Ce qu'elle montre |
+| --- | --- |
+| **En cours** | Accumulé et pas encore réglé |
+| **Clôturé** | Déjà clôturé lors d'un règlement précédent |
+| **Écritures** | Combien de rendez-vous ont généré une commission |
+
+Ouvrez un(e) professionnel(le) pour voir chaque écriture : date, service,
+client, prix de base, commission et statut (**En cours**, **Clôturé** ou
+**Annulée**).
+
+## Clôturer la période
+
+Quand vous payez quelqu'un, cliquez sur **Clôturer la période**. Chaque
+écriture en attente de cette période est verrouillée comme **clôturée**, pour
+que la période suivante démarre propre et que vous sachiez toujours ce qui a
+déjà été payé.
+
+<Warning>
+  Clôturer une période est une action comptable — elle n'envoie pas d'argent.
+  Payez votre professionnel(le) comme vous le faites d'habitude, puis clôturez
+  la période pour l'enregistrer.
+</Warning>
+
+## Ce que voit votre équipe
+
+Les professionnel(le)s que vous avez invité(e)s (voir
+[Équipe](/fr/scheduling/team)) ont leur propre espace avec **Mon agenda** et
+**Mes commissions** — uniquement leurs propres écritures. Ces personnes ne
+voient jamais les chiffres des autres professionnel(le)s ni les finances de
+votre activité.
+
+<CardGroup cols={2}>
+  <Card title="Équipe" icon="users" href="/fr/scheduling/team">
+    Ajoutez des professionnel(le)s et invitez-les dans leur propre espace.
+  </Card>
+  <Card title="Encaissements et virements" icon="wallet" href="/fr/scheduling/earnings">
+    Tout ce que vous avez reçu, avec les frais et les virements.
+  </Card>
+</CardGroup>

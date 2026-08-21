@@ -1,0 +1,100 @@
+---
+title: Provisionen
+icon: percent
+description: "Legen Sie fest, was jede Fachkraft pro Termin verdient, verfolgen Sie den laufenden Stand, und schließen Sie den Zeitraum ab, wenn Sie auszahlen."
+---
+
+Arbeiten Menschen mit Ihnen zusammen, übernimmt Linkzee die Provisionsrechnung
+für Sie: eine Regel pro Fachkraft, ein laufender Kontoauszug und eine
+Schaltfläche **Zeitraum abrechnen** für den Moment, in dem Sie abrechnen.
+
+<Note>
+  Linkzee **erfasst** Provisionen — es bewegt kein Geld. Die Auszahlung an Ihr
+  Team läuft weiter genau so, wie sie es heute schon tut (Überweisung, Bargeld,
+  Lohnabrechnung). Was sich ändert: Sie machen diese Rechnung nicht mehr in
+  einer Tabelle.
+</Note>
+
+## Legen Sie die Regel für jede Fachkraft fest
+
+Gehen Sie zu **Kalender → Team** und öffnen Sie eine Fachkraft:
+
+<Steps>
+  <Step title="Schalten Sie Erhält Provision ein">
+    Der Schalter aktiviert die Provision für diese Person.
+  </Step>
+  <Step title="Wählen Sie Prozentsatz oder Festbetrag">
+    **Prozentsatz** vom Leistungspreis oder ein **Festbetrag** pro Termin.
+  </Step>
+  <Step title="Legen Sie den Wert fest">
+    Ein Prozentsatz zwischen 0 und 100 oder ein Betrag in Ihrer Währung.
+  </Step>
+</Steps>
+
+Die Grundlage ist immer der **volle Leistungspreis** — der Wert aus Ihrer
+Leistungsliste, vor jedem Rabatt.
+
+### Leistungen ohne Provision
+
+Manche Leistungen sollen gar nicht in die Rechnung eingehen. Unter
+**Kalender → Leistungen** hat jede Leistung einen Schalter **Erzeugt
+Provision**. Schalten Sie ihn aus, bleibt diese Leistung für **alle** im Team
+außerhalb der Provisionsgrundlage.
+
+## Wann eine Provision gezählt wird
+
+Eine Provision entsteht, wenn der Termin **abgeschlossen** ist — nicht, wenn er
+gebucht wird, und nicht, wenn der Kunde zahlt.
+
+Dieser Zeitpunkt ist bewusst gewählt: Es ist der Moment, in dem die Arbeit
+tatsächlich stattgefunden hat. Deshalb verhält es sich immer gleich, egal ob
+der Kunde online, vor Ort oder gar nicht über Linkzee gezahlt hat.
+
+Wird ein abgeschlossener Termin später **erstattet** oder zu einem
+**Nichterscheinen**, wird die Provision automatisch **zurückgebucht** — auch
+wenn der Zeitraum bereits abgeschlossen war. In dem Fall kommt sie als
+negativer Eintrag zurück, damit Ihre nächste Abrechnung stimmt.
+
+## Verfolgen Sie die Summen
+
+Die Karte **Team-Provisionen** befindet sich auf Ihrer Seite **Einnahmen**. Wählen
+Sie ein Zeitfenster — 7, 30 oder 90 Tage — und Sie erhalten pro Fachkraft:
+
+| Spalte | Was sie zeigt |
+| --- | --- |
+| **Offen** | Aufgelaufen und noch nicht abgerechnet |
+| **Abgerechnet** | Bereits in einer vorherigen Abrechnung abgeschlossen |
+| **Einträge** | Wie viele Termine eine Provision erzeugt haben |
+
+Öffnen Sie eine Fachkraft, um jeden Eintrag zu sehen: Datum, Leistung, Kunde,
+Basispreis, Provision und Status (**Offen**, **Abgerechnet** oder
+**Storniert**).
+
+## Zeitraum abrechnen
+
+Wenn Sie jemanden bezahlen, klicken Sie auf **Zeitraum abrechnen**. Jeder
+offene Eintrag in diesem Zeitfenster wird als **abgerechnet** gesperrt, sodass
+der nächste Zeitraum sauber beginnt und Sie immer wissen, was bereits bezahlt
+wurde.
+
+<Warning>
+  Das Abschließen eines Zeitraums ist ein buchhalterischer Vorgang — es sendet
+  kein Geld. Zahlen Sie Ihre Fachkraft wie gewohnt aus und schließen Sie den
+  Zeitraum danach ab, um es zu erfassen.
+</Warning>
+
+## Was Ihr Team sieht
+
+Fachkräfte, die Sie eingeladen haben (siehe [Team](/de/scheduling/team)),
+erhalten einen eigenen Bereich mit **Mein Kalender** und **Meine Provisionen**
+— nur ihre eigenen Einträge. Sie sehen niemals die Zahlen anderer Fachkräfte
+oder die Finanzen Ihres Geschäfts.
+
+<CardGroup cols={2}>
+  <Card title="Team" icon="users" href="/de/scheduling/team">
+    Fügen Sie Fachkräfte hinzu und laden Sie sie in ihren eigenen Bereich ein.
+  </Card>
+  <Card title="Einnahmen & Auszahlungen" icon="wallet" href="/de/scheduling/earnings">
+    Alles, was Sie erhalten haben, mit Gebühren und Auszahlungen.
+  </Card>
+</CardGroup>

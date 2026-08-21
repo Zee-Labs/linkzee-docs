@@ -746,7 +746,8 @@ réafficher à tout moment).
 GET /v1/agenda/reviews
 ```
 
-Renvoie tous les avis reçus par votre agenda, **y compris les avis masqués**.
+Renvoie les avis reçus par votre agenda, **y compris les avis masqués**, du
+plus récent au plus ancien.
 
 #### Requête
 
@@ -768,14 +769,40 @@ curl -X GET \
       "rating": 5,
       "comment": "Great service, highly recommend!",
       "visitorName": "João Lima",
+      "visitorPhone": "+5511999998888",
+      "visitorEmail": "joao@example.com",
+      "offeringId": "665e11bb22cc33dd44ee55ff",
+      "offeringName": "Haircut",
+      "staffId": null,
+      "appointmentAt": "2026-07-22T14:00:00.000Z",
       "hidden": false,
+      "featured": false,
+      "followedUpAt": null,
       "createdAt": "2026-07-22T18:30:00.000Z"
     }
   ]
 }
 ```
 
-Renvoie les 50 avis les plus récents, du plus récent au plus ancien.
+#### Champs
+
+| Champ | Description |
+| --- | --- |
+| `rating` | De 1 à 5 étoiles. |
+| `comment` | Ce que le client a écrit. Jamais modifiable. |
+| `visitorName` / `visitorPhone` / `visitorEmail` | Le client qui a réservé, pour que vous puissiez le recontacter. Mêmes données que la réservation. |
+| `offeringId` / `offeringName` | Le service évalué. |
+| `staffId` | Le(la) professionnel(le) qui a pris le rendez-vous, quand vous avez une équipe. |
+| `appointmentAt` | Quand le rendez-vous a eu lieu (ISO 8601, UTC). |
+| `hidden` | `true` signifie qu'il ne compte pas dans votre moyenne publique. |
+| `featured` | `true` signifie qu'il passe en premier dans le bloc d'avis de votre page. |
+| `followedUpAt` | Quand vous avez marqué l'avis comme traité, ou `null`. |
+
+<Note>
+  `visitorPhone` et `visitorEmail` sont les coordonnées de votre client — les
+  mêmes que celles renvoyées par l'endpoint des réservations. Traitez la
+  réponse comme une donnée personnelle et gardez votre clé d'API privée.
+</Note>
 
 ### Masquer ou afficher un avis
 
@@ -784,6 +811,10 @@ PATCH /v1/agenda/reviews/{id}
 ```
 
 Bascule la visibilité d'un avis sur votre page publique. Requiert le scope **write**.
+
+Les avis ne sont jamais modifiés ni supprimés via l'API — le masquage est la
+seule action de modération disponible ici. Mettre en avant un avis et le
+marquer comme traité se font depuis votre tableau de bord.
 
 #### Requête
 

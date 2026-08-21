@@ -766,14 +766,40 @@ curl -X GET \
       "rating": 5,
       "comment": "Great service, highly recommend!",
       "visitorName": "João Lima",
+      "visitorPhone": "+5511999998888",
+      "visitorEmail": "joao@example.com",
+      "offeringId": "665e11bb22cc33dd44ee55ff",
+      "offeringName": "Corte",
+      "staffId": null,
+      "appointmentAt": "2026-07-22T14:00:00.000Z",
       "hidden": false,
+      "featured": false,
+      "followedUpAt": null,
       "createdAt": "2026-07-22T18:30:00.000Z"
     }
   ]
 }
 ```
 
-Retorna as 50 avaliações mais recentes, da mais nova para a mais antiga.
+#### Campos
+
+| Campo | Descrição |
+| --- | --- |
+| `rating` | De 1 a 5 estrelas. |
+| `comment` | O que o cliente escreveu. Nunca editável. |
+| `visitorName` / `visitorPhone` / `visitorEmail` | O cliente que agendou, para você dar retorno. Os mesmos dados do agendamento. |
+| `offeringId` / `offeringName` | O serviço avaliado. |
+| `staffId` | O profissional que atendeu, quando você tem equipe. |
+| `appointmentAt` | Quando o atendimento aconteceu (ISO 8601, UTC). |
+| `hidden` | `true` significa que não conta na sua média pública. |
+| `featured` | `true` significa que vem primeiro no bloco de avaliações da sua página. |
+| `followedUpAt` | Quando você marcou a avaliação como tratada, ou `null`. |
+
+<Note>
+  `visitorPhone` e `visitorEmail` são os dados de contato do seu cliente — os
+  mesmos devolvidos pelo endpoint de agendamentos. Trate a resposta como dado
+  pessoal e mantenha a sua chave de API privada.
+</Note>
 
 ### Ocultar ou exibir uma avaliação
 
@@ -783,6 +809,10 @@ PATCH /v1/agenda/reviews/{id}
 
 Alterna a visibilidade de uma avaliação na sua página pública. Exige o escopo
 **write**.
+
+Avaliações nunca são editadas nem apagadas pela API — ocultar é a única ação de
+moderação disponível aqui. Destacar uma avaliação e marcá-la como tratada são
+ações do seu painel.
 
 #### Requisição
 

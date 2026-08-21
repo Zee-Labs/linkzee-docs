@@ -1,0 +1,94 @@
+---
+title: Commissions
+icon: percent
+description: "Set what each professional earns per appointment, follow the running total, and close the period when you pay."
+---
+
+If people work with you, Linkzee keeps the commission math for you: a rule per
+professional, a running statement, and a **close period** button for when you
+settle up.
+
+<Note>
+  Linkzee **records** commissions — it doesn't move money. Payment to your team
+  happens the way it already does today (transfer, cash, payroll). What changes
+  is that you stop doing this math in a spreadsheet.
+</Note>
+
+## Set the rule for each professional
+
+Go to **Scheduling → Team** and open a professional:
+
+<Steps>
+  <Step title="Turn on Earns commission">
+    The toggle enables commission for that person.
+  </Step>
+  <Step title="Choose percentage or fixed amount">
+    **Percentage** of the service price, or a **fixed amount** per appointment.
+  </Step>
+  <Step title="Set the value">
+    A percentage between 0 and 100, or an amount in your currency.
+  </Step>
+</Steps>
+
+The base is always the **full service price** — the value on your services
+list, before any discount.
+
+### Services that don't pay commission
+
+Some services shouldn't enter the math at all. In **Scheduling → Services**,
+each service has an **Earns commission** toggle. Turn it off and that
+service stays out of the commission base for **everyone** on the team.
+
+## When a commission is counted
+
+A commission accrues when the appointment is **completed** — not when it is
+booked, and not when the client pays.
+
+That timing is deliberate: it is the moment the work actually happened, so it
+behaves the same whether the client paid online, paid in person, or didn't pay
+you through Linkzee at all.
+
+If a completed appointment is later **refunded** or turned into a **no-show**,
+the commission is **reversed** automatically — including when the period was
+already closed, where it comes back as a negative entry so your next settlement
+is correct.
+
+## Follow the totals
+
+The **Team commissions** card lives on your **Earnings** page. Pick a window — 7,
+30 or 90 days — and you get, per professional:
+
+| Column | What it shows |
+| --- | --- |
+| **Open** | Accrued and not settled yet |
+| **Settled** | Already closed in a previous settlement |
+| **Entries** | How many appointments generated commission |
+
+Open a professional to see every entry: date, service, client, base price,
+commission and status (**Open**, **Settled** or **Reversed**).
+
+## Settle the period
+
+When you pay someone, click **Settle period**. Every open entry in that window
+is locked as **settled**, so the next period starts clean and you always know
+what has already been paid.
+
+<Warning>
+  Settling a period is a bookkeeping action — it doesn't send money. Pay your
+  professional the way you normally do, then settle the period to record it.
+</Warning>
+
+## What your team sees
+
+Professionals you invited (see [Team](/scheduling/team)) get their own area
+with **My schedule** and **My commissions** — their own entries only. They
+never see other professionals' numbers or your store's finances.
+
+<CardGroup cols={2}>
+  <Card title="Team" icon="users" href="/scheduling/team">
+    Add professionals and invite them to their own area.
+  </Card>
+  <Card title="Earnings" icon="wallet" href="/scheduling/earnings">
+    Everything you received, with fees and payouts.
+  </Card>
+</CardGroup>

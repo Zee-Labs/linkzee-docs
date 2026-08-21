@@ -1,0 +1,96 @@
+---
+title: Comissões
+icon: percent
+description: "Defina quanto cada profissional ganha por atendimento, acompanhe o acumulado e feche o período quando pagar."
+---
+
+Se tem gente trabalhando com você, o Linkzee faz a conta da comissão: uma regra
+por profissional, um extrato que corre sozinho e um botão de **fechar período**
+para quando você acertar as contas.
+
+<Note>
+  O Linkzee **registra** as comissões — ele não movimenta dinheiro. O pagamento
+  para a sua equipe continua acontecendo como já acontece hoje (transferência,
+  dinheiro, folha). O que muda é você parar de fazer essa conta na planilha.
+</Note>
+
+## Defina a regra de cada profissional
+
+Vá em **Agenda → Equipe** e abra um profissional:
+
+<Steps>
+  <Step title="Ligue Recebe comissão">
+    A chave habilita a comissão para aquela pessoa.
+  </Step>
+  <Step title="Escolha porcentagem ou valor fixo">
+    **Porcentagem** do preço do serviço, ou **valor fixo** por atendimento.
+  </Step>
+  <Step title="Defina o valor">
+    Uma porcentagem entre 0 e 100, ou um valor na sua moeda.
+  </Step>
+</Steps>
+
+A base é sempre o **preço cheio do serviço** — o valor da sua lista de
+serviços, antes de qualquer desconto.
+
+### Serviços que não geram comissão
+
+Alguns serviços não devem entrar na conta. Em **Agenda → Serviços**, cada
+serviço tem a chave **Gera comissão**. Desligue e aquele serviço fica fora da
+base de comissão de **todo mundo** da equipe.
+
+## Quando a comissão é contada
+
+A comissão acumula quando o atendimento é **concluído** — não quando é
+agendado, nem quando o cliente paga.
+
+Esse momento é escolhido de propósito: é quando o trabalho de fato aconteceu,
+então funciona igual se o cliente pagou online, pagou presencialmente ou nem
+pagou pelo Linkzee.
+
+Se um atendimento concluído for depois **estornado** ou virar **falta**, a
+comissão é **revertida** automaticamente — inclusive quando o período já estava
+fechado, caso em que ela volta como lançamento negativo para o próximo acerto
+sair certo.
+
+## Acompanhe os totais
+
+O card **Comissões da equipe** fica na sua página de **Recebimentos**. Escolha
+a janela — 7, 30 ou 90 dias — e você tem, por profissional:
+
+| Coluna | O que mostra |
+| --- | --- |
+| **Em aberto** | Acumulado e ainda não fechado |
+| **Fechado** | Já travado num acerto anterior |
+| **Lançamentos** | Quantos atendimentos geraram comissão |
+
+Abra um profissional para ver cada lançamento: data, serviço, cliente, base,
+comissão e status (**Em aberto**, **Fechado** ou **Revertido**).
+
+## Feche o período
+
+Quando você pagar alguém, clique em **Fechar período**. Todos os lançamentos em
+aberto daquela janela são travados como **fechados**, então o próximo período
+começa limpo e você sempre sabe o que já foi pago.
+
+<Warning>
+  Fechar o período é um registro contábil — não envia dinheiro. Pague o
+  profissional do jeito que você já paga e depois feche o período para
+  registrar.
+</Warning>
+
+## O que a sua equipe vê
+
+Os profissionais que você convidou (veja [Equipe](/pt-BR/scheduling/team))
+ganham uma área própria com **Minha agenda** e **Minhas comissões** — só os
+lançamentos deles. Eles nunca veem os números dos outros profissionais nem o
+financeiro do seu negócio.
+
+<CardGroup cols={2}>
+  <Card title="Equipe" icon="users" href="/pt-BR/scheduling/team">
+    Adicione profissionais e convide para a área própria deles.
+  </Card>
+  <Card title="Recebimentos" icon="wallet" href="/pt-BR/scheduling/earnings">
+    Tudo o que você recebeu, com taxas e repasses.
+  </Card>
+</CardGroup>

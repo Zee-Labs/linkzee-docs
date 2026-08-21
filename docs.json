@@ -71,6 +71,7 @@
                   "your-page/social-networks",
                   "your-page/spotify",
                   "your-page/share-and-support",
+                  "your-page/reviews-block",
                   "your-page/header"
                 ]
               },
@@ -102,6 +103,7 @@
                   "scheduling/blocks",
                   "scheduling/google-calendar",
                   "scheduling/team-google-calendar",
+                  "scheduling/commissions",
                   "scheduling/reminders",
                   "scheduling/reschedule-cancel",
                   "scheduling/reviews",
@@ -277,6 +279,7 @@
                   "pt-BR/your-page/social-networks",
                   "pt-BR/your-page/spotify",
                   "pt-BR/your-page/share-and-support",
+                  "pt-BR/your-page/reviews-block",
                   "pt-BR/your-page/header"
                 ]
               },
@@ -308,6 +311,7 @@
                   "pt-BR/scheduling/blocks",
                   "pt-BR/scheduling/google-calendar",
                   "pt-BR/scheduling/team-google-calendar",
+                  "pt-BR/scheduling/commissions",
                   "pt-BR/scheduling/reminders",
                   "pt-BR/scheduling/reschedule-cancel",
                   "pt-BR/scheduling/reviews",
@@ -483,6 +487,7 @@
                   "es/your-page/social-networks",
                   "es/your-page/spotify",
                   "es/your-page/share-and-support",
+                  "es/your-page/reviews-block",
                   "es/your-page/header"
                 ]
               },
@@ -514,6 +519,7 @@
                   "es/scheduling/blocks",
                   "es/scheduling/google-calendar",
                   "es/scheduling/team-google-calendar",
+                  "es/scheduling/commissions",
                   "es/scheduling/reminders",
                   "es/scheduling/reschedule-cancel",
                   "es/scheduling/reviews",
@@ -689,6 +695,7 @@
                   "fr/your-page/social-networks",
                   "fr/your-page/spotify",
                   "fr/your-page/share-and-support",
+                  "fr/your-page/reviews-block",
                   "fr/your-page/header"
                 ]
               },
@@ -720,6 +727,7 @@
                   "fr/scheduling/blocks",
                   "fr/scheduling/google-calendar",
                   "fr/scheduling/team-google-calendar",
+                  "fr/scheduling/commissions",
                   "fr/scheduling/reminders",
                   "fr/scheduling/reschedule-cancel",
                   "fr/scheduling/reviews",
@@ -895,6 +903,7 @@
                   "de/your-page/social-networks",
                   "de/your-page/spotify",
                   "de/your-page/share-and-support",
+                  "de/your-page/reviews-block",
                   "de/your-page/header"
                 ]
               },
@@ -926,6 +935,7 @@
                   "de/scheduling/blocks",
                   "de/scheduling/google-calendar",
                   "de/scheduling/team-google-calendar",
+                  "de/scheduling/commissions",
                   "de/scheduling/reminders",
                   "de/scheduling/reschedule-cancel",
                   "de/scheduling/reviews",
