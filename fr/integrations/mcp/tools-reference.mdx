@@ -12,7 +12,8 @@ afin que vous sachiez quoi demander.
 <Note>
   Les actions qui **lisent** vos données nécessitent une clé avec le scope
   **read**. Les actions qui **créent, mettent à jour ou suppriment** nécessitent
-  une clé avec le scope **write**. Consultez
+  une clé avec le scope **write**. L'outil de revenus est l'exception : il
+  nécessite le scope **finance**, qui n'est jamais inclus par défaut. Consultez
   [Clés API](/fr/integrations/api/api-keys) pour définir le bon scope.
 </Note>
 
@@ -72,6 +73,7 @@ afin que vous sachiez quoi demander.
 | Modifications | Reprogrammer des rendez-vous et modifier leur statut. |
 | Avis et liste d'attente | Lire vos avis (y compris les avis masqués), masquer ou afficher un avis, et gérer la liste d'attente. |
 | Google | Vérifier l'état de la connexion à Google Agenda, et la déconnecter. |
+| Revenus | Lire vos revenus agrégés sur une période (nécessite le scope **finance** ; aucune donnée client). |
 
 ## Assistant IA
 
@@ -89,7 +91,9 @@ afin que vous sachiez quoi demander.
 
 Si vous voulez savoir exactement quels outils votre agent voit, voici la liste
 complète. Avec une clé **read**, l'agent obtient les 11 outils de lecture ; une
-clé **write** ajoute par-dessus les 28 outils d'écriture.
+clé **write** ajoute par-dessus les 28 outils d'écriture. Une clé avec le scope
+**finance** obtient aussi `get_earnings` (et une clé finance seule obtient
+uniquement celui-là).
 
 ### Outils de lecture
 
@@ -106,6 +110,12 @@ clé **write** ajoute par-dessus les 28 outils d'écriture.
 | `list_reviews` | Lister les avis que vous avez reçus, y compris les avis masqués. |
 | `list_waitlist` | Lister les visiteurs en attente d'un créneau. |
 | `search_leads` | Trouver un client existant par nom, téléphone, e-mail ou Instagram. |
+
+### Outils de finance
+
+| Outil | Ce qu'il fait |
+| --- | --- |
+| `get_earnings` | Revenus agrégés sur une période : brut, remboursements, frais et net, plus série quotidienne et répartitions. Requiert le scope `finance` ; ne renvoie aucune donnée client. |
 
 ### Outils d'écriture
 

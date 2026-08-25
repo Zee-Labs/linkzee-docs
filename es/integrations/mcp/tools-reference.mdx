@@ -12,7 +12,9 @@ qué pedir.
 <Note>
   Las acciones que **leen** tus datos necesitan una clave con el ámbito **read**.
   Las acciones que **crean, actualizan o eliminan** necesitan una clave con el
-  ámbito **write**. Consulta [Claves de API](/es/integrations/api/api-keys) para
+  ámbito **write**. La herramienta de ingresos es la excepción: necesita el
+  ámbito **finance**, que nunca se incluye por defecto. Consulta
+  [Claves de API](/es/integrations/api/api-keys) para
   configurar el ámbito adecuado.
 </Note>
 
@@ -72,6 +74,7 @@ qué pedir.
 | Cambios | Reprograma citas y cambia su estado. |
 | Reseñas y lista de espera | Lee tus reseñas (incluidas las ocultas), oculta o muestra una reseña y gestiona la lista de espera. |
 | Google | Comprueba el estado de la conexión con Google Calendar y desconéctalo. |
+| Ingresos | Lee tus ingresos agregados de un periodo (necesita el ámbito **finance**; sin datos de clientes). |
 
 ## Asistente de IA
 
@@ -89,7 +92,9 @@ qué pedir.
 
 Si quieres saber exactamente qué herramientas ve tu agente, aquí tienes la lista
 completa. Con una clave **read**, el agente obtiene las 11 herramientas de
-lectura; una clave **write** añade además las 28 herramientas de escritura.
+lectura; una clave **write** añade además las 28 herramientas de escritura. Una
+clave con el ámbito **finance** también obtiene `get_earnings` (y una clave solo
+finance obtiene únicamente esa).
 
 ### Herramientas de lectura
 
@@ -106,6 +111,12 @@ lectura; una clave **write** añade además las 28 herramientas de escritura.
 | `list_reviews` | Lista las reseñas que has recibido, incluidas las ocultas. |
 | `list_waitlist` | Lista los visitantes que esperan una franja. |
 | `search_leads` | Busca un cliente existente por nombre, teléfono, email o Instagram. |
+
+### Herramientas financieras
+
+| Herramienta | Qué hace |
+| --- | --- |
+| `get_earnings` | Ingresos agregados de un periodo: bruto, reembolsos, tarifas y neto, además de la serie diaria y los desgloses. Requiere el ámbito `finance`; no devuelve datos de clientes. |
 
 ### Herramientas de escritura
 

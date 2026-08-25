@@ -913,6 +913,28 @@ curl -X DELETE \
 { "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
 ```
 
+## Earnings
+
+### Get earnings summary
+
+`GET /v1/agenda/earnings` — requires the **`finance`** scope (never included in a
+key by default; see [Authentication](/api-reference/authentication)).
+
+Aggregated numbers for a period: gross, refunds, fees and net, plus a daily
+series and breakdowns by payment method and service. The response contains **no
+customer data** — the transaction list with names and phone numbers is only
+available in the dashboard.
+
+| Query param | Type | Description |
+| --- | --- | --- |
+| `from` | `YYYY-MM-DD` | Start of the period. |
+| `to` | `YYYY-MM-DD` | End of the period. |
+
+```bash
+curl "https://api.linkz.ee/v1/agenda/earnings?from=2026-08-01&to=2026-08-31" \
+  -H "Authorization: Bearer lzk_..."
+```
+
 ## Related
 
 <CardGroup cols={2}>

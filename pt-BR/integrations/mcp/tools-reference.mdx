@@ -10,7 +10,9 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 
 <Note>
   Ações que **leem** seus dados precisam de uma chave com o escopo **read**. Ações que
-  **criam, atualizam ou excluem** precisam de uma chave com o escopo **write**. Consulte
+  **criam, atualizam ou excluem** precisam de uma chave com o escopo **write**. A
+  ferramenta de recebimentos é a exceção: ela precisa do escopo **finance**, que
+  nunca é incluído por padrão. Consulte
   [Chaves de API](/pt-BR/integrations/api/api-keys) para definir o escopo certo.
 </Note>
 
@@ -70,6 +72,7 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 | Alterações | Reagendar agendamentos e alterar seu status. |
 | Avaliações e lista de espera | Ler suas avaliações (incluindo as ocultas), ocultar ou exibir uma avaliação e gerenciar a lista de espera. |
 | Google | Verificar o status da conexão com o Google Calendar e desconectá-lo. |
+| Recebimentos | Ler seus recebimentos agregados de um período (exige o escopo **finance**; sem dados de cliente). |
 
 ## Assistente de IA
 
@@ -87,6 +90,8 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 Se você quiser saber exatamente quais ferramentas seu agente vê, aqui está a
 lista completa. Com uma chave **read** o agente recebe as 11 ferramentas de
 leitura; uma chave **write** adiciona as 28 ferramentas de escrita por cima.
+Uma chave com o escopo **finance** também recebe a `get_earnings` (e uma chave
+só de finance recebe apenas essa).
 
 ### Ferramentas de leitura
 
@@ -103,6 +108,12 @@ leitura; uma chave **write** adiciona as 28 ferramentas de escrita por cima.
 | `list_reviews` | Listar as avaliações que você recebeu, incluindo as ocultas. |
 | `list_waitlist` | Listar os visitantes aguardando um horário. |
 | `search_leads` | Encontrar um cliente existente por nome, telefone, e-mail ou Instagram. |
+
+### Ferramentas de finanças
+
+| Ferramenta | O que faz |
+| --- | --- |
+| `get_earnings` | Recebimentos agregados de um período: bruto, estornos, taxas e líquido, além de série diária e cortes. Exige o escopo `finance`; não retorna dados de cliente. |
 
 ### Ferramentas de escrita
 

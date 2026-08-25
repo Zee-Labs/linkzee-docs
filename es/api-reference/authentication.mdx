@@ -40,8 +40,9 @@ Cada clave tiene un ámbito que controla lo que puede hacer:
 
 | Ámbito | Concede |
 | --- | --- |
-| `read` | Acceso de solo lectura. Todas las peticiones `GET`. |
+| `read` | Acceso de solo lectura — todas las peticiones `GET` excepto los informes financieros. |
 | `write` | Todo lo que permite `read`, además de crear, actualizar, eliminar y reordenar (`POST`, `PATCH`, `PUT`, `DELETE`). |
+| `finance` | Informes financieros (`GET /v1/agenda/earnings`). Nunca se incluye por defecto — agrégalo explícitamente al crear la clave. |
 
 Una clave `read` enviada a una operación de escritura se rechaza con `403 Forbidden`.
 Dale a cada integración el ámbito más reducido que necesite.

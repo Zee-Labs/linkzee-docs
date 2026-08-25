@@ -50,6 +50,7 @@
                 "pages": [
                   "get-started/introduction",
                   "get-started/quickstart",
+                  "get-started/import-from-linktree",
                   "get-started/create-account",
                   "get-started/your-username",
                   "get-started/install-app"
@@ -262,6 +263,7 @@
                 "pages": [
                   "pt-BR/get-started/introduction",
                   "pt-BR/get-started/quickstart",
+                  "pt-BR/get-started/import-from-linktree",
                   "pt-BR/get-started/create-account",
                   "pt-BR/get-started/your-username",
                   "pt-BR/get-started/install-app"
@@ -474,6 +476,7 @@
                 "pages": [
                   "es/get-started/introduction",
                   "es/get-started/quickstart",
+                  "es/get-started/import-from-linktree",
                   "es/get-started/create-account",
                   "es/get-started/your-username",
                   "es/get-started/install-app"
@@ -686,6 +689,7 @@
                 "pages": [
                   "fr/get-started/introduction",
                   "fr/get-started/quickstart",
+                  "fr/get-started/import-from-linktree",
                   "fr/get-started/create-account",
                   "fr/get-started/your-username",
                   "fr/get-started/install-app"
@@ -898,6 +902,7 @@
                 "pages": [
                   "de/get-started/introduction",
                   "de/get-started/quickstart",
+                  "de/get-started/import-from-linktree",
                   "de/get-started/create-account",
                   "de/get-started/your-username",
                   "de/get-started/install-app"

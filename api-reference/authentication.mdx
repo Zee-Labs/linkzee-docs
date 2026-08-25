@@ -40,8 +40,9 @@ Each key has a scope that controls what it can do:
 
 | Scope | Grants |
 | --- | --- |
-| `read` | Read-only access. All `GET` requests. |
+| `read` | Read-only access — every `GET` except financial reports. |
 | `write` | Everything `read` allows, plus create, update, delete and reorder (`POST`, `PATCH`, `PUT`, `DELETE`). |
+| `finance` | Financial reports (`GET /v1/agenda/earnings`). Never included by default — add it explicitly when creating the key. |
 
 A `read` key sent to a write operation is rejected with `403 Forbidden`. Give each
 integration the narrowest scope it needs.

@@ -920,6 +920,30 @@ curl -X DELETE \
 { "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
 ```
 
+## Revenus
+
+### Obtenir le récapitulatif des revenus
+
+`GET /v1/agenda/earnings` — requiert le scope **`finance`** (jamais inclus dans
+une clé par défaut ; voir
+[Authentification](/fr/api-reference/authentication)).
+
+Des chiffres agrégés pour une période : brut, remboursements, frais et net,
+plus une série quotidienne et des répartitions par moyen de paiement et par
+service. La réponse ne contient **aucune donnée client** — la liste des
+transactions avec noms et numéros de téléphone n'est disponible que dans le
+tableau de bord.
+
+| Paramètre de requête | Type | Description |
+| --- | --- | --- |
+| `from` | `YYYY-MM-DD` | Début de la période. |
+| `to` | `YYYY-MM-DD` | Fin de la période. |
+
+```bash
+curl "https://api.linkz.ee/v1/agenda/earnings?from=2026-08-01&to=2026-08-31" \
+  -H "Authorization: Bearer lzk_..."
+```
+
 ## Voir aussi
 
 <CardGroup cols={2}>

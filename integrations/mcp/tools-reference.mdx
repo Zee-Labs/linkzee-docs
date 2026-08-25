@@ -10,8 +10,9 @@ can do, grouped by area, so you know what to ask for.
 
 <Note>
   Actions that **read** your data need a key with the **read** scope. Actions that
-  **create, update or delete** need a key with the **write** scope. See
-  [API keys](/integrations/api/api-keys) to set the right scope.
+  **create, update or delete** need a key with the **write** scope. The earnings
+  tool is the exception: it needs the **finance** scope, which is never included
+  by default. See [API keys](/integrations/api/api-keys) to set the right scope.
 </Note>
 
 ## Page & profile
@@ -69,6 +70,7 @@ can do, grouped by area, so you know what to ask for.
 | Changes | Reschedule appointments and change their status. |
 | Reviews & waitlist | Read your reviews (including hidden ones), hide or show a review, and manage the waitlist. |
 | Google | Check the connection status of Google Calendar, and disconnect it. |
+| Earnings | Read your aggregated earnings for a period (needs the **finance** scope; no customer data). |
 
 ## AI assistant
 
@@ -85,7 +87,8 @@ can do, grouped by area, so you know what to ask for.
 
 If you want to know exactly which tools your agent sees, here is the full list.
 With a **read** key the agent gets the 11 read tools; a **write** key adds the
-28 write tools on top.
+28 write tools on top. A key with the **finance** scope also gets `get_earnings`
+(and a finance-only key gets just that one).
 
 ### Read tools
 
@@ -102,6 +105,12 @@ With a **read** key the agent gets the 11 read tools; a **write** key adds the
 | `list_reviews` | List the reviews you've received, including hidden ones. |
 | `list_waitlist` | List visitors waiting for a slot. |
 | `search_leads` | Find an existing client by name, phone, email or Instagram. |
+
+### Finance tools
+
+| Tool | What it does |
+| --- | --- |
+| `get_earnings` | Aggregated earnings for a period: gross, refunds, fees and net, plus daily series and breakdowns. Requires the `finance` scope; returns no customer data. |
 
 ### Write tools
 

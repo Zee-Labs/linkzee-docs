@@ -42,8 +42,9 @@ Chaque clé possède une portée qui contrôle ce qu'elle peut faire :
 
 | Portée | Accorde |
 | --- | --- |
-| `read` | Accès en lecture seule. Toutes les requêtes `GET`. |
+| `read` | Accès en lecture seule — toutes les requêtes `GET`, sauf les rapports financiers. |
 | `write` | Tout ce que `read` permet, plus créer, mettre à jour, supprimer et réordonner (`POST`, `PATCH`, `PUT`, `DELETE`). |
+| `finance` | Rapports financiers (`GET /v1/agenda/earnings`). Jamais inclus par défaut — ajoutez-le explicitement à la création de la clé. |
 
 Une clé `read` envoyée à une opération d'écriture est rejetée avec `403 Forbidden`.
 Attribuez à chaque intégration la portée la plus restreinte dont elle a besoin.

@@ -40,8 +40,9 @@ Cada chave tem um escopo que controla o que ela pode fazer:
 
 | Escopo | Concede |
 | --- | --- |
-| `read` | Acesso somente leitura. Todas as requisições `GET`. |
+| `read` | Acesso somente leitura — todas as requisições `GET`, exceto os relatórios financeiros. |
 | `write` | Tudo que `read` permite, além de criar, atualizar, excluir e reordenar (`POST`, `PATCH`, `PUT`, `DELETE`). |
+| `finance` | Relatórios financeiros (`GET /v1/agenda/earnings`). Nunca incluído por padrão — adicione o escopo explicitamente ao criar a chave. |
 
 Uma chave `read` enviada para uma operação de escrita é rejeitada com `403 Forbidden`. Dê a cada
 integração o escopo mais restrito de que ela precisa.

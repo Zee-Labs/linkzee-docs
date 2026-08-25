@@ -918,6 +918,28 @@ curl -X DELETE \
 { "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
 ```
 
+## Recebimentos
+
+### Consultar o resumo de recebimentos
+
+`GET /v1/agenda/earnings` — exige o escopo **`finance`** (nunca incluído em uma
+chave por padrão; veja [Autenticação](/pt-BR/api-reference/authentication)).
+
+Números agregados de um período: bruto, estornos, taxas e líquido, além de uma
+série diária e cortes por forma de pagamento e por serviço. A resposta não
+contém **nenhum dado de cliente** — a lista de transações com nomes e telefones
+só está disponível no dashboard.
+
+| Parâmetro de query | Tipo | Descrição |
+| --- | --- | --- |
+| `from` | `YYYY-MM-DD` | Início do período. |
+| `to` | `YYYY-MM-DD` | Fim do período. |
+
+```bash
+curl "https://api.linkz.ee/v1/agenda/earnings?from=2026-08-01&to=2026-08-31" \
+  -H "Authorization: Bearer lzk_..."
+```
+
 ## Relacionados
 
 <CardGroup cols={2}>

@@ -924,6 +924,29 @@ curl -X DELETE \
 { "error": false, "message": "Waitlist entry removed", "data": { "id": "665f44bb55cc66dd77ee88ff" } }
 ```
 
+## Einnahmen
+
+### Einnahmen-Zusammenfassung abrufen
+
+`GET /v1/agenda/earnings` — erfordert den **`finance`**-Scope (nie
+standardmäßig in einem Schlüssel enthalten; siehe
+[Authentifizierung](/de/api-reference/authentication)).
+
+Aggregierte Zahlen für einen Zeitraum: Brutto, Erstattungen, Gebühren und
+Netto, dazu eine Tagesreihe und Aufschlüsselungen nach Zahlungsart und
+Leistung. Die Antwort enthält **keine Kundendaten** — die Transaktionsliste
+mit Namen und Telefonnummern gibt es nur im Dashboard.
+
+| Query-Parameter | Typ | Beschreibung |
+| --- | --- | --- |
+| `from` | `YYYY-MM-DD` | Beginn des Zeitraums. |
+| `to` | `YYYY-MM-DD` | Ende des Zeitraums. |
+
+```bash
+curl "https://api.linkz.ee/v1/agenda/earnings?from=2026-08-01&to=2026-08-31" \
+  -H "Authorization: Bearer lzk_..."
+```
+
 ## Verwandt
 
 <CardGroup cols={2}>

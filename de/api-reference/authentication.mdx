@@ -40,8 +40,9 @@ Jeder Schlüssel hat einen Scope, der steuert, was er tun darf:
 
 | Scope | Gewährt |
 | --- | --- |
-| `read` | Nur-Lese-Zugriff. Alle `GET`-Anfragen. |
+| `read` | Nur-Lese-Zugriff — jedes `GET` außer Finanzberichten. |
 | `write` | Alles, was `read` erlaubt, plus Erstellen, Aktualisieren, Löschen und Neuanordnen (`POST`, `PATCH`, `PUT`, `DELETE`). |
+| `finance` | Finanzberichte (`GET /v1/agenda/earnings`). Nie standardmäßig enthalten — füge ihn beim Erstellen des Schlüssels explizit hinzu. |
 
 Ein `read`-Schlüssel, der für eine Schreiboperation gesendet wird, wird mit `403 Forbidden` abgelehnt. Gib jeder
 Integration den engsten Scope, den sie benötigt.

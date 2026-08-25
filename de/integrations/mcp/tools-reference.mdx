@@ -13,7 +13,9 @@ gruppiert, damit du weißt, worum du bitten kannst.
   Aktionen, die deine Daten **lesen**, benötigen einen Schlüssel mit dem
   Berechtigungsbereich **read**. Aktionen, die **erstellen, aktualisieren oder
   löschen**, benötigen einen Schlüssel mit dem Berechtigungsbereich **write**.
-  Siehe [API-Schlüssel](/de/integrations/api/api-keys), um den richtigen
+  Das Einnahmen-Tool ist die Ausnahme: Es benötigt den Berechtigungsbereich
+  **finance**, der nie standardmäßig enthalten ist. Siehe
+  [API-Schlüssel](/de/integrations/api/api-keys), um den richtigen
   Berechtigungsbereich festzulegen.
 </Note>
 
@@ -73,6 +75,7 @@ gruppiert, damit du weißt, worum du bitten kannst.
 | Änderungen | Termine verschieben und ihren Status ändern. |
 | Bewertungen & Warteliste | Deine Bewertungen lesen (einschließlich ausgeblendeter), eine Bewertung aus- oder einblenden und die Warteliste verwalten. |
 | Google | Den Verbindungsstatus von Google Calendar prüfen und die Verbindung trennen. |
+| Einnahmen | Deine aggregierten Einnahmen für einen Zeitraum lesen (benötigt den Berechtigungsbereich **finance**; keine Kundendaten). |
 
 ## KI-Assistent
 
@@ -91,6 +94,8 @@ gruppiert, damit du weißt, worum du bitten kannst.
 Wenn du genau wissen möchtest, welche Tools dein Agent sieht, ist hier die
 vollständige Liste. Mit einem **read**-Schlüssel erhält der Agent die 11
 Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 28 Schreib-Tools hinzu.
+Ein Schlüssel mit dem **finance**-Berechtigungsbereich erhält außerdem
+`get_earnings` (ein reiner finance-Schlüssel erhält nur dieses eine Tool).
 
 ### Lese-Tools
 
@@ -107,6 +112,12 @@ Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 28 Schreib-Tools hinz
 | `list_reviews` | Die erhaltenen Bewertungen auflisten, einschließlich ausgeblendeter. |
 | `list_waitlist` | Besucher auflisten, die auf ein Zeitfenster warten. |
 | `search_leads` | Einen bestehenden Kunden per Name, Telefon, E-Mail oder Instagram finden. |
+
+### Finance-Tools
+
+| Tool | Was es tut |
+| --- | --- |
+| `get_earnings` | Aggregierte Einnahmen für einen Zeitraum: Brutto, Erstattungen, Gebühren und Netto, dazu Tagesreihe und Aufschlüsselungen. Erfordert den `finance`-Berechtigungsbereich; gibt keine Kundendaten zurück. |
 
 ### Schreib-Tools
 
