@@ -11,8 +11,8 @@ usado automaticamente. Ótimo para o caixa e para trazer o cliente de volta.
 
 <Note>
   Os pacotes exigem **pagamentos online** ativos (veja
-  [Cobrar nos agendamentos](/pt-BR/scheduling/payments)): a compra é paga com
-  cartão ou PIX e o dinheiro vai direto para a sua conta Stripe.
+  [Cobrar nos agendamentos](/pt-BR/scheduling/payments)): a compra é paga
+  online e o dinheiro vai direto para a sua conta Stripe.
 </Note>
 
 ## Criar um pacote
@@ -24,22 +24,24 @@ usado automaticamente. Ótimo para o caixa e para trazer o cliente de volta.
    - **Sessões incluídas**: escolha cada serviço e quantas sessões ele inclui.
      Um pacote pode misturar serviços (ex.: 4 cortes + 1 barba).
    - **Preço**: um valor único para o pacote inteiro.
-   - **Validade**: por quantos dias os créditos valem após a compra.
+   - **Validade após a compra**: por quantos dias os créditos valem, contados
+     da confirmação do pagamento.
 3. Salve. Pacotes ativos aparecem na sua página pública automaticamente.
 
 ## O que os visitantes veem
 
 Sua página mostra um card **Pacotes de sessões** listando cada pacote com
 preço, sessões incluídas e validade. Você pode arrastar a posição do card (e
-ocultá-lo ou exibi-lo) no **Content**, como qualquer outro bloco.
+ocultá-lo ou exibi-lo) em **Links**, como qualquer outro bloco.
 
 A compra leva menos de um minuto:
 
-1. O visitante toca em **Comprar pacote** e informa **nome, número de WhatsApp
-   e e-mail**.
-2. Paga com **cartão ou PIX** no checkout seguro.
-3. A tela de confirmação mostra os créditos, e ele recebe por e-mail um recibo
-   com tudo o que está incluído.
+1. O visitante toca em **Comprar pacote** e informa **nome e número de
+   WhatsApp** (o e-mail é opcional: é para onde vai o comprovante).
+2. Paga no checkout seguro. As formas de pagamento oferecidas dependem da sua
+   conta Stripe: contas brasileiras podem oferecer **PIX** além de cartão.
+3. A tela de confirmação mostra os créditos e, se ele informou um e-mail,
+   chega um comprovante com tudo o que está incluído.
 
 <Note>
   O **telefone é a chave**: quando o mesmo cliente agendar um dos serviços

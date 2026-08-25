@@ -12,35 +12,37 @@ back.
 
 <Note>
   Packages require **online payments** to be active (see
-  [Charge for bookings](/scheduling/payments)) — the purchase is paid by card
-  or PIX and the money goes straight to your Stripe account.
+  [Charge for bookings](/scheduling/payments)) — the purchase is paid online
+  and the money goes straight to your Stripe account.
 </Note>
 
 ## Create a package
 
-1. Open **Scheduling** in the dashboard and go to the **Packages** tab.
+1. Open **Bookings** in the dashboard and go to the **Packages** tab.
 2. Tap **New package** and fill in:
    - **Name** — what the buyer sees (e.g. *"5-session pack"*).
    - **Description** — optional, shown on your page.
-   - **Items** — pick each service and how many sessions it includes. A
+   - **Included sessions** — pick each service and how many sessions it includes. A
      package can mix services (e.g. 4 haircuts + 1 beard trim).
    - **Price** — one single price for the whole bundle.
-   - **Validity** — how many days the credits last after purchase.
+   - **Validity after purchase** — how many days the credits last, counted from
+     the payment confirmation.
 3. Save. Active packages appear on your public page automatically.
 
 ## What your visitors see
 
 Your page shows a **Session packages** card listing each package with its
 price, included sessions and validity. You can drag the card's position (and
-hide or show it) in **Content**, like any other block.
+hide or show it) in **Links**, like any other block.
 
 Buying takes under a minute:
 
-1. The visitor taps **Buy package** and enters their **name, WhatsApp number
-   and e-mail**.
-2. They pay by **card or PIX** on the secure checkout.
-3. The confirmation screen shows their credits, and they receive an e-mail
-   receipt with everything included.
+1. The visitor taps **Buy package** and enters their **name and WhatsApp
+   number** (e-mail is optional — it's where the receipt goes).
+2. They pay on the secure checkout. The payment methods offered depend on
+   your Stripe account — Brazilian accounts can offer **PIX** alongside cards.
+3. The confirmation screen shows their credits — and if they entered an
+   e-mail, a receipt arrives with everything included.
 
 <Note>
   The **phone number is the key**: when the same customer books one of the
@@ -57,7 +59,7 @@ Buying takes under a minute:
 - If a covered booking is **cancelled**, the credit **returns automatically**
   to the package.
 - **No-shows** consume the credit by default. If you prefer to return the
-  credit on no-shows, enable that option in **Scheduling → Settings**.
+  credit on no-shows, enable that option in **Bookings → Settings**.
 - Credits **expire** at the end of the validity period you set.
 
 ## Where your customer tracks their credits

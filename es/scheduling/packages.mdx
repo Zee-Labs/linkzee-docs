@@ -12,8 +12,8 @@ caja y para hacer que los clientes vuelvan.
 
 <Note>
   Los paquetes requieren tener los **pagos online** activos (mira
-  [Cobrar en las reservas](/es/scheduling/payments)) — la compra se paga con
-  tarjeta o PIX y el dinero va directo a tu cuenta de Stripe.
+  [Cobrar en las reservas](/es/scheduling/payments)) — la compra se paga online
+  y el dinero va directo a tu cuenta de Stripe.
 </Note>
 
 ## Crear un paquete
@@ -26,7 +26,8 @@ caja y para hacer que los clientes vuelvan.
      Un paquete puede combinar servicios (p. ej. 4 cortes + 1 arreglo de
      barba).
    - **Precio** — un único precio por todo el paquete.
-   - **Vigencia** — cuántos días duran los créditos después de la compra.
+   - **Vigencia después de la compra** — cuántos días duran los créditos,
+     contados desde la confirmación del pago.
 3. Guarda. Los paquetes activos aparecen automáticamente en tu página pública.
 
 ## Lo que ven tus visitantes
@@ -37,11 +38,13 @@ la tarjeta (y ocultarla o mostrarla) en **Links**, como cualquier otro bloque.
 
 Comprar toma menos de un minuto:
 
-1. El visitante toca **Comprar paquete** e ingresa su **nombre, número de
-   WhatsApp y correo**.
-2. Paga con **tarjeta o PIX** en el checkout seguro.
-3. La pantalla de confirmación muestra sus créditos, y recibe un correo con el
-   recibo y todo lo incluido.
+1. El visitante toca **Comprar paquete** e ingresa su **nombre y número de
+   WhatsApp** (el correo es opcional — ahí llega el recibo).
+2. Paga en el checkout seguro. Los métodos de pago ofrecidos dependen de tu
+   cuenta de Stripe — las cuentas brasileñas pueden ofrecer **PIX** además de
+   las tarjetas.
+3. La pantalla de confirmación muestra sus créditos — y, si dio un correo,
+   recibe un recibo con todo lo incluido.
 
 <Note>
   El **número de teléfono es la clave**: cuando el mismo cliente reserva más

@@ -12,8 +12,8 @@ Cashflow und um Kunden zurückzubringen.
 
 <Note>
   Pakete erfordern aktive **Online-Zahlungen** (siehe
-  [Buchungen kassieren](/de/scheduling/payments)) — der Kauf wird per Karte
-  oder PIX bezahlt und das Geld geht direkt auf dein Stripe-Konto.
+  [Buchungen kassieren](/de/scheduling/payments)) — der Kauf wird online
+  bezahlt und das Geld geht direkt auf dein Stripe-Konto.
 </Note>
 
 ## Ein Paket erstellen
@@ -22,10 +22,11 @@ Cashflow und um Kunden zurückzubringen.
 2. Tippe auf **Neues Paket** und fülle aus:
    - **Name** — was der Käufer sieht (z. B. *„5er-Paket"*).
    - **Beschreibung** — optional, wird auf deiner Seite angezeigt.
-   - **Inhalte** — wähle jede Leistung und wie viele Sitzungen enthalten sind.
+   - **Enthaltene Sitzungen** — wähle jede Leistung und wie viele Sitzungen enthalten sind.
      Ein Paket kann Leistungen mischen (z. B. 4 Haarschnitte + 1 Bartschnitt).
    - **Preis** — ein einziger Preis für das ganze Bündel.
-   - **Gültigkeit** — wie viele Tage die Guthaben nach dem Kauf gelten.
+   - **Gültigkeit nach dem Kauf** — wie viele Tage die Guthaben gelten, gezählt
+     ab der Zahlungsbestätigung.
 3. Speichern. Aktive Pakete erscheinen automatisch auf deiner öffentlichen
    Seite.
 
@@ -33,16 +34,18 @@ Cashflow und um Kunden zurückzubringen.
 
 Deine Seite zeigt eine Karte **Sitzungspakete**, die jedes Paket mit Preis,
 enthaltenen Sitzungen und Gültigkeit auflistet. Du kannst die Position der
-Karte unter **Content** verschieben (und sie aus- oder einblenden), wie jeden
+Karte unter **Links** verschieben (und sie aus- oder einblenden), wie jeden
 anderen Block.
 
 Der Kauf dauert keine Minute:
 
-1. Der Besucher tippt auf **Paket kaufen** und gibt **Name, WhatsApp-Nummer
-   und E-Mail** ein.
-2. Er zahlt per **Karte oder PIX** im sicheren Checkout.
-3. Der Bestätigungsbildschirm zeigt die Guthaben, und er erhält eine
-   E-Mail-Quittung mit allem, was enthalten ist.
+1. Der Besucher tippt auf **Paket kaufen** und gibt **Name und
+   WhatsApp-Nummer** ein (die E-Mail ist optional — dorthin geht der Beleg).
+2. Er zahlt im sicheren Checkout. Welche Zahlungsmethoden angeboten werden,
+   hängt von deinem Stripe-Konto ab — brasilianische Konten können neben
+   Karten auch **PIX** anbieten.
+3. Der Bestätigungsbildschirm zeigt die Guthaben — und wenn er eine E-Mail
+   angegeben hat, kommt ein Beleg mit allem, was enthalten ist.
 
 <Note>
   Die **Telefonnummer ist der Schlüssel**: Wenn derselbe Kunde später eine

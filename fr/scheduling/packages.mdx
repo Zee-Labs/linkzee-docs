@@ -12,8 +12,8 @@ pour faire revenir vos clients.
 
 <Note>
   Les forfaits nécessitent que les **paiements en ligne** soient actifs (voir
-  [Encaisser les réservations](/fr/scheduling/payments)) — l'achat est réglé par
-  carte ou PIX et l'argent va directement sur votre compte Stripe.
+  [Encaisser les réservations](/fr/scheduling/payments)) — l'achat est réglé en
+  ligne et l'argent va directement sur votre compte Stripe.
 </Note>
 
 ## Créer un forfait
@@ -27,8 +27,8 @@ pour faire revenir vos clients.
      incluses. Un forfait peut mélanger plusieurs services (ex. 4 coupes +
      1 taille de barbe).
    - **Prix** — un prix unique pour tout le lot.
-   - **Validité** — le nombre de jours pendant lesquels les crédits restent
-     valables après l'achat.
+   - **Validité après l'achat** — le nombre de jours pendant lesquels les
+     crédits restent valables, comptés à partir de la confirmation du paiement.
 3. Enregistrez. Les forfaits actifs apparaissent automatiquement sur votre
    page publique.
 
@@ -36,16 +36,18 @@ pour faire revenir vos clients.
 
 Votre page affiche une carte **Forfaits de séances** listant chaque forfait
 avec son prix, les séances incluses et la validité. Vous pouvez déplacer la
-carte (et la masquer ou l'afficher) dans **Content**, comme n'importe quel
+carte (et la masquer ou l'afficher) dans **Liens**, comme n'importe quel
 autre bloc.
 
 L'achat prend moins d'une minute :
 
-1. Le visiteur touche **Acheter le forfait** et saisit son **nom, son numéro
-   WhatsApp et son e-mail**.
-2. Il paie par **carte ou PIX** sur le paiement sécurisé.
-3. L'écran de confirmation affiche ses crédits, et il reçoit un reçu par
-   e-mail avec tout le détail.
+1. Le visiteur touche **Acheter le forfait** et saisit son **nom et son numéro
+   WhatsApp** (l'e-mail est facultatif — c'est là qu'arrive le reçu).
+2. Il paie sur le paiement sécurisé. Les moyens de paiement proposés dépendent
+   de votre compte Stripe — les comptes brésiliens peuvent proposer le **PIX**
+   en plus des cartes.
+3. L'écran de confirmation affiche ses crédits — et s'il a renseigné un
+   e-mail, il reçoit un reçu avec tout le détail.
 
 <Note>
   Le **numéro de téléphone est la clé** : quand le même client réserve plus
