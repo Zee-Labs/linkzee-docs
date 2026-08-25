@@ -1,0 +1,73 @@
+---
+title: Pacotes de sessões
+icon: ticket
+description: "Venda pacotes de sessões pagos de uma vez: o cliente compra e usa os créditos quando agendar."
+---
+
+Um **pacote de sessões** é um conjunto de serviços vendido por um preço único,
+como *"5 cortes por R$150, válido por 90 dias"*. O cliente paga uma vez, recebe
+os créditos na hora e, sempre que agenda um dos serviços incluídos, o crédito é
+usado automaticamente. Ótimo para o caixa e para trazer o cliente de volta.
+
+<Note>
+  Os pacotes exigem **pagamentos online** ativos (veja
+  [Cobrar nos agendamentos](/pt-BR/scheduling/payments)): a compra é paga com
+  cartão ou PIX e o dinheiro vai direto para a sua conta Stripe.
+</Note>
+
+## Criar um pacote
+
+1. Abra a **Agenda** no painel e vá até a aba **Pacotes**.
+2. Toque em **Novo pacote** e preencha:
+   - **Nome**: o que o comprador vê (ex.: *"Pacote de 5 sessões"*).
+   - **Descrição**: opcional, aparece na sua página.
+   - **Sessões incluídas**: escolha cada serviço e quantas sessões ele inclui.
+     Um pacote pode misturar serviços (ex.: 4 cortes + 1 barba).
+   - **Preço**: um valor único para o pacote inteiro.
+   - **Validade**: por quantos dias os créditos valem após a compra.
+3. Salve. Pacotes ativos aparecem na sua página pública automaticamente.
+
+## O que os visitantes veem
+
+Sua página mostra um card **Pacotes de sessões** listando cada pacote com
+preço, sessões incluídas e validade. Você pode arrastar a posição do card (e
+ocultá-lo ou exibi-lo) no **Content**, como qualquer outro bloco.
+
+A compra leva menos de um minuto:
+
+1. O visitante toca em **Comprar pacote** e informa **nome, número de WhatsApp
+   e e-mail**.
+2. Paga com **cartão ou PIX** no checkout seguro.
+3. A tela de confirmação mostra os créditos, e ele recebe por e-mail um recibo
+   com tudo o que está incluído.
+
+<Note>
+  O **telefone é a chave**: quando o mesmo cliente agendar um dos serviços
+  incluídos, o Linkzee reconhece o número e usa um crédito automaticamente,
+  sem códigos nem vouchers.
+</Note>
+
+## Como os créditos são usados
+
+- Quando um cliente com créditos agenda um serviço incluído, o agendamento é
+  **coberto pelo pacote**: a etapa de pagamento é pulada para aquele serviço.
+- Os créditos são usados **por sessão** e valem apenas para os serviços
+  incluídos no pacote.
+- Se um agendamento coberto for **cancelado**, o crédito **volta
+  automaticamente** para o pacote.
+- **Faltas** consomem o crédito por padrão. Se preferir devolver o crédito
+  quando o cliente não comparecer, ative essa opção em
+  **Agenda → Configurações**.
+- Os créditos **expiram** ao fim do prazo de validade que você definiu.
+
+## Onde o cliente acompanha os créditos
+
+O cliente vê os créditos restantes, a validade e o histórico de compras na
+**área do cliente** dele; veja [Área do cliente](/pt-BR/scheduling/customer-area).
+
+## Recebimentos
+
+As vendas de pacotes aparecem na sua página de **Recebimentos** como qualquer
+outro pagamento, marcadas como compra de pacote, com a taxa Linkzee do seu
+plano aplicada: as mesmas taxas dos pagamentos de agendamento (veja
+[Planos e preços](/pt-BR/billing/plans)).

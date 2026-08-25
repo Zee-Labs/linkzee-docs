@@ -33,10 +33,14 @@ Cada clave lleva un **alcance** que decide lo que puede hacer:
 | --- | --- |
 | **read** | Listar y leer tus datos |
 | **write** | Crear, actualizar y eliminar |
+| **finance** | Informes financieros (como tu resumen de ingresos) |
 
 Dale a cada clave solo el acceso que necesita. Si una herramienta únicamente
 muestra tus datos, una clave **read** es suficiente; una clave que modifica tu
-página o tus productos necesita **write**.
+página o tus productos necesita **write**. **finance** nunca se incluye por
+defecto — lo añades explícitamente al crear la clave, y al rotar una clave se
+conservan exactamente los alcances que tenía. Los ingresos consolidados son el
+tipo de acceso que concedes a propósito.
 
 ## Revocar una clave
 

@@ -1,0 +1,74 @@
+---
+title: Abonnements récurrents
+icon: arrows-rotate
+description: "Vendez des abonnements mensuels ou annuels avec des avantages — séances illimitées, crédits par cycle ou réduction membre."
+---
+
+Avec les **abonnements récurrents**, vos clients s'abonnent à vos services et
+sont débités automatiquement chaque mois (ou chaque année) — comme *« Plan
+Santé Animale : R$99/mois avec 1 consultation incluse et 20 % de réduction sur
+le toilettage »*. Des revenus prévisibles pour vous, des renouvellements sans
+effort pour eux.
+
+<Note>
+  Les abonnements récurrents nécessitent que les **paiements en ligne** soient
+  actifs (voir [Encaisser les réservations](/fr/scheduling/payments)). Les
+  abonnements sont débités par carte et traités par Stripe ; l'argent va
+  directement sur votre compte.
+</Note>
+
+## Créer une formule
+
+1. Ouvrez **Agenda → Forfaits** et allez dans la section **Abonnements
+   récurrents**.
+2. Touchez **Nouvel abonnement** et définissez :
+   - **Nom et description** — ce que voient les abonnés.
+   - **Prix et périodicité** — mensuel ou annuel.
+   - **Avantages** — pour chaque service, choisissez l'un des trois :
+     | Avantage | Ce que l'abonné obtient |
+     | --- | --- |
+     | **Illimité** | Réserver le service aussi souvent qu'il le souhaite, sans frais supplémentaires. |
+     | **Crédits par cycle** | Un nombre de séances couvertes par cycle de facturation (ex. 2 par mois). Les crédits non utilisés ne sont pas reportés. |
+     | **Réduction** | Un pourcentage de réduction lors du paiement de ce service. |
+3. Enregistrez. Les formules actives apparaissent sur votre page publique, à
+   côté de vos forfaits.
+
+## Ce que voient vos visiteurs
+
+Votre page liste chaque formule avec son prix, sa périodicité et ses
+avantages. Pour s'abonner, le visiteur saisit son **nom, son numéro WhatsApp
+et son e-mail**, puis règle le premier paiement par carte — les paiements
+suivants se renouvellent automatiquement sur la même carte.
+
+Après le paiement, il reçoit un e-mail de confirmation avec les avantages de
+la formule, et l'abonnement apparaît dans son
+[espace client](/fr/scheduling/customer-area).
+
+## Comment les avantages s'appliquent à la réservation
+
+- Quand un abonné réserve, Linkzee reconnaît son **numéro de téléphone** et
+  applique automatiquement le meilleur avantage : les crédits de forfait
+  prépayés sont utilisés en premier, puis les avantages de l'abonnement, puis
+  les réductions membre sur ce qu'il reste à payer.
+- Les **crédits par cycle** sont comptés selon le cycle de facturation de la
+  **date du rendez-vous** et se réinitialisent à chaque cycle — sans report.
+- Si une réservation couverte est **annulée**, le crédit du cycle revient
+  automatiquement.
+
+## Gérer les abonnements
+
+- **Vous** : la liste des **Abonnés**, dans Agenda → Forfaits, affiche chaque
+  abonnement et son statut.
+- **Votre client** : depuis son [espace client](/fr/scheduling/customer-area),
+  il peut ouvrir le **portail de facturation** sécurisé pour mettre à jour sa
+  carte ou annuler. Un abonnement annulé conserve ses avantages jusqu'à la fin
+  de la période déjà réglée.
+- Si un paiement de renouvellement échoue, Stripe réessaie ; tant que le
+  paiement est en retard, les avantages sont suspendus jusqu'à sa
+  régularisation.
+
+## Revenus
+
+Chaque paiement d'abonnement apparaît dans **Revenus** avec la commission
+Linkzee de votre offre appliquée — les mêmes taux que les paiements de
+réservation (voir [Forfaits et tarifs](/fr/billing/plans)).

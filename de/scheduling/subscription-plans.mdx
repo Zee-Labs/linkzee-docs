@@ -1,0 +1,74 @@
+---
+title: Wiederkehrende Abos
+icon: arrows-rotate
+description: "Verkaufe monatliche oder jährliche Abonnements mit Vorteilen — unbegrenzte Sitzungen, Guthaben pro Zyklus oder ein Mitgliederrabatt."
+---
+
+Mit **wiederkehrenden Abos** abonnieren deine Kunden deine Leistungen und
+werden automatisch jeden Monat (oder jedes Jahr) belastet — wie
+*„Tiergesundheitsplan: R$99/Monat mit 1 enthaltenen Beratung und 20 % Rabatt
+aufs Grooming"*. Planbares Einkommen für dich, mühelose Verlängerungen für
+sie.
+
+<Note>
+  Wiederkehrende Abos erfordern aktive **Online-Zahlungen** (siehe
+  [Buchungen kassieren](/de/scheduling/payments)). Abonnements werden per
+  Karte belastet und über Stripe abgewickelt; das Geld geht direkt auf dein
+  Konto.
+</Note>
+
+## Ein Abo erstellen
+
+1. Öffne **Kalender → Pakete** und gehe zum Bereich **Wiederkehrende Abos**.
+2. Tippe auf **Neues Abo** und lege fest:
+   - **Name und Beschreibung** — was Abonnenten sehen.
+   - **Preis und Intervall** — monatlich oder jährlich.
+   - **Vorteile** — wähle für jede Leistung einen der folgenden:
+     | Vorteil | Was der Abonnent erhält |
+     | --- | --- |
+     | **Unbegrenzt** | Die Leistung so oft buchen, wie er möchte, ohne Aufpreis. |
+     | **Guthaben pro Zyklus** | Eine Anzahl gedeckter Sitzungen pro Abrechnungszyklus (z. B. 2 pro Monat). Ungenutzte Guthaben werden nicht übertragen. |
+     | **Rabatt** | Ein Prozentsatz Nachlass beim Bezahlen dieser Leistung. |
+3. Speichern. Aktive Abos erscheinen auf deiner öffentlichen Seite neben
+   deinen Paketen.
+
+## Was deine Besucher sehen
+
+Deine Seite listet jedes Abo mit Preis, Intervall und Vorteilen auf. Zum
+Abonnieren gibt der Besucher **Name, WhatsApp-Nummer und E-Mail** ein und
+zahlt dann die erste Abbuchung per Karte — die nächsten Abbuchungen verlängern
+sich automatisch über dieselbe Karte.
+
+Nach der Zahlung erhält er eine Bestätigungs-E-Mail mit den Vorteilen des
+Abos, und das Abonnement erscheint in seinem
+[Kundenbereich](/de/scheduling/customer-area).
+
+## Wie Vorteile beim Buchen greifen
+
+- Wenn ein Abonnent bucht, erkennt Linkzee seine **Telefonnummer** und wendet
+  automatisch den besten Vorteil an: Zuerst werden vorausbezahlte
+  Paket-Guthaben verwendet, dann Abo-Vorteile, dann Mitgliederrabatte auf den
+  verbleibenden Betrag.
+- **Guthaben pro Zyklus** zählen nach dem Abrechnungszyklus des
+  **Termindatums** und werden mit jedem Zyklus zurückgesetzt — keine
+  Übertragung.
+- Wird eine gedeckte Buchung **storniert**, kehrt das Zyklus-Guthaben
+  automatisch zurück.
+
+## Abonnements verwalten
+
+- **Du**: Die Liste **Abonnenten** unter Kalender → Pakete zeigt jedes
+  Abonnement und seinen Status.
+- **Dein Kunde**: Über seinen [Kundenbereich](/de/scheduling/customer-area)
+  kann er das sichere **Abrechnungsportal** öffnen, um die Karte zu
+  aktualisieren oder zu kündigen. Ein gekündigtes Abonnement behält seine
+  Vorteile bis zum Ende des bereits bezahlten Zeitraums.
+- Schlägt eine Verlängerungsabbuchung fehl, versucht Stripe es erneut;
+  solange die Zahlung überfällig ist, pausieren die Vorteile, bis sie
+  beglichen ist.
+
+## Einnahmen
+
+Jede Abo-Abbuchung erscheint unter **Einnahmen** mit der Linkzee-Gebühr
+deines Tarifs — die gleichen Sätze wie bei Buchungszahlungen (siehe
+[Tarife und Preise](/de/billing/plans)).

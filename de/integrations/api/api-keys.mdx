@@ -35,10 +35,14 @@ Jeder Schlüssel trägt eine **Berechtigung**, die festlegt, was er tun darf:
 | --- | --- |
 | **read** | Ihre Daten auflisten und lesen |
 | **write** | Erstellen, aktualisieren und löschen |
+| **finance** | Finanzberichte (wie Ihre Einnahmen-Zusammenfassung) |
 
 Geben Sie einem Schlüssel nur den Zugriff, den er braucht. Wenn ein Tool Ihre
 Daten nur anzeigt, reicht ein **read**-Schlüssel; ein Schlüssel, der Ihre Seite
-oder Produkte ändert, braucht **write**.
+oder Produkte ändert, braucht **write**. **finance** ist niemals standardmäßig
+enthalten — Sie fügen es beim Erstellen des Schlüssels ausdrücklich hinzu, und
+beim Rotieren behält ein Schlüssel genau die Berechtigungen, die er hatte.
+Zusammengefasste Einnahmen sind die Art von Zugriff, die man bewusst gewährt.
 
 ## Einen Schlüssel widerrufen
 

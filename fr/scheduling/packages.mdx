@@ -1,0 +1,81 @@
+---
+title: Forfaits de séances
+icon: ticket
+description: "Vendez des lots de séances payés d'avance — votre client achète une fois et utilise ses crédits à chaque réservation."
+---
+
+Un **forfait de séances** est un lot de services vendu à un prix unique — comme
+*« 5 coupes pour R$150, valable 90 jours »*. Votre client paie une fois, reçoit
+ses crédits instantanément, et chaque fois qu'il réserve l'un des services
+inclus, le crédit est utilisé automatiquement. Excellent pour la trésorerie et
+pour faire revenir vos clients.
+
+<Note>
+  Les forfaits nécessitent que les **paiements en ligne** soient actifs (voir
+  [Encaisser les réservations](/fr/scheduling/payments)) — l'achat est réglé par
+  carte ou PIX et l'argent va directement sur votre compte Stripe.
+</Note>
+
+## Créer un forfait
+
+1. Ouvrez **Agenda** dans le tableau de bord et allez dans l'onglet
+   **Forfaits**.
+2. Touchez **Nouveau forfait** et renseignez :
+   - **Nom** — ce que voit l'acheteur (ex. *« Pack 5 séances »*).
+   - **Description** — optionnelle, affichée sur votre page.
+   - **Séances incluses** — choisissez chaque service et le nombre de séances
+     incluses. Un forfait peut mélanger plusieurs services (ex. 4 coupes +
+     1 taille de barbe).
+   - **Prix** — un prix unique pour tout le lot.
+   - **Validité** — le nombre de jours pendant lesquels les crédits restent
+     valables après l'achat.
+3. Enregistrez. Les forfaits actifs apparaissent automatiquement sur votre
+   page publique.
+
+## Ce que voient vos visiteurs
+
+Votre page affiche une carte **Forfaits de séances** listant chaque forfait
+avec son prix, les séances incluses et la validité. Vous pouvez déplacer la
+carte (et la masquer ou l'afficher) dans **Content**, comme n'importe quel
+autre bloc.
+
+L'achat prend moins d'une minute :
+
+1. Le visiteur touche **Acheter le forfait** et saisit son **nom, son numéro
+   WhatsApp et son e-mail**.
+2. Il paie par **carte ou PIX** sur le paiement sécurisé.
+3. L'écran de confirmation affiche ses crédits, et il reçoit un reçu par
+   e-mail avec tout le détail.
+
+<Note>
+  Le **numéro de téléphone est la clé** : quand le même client réserve plus
+  tard l'un des services inclus, Linkzee reconnaît le numéro et utilise un
+  crédit automatiquement — sans code, sans bon d'achat.
+</Note>
+
+## Comment les crédits sont utilisés
+
+- Quand un client disposant de crédits réserve un service inclus, la
+  réservation est **couverte par le forfait** — l'étape de paiement est sautée
+  pour ce service.
+- Les crédits sont utilisés **par séance** et uniquement pour les services
+  inclus dans le forfait.
+- Si une réservation couverte est **annulée**, le crédit **revient
+  automatiquement** au forfait.
+- Les **absences** consomment le crédit par défaut. Si vous préférez rendre le
+  crédit en cas d'absence, activez cette option dans **Agenda → Paramètres**.
+- Les crédits **expirent** à la fin de la période de validité que vous avez
+  définie.
+
+## Où votre client suit ses crédits
+
+Vos clients voient leurs crédits restants, la validité et l'historique
+d'achat dans **leur espace client** — voir
+[Espace client](/fr/scheduling/customer-area).
+
+## Revenus
+
+Les ventes de forfaits apparaissent sur votre page **Revenus** comme
+n'importe quel autre paiement, identifiées comme achat de forfait, avec la
+commission Linkzee de votre offre appliquée — les mêmes taux que les
+paiements de réservation (voir [Forfaits et tarifs](/fr/billing/plans)).

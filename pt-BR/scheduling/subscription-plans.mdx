@@ -1,0 +1,71 @@
+---
+title: Assinaturas recorrentes
+icon: arrows-rotate
+description: "Venda assinaturas mensais ou anuais com benefícios: sessões ilimitadas, créditos por ciclo ou desconto para assinantes."
+---
+
+Com as **assinaturas recorrentes**, seus clientes assinam os seus serviços e
+são cobrados automaticamente todo mês (ou ano), como *"Plano de Saúde Pet:
+R$99/mês com 1 consulta incluída e 20% de desconto no banho e tosa"*. Renda
+previsível para você, renovação sem esforço para eles.
+
+<Note>
+  As assinaturas recorrentes exigem **pagamentos online** ativos (veja
+  [Cobrar nos agendamentos](/pt-BR/scheduling/payments)). As assinaturas são
+  cobradas no cartão e processadas pela Stripe; o dinheiro vai direto para a
+  sua conta.
+</Note>
+
+## Criar um plano
+
+1. Abra **Agenda → Pacotes** e vá até a seção **Assinaturas recorrentes**.
+2. Toque em **Nova assinatura** e defina:
+   - **Nome e descrição**: o que os assinantes veem.
+   - **Preço e cobrança**: mensal ou anual.
+   - **Benefícios**: para cada serviço, escolha um destes:
+     | Benefício | O que o assinante ganha |
+     | --- | --- |
+     | **Ilimitado** | Agenda o serviço quantas vezes quiser, sem custo extra. |
+     | **Sessões por ciclo** | Um número de sessões cobertas por ciclo de cobrança (ex.: 2 por mês). Créditos não usados não acumulam. |
+     | **Desconto** | Um percentual de desconto ao pagar por aquele serviço. |
+3. Salve. Planos ativos aparecem na sua página pública ao lado dos seus
+   pacotes.
+
+## O que os visitantes veem
+
+Sua página lista cada plano com preço, periodicidade e benefícios. Para
+assinar, o visitante informa **nome, número de WhatsApp e e-mail** e paga a
+primeira cobrança no cartão; as próximas renovam automaticamente no mesmo
+cartão.
+
+Após o pagamento, ele recebe um e-mail de confirmação com os benefícios do
+plano, e a assinatura aparece na
+[área do cliente](/pt-BR/scheduling/customer-area) dele.
+
+## Como os benefícios entram no agendamento
+
+- Quando um assinante agenda, o Linkzee reconhece o **telefone** dele e aplica
+  o melhor benefício automaticamente: primeiro os créditos de pacotes
+  pré-pagos, depois os benefícios da assinatura e, por fim, o desconto de
+  assinante sobre o que restar a pagar.
+- As **sessões por ciclo** contam pelo ciclo de cobrança da **data do
+  agendamento** e zeram a cada ciclo, sem acúmulo.
+- Se um agendamento coberto for **cancelado**, o crédito do ciclo volta
+  automaticamente.
+
+## Gerenciar as assinaturas
+
+- **Você**: a lista de **Assinantes** em Agenda → Pacotes mostra cada
+  assinatura e o status dela.
+- **Seu cliente**: pela [área do cliente](/pt-BR/scheduling/customer-area) ele
+  abre o **portal de cobrança** seguro para atualizar o cartão ou cancelar.
+  Uma assinatura cancelada mantém os benefícios até o fim do período já pago.
+- Se uma cobrança de renovação falhar, a Stripe tenta de novo; enquanto o
+  pagamento estiver atrasado, os benefícios ficam pausados até a situação ser
+  regularizada.
+
+## Recebimentos
+
+Toda cobrança de assinatura aparece em **Recebimentos** com a taxa Linkzee do
+seu plano aplicada: as mesmas taxas dos pagamentos de agendamento (veja
+[Planos e preços](/pt-BR/billing/plans)).

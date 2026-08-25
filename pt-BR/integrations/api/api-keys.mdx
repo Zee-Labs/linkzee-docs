@@ -33,10 +33,14 @@ Cada chave carrega um **escopo** que define o que ela pode fazer:
 | --- | --- |
 | **read** | Listar e ler seus dados |
 | **write** | Criar, atualizar e excluir |
+| **finance** | Relatórios financeiros (como o resumo dos seus recebimentos) |
 
 Dê a uma chave apenas o acesso de que ela precisa. Se uma ferramenta só exibe seus
 dados, uma chave **read** é suficiente; uma chave que altera sua página ou seus
-produtos precisa de **write**.
+produtos precisa de **write**. O escopo **finance** nunca entra por padrão: você o
+adiciona explicitamente ao criar a chave, e a rotação de uma chave mantém
+exatamente os escopos que ela tinha. Recebimentos consolidados são o tipo de
+acesso que você concede de propósito.
 
 ## Revogar uma chave
 

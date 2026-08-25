@@ -1,0 +1,69 @@
+---
+title: Planes recurrentes
+icon: arrows-rotate
+description: "Vende suscripciones mensuales o anuales con beneficios — sesiones ilimitadas, créditos por ciclo o descuento para miembros."
+---
+
+Con los **planes recurrentes** tus clientes se suscriben a tus servicios y se
+les cobra automáticamente cada mes (o año) — como *"Plan de Salud Pet:
+R$99/mes con 1 consulta incluida y 20% de descuento en la estética"*. Ingresos
+predecibles para ti, renovaciones sin esfuerzo para ellos.
+
+<Note>
+  Los planes recurrentes requieren tener los **pagos online** activos (mira
+  [Cobrar en las reservas](/es/scheduling/payments)). Las suscripciones se
+  cobran con tarjeta y las procesa Stripe; el dinero va directo a tu cuenta.
+</Note>
+
+## Crear un plan
+
+1. Abre **Agenda → Paquetes** y ve a la sección **Suscripciones recurrentes**.
+2. Toca **Nueva suscripción** y define:
+   - **Nombre y descripción** — lo que ven los suscriptores.
+   - **Precio e intervalo** — mensual o anual.
+   - **Beneficios** — para cada servicio, elige uno:
+     | Beneficio | Qué obtiene el suscriptor |
+     | --- | --- |
+     | **Ilimitado** | Reserva el servicio cuantas veces quiera, sin cargo extra. |
+     | **Créditos por ciclo** | Un número de sesiones cubiertas por ciclo de facturación (p. ej. 2 al mes). Los créditos no usados no se acumulan. |
+     | **Descuento** | Un porcentaje de descuento al pagar ese servicio. |
+3. Guarda. Los planes activos aparecen en tu página pública junto a tus
+   paquetes.
+
+## Lo que ven tus visitantes
+
+Tu página muestra cada plan con su precio, intervalo y beneficios. Para
+suscribirse, el visitante ingresa su **nombre, número de WhatsApp y correo**,
+y luego paga el primer cobro con tarjeta — los siguientes se renuevan
+automáticamente en la misma tarjeta.
+
+Tras el pago recibe un correo de confirmación con los beneficios del plan, y
+la suscripción aparece en su [área de clientes](/es/scheduling/customer-area).
+
+## Cómo se aplican los beneficios al reservar
+
+- Cuando un suscriptor reserva, Linkzee reconoce su **número de teléfono** y
+  aplica el mejor beneficio automáticamente: primero se usan los créditos
+  prepagados de los paquetes, luego los beneficios de la suscripción y, sobre
+  lo que quede por pagar, los descuentos de miembro.
+- Los **créditos por ciclo** cuentan según el ciclo de facturación de la
+  **fecha de la cita** y se reinician en cada ciclo — sin acumulación.
+- Si una reserva cubierta se **cancela**, el crédito del ciclo vuelve
+  automáticamente.
+
+## Gestionar las suscripciones
+
+- **Tú**: la lista de **Suscriptores** en Agenda → Paquetes muestra cada
+  suscripción y su estado.
+- **Tu cliente**: desde su [área de clientes](/es/scheduling/customer-area)
+  puede abrir el **portal de facturación** seguro para actualizar la tarjeta o
+  cancelar. Una suscripción cancelada conserva sus beneficios hasta el final
+  del periodo ya pagado.
+- Si un cobro de renovación falla, Stripe lo reintenta; mientras el pago esté
+  atrasado, los beneficios se pausan hasta que se regularice.
+
+## Ingresos
+
+Cada cobro de suscripción aparece en **Ingresos** con la tarifa de Linkzee de
+tu plan aplicada — las mismas tarifas que los pagos de reserva (mira
+[Planes y precios](/es/billing/plans)).

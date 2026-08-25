@@ -1,0 +1,72 @@
+---
+title: Session packages
+icon: ticket
+description: "Sell bundles of sessions upfront — your customer buys once and uses the credits whenever they book."
+---
+
+A **session package** is a bundle of services sold at a single price — like
+*"5 haircuts for R$150, valid for 90 days"*. Your customer pays once, gets the
+credits instantly, and every time they book one of the included services the
+credit is used automatically. Great for cash flow and for bringing customers
+back.
+
+<Note>
+  Packages require **online payments** to be active (see
+  [Charge for bookings](/scheduling/payments)) — the purchase is paid by card
+  or PIX and the money goes straight to your Stripe account.
+</Note>
+
+## Create a package
+
+1. Open **Scheduling** in the dashboard and go to the **Packages** tab.
+2. Tap **New package** and fill in:
+   - **Name** — what the buyer sees (e.g. *"5-session pack"*).
+   - **Description** — optional, shown on your page.
+   - **Items** — pick each service and how many sessions it includes. A
+     package can mix services (e.g. 4 haircuts + 1 beard trim).
+   - **Price** — one single price for the whole bundle.
+   - **Validity** — how many days the credits last after purchase.
+3. Save. Active packages appear on your public page automatically.
+
+## What your visitors see
+
+Your page shows a **Session packages** card listing each package with its
+price, included sessions and validity. You can drag the card's position (and
+hide or show it) in **Content**, like any other block.
+
+Buying takes under a minute:
+
+1. The visitor taps **Buy package** and enters their **name, WhatsApp number
+   and e-mail**.
+2. They pay by **card or PIX** on the secure checkout.
+3. The confirmation screen shows their credits, and they receive an e-mail
+   receipt with everything included.
+
+<Note>
+  The **phone number is the key**: when the same customer books one of the
+  included services later, Linkzee recognizes the number and uses a credit
+  automatically — no codes, no vouchers.
+</Note>
+
+## How credits are used
+
+- When a customer with credits books an included service, the booking is
+  **covered by the package** — the payment step is skipped for that service.
+- Credits are used **per session** and only for the services included in the
+  package.
+- If a covered booking is **cancelled**, the credit **returns automatically**
+  to the package.
+- **No-shows** consume the credit by default. If you prefer to return the
+  credit on no-shows, enable that option in **Scheduling → Settings**.
+- Credits **expire** at the end of the validity period you set.
+
+## Where your customer tracks their credits
+
+Customers see their remaining credits, validity and purchase history in
+**their customer area** — see [Customer area](/scheduling/customer-area).
+
+## Earnings
+
+Package sales appear in your **Earnings** page like any other payment, marked
+as a package purchase, with the Linkzee fee of your plan applied — the same
+rates as booking payments (see [Plans & pricing](/billing/plans)).

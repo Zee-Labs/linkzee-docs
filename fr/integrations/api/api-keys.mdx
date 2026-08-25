@@ -34,10 +34,14 @@ Chaque clé porte une **portée** qui détermine ce qu'elle peut faire :
 | --- | --- |
 | **read** | Lister et lire vos données |
 | **write** | Créer, mettre à jour et supprimer |
+| **finance** | Rapports financiers (comme votre récapitulatif de revenus) |
 
 N'accordez à une clé que l'accès dont elle a besoin. Si un outil se contente
 d'afficher vos données, une clé **read** suffit ; une clé qui modifie votre page
-ou vos produits a besoin de **write**.
+ou vos produits a besoin de **write**. **finance** n'est jamais inclus par
+défaut — vous l'ajoutez explicitement à la création de la clé, et la rotation
+d'une clé conserve exactement les portées qu'elle avait. Les revenus
+consolidés sont le genre d'accès que l'on accorde en connaissance de cause.
 
 ## Révoquer une clé
 

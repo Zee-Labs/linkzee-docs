@@ -32,9 +32,13 @@ Each key carries a **scope** that decides what it can do:
 | --- | --- |
 | **read** | List and read your data |
 | **write** | Create, update and delete |
+| **finance** | Financial reports (like your earnings summary) |
 
 Give a key only the access it needs. If a tool just displays your data, a
 **read** key is enough; a key that changes your page or products needs **write**.
+**finance** is never included by default — you add it explicitly when creating
+the key, and rotating a key keeps exactly the scopes it had. Consolidated
+earnings are the kind of access you grant on purpose.
 
 ## Revoke a key
 

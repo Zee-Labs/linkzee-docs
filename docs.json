@@ -59,7 +59,8 @@
                 "group": "Plans & pricing",
                 "icon": "crown",
                 "pages": [
-                  "billing/plans"
+                  "billing/plans",
+                  "billing/partner-program"
                 ]
               },
               {
@@ -110,6 +111,7 @@
                   "scheduling/waitlist",
                   "scheduling/dashboard",
                   "scheduling/booking-link",
+                  "scheduling/customer-area",
                   "scheduling/ai-scheduling"
                 ]
               },
@@ -117,7 +119,9 @@
                 "group": "Earnings",
                 "pages": [
                   "scheduling/earnings",
-                  "scheduling/payments"
+                  "scheduling/payments",
+                  "scheduling/packages",
+                  "scheduling/subscription-plans"
                 ]
               },
               {
@@ -267,7 +271,8 @@
                 "group": "Planos e preços",
                 "icon": "crown",
                 "pages": [
-                  "pt-BR/billing/plans"
+                  "pt-BR/billing/plans",
+                  "pt-BR/billing/partner-program"
                 ]
               },
               {
@@ -318,6 +323,7 @@
                   "pt-BR/scheduling/waitlist",
                   "pt-BR/scheduling/dashboard",
                   "pt-BR/scheduling/booking-link",
+                  "pt-BR/scheduling/customer-area",
                   "pt-BR/scheduling/ai-scheduling"
                 ]
               },
@@ -325,7 +331,9 @@
                 "group": "Recebimentos",
                 "pages": [
                   "pt-BR/scheduling/earnings",
-                  "pt-BR/scheduling/payments"
+                  "pt-BR/scheduling/payments",
+                  "pt-BR/scheduling/packages",
+                  "pt-BR/scheduling/subscription-plans"
                 ]
               },
               {
@@ -475,7 +483,8 @@
                 "group": "Planes y precios",
                 "icon": "crown",
                 "pages": [
-                  "es/billing/plans"
+                  "es/billing/plans",
+                  "es/billing/partner-program"
                 ]
               },
               {
@@ -526,6 +535,7 @@
                   "es/scheduling/waitlist",
                   "es/scheduling/dashboard",
                   "es/scheduling/booking-link",
+                  "es/scheduling/customer-area",
                   "es/scheduling/ai-scheduling"
                 ]
               },
@@ -533,7 +543,9 @@
                 "group": "Ingresos",
                 "pages": [
                   "es/scheduling/earnings",
-                  "es/scheduling/payments"
+                  "es/scheduling/payments",
+                  "es/scheduling/packages",
+                  "es/scheduling/subscription-plans"
                 ]
               },
               {
@@ -683,7 +695,8 @@
                 "group": "Forfaits et tarifs",
                 "icon": "crown",
                 "pages": [
-                  "fr/billing/plans"
+                  "fr/billing/plans",
+                  "fr/billing/partner-program"
                 ]
               },
               {
@@ -734,6 +747,7 @@
                   "fr/scheduling/waitlist",
                   "fr/scheduling/dashboard",
                   "fr/scheduling/booking-link",
+                  "fr/scheduling/customer-area",
                   "fr/scheduling/ai-scheduling"
                 ]
               },
@@ -741,7 +755,9 @@
                 "group": "Revenus",
                 "pages": [
                   "fr/scheduling/earnings",
-                  "fr/scheduling/payments"
+                  "fr/scheduling/payments",
+                  "fr/scheduling/packages",
+                  "fr/scheduling/subscription-plans"
                 ]
               },
               {
@@ -891,7 +907,8 @@
                 "group": "Tarife und Preise",
                 "icon": "crown",
                 "pages": [
-                  "de/billing/plans"
+                  "de/billing/plans",
+                  "de/billing/partner-program"
                 ]
               },
               {
@@ -942,6 +959,7 @@
                   "de/scheduling/waitlist",
                   "de/scheduling/dashboard",
                   "de/scheduling/booking-link",
+                  "de/scheduling/customer-area",
                   "de/scheduling/ai-scheduling"
                 ]
               },
@@ -949,7 +967,9 @@
                 "group": "Einnahmen",
                 "pages": [
                   "de/scheduling/earnings",
-                  "de/scheduling/payments"
+                  "de/scheduling/payments",
+                  "de/scheduling/packages",
+                  "de/scheduling/subscription-plans"
                 ]
               },
               {

@@ -1,0 +1,67 @@
+---
+title: Recurring plans
+icon: arrows-rotate
+description: "Sell monthly or yearly subscriptions with benefits — unlimited sessions, credits per cycle or a member discount."
+---
+
+With **recurring plans** your customers subscribe to your services and are
+charged automatically every month (or year) — like *"Pet Health Plan:
+R$99/month with 1 consultation included and 20% off grooming"*. Predictable
+income for you, effortless renewals for them.
+
+<Note>
+  Recurring plans require **online payments** to be active (see
+  [Charge for bookings](/scheduling/payments)). Subscriptions are charged by
+  card and processed by Stripe; the money goes straight to your account.
+</Note>
+
+## Create a plan
+
+1. Open **Scheduling → Packages** and go to the **Recurring plans** section.
+2. Tap **New plan** and set:
+   - **Name and description** — what subscribers see.
+   - **Price and interval** — monthly or yearly.
+   - **Benefits** — for each service, choose one of:
+     | Benefit | What the subscriber gets |
+     | --- | --- |
+     | **Unlimited** | Book the service as often as they want, no extra charge. |
+     | **Credits per cycle** | A number of covered sessions per billing cycle (e.g. 2 per month). Unused credits don't roll over. |
+     | **Discount** | A percentage off when paying for that service. |
+3. Save. Active plans appear on your public page next to your packages.
+
+## What your visitors see
+
+Your page lists each plan with price, interval and benefits. To subscribe,
+the visitor enters their **name, WhatsApp number and e-mail**, then pays the
+first charge by card — the next charges renew automatically on the same card.
+
+After payment they receive a confirmation e-mail with the plan's benefits,
+and the subscription shows up in their [customer area](/scheduling/customer-area).
+
+## How benefits apply when booking
+
+- When a subscriber books, Linkzee recognizes their **phone number** and
+  applies the best benefit automatically: prepaid package credits are used
+  first, then subscription benefits, then member discounts on whatever is
+  left to pay.
+- **Credits per cycle** count by the **appointment date's** billing cycle and
+  reset each cycle — no rollover.
+- If a covered booking is **cancelled**, the cycle credit returns
+  automatically.
+
+## Managing subscriptions
+
+- **You**: the **Subscribers** list in Scheduling → Packages shows each
+  subscription and its status.
+- **Your customer**: from their [customer area](/scheduling/customer-area)
+  they can open the secure **billing portal** to update the card or cancel.
+  A cancelled subscription keeps its benefits until the end of the period
+  already paid.
+- If a renewal charge fails, Stripe retries it; while the payment is overdue
+  the benefits pause until it's settled.
+
+## Earnings
+
+Every subscription charge appears in **Earnings** with the Linkzee fee of
+your plan applied — the same rates as booking payments (see
+[Plans & pricing](/billing/plans)).
