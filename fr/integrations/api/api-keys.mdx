@@ -1,17 +1,26 @@
 ---
 title: Clés d'API
 icon: key
-description: "Créez et gérez les clés d'API qui permettent à vos outils et scripts d'agir en toute sécurité sur votre compte Linkzee."
+description: "Créez et gérez les clés d'API qui permettent à vos outils et scripts d'agir en toute sécurité sur l'une de vos boutiques Linkzee."
 ---
 
 Une **clé d'API** est le moyen par lequel vos outils, scripts et agents d'IA
-prouvent qu'ils sont autorisés à agir sur votre compte Linkzee. Vous créez les
-clés vous-même, vous accordez à chacune l'accès dont elle a besoin, et vous
-révoquez n'importe quelle clé dès que vous ne lui faites plus confiance.
+prouvent qu'ils sont autorisés à agir sur votre Linkzee. Vous créez les clés
+vous-même, vous accordez à chacune l'accès dont elle a besoin, et vous révoquez
+n'importe quelle clé dès que vous ne lui faites plus confiance.
+
+Chaque clé appartient à **une seule boutique**. Si votre compte en contient
+plusieurs, la clé agit sur la boutique dans laquelle vous vous trouviez au moment
+de la créer, et ne touche jamais les autres — voir
+[Plusieurs boutiques](/fr/account/multiple-stores).
 
 ## Créer une clé
 
 <Steps>
+  <Step title="Basculez sur la bonne boutique">
+    La clé est créée pour la boutique **active** dans le menu latéral :
+    choisissez donc cette boutique avant de commencer.
+  </Step>
   <Step title="Ouvrez vos paramètres">
     Dans les paramètres de votre tableau de bord, ouvrez la section **API et MCP**.
   </Step>
@@ -50,10 +59,17 @@ MCP**. La révocation prend effet immédiatement et arrête instantanément tout
 outil qui utilise encore cette clé : c'est donc le moyen le plus rapide de couper
 l'accès si une clé est un jour exposée ou n'est plus nécessaire.
 
+<Note>
+  La section **API et MCP** liste les clés de la boutique dans laquelle vous vous
+  trouvez. Pour voir, faire tourner ou révoquer la clé d'une autre boutique,
+  basculez d'abord sur cette boutique. La rotation d'une clé la maintient sur sa
+  propre boutique : votre intégration ne change donc jamais de boutique.
+</Note>
+
 <Warning>
   Ne partagez jamais votre clé et ne la placez jamais dans du code public —
-  quiconque la possède peut agir sur votre compte. Si une clé fuite, révoquez-la
-  immédiatement et créez-en une nouvelle.
+  quiconque la possède peut agir sur la boutique à laquelle elle appartient. Si
+  une clé fuite, révoquez-la immédiatement et créez-en une nouvelle.
 </Warning>
 
 <CardGroup cols={2}>

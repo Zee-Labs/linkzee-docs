@@ -4,10 +4,12 @@ icon: store
 description: "Lee y actualiza el perfil de la tienda, explora el catálogo de temas y obtén un resumen de rendimiento."
 ---
 
-La tienda es el corazón de una cuenta de Linkzee: su nombre, biografía, redes
-sociales, tema, campos de SEO, píxeles de seguimiento y ajustes de marketing.
-Estos endpoints te permiten leer el perfil completo, aplicar cambios, listar los
-temas predefinidos y obtener un resumen rápido de rendimiento.
+Una tienda contiene una página pública: su nombre, biografía, redes sociales,
+tema, campos de SEO, píxeles de seguimiento y ajustes de marketing. Una sola
+cuenta de Linkzee puede tener **varias tiendas**, así que estos endpoints siempre
+actúan sobre **una** de ellas — la tienda a la que está vinculada tu clave de API.
+Te permiten leer el perfil completo, aplicar cambios, listar los temas
+predefinidos y obtener un resumen rápido de rendimiento.
 
 Todas las solicitudes van a `https://api.linkz.ee` y deben incluir tu clave de API:
 
@@ -17,6 +19,11 @@ Authorization: Bearer lzk_your_key
 
 <Note>
   Las lecturas funcionan con cualquier clave. Las actualizaciones requieren una clave con el permiso **write**.
+</Note>
+
+<Note>
+  Para trabajar con otra tienda, usa una clave creada en esa tienda — mira
+  [Autenticación](/es/api-reference/authentication#la-tienda-a-la-que-pertenece-una-clave).
 </Note>
 
 ## Obtener el perfil de la tienda

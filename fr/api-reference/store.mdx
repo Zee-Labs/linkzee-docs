@@ -4,9 +4,11 @@ icon: store
 description: "Lisez et modifiez le profil de la boutique, parcourez le catalogue de thèmes et récupérez un résumé des performances."
 ---
 
-La boutique est le cœur d'un compte Linkzee : son nom, sa bio, ses identifiants
-de réseaux sociaux, son thème, ses champs SEO, ses pixels de suivi et ses
-paramètres marketing. Ces endpoints vous permettent de lire le profil complet,
+Une boutique porte une page publique : son nom, sa bio, ses identifiants de
+réseaux sociaux, son thème, ses champs SEO, ses pixels de suivi et ses paramètres
+marketing. Un même compte Linkzee peut réunir **plusieurs boutiques** : ces
+endpoints agissent donc toujours sur **une seule** d'entre elles — celle à
+laquelle votre clé d'API est liée. Ils vous permettent de lire le profil complet,
 d'appliquer des modifications, de lister les thèmes prêts à l'emploi et de
 récupérer un résumé rapide des performances.
 
@@ -20,6 +22,12 @@ Authorization: Bearer lzk_your_key
 <Note>
   Les lectures fonctionnent avec n'importe quelle clé. Les modifications
   nécessitent une clé disposant du scope **write**.
+</Note>
+
+<Note>
+  Pour travailler sur une autre boutique, utilisez une clé créée dans cette
+  boutique — voir
+  [Authentification](/fr/api-reference/authentication#sur-quelle-boutique-agit-une-cl%C3%A9).
 </Note>
 
 ## Récupérer le profil de la boutique

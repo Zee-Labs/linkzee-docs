@@ -1,0 +1,88 @@
+---
+title: Plan per store
+icon: receipt
+description: "Each store carries its own plan, its own subscription and its own invoice — subscribing one store doesn't unlock the others."
+---
+
+If your account has more than one store, the plan is **not** an account-wide
+setting. Each store carries **its own plan**, with its own subscription, its own
+invoices and its own renewal date.
+
+Put simply: **subscribing store A does not put store B on a paid plan.** A store
+you don't subscribe stays on **Free**, with Free's limits, no matter what your
+other stores are paying for.
+
+<Note>
+  Only running one store? Nothing changes for you — your store is your plan, and
+  the rest of this page is just there for the day you add a second one.
+</Note>
+
+## Subscribe a specific store
+
+<Steps>
+  <Step title="Switch to the store first">
+    Open the store switcher at the top of the sidebar and pick the store you
+    want to put on a paid plan. Its name should be the one showing in the
+    sidebar.
+  </Step>
+  <Step title="Open Plan">
+    Go to **Dashboard → Plan**. Everything on that screen — your current plan,
+    your usage, the upgrade options — is about the **active** store.
+  </Step>
+  <Step title="Choose the plan and check out">
+    Pick the plan and the billing cycle, and finish the checkout. Payment is
+    processed by Stripe, exactly as described in
+    [Plans & pricing](/billing/plans).
+  </Step>
+</Steps>
+
+<Warning>
+  Check the store name in the sidebar before you subscribe, upgrade, downgrade
+  or cancel. Each of these actions applies **only** to the store that's active
+  at that moment.
+</Warning>
+
+## What that means in practice
+
+| | How it works with several stores |
+| --- | --- |
+| **Subscription** | One per store. Each store you want on a paid plan needs its own subscription. |
+| **Invoices** | Separate. Each store has its own payment history, its own invoices and its own PDF receipts, under **Dashboard → Plan** of that store. |
+| **Billing cycle** | Independent. Store A can renew monthly on the 3rd while store B renews yearly in November. |
+| **Upgrade & downgrade** | Applies to the active store. Proration, and the credit from a downgrade, land on **that store's** next invoice. |
+| **Cancelling** | Returns **that store** to Free at the end of the period you already paid for. Your other stores keep their plans. |
+| **Price you signed up at** | Tied to each subscription. A store that keeps its subscription active keeps the price it signed up at, independently of the others. |
+| **Features and limits** | Read from the plan of the store you're in — products, analytics history, AI conversations, scheduling, WhatsApp reminders, Zee, public API and lead webhook. |
+| **Linkzee fee on booking payments** | Follows the plan of the store where the booking happened: 5% on Free, 3% on Essential, 1.5% on Pro, 0% on Scale. |
+
+<Note>
+  Because the fee is read from the store's plan, a booking taken on a Free store
+  keeps 5% even if another store in your account is on Scale.
+</Note>
+
+## The free trial is one per person
+
+The **14-day free trial** belongs to **you**, not to a store. It's granted on
+your **first** store, and it can only be used once — a store you create later
+starts on **Free with no trial**, and deleting a store doesn't give the trial
+back.
+
+## Account or store?
+
+| Belongs to your account | Belongs to each store |
+| --- | --- |
+| Your email, password and two-factor | Plan and subscription |
+| Language, region and appearance | Invoices and billing cycle |
+| The one-time 14-day free trial | Booking fee and feature limits |
+| The list of stores you can switch between | Page, schedule, team and API keys |
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Multiple stores" icon="store" href="/account/multiple-stores">
+    Create stores, switch between them, and see what changes when you do.
+  </Card>
+  <Card title="Plans & pricing" icon="crown" href="/billing/plans">
+    What each plan includes, what it costs and how billing works.
+  </Card>
+</CardGroup>

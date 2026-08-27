@@ -30,9 +30,29 @@ Las claves de Linkzee siempre empiezan con el prefijo `lzk_`. Crea y administra
 tus claves desde la pantalla de claves de API de tu cuenta.
 
 <Warning>
-  Trata tu clave como una contraseña. Da acceso completo a los datos de tu cuenta:
-  guárdala en el servidor, nunca la subas a un repositorio y rótala si se filtra.
+  Trata tu clave como una contraseña. Da acceso completo a los datos de la tienda
+  a la que pertenece: guárdala en el servidor, nunca la subas a un repositorio y
+  rótala si se filtra.
 </Warning>
+
+### La tienda a la que pertenece una clave
+
+Una sola cuenta de Linkzee puede tener **varias tiendas** (mira
+[Varias tiendas](/es/account/multiple-stores)). Una clave está vinculada a **una
+sola tienda**: la que estaba activa en el panel cuando se creó la clave. Cada
+petición a `/v1` hecha con esa clave — y cada llamada por MCP — lee y escribe en
+esa tienda, y solo en esa.
+
+**No hay ninguna cabecera para elegir la tienda en la petición.** Para automatizar
+una segunda tienda, cambia a ella en el panel, crea una clave ahí y usa esa clave.
+
+<Note>
+  Al rotar una clave, esta se queda en la misma tienda que la original, así que
+  una integración nunca se muda a otra tienda en silencio. Una clave creada antes
+  de que se pudieran separar las tiendas no está vinculada a ninguna: actúa sobre
+  la tienda **más antigua** de la cuenta hasta que la reemplaces por una clave
+  vinculada a una tienda.
+</Note>
 
 ### Ámbitos
 

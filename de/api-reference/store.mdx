@@ -4,9 +4,11 @@ icon: store
 description: "Store-Profil lesen und aktualisieren, den Theme-Katalog durchsuchen und eine Leistungsübersicht abrufen."
 ---
 
-Der Store ist das Herzstück eines Linkzee-Kontos: sein Name, die Bio, die
+Ein Store trägt eine öffentliche Seite: seinen Namen, die Bio, die
 Social-Handles, das Theme, die SEO-Felder, die Tracking-Pixel und die
-Marketing-Einstellungen. Mit diesen Endpunkten kannst du das vollständige Profil
+Marketing-Einstellungen. Ein Linkzee-Konto kann **mehrere Stores** enthalten —
+diese Endpunkte wirken deshalb immer auf **einen** davon: auf den Store, an den
+dein API-Schlüssel gebunden ist. Mit ihnen kannst du das vollständige Profil
 lesen, Änderungen anwenden, die vorgefertigten Themes auflisten und eine schnelle
 Leistungsübersicht abrufen.
 
@@ -20,6 +22,12 @@ Authorization: Bearer lzk_your_key
 <Note>
   Lesezugriffe funktionieren mit jedem Schlüssel. Aktualisierungen erfordern
   einen Schlüssel mit dem **write**-Scope.
+</Note>
+
+<Note>
+  Um mit einem anderen Store zu arbeiten, verwende einen Schlüssel, der in
+  diesem Store erstellt wurde — siehe
+  [Authentifizierung](/de/api-reference/authentication#auf-welchen-store-ein-schl%C3%BCssel-wirkt).
 </Note>
 
 ## Store-Profil abrufen

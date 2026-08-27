@@ -1,0 +1,87 @@
+---
+title: Plano por loja
+icon: receipt
+description: "Cada loja tem o próprio plano, a própria assinatura e a própria fatura: assinar uma loja não libera as outras."
+---
+
+Se a sua conta tem mais de uma loja, o plano **não** é uma configuração da conta
+inteira. Cada loja carrega **o próprio plano**, com assinatura, faturas e data de
+renovação próprias.
+
+Direto ao ponto: **assinar a loja A não coloca a loja B em um plano pago.** Uma
+loja que você não assina continua no **Free**, com os limites do Free, não
+importa o que as suas outras lojas estejam pagando.
+
+<Note>
+  Tem só uma loja? Nada muda para você: sua loja é o seu plano, e o resto desta
+  página fica aqui para o dia em que você criar a segunda.
+</Note>
+
+## Assinar uma loja específica
+
+<Steps>
+  <Step title="Troque para a loja primeiro">
+    Abra o seletor de loja no topo do menu lateral e escolha a loja que você quer
+    colocar em um plano pago. O nome dela é o que precisa estar aparecendo no
+    menu.
+  </Step>
+  <Step title="Abra o Plano">
+    Vá em **Dashboard → Plano**. Tudo naquela tela (seu plano atual, seu uso, as
+    opções de upgrade) é sobre a loja **ativa**.
+  </Step>
+  <Step title="Escolha o plano e finalize">
+    Escolha o plano e o ciclo de cobrança, e conclua o checkout. O pagamento é
+    processado pela Stripe, exatamente como está descrito em
+    [Planos e preços](/pt-BR/billing/plans).
+  </Step>
+</Steps>
+
+<Warning>
+  Confira o nome da loja no menu lateral antes de assinar, fazer upgrade,
+  downgrade ou cancelar. Cada uma dessas ações vale **só** para a loja que está
+  ativa naquele momento.
+</Warning>
+
+## O que isso significa na prática
+
+| | Como funciona com várias lojas |
+| --- | --- |
+| **Assinatura** | Uma por loja. Cada loja que você quiser em um plano pago precisa da própria assinatura. |
+| **Faturas** | Separadas. Cada loja tem o próprio histórico de pagamentos, as próprias faturas e os próprios recibos em PDF, em **Dashboard → Plano** daquela loja. |
+| **Ciclo de cobrança** | Independente. A loja A pode renovar todo dia 3, no mensal, enquanto a loja B renova em novembro, no anual. |
+| **Upgrade e downgrade** | Valem para a loja ativa. O valor proporcional, e o crédito de um downgrade, entram na próxima fatura **daquela loja**. |
+| **Cancelamento** | Devolve **aquela loja** ao Free no fim do período que você já pagou. Suas outras lojas mantêm os planos delas. |
+| **Preço que você contratou** | Fica preso a cada assinatura. Uma loja que mantém a assinatura ativa mantém o preço que contratou, independentemente das outras. |
+| **Recursos e limites** | São lidos do plano da loja em que você está: produtos, histórico de analytics, conversas de IA, agenda, lembretes por WhatsApp, Zee, API pública e webhook de leads. |
+| **Taxa Linkzee nos pagamentos de agendamento** | Segue o plano da loja onde o agendamento aconteceu: 5% no Free, 3% no Essential, 1,5% no Pro, 0% no Scale. |
+
+<Note>
+  Como a taxa é lida do plano da loja, um agendamento feito em uma loja no Free
+  mantém os 5% mesmo que outra loja da sua conta esteja no Scale.
+</Note>
+
+## Os 14 dias grátis são um por pessoa
+
+O teste de **14 dias grátis** é **seu**, não da loja. Ele vale na sua
+**primeira** loja e só pode ser usado uma vez: uma loja criada depois começa no
+**Free, sem teste**, e excluir uma loja não devolve o teste.
+
+## Da conta ou da loja?
+
+| É da sua conta | É de cada loja |
+| --- | --- |
+| Seu e-mail, sua senha e o 2FA | Plano e assinatura |
+| Idioma, região e aparência | Faturas e ciclo de cobrança |
+| Os 14 dias grátis, uma única vez | Taxa dos agendamentos e limites dos recursos |
+| A lista de lojas entre as quais você troca | Página, agenda, equipe e chaves de API |
+
+## Páginas relacionadas
+
+<CardGroup cols={2}>
+  <Card title="Várias lojas" icon="store" href="/pt-BR/account/multiple-stores">
+    Crie lojas, troque entre elas e veja o que muda quando você troca.
+  </Card>
+  <Card title="Planos e preços" icon="crown" href="/pt-BR/billing/plans">
+    O que cada plano inclui, quanto custa e como funciona a cobrança.
+  </Card>
+</CardGroup>

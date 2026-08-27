@@ -1,16 +1,24 @@
 ---
 title: API keys
 icon: key
-description: "Create and manage the API keys that let your tools and scripts securely act on your Linkzee account."
+description: "Create and manage the API keys that let your tools and scripts securely act on one of your Linkzee stores."
 ---
 
 An **API key** is how your tools, scripts and AI agents prove they're allowed
-to act on your Linkzee account. You create keys yourself, give each one the
-access it needs, and revoke any key the moment you no longer trust it.
+to act on your Linkzee. You create keys yourself, give each one the access it
+needs, and revoke any key the moment you no longer trust it.
+
+Each key belongs to **one store**. If your account holds more than one store,
+the key acts on the store you were in when you created it, and never touches the
+others — see [Multiple stores](/account/multiple-stores).
 
 ## Create a key
 
 <Steps>
+  <Step title="Switch to the right store">
+    The key is created for the store that's **active** in the sidebar, so pick
+    that store before you start.
+  </Step>
   <Step title="Open your settings">
     In your dashboard settings, open the **API & MCP** section.
   </Step>
@@ -46,9 +54,16 @@ You can revoke a key anytime from the same **API & MCP** section. Revoking takes
 effect immediately and instantly stops any tool still using that key, so it's
 the fastest way to cut off access if a key is ever exposed or no longer needed.
 
+<Note>
+  The **API & MCP** section lists the keys of the store you're in. To see, rotate
+  or revoke another store's key, switch to that store first. Rotating a key keeps
+  it on its own store, so your integration never moves to a different one.
+</Note>
+
 <Warning>
   Never share your key or put it in public code — anyone who has it can act on
-  your account. If a key leaks, revoke it right away and create a new one.
+  the store it belongs to. If a key leaks, revoke it right away and create a new
+  one.
 </Warning>
 
 <CardGroup cols={2}>

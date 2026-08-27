@@ -4,10 +4,11 @@ icon: store
 description: "Read and update the store profile, browse the theme catalog, and pull a performance summary."
 ---
 
-The store is the heart of a Linkzee account: its name, bio, social handles,
-theme, SEO fields, tracking pixels, and marketing settings. These endpoints let
-you read the full profile, apply changes, list the ready‑made themes, and fetch
-a quick performance summary.
+A store holds a public page: its name, bio, social handles, theme, SEO fields,
+tracking pixels, and marketing settings. One Linkzee account can hold **several
+stores**, so these endpoints always act on **one** of them — the store your API
+key is bound to. They let you read the full profile, apply changes, list the
+ready‑made themes, and fetch a quick performance summary.
 
 All requests go to `https://api.linkz.ee` and must include your API key:
 
@@ -17,6 +18,11 @@ Authorization: Bearer lzk_your_key
 
 <Note>
   Reads work with any key. Updates require a key with the **write** scope.
+</Note>
+
+<Note>
+  To work with a different store, use a key created in that store — see
+  [Authentication](/api-reference/authentication#which-store-a-key-acts-on).
 </Note>
 
 ## Get the store profile

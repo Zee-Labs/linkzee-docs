@@ -30,9 +30,28 @@ As chaves do Linkzee sempre começam com o prefixo `lzk_`. Crie e gerencie suas 
 tela de chaves de API da sua conta.
 
 <Warning>
-  Trate sua chave como uma senha. Ela dá acesso total aos dados da sua conta —
-  mantenha-a no servidor, nunca faça commit dela em um repositório e troque-a caso vaze.
+  Trate sua chave como uma senha. Ela dá acesso total aos dados da loja à qual
+  pertence: mantenha-a no servidor, nunca faça commit dela em um repositório e
+  troque-a caso vaze.
 </Warning>
+
+### Em qual loja a chave age
+
+Uma conta Linkzee pode ter **várias lojas** (veja
+[Várias lojas](/pt-BR/account/multiple-stores)). Cada chave fica presa a **uma
+única loja**: aquela que estava ativa no painel quando a chave foi criada. Toda
+requisição `/v1` feita com essa chave, e toda chamada MCP, lê e escreve nessa
+loja, e só nela.
+
+**Não existe cabeçalho de requisição para escolher a loja.** Para automatizar uma
+segunda loja, troque para ela no painel, crie uma chave ali e use essa chave.
+
+<Note>
+  Rotacionar uma chave mantém a mesma loja da original, então uma integração
+  nunca muda de loja sem você perceber. Uma chave criada antes de as lojas
+  poderem ser separadas não fica presa a nenhuma: ela age na loja **mais antiga**
+  da conta até você substituí-la por uma chave presa a uma loja.
+</Note>
 
 ### Escopos
 

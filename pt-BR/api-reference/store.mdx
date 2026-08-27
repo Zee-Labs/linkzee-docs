@@ -4,10 +4,12 @@ icon: store
 description: "Leia e atualize o perfil da loja, navegue pelo catálogo de temas e obtenha um resumo de desempenho."
 ---
 
-A loja é o coração de uma conta Linkzee: seu nome, bio, perfis de redes sociais,
-tema, campos de SEO, pixels de rastreamento e configurações de marketing. Estes
-endpoints permitem ler o perfil completo, aplicar mudanças, listar os temas
-prontos e obter um resumo rápido de desempenho.
+Uma loja guarda uma página pública: seu nome, bio, perfis de redes sociais, tema,
+campos de SEO, pixels de rastreamento e configurações de marketing. Uma conta
+Linkzee pode ter **várias lojas**, então estes endpoints sempre agem em **uma**
+delas: a loja à qual a sua chave de API está presa. Eles permitem ler o perfil
+completo, aplicar mudanças, listar os temas prontos e obter um resumo rápido de
+desempenho.
 
 Todas as requisições vão para `https://api.linkz.ee` e devem incluir sua chave de API:
 
@@ -17,6 +19,11 @@ Authorization: Bearer lzk_your_key
 
 <Note>
   Leituras funcionam com qualquer chave. Atualizações exigem uma chave com o escopo **write**.
+</Note>
+
+<Note>
+  Para trabalhar com outra loja, use uma chave criada naquela loja. Veja
+  [Autenticação](/pt-BR/api-reference/authentication#em-qual-loja-a-chave-age).
 </Note>
 
 ## Obter o perfil da loja

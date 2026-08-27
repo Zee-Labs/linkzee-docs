@@ -1,0 +1,92 @@
+---
+title: Un forfait par boutique
+icon: receipt
+description: "Chaque boutique porte son propre forfait, son propre abonnement et sa propre facture — abonner une boutique ne débloque pas les autres."
+---
+
+Si votre compte contient plusieurs boutiques, le forfait n'est **pas** un réglage
+qui s'applique à tout le compte. Chaque boutique porte **son propre forfait**,
+avec son propre abonnement, ses propres factures et sa propre date de
+renouvellement.
+
+En clair : **abonner la boutique A ne place pas la boutique B sur un forfait
+payant.** Une boutique que vous n'abonnez pas reste en **Free**, avec les limites
+du Free, quel que soit le forfait payé par vos autres boutiques.
+
+<Note>
+  Vous ne gérez qu'une seule boutique ? Rien ne change pour vous — votre boutique
+  est votre forfait, et le reste de cette page ne servira que le jour où vous en
+  ajouterez une deuxième.
+</Note>
+
+## Abonner une boutique précise
+
+<Steps>
+  <Step title="Basculez d'abord sur la boutique">
+    Ouvrez le sélecteur de boutique en haut du menu latéral et choisissez la
+    boutique que vous voulez placer sur un forfait payant. Son nom doit être
+    celui qui s'affiche dans le menu latéral.
+  </Step>
+  <Step title="Ouvrez Forfait">
+    Allez dans **Dashboard → Forfait**. Tout ce que montre cet écran — votre
+    forfait actuel, votre usage, les options de montée en gamme — concerne la
+    boutique **active**.
+  </Step>
+  <Step title="Choisissez le forfait et payez">
+    Choisissez le forfait et la périodicité, puis finalisez le paiement. Le
+    paiement est traité par Stripe, exactement comme décrit dans
+    [Forfaits et tarifs](/fr/billing/plans).
+  </Step>
+</Steps>
+
+<Warning>
+  Vérifiez le nom de la boutique dans le menu latéral avant de vous abonner, de
+  monter ou descendre en gamme, ou de résilier. Chacune de ces actions s'applique
+  **uniquement** à la boutique active à ce moment-là.
+</Warning>
+
+## Ce que cela change concrètement
+
+| | Comment ça marche avec plusieurs boutiques |
+| --- | --- |
+| **Abonnement** | Un par boutique. Chaque boutique que vous voulez sur un forfait payant a besoin de son propre abonnement. |
+| **Factures** | Séparées. Chaque boutique a son propre historique des paiements, ses propres factures et ses propres reçus PDF, dans **Dashboard → Forfait** de cette boutique. |
+| **Cycle de facturation** | Indépendant. La boutique A peut se renouveler tous les mois le 3 pendant que la boutique B se renouvelle chaque année en novembre. |
+| **Montée et baisse de gamme** | S'appliquent à la boutique active. Le prorata, comme le crédit issu d'une baisse de gamme, atterrissent sur la prochaine facture de **cette boutique**. |
+| **Résiliation** | Ramène **cette boutique** au Free à la fin de la période déjà réglée. Vos autres boutiques conservent leur forfait. |
+| **Prix auquel vous avez souscrit** | Lié à chaque abonnement. Une boutique dont l'abonnement reste actif conserve le prix auquel elle a souscrit, indépendamment des autres. |
+| **Fonctionnalités et limites** | Lues sur le forfait de la boutique où vous vous trouvez — produits, historique des statistiques, conversations IA, agenda, rappels WhatsApp, Zee, API publique et webhook de leads. |
+| **Commission Linkzee sur les paiements de réservation** | Suit le forfait de la boutique où la réservation a eu lieu : 5 % en Free, 3 % en Essential, 1,5 % en Pro, 0 % en Scale. |
+
+<Note>
+  Comme la commission est lue sur le forfait de la boutique, une réservation
+  prise sur une boutique en Free reste à 5 % même si une autre boutique de votre
+  compte est en Scale.
+</Note>
+
+## L'essai gratuit est unique par personne
+
+Les **14 jours d'essai gratuit** vous appartiennent à **vous**, pas à une
+boutique. Ils sont accordés sur votre **première** boutique et ne peuvent servir
+qu'une seule fois — une boutique créée plus tard démarre en **Free, sans essai**,
+et supprimer une boutique ne redonne pas l'essai.
+
+## Compte ou boutique ?
+
+| Appartient à votre compte | Appartient à chaque boutique |
+| --- | --- |
+| Votre e-mail, votre mot de passe et la double authentification | Forfait et abonnement |
+| Langue, région et apparence | Factures et cycle de facturation |
+| Les 14 jours d'essai gratuit, une seule fois | Commission sur les réservations et limites des fonctionnalités |
+| La liste des boutiques entre lesquelles vous basculez | Page, agenda, équipe et clés API |
+
+## Pages liées
+
+<CardGroup cols={2}>
+  <Card title="Plusieurs boutiques" icon="store" href="/fr/account/multiple-stores">
+    Créez des boutiques, basculez de l'une à l'autre et voyez ce qui change quand vous le faites.
+  </Card>
+  <Card title="Forfaits et tarifs" icon="crown" href="/fr/billing/plans">
+    Ce que contient chaque forfait, combien il coûte et comment fonctionne la facturation.
+  </Card>
+</CardGroup>

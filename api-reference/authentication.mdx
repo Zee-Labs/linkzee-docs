@@ -30,9 +30,28 @@ Linkzee keys always start with the `lzk_` prefix. Create and manage keys from th
 API keys screen in your account.
 
 <Warning>
-  Treat your key like a password. It carries full access to your account's data —
-  keep it server-side, never commit it to a repository, and rotate it if it leaks.
+  Treat your key like a password. It carries full access to the data of the store
+  it belongs to — keep it server-side, never commit it to a repository, and
+  rotate it if it leaks.
 </Warning>
+
+### Which store a key acts on
+
+One Linkzee account can hold **several stores** (see
+[Multiple stores](/account/multiple-stores)). A key is bound to a **single
+store**: the one that was active in the dashboard when the key was created.
+Every `/v1` request made with that key — and every MCP call — reads and writes
+that store, and only that store.
+
+There is **no request header to pick a store**. To automate a second store,
+switch to it in the dashboard, create a key there, and use that key.
+
+<Note>
+  Rotating a key keeps it on the same store as the original, so an integration
+  never silently moves to another store. A key created before stores could be
+  separated isn't bound to one: it acts on the account's **oldest** store until
+  you replace it with a store-bound key.
+</Note>
 
 ### Scopes
 

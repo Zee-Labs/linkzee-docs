@@ -32,9 +32,29 @@ clés depuis l'écran des clés d'API de votre compte.
 
 <Warning>
   Traitez votre clé comme un mot de passe. Elle donne un accès complet aux données
-  de votre compte — conservez-la côté serveur, ne la validez jamais dans un dépôt,
-  et faites-la tourner en cas de fuite.
+  de la boutique à laquelle elle appartient — conservez-la côté serveur, ne la
+  validez jamais dans un dépôt, et faites-la tourner en cas de fuite.
 </Warning>
+
+### Sur quelle boutique agit une clé
+
+Un même compte Linkzee peut réunir **plusieurs boutiques** (voir
+[Plusieurs boutiques](/fr/account/multiple-stores)). Une clé est liée à une
+**seule boutique** : celle qui était active dans le tableau de bord au moment de
+sa création. Chaque requête `/v1` effectuée avec cette clé — et chaque appel MCP
+— lit et modifie cette boutique, et elle seule.
+
+Il n'existe **aucun en-tête de requête pour choisir une boutique**. Pour
+automatiser une seconde boutique, basculez dessus dans le tableau de bord, créez
+une clé depuis cette boutique et utilisez cette clé.
+
+<Note>
+  Faire tourner une clé la maintient sur la même boutique que l'originale : une
+  intégration ne migre donc jamais silencieusement vers une autre boutique. Une
+  clé créée avant la séparation des boutiques n'est liée à aucune d'elles : elle
+  agit sur la boutique la **plus ancienne** du compte jusqu'à ce que vous la
+  remplaciez par une clé liée à une boutique.
+</Note>
 
 ### Portées
 

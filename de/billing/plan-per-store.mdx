@@ -1,0 +1,92 @@
+---
+title: Tarif pro Geschäft
+icon: receipt
+description: "Jedes Geschäft trägt seinen eigenen Tarif, sein eigenes Abo und seine eigene Rechnung — ein Abo für ein Geschäft schaltet die anderen nicht frei."
+---
+
+Hat dein Konto mehr als ein Geschäft, ist der Tarif **keine** kontoweite
+Einstellung. Jedes Geschäft trägt **seinen eigenen Tarif**, mit eigenem Abo,
+eigenen Rechnungen und eigenem Verlängerungsdatum.
+
+Kurz gesagt: **Ein Abo für Geschäft A bringt Geschäft B nicht in einen
+kostenpflichtigen Tarif.** Ein Geschäft, für das du nichts abschließt, bleibt auf
+**Free** — mit den Free-Grenzen, unabhängig davon, wofür deine anderen Geschäfte
+zahlen.
+
+<Note>
+  Du führst nur ein Geschäft? Dann ändert sich für dich nichts — dein Geschäft
+  ist dein Tarif, und der Rest dieser Seite ist für den Tag da, an dem ein
+  zweites dazukommt.
+</Note>
+
+## Ein bestimmtes Geschäft abonnieren
+
+<Steps>
+  <Step title="Wechsle zuerst in das Geschäft">
+    Öffne die Geschäftsauswahl oben in der Seitenleiste und wähle das Geschäft,
+    das du in einen kostenpflichtigen Tarif bringen willst. Sein Name sollte der
+    sein, der in der Seitenleiste steht.
+  </Step>
+  <Step title="Öffne Tarif">
+    Gehe zu **Dashboard → Tarif**. Alles auf diesem Bildschirm — dein aktueller
+    Tarif, deine Nutzung, die Upgrade-Optionen — bezieht sich auf das **aktive**
+    Geschäft.
+  </Step>
+  <Step title="Wähle den Tarif und schließe ab">
+    Wähle den Tarif und den Abrechnungszyklus und schließe den Bezahlvorgang ab.
+    Die Zahlung wird über Stripe abgewickelt, genau wie unter
+    [Tarife und Preise](/de/billing/plans) beschrieben.
+  </Step>
+</Steps>
+
+<Warning>
+  Prüfe den Namen des Geschäfts in der Seitenleiste, bevor du abonnierst, up-
+  oder downgradest oder kündigst. Jede dieser Aktionen gilt **nur** für das
+  Geschäft, das in diesem Moment aktiv ist.
+</Warning>
+
+## Was das in der Praxis bedeutet
+
+| | So funktioniert es mit mehreren Geschäften |
+| --- | --- |
+| **Abo** | Eines pro Geschäft. Jedes Geschäft, das in einem kostenpflichtigen Tarif laufen soll, braucht ein eigenes Abo. |
+| **Rechnungen** | Getrennt. Jedes Geschäft hat seinen eigenen Zahlungsverlauf, seine eigenen Rechnungen und seine eigenen PDF-Belege, unter **Dashboard → Tarif** dieses Geschäfts. |
+| **Abrechnungszyklus** | Unabhängig. Geschäft A kann sich monatlich am 3. verlängern, während Geschäft B sich jährlich im November verlängert. |
+| **Up- und Downgrade** | Gilt für das aktive Geschäft. Die anteilige Berechnung und das Guthaben aus einem Downgrade landen auf der nächsten Rechnung **dieses Geschäfts**. |
+| **Kündigen** | Bringt **dieses Geschäft** zum Ende des bereits bezahlten Zeitraums zurück auf Free. Deine anderen Geschäfte behalten ihre Tarife. |
+| **Preis beim Abschluss** | Hängt am jeweiligen Abo. Ein Geschäft, dessen Abo aktiv bleibt, behält den Preis, zu dem du abgeschlossen hast — unabhängig von den anderen. |
+| **Funktionen und Grenzen** | Werden aus dem Tarif des Geschäfts gelesen, in dem du gerade bist — Produkte, Analyse-Verlauf, KI-Gespräche, Terminplanung, WhatsApp-Erinnerungen, Zee, öffentliche API und Lead-Webhook. |
+| **Linkzee-Gebühr auf Buchungszahlungen** | Folgt dem Tarif des Geschäfts, in dem die Buchung entstanden ist: 5 % auf Free, 3 % auf Essential, 1,5 % auf Pro, 0 % auf Scale. |
+
+<Note>
+  Weil die Gebühr aus dem Tarif des Geschäfts gelesen wird, bleiben es bei einer
+  Buchung in einem Free-Geschäft 5 % — auch wenn ein anderes Geschäft in deinem
+  Konto im Scale-Tarif ist.
+</Note>
+
+## Die Testphase gilt einmal pro Person
+
+Die **14-tägige Testphase** gehört **dir**, nicht einem Geschäft. Sie wird auf
+deinem **ersten** Geschäft gewährt und kann nur einmal genutzt werden — ein
+Geschäft, das du später anlegst, startet auf **Free ohne Testphase**, und ein
+gelöschtes Geschäft gibt die Testphase nicht zurück.
+
+## Konto oder Geschäft?
+
+| Gehört zu deinem Konto | Gehört zu jedem Geschäft |
+| --- | --- |
+| Deine E-Mail-Adresse, dein Passwort und Zwei-Faktor | Tarif und Abo |
+| Sprache, Region und Erscheinungsbild | Rechnungen und Abrechnungszyklus |
+| Die einmalige 14-tägige Testphase | Buchungsgebühr und Funktionsgrenzen |
+| Die Liste der Geschäfte, zwischen denen du wechseln kannst | Seite, Kalender, Team und API-Schlüssel |
+
+## Verwandte Seiten
+
+<CardGroup cols={2}>
+  <Card title="Mehrere Geschäfte" icon="store" href="/de/account/multiple-stores">
+    Geschäfte anlegen, zwischen ihnen wechseln und sehen, was sich dabei ändert.
+  </Card>
+  <Card title="Tarife und Preise" icon="crown" href="/de/billing/plans">
+    Was jeder Tarif enthält, was er kostet und wie die Abrechnung funktioniert.
+  </Card>
+</CardGroup>

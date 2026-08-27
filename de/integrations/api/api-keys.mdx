@@ -1,18 +1,26 @@
 ---
 title: API-Schlüssel
 icon: key
-description: "Erstellen und verwalten Sie die API-Schlüssel, mit denen Ihre Tools und Skripte sicher in Ihrem Linkzee-Konto handeln können."
+description: "Erstellen und verwalten Sie die API-Schlüssel, mit denen Ihre Tools und Skripte sicher in einem Ihrer Linkzee-Geschäfte handeln können."
 ---
 
 Ein **API-Schlüssel** ist die Art und Weise, wie Ihre Tools, Skripte und
-KI-Agenten nachweisen, dass sie in Ihrem Linkzee-Konto handeln dürfen. Sie
-erstellen die Schlüssel selbst, geben jedem genau den Zugriff, den er braucht,
-und widerrufen jeden Schlüssel in dem Moment, in dem Sie ihm nicht mehr
-vertrauen.
+KI-Agenten nachweisen, dass sie in Ihrem Linkzee handeln dürfen. Sie erstellen
+die Schlüssel selbst, geben jedem genau den Zugriff, den er braucht, und
+widerrufen jeden Schlüssel in dem Moment, in dem Sie ihm nicht mehr vertrauen.
+
+Jeder Schlüssel gehört zu **einem Geschäft**. Enthält Ihr Konto mehr als ein
+Geschäft, wirkt der Schlüssel auf das Geschäft, in dem Sie ihn erstellt haben,
+und rührt die anderen nie an — siehe
+[Mehrere Geschäfte](/de/account/multiple-stores).
 
 ## Einen Schlüssel erstellen
 
 <Steps>
+  <Step title="Wechseln Sie in das richtige Geschäft">
+    Der Schlüssel wird für das Geschäft erstellt, das in der Seitenleiste
+    **aktiv** ist — wählen Sie es also aus, bevor Sie beginnen.
+  </Step>
   <Step title="Öffnen Sie Ihre Einstellungen">
     Öffnen Sie in den Einstellungen Ihres Dashboards den Bereich **API und MCP**.
   </Step>
@@ -52,11 +60,19 @@ das diesen Schlüssel noch verwendet — es ist also der schnellste Weg, den
 Zugriff zu kappen, falls ein Schlüssel jemals offengelegt wird oder nicht mehr
 benötigt wird.
 
+<Note>
+  Der Bereich **API und MCP** listet die Schlüssel des Geschäfts, in dem Sie
+  gerade sind. Um den Schlüssel eines anderen Geschäfts zu sehen, zu rotieren
+  oder zu widerrufen, wechseln Sie zuerst in dieses Geschäft. Beim Rotieren
+  bleibt ein Schlüssel bei seinem eigenen Geschäft — Ihre Integration wandert
+  also nie zu einem anderen.
+</Note>
+
 <Warning>
   Geben Sie Ihren Schlüssel niemals weiter und fügen Sie ihn nicht in
-  öffentlichen Code ein — wer ihn hat, kann in Ihrem Konto handeln. Wenn ein
-  Schlüssel durchsickert, widerrufen Sie ihn sofort und erstellen Sie einen
-  neuen.
+  öffentlichen Code ein — wer ihn hat, kann in dem Geschäft handeln, zu dem er
+  gehört. Wenn ein Schlüssel durchsickert, widerrufen Sie ihn sofort und
+  erstellen Sie einen neuen.
 </Warning>
 
 <CardGroup cols={2}>

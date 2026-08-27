@@ -83,7 +83,7 @@ the booking too if the service won't happen.
 
 Stripe charges its standard processing fee per transaction (shown in every
 payout). On top of that, Linkzee keeps a small fee per booking payment,
-depending on your plan:
+depending on the plan of the **store where the booking happened**:
 
 | Plan | Linkzee fee per booking payment |
 | --- | --- |
@@ -91,6 +91,16 @@ depending on your plan:
 | Essential | 3% |
 | Pro | 1.5% |
 | **Scale** | **0%** |
+
+<Note>
+  Plans belong to each store, so if you run more than one, the fee follows the
+  store that took the booking — a booking on a Free store keeps 5% even when
+  another store of yours is on Scale. See
+  [Plan per store](/billing/plan-per-store).
+</Note>
+
+The fee is set at the moment the payment is created, so upgrading later changes
+the fee on new bookings, not on ones already paid.
 
 You always see the exact fee amounts in **Earnings**, right in the dashboard
 menu — nothing is hidden. See [Earnings & payouts](/scheduling/earnings).

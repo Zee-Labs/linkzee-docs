@@ -88,7 +88,7 @@ cancele também o horário se o atendimento não for acontecer.
 
 O Stripe cobra a tarifa padrão de processamento por transação (detalhada em
 cada repasse). Além dela, o Linkzee fica com uma pequena taxa por pagamento de
-agendamento, conforme o seu plano:
+agendamento, conforme o plano da **loja onde o agendamento aconteceu**:
 
 | Plano | Taxa Linkzee por pagamento |
 | --- | --- |
@@ -96,6 +96,16 @@ agendamento, conforme o seu plano:
 | Essential | 3% |
 | Pro | 1,5% |
 | **Scale** | **0%** |
+
+<Note>
+  Os planos são de cada loja, então, se você tem mais de uma, a taxa segue a loja
+  que recebeu o agendamento: um agendamento em uma loja no Free mantém os 5%
+  mesmo quando outra loja sua está no Scale. Veja
+  [Plano por loja](/pt-BR/billing/plan-per-store).
+</Note>
+
+A taxa é definida no momento em que o pagamento é criado, então fazer upgrade
+depois muda a taxa dos agendamentos novos, não a dos que já foram pagos.
 
 Você sempre vê os valores exatos das taxas em **Recebimentos**, direto no menu
 do dashboard — nada fica escondido. Veja

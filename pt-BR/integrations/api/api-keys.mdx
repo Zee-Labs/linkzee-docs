@@ -1,17 +1,25 @@
 ---
 title: Chaves de API
 icon: key
-description: "Crie e gerencie as chaves de API que permitem que suas ferramentas e scripts ajam com segurança na sua conta Linkzee."
+description: "Crie e gerencie as chaves de API que permitem que suas ferramentas e scripts ajam com segurança em uma das suas lojas Linkzee."
 ---
 
 Uma **chave de API** é como suas ferramentas, scripts e agentes de IA comprovam que
-têm permissão para agir na sua conta Linkzee. Você mesmo cria as chaves, dá a cada
-uma o acesso de que ela precisa e revoga qualquer chave no instante em que deixar de
+têm permissão para agir no seu Linkzee. Você mesmo cria as chaves, dá a cada uma o
+acesso de que ela precisa e revoga qualquer chave no instante em que deixar de
 confiar nela.
+
+Cada chave pertence a **uma loja**. Se a sua conta tem mais de uma loja, a chave
+age na loja em que você estava quando a criou, e nunca toca nas outras. Veja
+[Várias lojas](/pt-BR/account/multiple-stores).
 
 ## Criar uma chave
 
 <Steps>
+  <Step title="Troque para a loja certa">
+    A chave é criada para a loja que está **ativa** no menu lateral, então escolha
+    essa loja antes de começar.
+  </Step>
   <Step title="Abra suas configurações">
     Nas configurações do seu painel, abra a seção **API e MCP**.
   </Step>
@@ -49,10 +57,17 @@ revogação tem efeito imediato e interrompe na hora qualquer ferramenta que ain
 esteja usando aquela chave, então é a forma mais rápida de cortar o acesso caso uma
 chave seja exposta ou não seja mais necessária.
 
+<Note>
+  A seção **API e MCP** lista as chaves da loja em que você está. Para ver,
+  rotacionar ou revogar a chave de outra loja, troque antes para essa loja.
+  Rotacionar uma chave a mantém na loja dela, então sua integração nunca muda de
+  loja.
+</Note>
+
 <Warning>
-  Nunca compartilhe sua chave nem a coloque em código público — qualquer pessoa que
-  a tiver pode agir na sua conta. Se uma chave vazar, revogue-a imediatamente e crie
-  uma nova.
+  Nunca compartilhe sua chave nem a coloque em código público: qualquer pessoa que
+  a tiver pode agir na loja à qual ela pertence. Se uma chave vazar, revogue-a
+  imediatamente e crie uma nova.
 </Warning>
 
 <CardGroup cols={2}>

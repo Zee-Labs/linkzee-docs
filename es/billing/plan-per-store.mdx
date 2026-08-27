@@ -1,0 +1,88 @@
+---
+title: Plan por tienda
+icon: receipt
+description: "Cada tienda tiene su propio plan, su propia suscripción y su propia factura — suscribir una tienda no desbloquea las demás."
+---
+
+Si tu cuenta tiene más de una tienda, el plan **no** es un ajuste de toda la
+cuenta. Cada tienda lleva **su propio plan**, con su propia suscripción, sus
+propias facturas y su propia fecha de renovación.
+
+Dicho simple: **suscribir la tienda A no pone la tienda B en un plan de pago.**
+Una tienda que no suscribes se queda en **Free**, con los límites de Free, sin
+importar lo que estén pagando tus otras tiendas.
+
+<Note>
+  ¿Solo llevas una tienda? Para ti no cambia nada — tu tienda es tu plan, y el
+  resto de esta página está aquí para el día en que agregues la segunda.
+</Note>
+
+## Suscribir una tienda concreta
+
+<Steps>
+  <Step title="Cambia primero a la tienda">
+    Abre el selector de tienda, arriba en la barra lateral, y elige la tienda que
+    quieres poner en un plan de pago. Su nombre debe ser el que aparece en la
+    barra lateral.
+  </Step>
+  <Step title="Abre Plan">
+    Ve a **Dashboard → Plan**. Todo lo de esa pantalla — tu plan actual, tu uso,
+    las opciones para mejorar — es de la tienda **activa**.
+  </Step>
+  <Step title="Elige el plan y paga">
+    Elige el plan y el ciclo de facturación, y completa el pago. El pago lo
+    procesa Stripe, exactamente como se explica en
+    [Planes y precios](/es/billing/plans).
+  </Step>
+</Steps>
+
+<Warning>
+  Revisa el nombre de la tienda en la barra lateral antes de suscribirte, subir
+  de plan, bajar de plan o cancelar. Cada una de estas acciones se aplica **solo**
+  a la tienda que está activa en ese momento.
+</Warning>
+
+## Qué significa en la práctica
+
+| | Cómo funciona con varias tiendas |
+| --- | --- |
+| **Suscripción** | Una por tienda. Cada tienda que quieras en un plan de pago necesita su propia suscripción. |
+| **Facturas** | Separadas. Cada tienda tiene su propio historial de pagos, sus propias facturas y sus propios recibos en PDF, en **Dashboard → Plan** de esa tienda. |
+| **Ciclo de facturación** | Independiente. La tienda A puede renovar cada mes el día 3 mientras la tienda B renueva cada año en noviembre. |
+| **Subir y bajar de plan** | Se aplica a la tienda activa. El prorrateo, y el crédito de una bajada de plan, caen en la próxima factura **de esa tienda**. |
+| **Cancelar** | Devuelve **esa tienda** a Free al final del periodo que ya pagaste. Tus otras tiendas conservan sus planes. |
+| **El precio con el que te suscribiste** | Va atado a cada suscripción. Una tienda que mantiene su suscripción activa conserva el precio con el que se suscribió, con independencia de las demás. |
+| **Funciones y límites** | Se leen del plan de la tienda en la que estás — productos, historial de analíticas, conversaciones de IA, agenda, recordatorios por WhatsApp, Zee, API pública y webhook de leads. |
+| **Tarifa de Linkzee en los pagos de reserva** | Sigue el plan de la tienda donde ocurrió la reserva: 5% en Free, 3% en Essential, 1,5% en Pro, 0% en Scale. |
+
+<Note>
+  Como la tarifa se lee del plan de la tienda, una reserva hecha en una tienda
+  Free mantiene el 5% aunque otra tienda de tu cuenta esté en Scale.
+</Note>
+
+## La prueba gratis es una por persona
+
+Los **14 días de prueba gratis** son **tuyos**, no de una tienda. Se conceden en
+tu **primera** tienda y solo se pueden usar una vez — una tienda que crees más
+tarde empieza en **Free y sin prueba**, y eliminar una tienda no devuelve la
+prueba.
+
+## ¿De la cuenta o de la tienda?
+
+| Es de tu cuenta | Es de cada tienda |
+| --- | --- |
+| Tu correo, tu contraseña y la verificación en dos pasos | El plan y la suscripción |
+| El idioma, la región y la apariencia | Las facturas y el ciclo de facturación |
+| Los 14 días de prueba gratis, una sola vez | La tarifa por reserva y los límites de funciones |
+| La lista de tiendas entre las que puedes cambiar | La página, la agenda, el equipo y las claves de API |
+
+## Páginas relacionadas
+
+<CardGroup cols={2}>
+  <Card title="Varias tiendas" icon="store" href="/es/account/multiple-stores">
+    Crea tiendas, cambia entre ellas y descubre qué cambia cuando lo haces.
+  </Card>
+  <Card title="Planes y precios" icon="crown" href="/es/billing/plans">
+    Qué incluye cada plan, cuánto cuesta y cómo funciona la facturación.
+  </Card>
+</CardGroup>

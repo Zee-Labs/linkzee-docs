@@ -61,6 +61,7 @@
                 "icon": "crown",
                 "pages": [
                   "billing/plans",
+                  "billing/plan-per-store",
                   "billing/partner-program"
                 ]
               },
@@ -153,6 +154,7 @@
                 "group": "Account & settings",
                 "pages": [
                   "account/account",
+                  "account/multiple-stores",
                   "account/password-security",
                   "account/two-factor",
                   "account/notifications",
@@ -274,6 +276,7 @@
                 "icon": "crown",
                 "pages": [
                   "pt-BR/billing/plans",
+                  "pt-BR/billing/plan-per-store",
                   "pt-BR/billing/partner-program"
                 ]
               },
@@ -366,6 +369,7 @@
                 "group": "Conta e configurações",
                 "pages": [
                   "pt-BR/account/account",
+                  "pt-BR/account/multiple-stores",
                   "pt-BR/account/password-security",
                   "pt-BR/account/two-factor",
                   "pt-BR/account/notifications",
@@ -487,6 +491,7 @@
                 "icon": "crown",
                 "pages": [
                   "es/billing/plans",
+                  "es/billing/plan-per-store",
                   "es/billing/partner-program"
                 ]
               },
@@ -579,6 +584,7 @@
                 "group": "Cuenta y ajustes",
                 "pages": [
                   "es/account/account",
+                  "es/account/multiple-stores",
                   "es/account/password-security",
                   "es/account/two-factor",
                   "es/account/notifications",
@@ -700,6 +706,7 @@
                 "icon": "crown",
                 "pages": [
                   "fr/billing/plans",
+                  "fr/billing/plan-per-store",
                   "fr/billing/partner-program"
                 ]
               },
@@ -792,6 +799,7 @@
                 "group": "Compte et paramètres",
                 "pages": [
                   "fr/account/account",
+                  "fr/account/multiple-stores",
                   "fr/account/password-security",
                   "fr/account/two-factor",
                   "fr/account/notifications",
@@ -913,6 +921,7 @@
                 "icon": "crown",
                 "pages": [
                   "de/billing/plans",
+                  "de/billing/plan-per-store",
                   "de/billing/partner-program"
                 ]
               },
@@ -1005,6 +1014,7 @@
                 "group": "Konto & Einstellungen",
                 "pages": [
                   "de/account/account",
+                  "de/account/multiple-stores",
                   "de/account/password-security",
                   "de/account/two-factor",
                   "de/account/notifications",

@@ -30,9 +30,30 @@ Linkzee-Schlüssel beginnen immer mit dem Präfix `lzk_`. Erstelle und verwalte 
 API-Schlüssel-Bildschirm in deinem Konto.
 
 <Warning>
-  Behandle deinen Schlüssel wie ein Passwort. Er gewährt vollen Zugriff auf die Daten deines Kontos —
-  bewahre ihn serverseitig auf, committe ihn niemals in ein Repository und rotiere ihn, falls er nach außen gelangt.
+  Behandle deinen Schlüssel wie ein Passwort. Er gewährt vollen Zugriff auf die Daten des Stores,
+  zu dem er gehört — bewahre ihn serverseitig auf, committe ihn niemals in ein Repository und rotiere ihn,
+  falls er nach außen gelangt.
 </Warning>
+
+### Auf welchen Store ein Schlüssel wirkt
+
+Ein Linkzee-Konto kann **mehrere Stores** enthalten — im Dashboard heißen sie
+Geschäfte (siehe [Mehrere Geschäfte](/de/account/multiple-stores)). Ein Schlüssel
+ist an **einen einzigen Store** gebunden: an den, der im Dashboard aktiv war, als
+der Schlüssel erstellt wurde. Jede `/v1`-Anfrage mit diesem Schlüssel — und jeder
+MCP-Aufruf — liest und schreibt genau diesen Store, und nur ihn.
+
+Es gibt **keinen Request-Header, um einen Store auszuwählen**. Um einen zweiten
+Store zu automatisieren, wechsle im Dashboard dorthin, erstelle dort einen
+Schlüssel und verwende diesen.
+
+<Note>
+  Beim Rotieren bleibt ein Schlüssel an demselben Store wie das Original, sodass
+  eine Integration nie unbemerkt zu einem anderen Store wandert. Ein Schlüssel,
+  der erstellt wurde, bevor Stores getrennt werden konnten, ist an keinen
+  gebunden: Er wirkt auf den **ältesten** Store des Kontos, bis du ihn durch
+  einen store-gebundenen Schlüssel ersetzt.
+</Note>
 
 ### Scopes
 

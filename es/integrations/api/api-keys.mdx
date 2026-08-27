@@ -1,17 +1,25 @@
 ---
 title: Claves de API
 icon: key
-description: "Crea y administra las claves de API que permiten a tus herramientas y scripts actuar de forma segura en tu cuenta de Linkzee."
+description: "Crea y administra las claves de API que permiten a tus herramientas y scripts actuar de forma segura en una de tus tiendas de Linkzee."
 ---
 
 Una **clave de API** es la forma en que tus herramientas, scripts y agentes de IA
-demuestran que tienen permiso para actuar en tu cuenta de Linkzee. Tú mismo creas
-las claves, le das a cada una el acceso que necesita y revocas cualquier clave en
-el momento en que dejes de confiar en ella.
+demuestran que tienen permiso para actuar en tu Linkzee. Tú mismo creas las
+claves, le das a cada una el acceso que necesita y revocas cualquier clave en el
+momento en que dejes de confiar en ella.
+
+Cada clave pertenece a **una tienda**. Si tu cuenta tiene más de una tienda, la
+clave actúa sobre la tienda en la que estabas al crearla y nunca toca las demás —
+mira [Varias tiendas](/es/account/multiple-stores).
 
 ## Crear una clave
 
 <Steps>
+  <Step title="Cambia a la tienda correcta">
+    La clave se crea para la tienda que está **activa** en la barra lateral, así
+    que elige esa tienda antes de empezar.
+  </Step>
   <Step title="Abre tu configuración">
     En la configuración de tu panel, abre la sección **API y MCP**.
   </Step>
@@ -49,10 +57,17 @@ La revocación surte efecto de inmediato y detiene al instante cualquier herrami
 que aún esté usando esa clave, así que es la forma más rápida de cortar el acceso si
 una clave llega a quedar expuesta o ya no se necesita.
 
+<Note>
+  La sección **API y MCP** lista las claves de la tienda en la que estás. Para
+  ver, rotar o revocar la clave de otra tienda, cambia antes a esa tienda. Al
+  rotar una clave, esta se queda en su propia tienda, así que tu integración
+  nunca se muda a otra.
+</Note>
+
 <Warning>
   Nunca compartas tu clave ni la incluyas en código público — cualquiera que la
-  tenga puede actuar en tu cuenta. Si una clave se filtra, revócala de inmediato y
-  crea una nueva.
+  tenga puede actuar en la tienda a la que pertenece. Si una clave se filtra,
+  revócala de inmediato y crea una nueva.
 </Warning>
 
 <CardGroup cols={2}>
