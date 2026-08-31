@@ -85,16 +85,20 @@ Stripe charges its standard processing fee per transaction (shown in every
 payout). On top of that, Linkzee keeps a small fee per booking payment,
 depending on the plan of the **store where the booking happened**:
 
-| Plan | Linkzee fee per booking payment |
+| Plan | Linkzee fee per payment |
 | --- | --- |
-| Free | 5% |
-| Essential | 3% |
-| Pro | 1.5% |
+| Free | 4% |
+| Essential | 2% |
+| Pro | 1% |
 | **Scale** | **0%** |
+
+Stripe's processing fee for your country applies on top (for example, in
+Brazil: 3.99% + R$0.39 for domestic cards, 1.19% for Pix). The exact total of
+every payment always shows up in **Earnings**.
 
 <Note>
   Plans belong to each store, so if you run more than one, the fee follows the
-  store that took the booking — a booking on a Free store keeps 5% even when
+  store that took the booking — a booking on a Free store keeps 4% even when
   another store of yours is on Scale. See
   [Plan per store](/billing/plan-per-store).
 </Note>

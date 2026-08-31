@@ -96,17 +96,21 @@ Stripe berechnet seine übliche Verarbeitungsgebühr pro Transaktion
 Gebühr pro Buchungszahlung, abhängig vom Plan des **Geschäfts, in dem die
 Buchung entstanden ist**:
 
-| Plan | Linkzee-Gebühr pro Zahlung |
+| Plan | Linkzee fee per payment |
 | --- | --- |
-| Free | 5 % |
-| Essential | 3 % |
-| Pro | 1,5 % |
-| **Scale** | **0 %** |
+| Free | 4% |
+| Essential | 2% |
+| Pro | 1% |
+| **Scale** | **0%** |
+
+Stripe's processing fee for your country applies on top (for example, in
+Brazil: 3.99% + R$0.39 for domestic cards, 1.19% for Pix). The exact total of
+every payment always shows up in **Earnings**.
 
 <Note>
   Pläne gehören zu jedem einzelnen Geschäft. Führen Sie mehr als eines, folgt
   die Gebühr also dem Geschäft, in dem die Buchung entstanden ist — bei einer
-  Buchung in einem Free-Geschäft bleiben es 5 %, selbst wenn ein anderes
+  Buchung in einem Free-Geschäft bleiben es 4 %, selbst wenn ein anderes
   Geschäft von Ihnen im Scale-Plan ist. Siehe
   [Tarif pro Geschäft](/de/billing/plan-per-store).
 </Note>

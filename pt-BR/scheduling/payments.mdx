@@ -90,16 +90,21 @@ O Stripe cobra a tarifa padrão de processamento por transação (detalhada em
 cada repasse). Além dela, o Linkzee fica com uma pequena taxa por pagamento de
 agendamento, conforme o plano da **loja onde o agendamento aconteceu**:
 
-| Plano | Taxa Linkzee por pagamento |
-| --- | --- |
-| Free | 5% |
-| Essential | 3% |
-| Pro | 1,5% |
-| **Scale** | **0%** |
+| Plano | Taxa Linkzee por pagamento | Total no Brasil (cartão) | Total no Brasil (Pix) |
+| --- | --- | --- | --- |
+| Free | 4% | 7,99% + R$0,39 | 5,19% |
+| Essential | 2% | 5,99% + R$0,39 | 3,19% |
+| Pro | 1% | 4,99% + R$0,39 | 2,19% |
+| **Scale** | **0%** | **3,99% + R$0,39** | **1,19%** |
+
+O total já inclui a tarifa do Stripe vigente no Brasil (cartão nacional:
+3,99% + R$0,39; Pix: 1,19%). A tarifa do Stripe pode mudar e varia para
+cartões internacionais — o valor exato de cada pagamento aparece sempre em
+**Recebimentos**.
 
 <Note>
   Os planos são de cada loja, então, se você tem mais de uma, a taxa segue a loja
-  que recebeu o agendamento: um agendamento em uma loja no Free mantém os 5%
+  que recebeu o agendamento: um agendamento em uma loja no Free mantém os 4%
   mesmo quando outra loja sua está no Scale. Veja
   [Plano por loja](/pt-BR/billing/plan-per-store).
 </Note>
