@@ -128,7 +128,7 @@ curl -X POST \
 ```
 
 <Note>
-  **Media blocks (`before_after` / `gallery`)** are created in three steps: create the link with `mediaType` and no `url` (it stays unpublished), upload each photo with `POST /v1/uploads/image` (`kind=linkMediaSlot`, `linkId`, `slot` 0–9 — resized to 1280px), then update the link with the full `mediaItems` list (+ `mediaConsent: true`). A block is published only when complete (exactly 2 photos for `before_after`, 2–10 for `gallery`). Both are Premium: the API answers `403` with `code: "PLAN_REQUIRED"` on free plans.
+  **Media blocks (`before_after` / `gallery`)** are created in three steps: create the link with `mediaType` and no `url` (it stays unpublished), upload each photo with `POST /v1/uploads/image` (`kind=linkMediaSlot`, `linkId`, `slot` 0–9 — resized to 1344px wide (fit inside 1344×2016)), then update the link with the full `mediaItems` list (+ `mediaConsent: true`). A block is published only when complete (exactly 2 photos for `before_after`, 2–10 for `gallery`). Both are Premium: the API answers `403` with `code: "PLAN_REQUIRED"` on free plans.
 </Note>
 
 ### Update a link
