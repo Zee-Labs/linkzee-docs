@@ -42,7 +42,8 @@ Send these as multipart form fields.
 | `file` | file | Yes | The image to upload. Any common format (JPEG, PNG, WebP, etc.), up to **8&nbsp;MB**. It is converted to WebP automatically. |
 | `kind` | string | No | Where the image belongs. Determines a stable storage location so re-uploading the same kind overwrites the previous image instead of piling up. See the table below. |
 | `productId` | string | No | Required when `kind` is `product`. The product this image belongs to. It must be a product in your own store. |
-| `linkId` | string | No | Required when `kind` is `link`, `linkMedia`, or `linkPoster`. The link the image belongs to. It must be a link in your own store. |
+| `linkId` | string | No | Required when `kind` is `link`, `linkMedia`, `linkPoster`, or `linkMediaSlot`. The link the image belongs to. It must be a link in your own store. |
+| `slot` | string | No | Required when `kind` is `linkMediaSlot`: the photo slot (`0`–`9`) of a Before & After / Gallery block. The slot is the stable file id — re-uploading the same slot replaces the photo. |
 | `staffId` | string | No | Required when `kind` is `staffAvatar`. The team member the avatar belongs to. |
 | `socialKey` | string | No | Required when `kind` is `socialCard`. The social network the card cover belongs to (e.g. `instagram`, `tiktok`, `youtube`). |
 
@@ -59,6 +60,7 @@ Send these as multipart form fields.
 | `link` | A link thumbnail | `linkId` |
 | `linkMedia` | A link card cover | `linkId` |
 | `linkPoster` | A link video poster | `linkId` |
+| `linkMediaSlot` | One photo of a Before & After / Gallery block (Premium; resized to 1280px) | `linkId`, `slot` |
 | `aiAssistantAvatar` | Your AI assistant avatar | — |
 | `staffAvatar` | A team member's photo | `staffId` |
 | `heroPoster` | The poster frame for a hero header video | — |

@@ -92,14 +92,16 @@ curl -X POST \
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
 | `title` | string | Yes | Button label. Up to 120 characters. |
-| `url` | string | Yes | Destination URL, including `https://`. |
+| `url` | string | Conditional | Destination URL, including `https://`. Required unless `mediaType` is `"image"`, `"video"`, `"before_after"` or `"gallery"` (a media card can be content only). |
 | `collectionId` | string | No | ID of the collection this link belongs to. Leave it out to keep the link ungrouped. |
 | `thumbnailUrl` | string | No | Thumbnail image URL. Upload the image first, then pass the returned URL. |
 | `isActive` | boolean | No | Whether the link is visible on your page. Defaults to `true`. |
 | `isFeatured` | boolean | No | Show the link with extra prominence. Defaults to `false`. |
 | `highlightFx` | string | No | Animated highlight (Premium): `""` (none), `"shake"`, `"shine"`, `"pulse"`, or `"bounce"`. |
-| `mediaType` | string | No | Cover media style: `""`, `"image"`, `"video"`, or `"embed"`. |
-| `mediaUrl` | string | No | Cover media URL for the chosen `mediaType`. |
+| `mediaType` | string | No | Media style: `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` (two photos with a draggable edge) or `"gallery"` (2–10 photos). `before_after`/`gallery` are Premium and use `mediaItems` instead of `mediaUrl`. |
+| `mediaUrl` | string | No | Cover media URL for the chosen `mediaType` (`image`/`video`/`embed`). |
+| `caption` | string | No | Visible caption of a media card (max 160). The `title` stays the internal name. |
+| `mediaConsent` | boolean | No | Media blocks: confirms you have permission from the people photographed. Required once before photos are saved; stored as `mediaConsentAt`. |
 | `posterUrl` | string | No | Poster image URL for a video cover. |
 | `scheduledStartAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) from which the link appears. `null` clears it. Both `null` means always visible. |
 | `scheduledEndAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) at which the link disappears. Must be after `scheduledStartAt`. `null` clears it. |
@@ -124,6 +126,10 @@ curl -X POST \
   }
 }
 ```
+
+<Note>
+  **Media blocks (`before_after` / `gallery`)** are created in three steps: create the link with `mediaType` and no `url` (it stays unpublished), upload each photo with `POST /v1/uploads/image` (`kind=linkMediaSlot`, `linkId`, `slot` 0–9 — resized to 1280px), then update the link with the full `mediaItems` list (+ `mediaConsent: true`). A block is published only when complete (exactly 2 photos for `before_after`, 2–10 for `gallery`). Both are Premium: the API answers `403` with `code: "PLAN_REQUIRED"` on free plans.
+</Note>
 
 ### Update a link
 
@@ -155,7 +161,12 @@ curl -X PATCH \
 | `isActive` | boolean | No | Show or hide the link. |
 | `isFeatured` | boolean | No | Toggle extra prominence. |
 | `highlightFx` | string | No | `""` (none), `"shake"`, `"shine"`, `"pulse"`, or `"bounce"` (Premium). |
-| `mediaType` | string | No | `""`, `"image"`, `"video"`, or `"embed"`. |
+| `mediaType` | string | No | `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` or `"gallery"`. |
+| `caption` | string | No | Visible caption of a media card (max 160). |
+| `mediaItems` | array | No | Media blocks: the FULL photo list (replace). Each item is `{ slot, url, w, h, alt? }` — `slot` (0–9) is the stable file id used in the upload, the array order is the display order (`before_after`: `[0]` = before, `[1]` = after, exactly 2; `gallery`: 2–10). URLs must come from `POST /v1/uploads/image` with `kind=linkMediaSlot` for this link and slot. |
+| `mediaLabels` | object | No | `before_after`: `{ "before": "", "after": "" }` labels (max 24 each). Empty = localized default. |
+| `mediaStartPct` | integer | No | `before_after`: initial % of the "after" photo shown (10–90, default 50). |
+| `mediaConsent` | boolean | No | Media blocks: permission confirmation (see Create). |
 | `mediaUrl` | string | No | Cover media URL. |
 | `posterUrl` | string | No | Poster image URL for a video cover. |
 | `scheduledStartAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) from which the link appears. `null` clears it. |
