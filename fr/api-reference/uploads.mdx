@@ -54,7 +54,7 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `logo` | Le logo de votre boutique | — |
 | `product` | Une image de produit | `productId` |
 | `wallpaper` | Le fond d'écran de votre page | — |
-| `wallpaperPoster` | L'image d'aperçu d'un fond d'écran vidéo | — |
+| `wallpaperPoster` | Hérité — l'image d'aperçu d'un fond d'écran vidéo est désormais générée automatiquement à partir de la vidéo | — |
 | `banner` | La bannière de votre en-tête | — |
 | `cutout` | Une image découpée d'en-tête | — |
 | `link` | Une miniature de lien | `linkId` |
@@ -62,7 +62,7 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `linkPoster` | Une image d'aperçu de vidéo de lien | `linkId` |
 | `aiAssistantAvatar` | L'avatar de votre assistant IA | — |
 | `staffAvatar` | La photo d'un membre de l'équipe | `staffId` |
-| `heroPoster` | L'image d'aperçu d'une vidéo d'en-tête hero | — |
+| `heroPoster` | Hérité — l'image d'aperçu d'une vidéo hero est désormais générée automatiquement à partir de la vidéo | — |
 | `socialCard` | Une couverture de carte de réseau social | `socialKey` |
 
 <Note>
@@ -111,6 +111,124 @@ de façon agressive, l'URL se termine par un marqueur de version `?v=` qui chang
 Pour associer une image envoyée à une ressource, prenez l'`url` retournée et
 définissez-la sur le produit ou le lien — par exemple, passez-la comme `image`
 du produit lorsque vous le créez ou le mettez à jour.
+</Note>
+
+## Envoi de vidéos (hero et fond d'écran)
+
+```
+POST /v1/uploads/video?kind=hero|wallpaper
+```
+
+Envoie une courte vidéo pour votre en-tête **Hero** ou pour le **fond d'écran**
+de votre page, et l'optimise en arrière-plan. Transmettez-la en
+`multipart/form-data` avec un seul champ `file` (MP4 ou MOV, jusqu'à
+**40&nbsp;Mo**). Cet endpoint requiert une clé disposant de la portée **write**
+et une boutique sur une offre **Premium**.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/clip.mp4" \
+  "https://api.linkz.ee/v1/uploads/video?kind=hero"
+```
+
+| Paramètre | Où | Requis | Description |
+| --- | --- | --- | --- |
+| `kind` | query | Oui | `hero` pour la vidéo de l'en-tête Hero, `wallpaper` pour le fond de la page. |
+| `file` | multipart | Oui | La vidéo à envoyer — MP4 ou MOV, jusqu'à **40&nbsp;Mo**. |
+
+### Réponse
+
+La requête retourne `200` dès que le fichier est reçu, avec un **job** qui
+décrit l'optimisation, ainsi qu'une indication `pollMs` de la fréquence à
+laquelle le consulter.
+
+```json
+{
+  "error": false,
+  "message": "Video received",
+  "data": {
+    "job": {
+      "id": "66f1c2a9e4b0c1d2f3a4b5c6",
+      "kind": "hero",
+      "status": "queued",
+      "error": null,
+      "errorCode": null,
+      "tries": 0,
+      "result": null,
+      "createdAt": "2026-10-14T12:00:00.000Z",
+      "finishedAt": null
+    },
+    "pollMs": 2000
+  }
+}
+```
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | string | L'identifiant du job. Utilisez-le pour suivre la progression. |
+| `kind` | string | `hero` ou `wallpaper`. |
+| `status` | string | `queued` → `processing` → `ready`, `failed` ou `superseded`. `superseded` signifie qu'un envoi plus récent du même type a remplacé celui-ci. |
+| `error` | string \| null | Un message lisible lorsque le job a échoué. |
+| `errorCode` | string \| null | Un code d'erreur stable lorsque le job a échoué. |
+| `tries` | integer | Le nombre de tentatives d'optimisation. |
+| `result` | object \| null | Renseigné lorsque `status` vaut `ready` — voir ci-dessous. |
+| `createdAt` | string | Date de création du job (ISO 8601). |
+| `finishedAt` | string \| null | Date de fin du job, le cas échéant. |
+
+Lorsque le job est `ready`, `result` contient la vidéo optimisée — et elle est
+**déjà appliquée** à votre boutique, aucun `PATCH` supplémentaire n'est donc
+nécessaire :
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `url` | string | L'URL hébergée de la vidéo optimisée. |
+| `posterUrl` | string | L'image de couverture, générée à partir de la première image de la vidéo. |
+| `durationMs` | integer | Durée de la vidéo optimisée, en millisecondes. |
+| `width` | integer | Largeur en pixels. |
+| `height` | integer | Hauteur en pixels. |
+| `bytes` | integer | Taille du fichier optimisé. |
+| `trimmed` | boolean | `true` lorsque l'original dépassait 15 secondes et a été coupé. |
+
+### Suivre et gérer les jobs vidéo
+
+```
+GET    /v1/uploads/video/jobs/{id}
+GET    /v1/uploads/video/latest?kind=hero
+DELETE /v1/uploads/video/{kind}
+```
+
+- `GET /v1/uploads/video/jobs/{id}` retourne le job dans son état actuel —
+  consultez-le toutes les `pollMs` millisecondes jusqu'à ce que `status` vaille
+  `ready` ou `failed`.
+- `GET /v1/uploads/video/latest?kind=hero` (ou `kind=wallpaper`) retourne le job
+  le plus récent pour ce type, ou `null` s'il n'y en a jamais eu.
+- `DELETE /v1/uploads/video/{kind}` retire la vidéo publiée (`hero` ou
+  `wallpaper`) de votre page.
+
+### Profil de sortie
+
+Chaque vidéo est encodée selon le même profil pour démarrer instantanément sur
+mobile :
+
+| Réglage | Valeur |
+| --- | --- |
+| Résolution | **720p** sur le petit côté — jamais agrandie |
+| Fréquence d'images | 24 i/s |
+| Codec | H.264 (MP4) |
+| Durée | Les **15 premières secondes** |
+| Audio | Supprimé — les vidéos sont toujours muettes |
+| Taille | Généralement **≤ ~3&nbsp;Mo** |
+
+<Note>
+Les vidéos de plus de 15 secondes ne sont jamais rejetées pour leur durée — elles
+sont coupées, et le résultat indique `trimmed: true`. Un envoi n'est rejeté que
+si le fichier dépasse 40&nbsp;Mo ou n'est pas un fichier vidéo valide.
+</Note>
+
+<Note>
+`POST /v1/uploads/video` avec `kind=link` (la vidéo d'un lien) continue de
+stocker le fichier brut comme avant — cette optimisation ne s'applique pas.
 </Note>
 
 <CardGroup cols={2}>

@@ -55,6 +55,7 @@ afin que vous sachiez quoi demander.
 | Domaine d'outils | Ce que l'agent peut faire |
 | --- | --- |
 | Design | Mettre à jour votre design et changer de thème. |
+| Vidéo | Définir, remplacer ou supprimer une vidéo hero ou une vidéo de fond à partir d'une URL vidéo publique (Premium). |
 
 ## Statistiques et leads
 
@@ -91,7 +92,7 @@ afin que vous sachiez quoi demander.
 
 Si vous voulez savoir exactement quels outils votre agent voit, voici la liste
 complète. Avec une clé **read**, l'agent obtient les 11 outils de lecture ; une
-clé **write** ajoute par-dessus les 28 outils d'écriture. Une clé avec le scope
+clé **write** ajoute par-dessus les 33 outils d'écriture. Une clé avec le scope
 **finance** obtient aussi `get_earnings` (et une clé finance seule obtient
 uniquement celui-là).
 
@@ -135,7 +136,12 @@ uniquement celui-là).
 | `reorder_content` | Réordonner le contenu de votre page. |
 | `configure_vitrine` | Configurer la vitrine — visibilité, colonnes, cadrage des photos et mise en page (`grid`, `masonry` ou `carousel`). |
 | `configure_tracking` | Définir les pixels, l'API Conversions, GTM et les UTM par défaut. |
-| `update_design` | Ajuster le design — thème, couleurs, boutons, police, en-tête et fonds, y compris `mesh` et `video` (via `wallpaperVideoUrl`). |
+| `update_design` | Ajuster le design — thème, couleurs, boutons, police, en-tête (y compris `heroMedia` : `photo` ou `video`) et fonds, y compris `mesh`. Les vidéos elles-mêmes se définissent avec les outils dédiés ci-dessous. |
+| `set_hero_video` | Donnez-lui une URL vidéo publique — Linkzee la télécharge, l'optimise et l'applique à la disposition **Hero**, en basculant votre en-tête en Hero. Retourne un job. Nécessite une offre Premium. |
+| `set_background_video` | Idem, pour le fond d'écran de votre page. Retourne un job. Nécessite une offre Premium. |
+| `get_media_job` | Suivre un job vidéo jusqu'à ce qu'il soit `ready` ou `failed`. |
+| `remove_hero_video` | Retirer la vidéo hero de votre page. |
+| `remove_background_video` | Retirer la vidéo de fond de votre page. |
 | `update_map` | Configurer la carte sur votre page. |
 | `update_socials` | Mettre à jour vos identifiants de réseaux sociaux. |
 | `configure_agenda` | Configurer votre système de prise de rendez-vous. |

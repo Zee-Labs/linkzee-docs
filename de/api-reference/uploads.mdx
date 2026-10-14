@@ -54,7 +54,7 @@ Sende diese als Multipart-Formularfelder.
 | `logo` | Dein Store-Logo | — |
 | `product` | Ein Produktbild | `productId` |
 | `wallpaper` | Der Hintergrund deiner Seite | — |
-| `wallpaperPoster` | Das Poster-Bild für einen Video-Hintergrund | — |
+| `wallpaperPoster` | Veraltet — das Poster eines Video-Hintergrunds wird jetzt automatisch aus dem Video erzeugt | — |
 | `banner` | Dein Header-Banner | — |
 | `cutout` | Ein Header-Freistellerbild | — |
 | `link` | Ein Link-Vorschaubild | `linkId` |
@@ -62,7 +62,7 @@ Sende diese als Multipart-Formularfelder.
 | `linkPoster` | Ein Link-Video-Poster | `linkId` |
 | `aiAssistantAvatar` | Der Avatar deines KI-Assistenten | — |
 | `staffAvatar` | Das Foto eines Teammitglieds | `staffId` |
-| `heroPoster` | Das Poster-Bild für ein Hero-Header-Video | — |
+| `heroPoster` | Veraltet — das Poster eines Hero-Videos wird jetzt automatisch aus dem Video erzeugt | — |
 | `socialCard` | Das Karten-Cover eines sozialen Netzwerks | `socialKey` |
 
 <Note>
@@ -110,6 +110,124 @@ verwende immer genau die URL, die du zurückerhältst.
 Um ein hochgeladenes Bild an eine Ressource anzuhängen, nimm die zurückgegebene `url`
 und setze sie am Produkt oder Link — übergib sie zum Beispiel als `image` des Produkts,
 wenn du es erstellst oder aktualisierst.
+</Note>
+
+## Video-Uploads (Hero und Hintergrund)
+
+```
+POST /v1/uploads/video?kind=hero|wallpaper
+```
+
+Lädt ein kurzes Video für deinen **Hero**-Header oder den **Hintergrund** deiner
+Seite hoch und optimiert es im Hintergrund. Sende es als `multipart/form-data`
+mit einem einzigen Feld `file` (MP4 oder MOV, bis zu **40&nbsp;MB**). Dieser
+Endpunkt erfordert einen Schlüssel mit dem **write**-Scope und einen Store in
+einem **Premium**-Tarif.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/clip.mp4" \
+  "https://api.linkz.ee/v1/uploads/video?kind=hero"
+```
+
+| Parameter | Wo | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `kind` | query | Ja | `hero` für das Video des Hero-Headers, `wallpaper` für den Seitenhintergrund. |
+| `file` | multipart | Ja | Das hochzuladende Video — MP4 oder MOV, bis zu **40&nbsp;MB**. |
+
+### Antwort
+
+Die Anfrage liefert `200`, sobald die Datei empfangen wurde, mit einem **Job**,
+der die Optimierung beschreibt, plus einem Hinweis `pollMs`, wie oft du ihn
+abfragen solltest.
+
+```json
+{
+  "error": false,
+  "message": "Video received",
+  "data": {
+    "job": {
+      "id": "66f1c2a9e4b0c1d2f3a4b5c6",
+      "kind": "hero",
+      "status": "queued",
+      "error": null,
+      "errorCode": null,
+      "tries": 0,
+      "result": null,
+      "createdAt": "2026-10-14T12:00:00.000Z",
+      "finishedAt": null
+    },
+    "pollMs": 2000
+  }
+}
+```
+
+| Feld | Typ | Beschreibung |
+| --- | --- | --- |
+| `id` | string | Die Job-ID. Verwende sie, um den Fortschritt abzufragen. |
+| `kind` | string | `hero` oder `wallpaper`. |
+| `status` | string | `queued` → `processing` → `ready`, `failed` oder `superseded`. `superseded` bedeutet, dass ein neuerer Upload derselben Art diesen ersetzt hat. |
+| `error` | string \| null | Eine lesbare Meldung, wenn der Job fehlgeschlagen ist. |
+| `errorCode` | string \| null | Ein stabiler Fehlercode, wenn der Job fehlgeschlagen ist. |
+| `tries` | integer | Wie oft die Optimierung versucht wurde. |
+| `result` | object \| null | Gefüllt, wenn `status` gleich `ready` ist — siehe unten. |
+| `createdAt` | string | Wann der Job erstellt wurde (ISO 8601). |
+| `finishedAt` | string \| null | Wann der Job beendet wurde, falls bereits geschehen. |
+
+Ist der Job `ready`, enthält `result` das optimierte Video — und es ist
+**bereits auf deinen Store angewendet**, ein zusätzlicher `PATCH` ist also nicht
+nötig:
+
+| Feld | Typ | Beschreibung |
+| --- | --- | --- |
+| `url` | string | Die gehostete URL des optimierten Videos. |
+| `posterUrl` | string | Das Cover-Bild, erzeugt aus dem ersten Bild des Videos. |
+| `durationMs` | integer | Dauer des optimierten Videos in Millisekunden. |
+| `width` | integer | Breite in Pixeln. |
+| `height` | integer | Höhe in Pixeln. |
+| `bytes` | integer | Größe der optimierten Datei. |
+| `trimmed` | boolean | `true`, wenn das Original länger als 15 Sekunden war und gekürzt wurde. |
+
+### Video-Jobs abfragen und verwalten
+
+```
+GET    /v1/uploads/video/jobs/{id}
+GET    /v1/uploads/video/latest?kind=hero
+DELETE /v1/uploads/video/{kind}
+```
+
+- `GET /v1/uploads/video/jobs/{id}` gibt den Job in seinem aktuellen Zustand
+  zurück — frage ihn alle `pollMs` Millisekunden ab, bis `status` gleich `ready`
+  oder `failed` ist.
+- `GET /v1/uploads/video/latest?kind=hero` (oder `kind=wallpaper`) gibt den
+  neuesten Job dieser Art zurück, oder `null`, wenn es noch nie einen gab.
+- `DELETE /v1/uploads/video/{kind}` entfernt das veröffentlichte Video (`hero`
+  oder `wallpaper`) von deiner Seite.
+
+### Ausgabeprofil
+
+Jedes Video wird mit demselben Profil kodiert, damit es auf dem Handy sofort
+startet:
+
+| Einstellung | Wert |
+| --- | --- |
+| Auflösung | **720p** auf der kurzen Seite — nie hochskaliert |
+| Bildrate | 24 fps |
+| Codec | H.264 (MP4) |
+| Länge | Die **ersten 15 Sekunden** |
+| Audio | Entfernt — Videos sind immer stumm |
+| Größe | Meist **≤ ~3&nbsp;MB** |
+
+<Note>
+Videos, die länger als 15 Sekunden sind, werden nie wegen ihrer Länge abgelehnt —
+sie werden gekürzt, und das Ergebnis meldet `trimmed: true`. Ein Upload wird nur
+abgelehnt, wenn die Datei größer als 40&nbsp;MB oder keine gültige Videodatei ist.
+</Note>
+
+<Note>
+`POST /v1/uploads/video` mit `kind=link` (das Video eines Links) speichert die
+Rohdatei weiterhin wie bisher — diese Optimierung wird dort nicht angewendet.
 </Note>
 
 <CardGroup cols={2}>

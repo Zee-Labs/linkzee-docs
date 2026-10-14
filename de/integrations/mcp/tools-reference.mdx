@@ -57,6 +57,7 @@ gruppiert, damit du weißt, worum du bitten kannst.
 | Tool-Bereich | Was der Agent tun kann |
 | --- | --- |
 | Design | Dein Design aktualisieren und dein Theme wechseln. |
+| Video | Ein Hero-Video oder ein Hintergrund-Video aus einer öffentlichen Video-URL setzen, ersetzen oder entfernen (Premium). |
 
 ## Analytics & Leads
 
@@ -93,7 +94,7 @@ gruppiert, damit du weißt, worum du bitten kannst.
 
 Wenn du genau wissen möchtest, welche Tools dein Agent sieht, ist hier die
 vollständige Liste. Mit einem **read**-Schlüssel erhält der Agent die 11
-Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 28 Schreib-Tools hinzu.
+Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 33 Schreib-Tools hinzu.
 Ein Schlüssel mit dem **finance**-Berechtigungsbereich erhält außerdem
 `get_earnings` (ein reiner finance-Schlüssel erhält nur dieses eine Tool).
 
@@ -137,7 +138,12 @@ Ein Schlüssel mit dem **finance**-Berechtigungsbereich erhält außerdem
 | `reorder_content` | Deine Seiteninhalte neu anordnen. |
 | `configure_vitrine` | Die Vitrine konfigurieren — Sichtbarkeit, Spalten, Foto-Anpassung und Layout (`grid`, `masonry` oder `carousel`). |
 | `configure_tracking` | Pixel, Conversion API, GTM und Standard-UTMs festlegen. |
-| `update_design` | Das Design anpassen — Theme, Farben, Buttons, Schrift, Header und Hintergründe einschließlich `mesh` und `video` (über `wallpaperVideoUrl`). |
+| `update_design` | Das Design anpassen — Theme, Farben, Buttons, Schrift, Header (einschließlich `heroMedia`: `photo` oder `video`) und Hintergründe einschließlich `mesh`. Die Videos selbst werden mit den eigenen Tools unten gesetzt. |
+| `set_hero_video` | Gib eine öffentliche Video-URL an — Linkzee lädt das Video herunter, optimiert es und wendet es auf das **Hero**-Layout an, wobei dein Header auf Hero umgestellt wird. Gibt einen Job zurück. Erfordert einen Premium-Tarif. |
+| `set_background_video` | Dasselbe für den Hintergrund deiner Seite. Gibt einen Job zurück. Erfordert einen Premium-Tarif. |
+| `get_media_job` | Einen Video-Job abfragen, bis er `ready` oder `failed` ist. |
+| `remove_hero_video` | Das Hero-Video von deiner Seite entfernen. |
+| `remove_background_video` | Das Hintergrund-Video von deiner Seite entfernen. |
 | `update_map` | Die Kartenkarte auf deiner Seite konfigurieren. |
 | `update_socials` | Deine Handles in sozialen Netzwerken aktualisieren. |
 | `configure_agenda` | Deine Terminplanung einrichten. |

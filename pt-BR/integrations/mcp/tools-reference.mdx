@@ -54,6 +54,7 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 | Área da ferramenta | O que o agente pode fazer |
 | --- | --- |
 | Design | Atualizar seu design e trocar seu tema. |
+| Vídeo | Definir, substituir ou remover um vídeo na hero ou um vídeo de fundo a partir de uma URL pública de vídeo (Premium). |
 
 ## Análises e leads
 
@@ -89,7 +90,7 @@ o que um agente pode fazer, agrupado por área, para você saber o que solicitar
 
 Se você quiser saber exatamente quais ferramentas seu agente vê, aqui está a
 lista completa. Com uma chave **read** o agente recebe as 11 ferramentas de
-leitura; uma chave **write** adiciona as 28 ferramentas de escrita por cima.
+leitura; uma chave **write** adiciona as 33 ferramentas de escrita por cima.
 Uma chave com o escopo **finance** também recebe a `get_earnings` (e uma chave
 só de finance recebe apenas essa).
 
@@ -133,7 +134,12 @@ só de finance recebe apenas essa).
 | `reorder_content` | Reordenar o conteúdo da sua página. |
 | `configure_vitrine` | Configurar a vitrine — visibilidade, colunas, ajuste da foto e layout (`grid`, `masonry` ou `carousel`). |
 | `configure_tracking` | Definir pixels, Conversion API, GTM e UTMs padrão. |
-| `update_design` | Ajustar o design — tema, cores, botões, fonte, cabeçalho e fundos, incluindo `mesh` e `video` (via `wallpaperVideoUrl`). |
+| `update_design` | Ajustar o design — tema, cores, botões, fonte, cabeçalho (incluindo `heroMedia`: `photo` ou `video`) e fundos, incluindo `mesh`. Os vídeos em si são definidos pelas ferramentas dedicadas abaixo. |
+| `set_hero_video` | Informe uma URL pública de vídeo — o Linkzee baixa, otimiza e aplica o vídeo ao layout **Hero**, trocando o cabeçalho para Hero. Retorna um job. Exige plano Premium. |
+| `set_background_video` | O mesmo, para o papel de parede da página. Retorna um job. Exige plano Premium. |
+| `get_media_job` | Consultar um job de vídeo até ficar `ready` ou `failed`. |
+| `remove_hero_video` | Remover o vídeo da hero da sua página. |
+| `remove_background_video` | Remover o vídeo de fundo da sua página. |
 | `update_map` | Configurar o card de mapa da sua página. |
 | `update_socials` | Atualizar seus perfis de redes sociais. |
 | `configure_agenda` | Configurar sua estrutura de agendamento. |

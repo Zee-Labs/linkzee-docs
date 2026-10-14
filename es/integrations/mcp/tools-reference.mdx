@@ -56,6 +56,7 @@ qué pedir.
 | Área de herramientas | Lo que el agente puede hacer |
 | --- | --- |
 | Diseño | Actualiza tu diseño y cambia tu tema. |
+| Video | Define, reemplaza o elimina un video en el hero o un video de fondo a partir de una URL pública de video (Premium). |
 
 ## Analytics y leads
 
@@ -92,7 +93,7 @@ qué pedir.
 
 Si quieres saber exactamente qué herramientas ve tu agente, aquí tienes la lista
 completa. Con una clave **read**, el agente obtiene las 11 herramientas de
-lectura; una clave **write** añade además las 28 herramientas de escritura. Una
+lectura; una clave **write** añade además las 33 herramientas de escritura. Una
 clave con el ámbito **finance** también obtiene `get_earnings` (y una clave solo
 finance obtiene únicamente esa).
 
@@ -136,7 +137,12 @@ finance obtiene únicamente esa).
 | `reorder_content` | Reordena el contenido de tu página. |
 | `configure_vitrine` | Configura la vitrina — visibilidad, columnas, ajuste de las fotos y diseño (`grid`, `masonry` o `carousel`). |
 | `configure_tracking` | Configura los píxeles, la Conversion API, GTM y las UTM predeterminadas. |
-| `update_design` | Ajusta el diseño — tema, colores, botones, fuente, encabezado y fondos, incluidos `mesh` y `video` (vía `wallpaperVideoUrl`). |
+| `update_design` | Ajusta el diseño — tema, colores, botones, fuente, encabezado (incluido `heroMedia`: `photo` o `video`) y fondos, incluido `mesh`. Los videos en sí se definen con las herramientas dedicadas de abajo. |
+| `set_hero_video` | Dale una URL pública de video — Linkzee lo descarga, lo optimiza y lo aplica al diseño **Hero**, cambiando tu encabezado a Hero. Devuelve un job. Requiere plan Premium. |
+| `set_background_video` | Lo mismo, para el fondo de tu página. Devuelve un job. Requiere plan Premium. |
+| `get_media_job` | Consulta un job de video hasta que esté `ready` o `failed`. |
+| `remove_hero_video` | Elimina el video del hero de tu página. |
+| `remove_background_video` | Elimina el video de fondo de tu página. |
 | `update_map` | Configura la tarjeta de mapa de tu página. |
 | `update_socials` | Actualiza tus usuarios de redes sociales. |
 | `configure_agenda` | Configura tu sistema de agendamiento. |

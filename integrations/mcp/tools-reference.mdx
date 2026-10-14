@@ -52,6 +52,7 @@ can do, grouped by area, so you know what to ask for.
 | Tool area | What the agent can do |
 | --- | --- |
 | Design | Update your design and switch your theme. |
+| Video | Set, replace or remove a hero video or a background video from a public video URL (Premium). |
 
 ## Analytics & leads
 
@@ -87,7 +88,7 @@ can do, grouped by area, so you know what to ask for.
 
 If you want to know exactly which tools your agent sees, here is the full list.
 With a **read** key the agent gets the 11 read tools; a **write** key adds the
-28 write tools on top. A key with the **finance** scope also gets `get_earnings`
+33 write tools on top. A key with the **finance** scope also gets `get_earnings`
 (and a finance-only key gets just that one).
 
 ### Read tools
@@ -130,7 +131,12 @@ With a **read** key the agent gets the 11 read tools; a **write** key adds the
 | `reorder_content` | Reorder your page content. |
 | `configure_vitrine` | Configure the showcase — visibility, columns, photo fit, and layout (`grid`, `masonry` or `carousel`). |
 | `configure_tracking` | Set pixels, Conversion API, GTM and default UTMs. |
-| `update_design` | Adjust the design — theme, colors, buttons, font, header, and backgrounds including `mesh` and `video` (via `wallpaperVideoUrl`). |
+| `update_design` | Adjust the design — theme, colors, buttons, font, header (including `heroMedia`: `photo` or `video`) and backgrounds including `mesh`. Videos themselves are set with the dedicated tools below. |
+| `set_hero_video` | Give it a public video URL — Linkzee downloads, optimizes and applies it to the **Hero** layout, switching your header to Hero. Returns a job. Needs a Premium plan. |
+| `set_background_video` | Same, for your page wallpaper. Returns a job. Needs a Premium plan. |
+| `get_media_job` | Poll a video job until it is `ready` or `failed`. |
+| `remove_hero_video` | Remove the hero video from your page. |
+| `remove_background_video` | Remove the background video from your page. |
 | `update_map` | Configure the map card on your page. |
 | `update_socials` | Update your social network handles. |
 | `configure_agenda` | Configure your scheduling setup. |

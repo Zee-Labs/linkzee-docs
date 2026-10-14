@@ -54,7 +54,7 @@ Send these as multipart form fields.
 | `logo` | Your store logo | — |
 | `product` | A product image | `productId` |
 | `wallpaper` | Your page wallpaper | — |
-| `wallpaperPoster` | The poster frame for a video wallpaper | — |
+| `wallpaperPoster` | Legacy — the poster for a video wallpaper is now generated automatically from the video | — |
 | `banner` | Your header banner | — |
 | `cutout` | A header cutout image | — |
 | `link` | A link thumbnail | `linkId` |
@@ -63,7 +63,7 @@ Send these as multipart form fields.
 | `linkMediaSlot` | One photo of a Before & After / Gallery block (Premium; resized to 1344px wide (fit inside 1344×2016)) | `linkId`, `slot` |
 | `aiAssistantAvatar` | Your AI assistant avatar | — |
 | `staffAvatar` | A team member's photo | `staffId` |
-| `heroPoster` | The poster frame for a hero header video | — |
+| `heroPoster` | Legacy — the poster for a hero video is now generated automatically from the video | — |
 | `socialCard` | A social network card cover | `socialKey` |
 
 <Note>
@@ -110,6 +110,119 @@ use the exact URL you get back.
 To attach an uploaded image to a resource, take the returned `url` and set it on
 the product or link — for example, pass it as the product's `image` when you
 create or update it.
+</Note>
+
+## Video uploads (hero and wallpaper)
+
+```
+POST /v1/uploads/video?kind=hero|wallpaper
+```
+
+Uploads a short video for your **Hero** header or your page **wallpaper** and
+optimizes it in the background. Send it as `multipart/form-data` with a single
+`file` field (MP4 or MOV, up to **40&nbsp;MB**). This endpoint requires a key
+with the **write** scope and a store on a **Premium** plan.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -F "file=@/path/to/clip.mp4" \
+  "https://api.linkz.ee/v1/uploads/video?kind=hero"
+```
+
+| Parameter | In | Required | Description |
+| --- | --- | --- | --- |
+| `kind` | query | Yes | `hero` for the Hero header video, `wallpaper` for the page background. |
+| `file` | multipart | Yes | The video to upload — MP4 or MOV, up to **40&nbsp;MB**. |
+
+### Response
+
+The request returns `200` as soon as the file is received, with a **job** that
+describes the optimization, plus a `pollMs` hint for how often to check on it.
+
+```json
+{
+  "error": false,
+  "message": "Video received",
+  "data": {
+    "job": {
+      "id": "66f1c2a9e4b0c1d2f3a4b5c6",
+      "kind": "hero",
+      "status": "queued",
+      "error": null,
+      "errorCode": null,
+      "tries": 0,
+      "result": null,
+      "createdAt": "2026-10-14T12:00:00.000Z",
+      "finishedAt": null
+    },
+    "pollMs": 2000
+  }
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | The job id. Use it to poll for progress. |
+| `kind` | string | `hero` or `wallpaper`. |
+| `status` | string | `queued` → `processing` → `ready`, `failed` or `superseded`. `superseded` means a newer upload of the same kind replaced this one. |
+| `error` | string \| null | A human-readable message when the job failed. |
+| `errorCode` | string \| null | A stable error code when the job failed. |
+| `tries` | integer | How many times the optimization was attempted. |
+| `result` | object \| null | Filled in when `status` is `ready` — see below. |
+| `createdAt` | string | When the job was created (ISO 8601). |
+| `finishedAt` | string \| null | When the job finished, if it has. |
+
+When the job is `ready`, `result` contains the optimized video — and it is
+**already applied** to your store, so no extra `PATCH` is needed:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `url` | string | The hosted, optimized video URL. |
+| `posterUrl` | string | The cover image, generated from the video's first frame. |
+| `durationMs` | integer | Duration of the optimized video, in milliseconds. |
+| `width` | integer | Width in pixels. |
+| `height` | integer | Height in pixels. |
+| `bytes` | integer | Size of the optimized file. |
+| `trimmed` | boolean | `true` when the original was longer than 15 seconds and was cut. |
+
+### Polling and managing video jobs
+
+```
+GET    /v1/uploads/video/jobs/{id}
+GET    /v1/uploads/video/latest?kind=hero
+DELETE /v1/uploads/video/{kind}
+```
+
+- `GET /v1/uploads/video/jobs/{id}` returns the job in its current state — poll
+  it every `pollMs` milliseconds until `status` is `ready` or `failed`.
+- `GET /v1/uploads/video/latest?kind=hero` (or `kind=wallpaper`) returns the
+  most recent job for that kind, or `null` if there has never been one.
+- `DELETE /v1/uploads/video/{kind}` removes the published video (`hero` or
+  `wallpaper`) from your page.
+
+### Output profile
+
+Every video is encoded to the same profile so it starts instantly on mobile:
+
+| Setting | Value |
+| --- | --- |
+| Resolution | **720p** on the short side — never upscaled |
+| Frame rate | 24 fps |
+| Codec | H.264 (MP4) |
+| Length | The **first 15 seconds** |
+| Audio | Removed — videos are always silent |
+| Size | Usually **≤ ~3&nbsp;MB** |
+
+<Note>
+Videos longer than 15 seconds are never rejected for their length — they are
+trimmed, and the result reports `trimmed: true`. An upload is rejected only when
+the file is over 40&nbsp;MB or isn't a valid video file.
+</Note>
+
+<Note>
+`POST /v1/uploads/video` with `kind=link` (a link's video) still stores the raw
+file as before — this optimization is not applied.
 </Note>
 
 <CardGroup cols={2}>
