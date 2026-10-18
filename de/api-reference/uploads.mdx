@@ -242,3 +242,32 @@ Rohdatei weiterhin wie bisher — diese Optimierung wird dort nicht angewendet.
     Basis-URL, Schlüssel, Scopes und Antwortstrukturen.
   </Card>
 </CardGroup>
+
+## Ein Hero-Video aus Produktfotos erstellen
+
+```
+POST /v1/uploads/video/montage
+```
+
+Erstellt eine kurze kinoreife Montage aus Ihren Produktfotos (langsame Zooms
+und Schwenks, Überblendungen, rund 14 Sekunden) und reiht sie als **Hero**-Video
+ein — derselbe Job und dasselbe Polling wie beim Upload, angewendet, sobald sie
+fertig ist. Verwendet die neuesten Produkte mit Foto oder die in `productIds`
+übergebenen (bis zu 6, in Reihenfolge). Erfordert einen Schlüssel mit dem Scope
+**write**, einen **Premium**-Shop und mindestens 3 Produkte mit einem bei
+Linkzee gehosteten Foto.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"productIds":["prod_a","prod_b","prod_c"]}' \
+  "https://api.linkz.ee/v1/uploads/video/montage"
+```
+
+| Parameter | Wo | Pflicht | Beschreibung |
+| --- | --- | --- | --- |
+| `productIds` | body | Nein | Bis zu 6 Produkt-IDs in der gewünschten Reihenfolge. Fehlt der Wert: die neuesten Produkte mit Foto. |
+
+Gibt den Verarbeitungs-Job zurück (`{ id, kind, status, result, error }`), genau
+wie der Video-Upload. Fehler: `400`, wenn weniger als 3 Produkte ein Foto haben.

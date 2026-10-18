@@ -237,3 +237,31 @@ file as before — this optimization is not applied.
     Base URL, keys, scopes, and response shapes.
   </Card>
 </CardGroup>
+
+## Generate a hero video from product photos
+
+```
+POST /v1/uploads/video/montage
+```
+
+Builds a short cinematic montage from your product photos (slow zooms and
+pans, dissolves, about 14 seconds) and queues it as a **hero** video — the same
+job and polling as an upload, applied to the hero when ready. Uses the newest
+products that have a photo, or the ones you pass in `productIds` (up to 6, in
+order). Requires a **write** key and a **Premium** store; at least 3 products
+with a photo hosted on Linkzee.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"productIds":["prod_a","prod_b","prod_c"]}' \
+  "https://api.linkz.ee/v1/uploads/video/montage"
+```
+
+| Parameter | Where | Required | Description |
+| --- | --- | --- | --- |
+| `productIds` | body | No | Up to 6 product ids, in the order they should appear. Omitted: the newest products with a photo. |
+
+Returns the processing job (`{ id, kind, status, result, error }`), exactly like
+the video upload. Errors: `400` when fewer than 3 products have a photo.
