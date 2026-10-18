@@ -98,7 +98,9 @@ curl -X POST \
 | `isActive` | boolean | Não | Se o link está visível na sua página. Padrão: `true`. |
 | `isFeatured` | boolean | Não | Exibe o link com destaque extra. Padrão: `false`. |
 | `highlightFx` | string | Não | Destaque animado (Premium): `""` (nenhum), `"shake"`, `"shine"`, `"pulse"` ou `"bounce"`. |
-| `mediaType` | string | Não | Estilo da mídia de capa: `""`, `"image"`, `"video"` ou `"embed"`. |
+| `mediaType` | string | Não | Estilo da mídia de capa: `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` ou `"gallery"` (blocos de fotos, Premium — ver a referência em inglês para `mediaItems`). |
+| `galleryLayout` | string | Não | Bloco `gallery`: `"carousel"` (padrão), `"strip"` ou `"reel"` (vitrine vertical 9:16 com visualizador em tela cheia). |
+| `reelCta` | string | Não | Galeria `reel`: botão padrão das fotos sem serviço/produto — `"none"` (padrão) ou `"whatsapp"` (abre o WhatsApp da loja com o nome da peça e o link da foto `https://linkz.ee/<slug>/look/<linkId>-<slot>` na mensagem, no idioma da página; exige o `whatsapp` da loja). Cada item de `mediaItems` pode trazer `label`, `offeringId` (serviço), `productId` (produto da loja; abre o link do produto com clique contado) e `cta` (`"inherit"`, `"none"` ou `"whatsapp"`). O botão é resolvido por foto: serviço → produto → WhatsApp → nada. |
 | `mediaUrl` | string | Não | URL da mídia de capa para o `mediaType` escolhido. |
 | `posterUrl` | string | Não | URL da imagem de pôster para uma capa em vídeo. |
 | `scheduledStartAt` | string \| null | Não | Agendamento: instante (ISO 8601, UTC) a partir do qual o link aparece. `null` limpa o valor. Ambos `null` significa sempre visível. |
