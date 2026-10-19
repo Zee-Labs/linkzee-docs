@@ -168,7 +168,7 @@ curl -X PATCH \
 | `mediaStartPct` | integer | No | `before_after`: where the draggable edge starts, as % of the width from the left (10–90, default 50). Lower = more of the "after" photo visible at first. |
 | `mediaConsent` | boolean | No | Media blocks: permission confirmation (see Create). |
 | `galleryLayout` | string | No | `gallery` block: `"carousel"` (default), `"strip"` (3 thumbnails under a `before_after`) or `"reel"` (vertical 9:16 showcase with a full-screen viewer). |
-| `reelCta` | string | No | `reel` gallery: default button of photos without a service/product — `"none"` (default) or `"whatsapp"` (opens the store WhatsApp with the item name and the photo link `https://linkz.ee/<slug>/look/<linkId>-<slot>` in the message, in the page language; requires the store `whatsapp` number). |
+| `reelCta` | string | No | `reel` gallery: default button of photos without a service/product — `"none"` (default) or `"whatsapp"` (opens the store WhatsApp with the product name and the photo link `https://linkz.ee/<slug>/look/<linkId>-<slot>` in the message, in the page language; requires the store `whatsapp` number). |
 | `mediaUrl` | string | No | Cover media URL. |
 | `posterUrl` | string | No | Poster image URL for a video cover. |
 | `scheduledStartAt` | string \| null | No | Schedule: instant (ISO 8601, UTC) from which the link appears. `null` clears it. |
