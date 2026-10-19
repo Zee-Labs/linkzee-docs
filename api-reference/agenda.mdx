@@ -663,6 +663,8 @@ curl -X POST \
 | --- | --- | --- | --- |
 | `id` | string | Yes | The appointment ID (in the path). |
 | `startAt` | string | Yes | New start time in ISO 8601. |
+| `staffId` | string | No | Team mode only: move the appointment to this team member (must be active and offer the service). |
+| `anyStaff` | boolean | No | Team mode only: let Linkzee pick the first free team member for the new time. |
 
 #### Response
 
@@ -670,7 +672,7 @@ curl -X POST \
 {
   "error": false,
   "message": "Appointment rescheduled successfully",
-  "data": { "startAt": "2026-07-22T15:00:00.000Z" }
+  "data": { "startAt": "2026-07-22T15:00:00.000Z", "staffId": "665f00aa11bb22cc33dd44ee", "staffName": "Ana" }
 }
 ```
 

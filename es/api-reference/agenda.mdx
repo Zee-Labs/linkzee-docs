@@ -664,6 +664,8 @@ curl -X POST \
 | --- | --- | --- | --- |
 | `id` | string | Sí | El ID de la cita (en la ruta). |
 | `startAt` | string | Sí | Nueva hora de inicio en ISO 8601. |
+| `staffId` | string | No | Solo en modo equipo: pasa la cita a este profesional (activo y que atiende el servicio). |
+| `anyStaff` | boolean | No | Solo en modo equipo: Linkzee elige al primer profesional libre en la nueva hora. |
 
 #### Respuesta
 
@@ -671,7 +673,7 @@ curl -X POST \
 {
   "error": false,
   "message": "Appointment rescheduled successfully",
-  "data": { "startAt": "2026-07-22T15:00:00.000Z" }
+  "data": { "startAt": "2026-07-22T15:00:00.000Z", "staffId": "665f00aa11bb22cc33dd44ee", "staffName": "Ana" }
 }
 ```
 

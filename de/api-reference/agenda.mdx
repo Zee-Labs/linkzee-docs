@@ -671,6 +671,8 @@ curl -X POST \
 | --- | --- | --- | --- |
 | `id` | string | Ja | Die Termin-ID (im Pfad). |
 | `startAt` | string | Ja | Neue Startzeit in ISO 8601. |
+| `staffId` | string | Nein | Nur im Team-Modus: überträgt den Termin an diesen Mitarbeiter (aktiv und mit dieser Leistung). |
+| `anyStaff` | boolean | Nein | Nur im Team-Modus: Linkzee wählt den ersten freien Mitarbeiter zur neuen Zeit. |
 
 #### Antwort
 
@@ -678,7 +680,7 @@ curl -X POST \
 {
   "error": false,
   "message": "Appointment rescheduled successfully",
-  "data": { "startAt": "2026-07-22T15:00:00.000Z" }
+  "data": { "startAt": "2026-07-22T15:00:00.000Z", "staffId": "665f00aa11bb22cc33dd44ee", "staffName": "Ana" }
 }
 ```
 
