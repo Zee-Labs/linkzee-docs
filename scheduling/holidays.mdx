@@ -3,51 +3,90 @@ title: Holidays
 icon: calendar-star
 ---
 
-Linkzee knows the public holidays where your business is (country, state and,
-for Brazilian cities, the city itself) and asks you **once, 10 days before** each
-one: *are you open that day?* One tap answers. You never have to remember a
-holiday again, and nobody books a day you meant to close.
+Linkzee knows the holidays where your business is (country, state and, for
+Brazilian cities, the city itself) and asks **10 days ahead**: *will you be
+working that day?* You answer in one tap: **We'll be working**, **Reduced
+hours** or **We won't be working**. Nobody books on a day you don't work, or
+outside the hours you chose.
 
 ## How it works
 
-1. **Confirm where the business is.** Scheduling → Settings → Holidays shows
-   the location taken from your account ("Goiânia, GO · Brazil"). Confirm it once
-   (or change it). Each business has its own location.
-2. **Ten days before a holiday** you get an e-mail and a push: *"Is Vikings open
-   on Tiradentes?"* with two buttons, **We're open** and **Closed that day**. The
-   button opens a light page with a single **Confirm**. The same line appears,
-   quietly, at the top of the Today view, and you can dismiss it.
-3. **Closed** blocks the day for the whole team with one block per day; nobody
-   can book it. If clients are already booked, Linkzee shows you who they are
-   first, e-mails them the reschedule link and **never cancels anything on its
-   own**: the Today view keeps "2 clients to reschedule on 21/04" until you sort
-   them out.
-4. **No answer? Nothing changes.** The agenda stays open. If you did not answer
-   in time, a single reminder arrives 3 days before.
-5. **Your choice is remembered** for next year (the holiday is identified by its
-   rule, so moving holidays like Carnival still match).
+1. **Confirm where the business is.** Calendar → Settings → Holidays shows the
+   location from your account. Confirm it once (or change it). Each business has
+   its own location.
+2. **Ten days before**, you get an email and a phone notification. With one
+   business and one holiday, the email has the three answers as buttons. If you
+   worked reduced hours last year, the main button is ready ("Work from 8:00 AM
+   to 12:00 PM"). The same question shows at the top of the Today tab.
+3. **Nearby holidays come together.** Holidays that start up to 9 days after the
+   first one join the same question (Carnival and Ash Wednesday; Christmas, its
+   eve and New Year). Instead of several emails, you get one with an **Answer**
+   button.
+4. **No answer, no change.** Your calendar stays as it is. A single reminder
+   arrives 3 days before, with only the holidays still unanswered.
+5. **Your choice is saved** for next year: the question comes prefilled with
+   what you did.
+
+## The three answers
+
+- **Working**: the day stays normal.
+- **Reduced**: choose *from* and *to* (for example, 8:00 AM to 12:00 PM).
+  Nobody can book outside those hours. It applies to the whole team; each
+  professional keeps their own hours. Shortcuts appear as suggestions: *Same as
+  last year*, *Morning only*, *Afternoon only* and, on holiday eves, the official
+  half day.
+- **Not working**: the whole day is blocked.
+
+For multi-day holidays (Carnival, for example) you can answer day by day: not
+working on Monday and reduced hours on Tuesday.
+
+**Booked clients are never cancelled.** Before you confirm, Linkzee shows who
+falls outside the new hours and, if you keep the switch on, emails them a link
+to reschedule. Each client gets that notice only once, even if you change the
+hours later. The Today tab keeps "3 clients outside the reduced hours on 12/24"
+until you sort it out.
+
+## Christmas Eve, New Year's Eve and Ash Wednesday
+
+These are official **half days** in some countries (in Brazil, the eves are
+holidays from 2:00 PM and Ash Wednesday until 2:00 PM). They ask too, already
+suggesting reduced hours that fit your schedule. If you don't open that day,
+nothing shows up. Automatic blocking of national holidays never applies to half
+days.
+
+## More than one business
+
+If you have more than one business, you get **a single email** with a block per
+business (how many days each would open and how many clients already booked).
+The **Answer** button opens a page with a card per business, prefilled from last
+year, and each business keeps its own answer. **Same answer for all** only fills
+in; nothing changes until you tap **Confirm**. Each business only shows on the
+days it would open and on its own city's holidays. Businesses in different time
+zones get the notice at 9 AM in each zone.
 
 ## The list
 
-Settings → Holidays lists the next 60 days: date, name, weekday and "in 10 days",
-and the origin of each entry (National, your state, your city, Optional holiday,
-Added). Carnival and other optional holidays ask too; observances such as
-Mother's Day only appear. Holidays falling on a day you are closed anyway are
-shown muted and never asked.
+Settings → Holidays shows the next 60 days: date, name, weekday and "in 10
+days", plus where each line comes from (National, your state, your city,
+Optional holiday, Added). Each line has **Working · Reduced · Not working**;
+with reduced hours the line shows "From 8:00 to 12:00 · Change". Observances
+such as Mother's Day only show. A holiday on a day you already don't open is
+greyed out and never asks.
 
-- **Add a date** for a local holiday Linkzee does not know (city anniversary,
-  patron saint): it repeats every year.
-- **Not a holiday here** hides an entry for good (you can bring it back).
-- **Close automatically on national holidays** for businesses that always
-  close: the day is blocked 10 days before and you still get the e-mail to open
-  an exception.
-- **Holiday e-mails** can be switched off per business; the push and the line
-  in the Today view stay.
+- **Add a date** for a local holiday Linkzee doesn't know: it repeats every year.
+- **Not observed here** hides the holiday this year and in the following years.
+- **Don't work on national holidays** if you never work on them: the day is
+  blocked when the notice goes out (about 10 days ahead) and you can still change it.
+- **Holiday notices by email** can be turned off per business, or with the link
+  at the bottom of the email itself; the phone notice and the Today tab stay.
+
+Under **Unavailable days**, reduced hours show as a single line ("only 8:00 to 12:00"). Deleting it sets the day back to "Working".
 
 ## For your clients
 
-A closed day simply appears disabled in the booking form, like any other block,
-with no reason shown. If you are open, nothing changes for them.
+A day you don't work shows as disabled in the booking form, like any other
+block, with no reason. With reduced hours only the slots inside the window show,
+and the bio badge says "Open now · closes at 12 PM" that day.
 
 <Note>
   Holiday data comes from the open-source [date-holidays](https://github.com/commenthol/date-holidays)
