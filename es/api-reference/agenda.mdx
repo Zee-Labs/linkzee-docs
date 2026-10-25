@@ -563,6 +563,10 @@ POST /v1/agenda/appointments
 Reserva una cita manualmente, con las mismas reglas que la reserva pública: la
 franja debe estar realmente disponible o la solicitud se rechaza.
 
+<Note>
+  Con [agendas vinculadas](/es/scheduling/linked-calendars), un horario que el profesional ya tiene en otra agenda de Linkzee también se rechaza: `409` con `code: "BUSY_ELSEWHERE"` y el mensaje genérico; el otro negocio nunca se nombra a una integración.
+</Note>
+
 #### Solicitud
 
 ```bash

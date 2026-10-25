@@ -562,6 +562,10 @@ POST /v1/agenda/appointments
 Books an appointment manually, using the same rules as public booking — the
 slot must be genuinely available or the request is rejected.
 
+<Note>
+  With [linked calendars](/scheduling/linked-calendars), a time the staff member already has on another Linkzee calendar is also rejected: `409` with `code: "BUSY_ELSEWHERE"` and the generic message — the other business is never named to an integration.
+</Note>
+
 #### Request
 
 ```bash

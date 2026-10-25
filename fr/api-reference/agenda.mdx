@@ -567,6 +567,10 @@ POST /v1/agenda/appointments
 Réserve un créneau manuellement, selon les mêmes règles que la réservation
 publique — le créneau doit être réellement disponible, sinon la requête est rejetée.
 
+<Note>
+  Avec les [agendas liés](/fr/scheduling/linked-calendars), un créneau que le professionnel a déjà sur un autre agenda Linkzee est aussi rejeté : `409` avec `code: "BUSY_ELSEWHERE"` et le message générique — l'autre activité n'est jamais nommée à une intégration.
+</Note>
+
 #### Requête
 
 ```bash

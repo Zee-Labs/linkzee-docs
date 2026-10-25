@@ -566,6 +566,10 @@ POST /v1/agenda/appointments
 Cria um agendamento manualmente, usando as mesmas regras da reserva pública — o
 horário precisa estar realmente disponível ou a requisição é rejeitada.
 
+<Note>
+  Com [agendas vinculadas](/pt-BR/scheduling/linked-calendars), um horário que o atendente já tem em outra agenda do Linkzee também é rejeitado: `409` com `code: "BUSY_ELSEWHERE"` e a mensagem genérica — o outro negócio nunca é nomeado para uma integração.
+</Note>
+
 #### Requisição
 
 ```bash

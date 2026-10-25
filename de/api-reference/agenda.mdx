@@ -569,6 +569,10 @@ POST /v1/agenda/appointments
 Bucht einen Termin manuell, nach denselben Regeln wie die öffentliche Buchung —
 das Zeitfenster muss tatsächlich verfügbar sein, sonst wird die Anfrage abgelehnt.
 
+<Note>
+  Mit [verknüpften Kalendern](/de/scheduling/linked-calendars) wird auch eine Zeit abgelehnt, die die Fachkraft bereits in einem anderen Linkzee-Kalender hat: `409` mit `code: "BUSY_ELSEWHERE"` und der allgemeinen Meldung – der andere Betrieb wird einer Integration nie genannt.
+</Note>
+
 #### Anfrage
 
 ```bash
