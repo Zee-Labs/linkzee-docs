@@ -1,62 +1,77 @@
 ---
 title: Google Calendar
 icon: calendar-plus
-description: "Connectez votre Google Calendar pour que chaque réservation arrive directement sur votre téléphone, avec des liens Google Meet automatiques pour les services en ligne."
+description: "Connectez votre Google Agenda pour que chaque rendez-vous arrive sur votre téléphone, avec un rappel avant l'heure et un lien Google Meet automatique pour les services en ligne."
 ---
 
-Connectez votre **Google Calendar** pour que vos rendez-vous apparaissent directement
-sur votre téléphone, à côté de tout le reste de votre journée. Une fois lié, Linkzee
-et Google restent synchronisés dans les deux sens — les nouvelles réservations sont
-transmises à Google, et les moments où vous êtes occupé dans Google cessent d'être
-proposés sur Linkzee.
+Connectez votre **Google Agenda** pour que vos rendez-vous apparaissent directement sur votre
+téléphone, à côté de tout le reste de votre journée. Linkzee crée son propre agenda dans votre
+Google Agenda — **« Linkzee · {nom de votre établissement} »** — et y place chaque rendez-vous, avec
+un rappel sur le téléphone avant l'heure.
 
-## Connecter votre agenda
+## Connectez votre agenda
 
 <Steps>
-  <Step title="Ouvrez les paramètres de votre agenda">
-    Allez dans **Agenda → paramètres**.
+  <Step title="Ouvrez les paramètres de l'agenda">
+    Allez dans **Agenda → Paramètres**.
   </Step>
   <Step title="Connectez la carte Google">
     Cliquez sur **Connecter** sur la carte Google.
   </Step>
   <Step title="Autorisez l'accès">
-    Connectez-vous avec votre compte Google et autorisez Linkzee. Vous reviendrez
-    au tableau de bord avec la confirmation **« Google Agenda connecté »** — et
-    dès cet instant, les réservations apparaissent automatiquement dans votre
-    agenda.
+    Connectez-vous à votre compte Google et cochez l'autorisation de **créer des agendas
+    secondaires et d'en gérer les événements**. Vous revenez au tableau de bord avec
+    **« Google Agenda connecté »**, et l'agenda « Linkzee » apparaît déjà dans Google.
   </Step>
 </Steps>
 
-## Ce qui se passe une fois connecté
+<Note>
+  Linkzee ne touche qu'à l'agenda qu'il a créé. Vos autres événements ne sont jamais lus, modifiés ni
+  supprimés — pour respecter vos créneaux occupés, Linkzee ne voit que « libre » ou « occupé », sans
+  titre ni détail.
+</Note>
 
-- **Chaque réservation est ajoutée automatiquement à votre Google Calendar**, elle
-  apparaît donc partout où vous consultez Google — téléphone, ordinateur portable ou montre.
-- **Les services avec l'option de réunion en ligne obtiennent un lien Google Meet**
-  créé automatiquement, prêt à être partagé avec le visiteur (voir [Services](/fr/scheduling/services)).
+## Ce qui se passe après la connexion
+
+- **Chaque rendez-vous arrive dans l'agenda « Linkzee »**, qui apparaît dans votre liste d'agendas
+  Google (téléphone, ordinateur ou montre) avec sa propre couleur. Affichez-le ou masquez-le d'un geste.
+- **Rappel sur le téléphone avant chaque rendez-vous.** Sur la carte Google, choisissez le délai :
+  sans rappel, 10, 15 ou 30 minutes, 1 ou 2 heures ou 1 jour avant (par défaut : 30 minutes). Il
+  s'applique aux rendez-vous synchronisés après le changement.
+- **Les services avec réunion en ligne reçoivent un lien Google Meet** créé automatiquement (voir
+  [Services](/fr/scheduling/services)). Certains comptes professionnels ont Meet désactivé par
+  l'administrateur ; dans ce cas la carte le signale et les services en visio n'ont pas de lien automatique.
+- **Reprogrammé ou annulé dans Linkzee ?** L'événement suit aussitôt. Les modifications faites
+  directement dans Google ne remontent pas dans Linkzee — reprogrammez toujours depuis Linkzee.
 
 ## Respectez vos événements Google
 
-Activez **Respecter mes événements Google** pour éviter que vos deux agendas ne se
-chevauchent. Lorsque c'est activé, tout moment où vous êtes déjà occupé dans Google —
-une course personnelle, une autre réunion, un jour de congé — est masqué de vos
-créneaux de réservation Linkzee. La synchronisation fonctionne dans les deux sens,
-vous n'avez donc jamais de double réservation.
+Activez **Respecter mes événements Google** pour éviter les conflits. Une fois activé, tout créneau
+où vous êtes occupé dans votre agenda Google **principal** — un rendez-vous personnel, une autre
+réunion, un jour de congé — n'est plus proposé sur Linkzee.
+
+## Connecté avant novembre 2026 ?
+
+Les anciennes connexions utilisaient une autre autorisation Google et plaçaient les rendez-vous dans
+votre agenda principal. Elles continuent de fonctionner, mais la carte affiche **Se reconnecter** :
+après la reconnexion, les prochains rendez-vous vont dans l'agenda « Linkzee », avec rappel sur le
+téléphone. Ceux déjà pris restent où ils sont — avec le même lien Meet.
 
 <Note>
-  Vous pouvez vous déconnecter à tout moment depuis le même écran. Vos rendez-vous
-  existants restent dans votre agenda Linkzee.
+  Vous avez supprimé l'agenda « Linkzee » dans Google par erreur ? Il est recréé automatiquement au
+  prochain rendez-vous. Vous pouvez vous déconnecter à tout moment depuis le même écran.
 </Note>
 
 ## Google Agenda et agendas liés
 
-Les événements Google ne bloquent que l'activité où le compte a été connecté ; ils ne passent **pas** aux autres agendas Linkzee de la personne. Pour qu'un rendez-vous dans une activité bloque le créneau dans une autre, utilisez [Agendas liés](/fr/scheduling/linked-calendars).
+Les engagements Google ne bloquent que l'établissement où le compte a été connecté ; ils ne passent **pas** dans les autres agendas de la personne sur Linkzee. Pour qu'un créneau pris dans un établissement soit occupé dans l'autre, utilisez les [Agendas liés](/fr/scheduling/linked-calendars).
 
 <CardGroup cols={2}>
   <Card title="Services" icon="list-check" href="/fr/scheduling/services">
-    Configurez ce que les gens peuvent réserver, y compris les réunions en ligne avec Google Meet.
+    Définissez ce qui peut être réservé, y compris les réunions en ligne avec Google Meet.
   </Card>
-  <Card title="Équipe et Google Calendar" icon="user-clock" href="/fr/scheduling/team-google-calendar">
-    Laissez chaque collaborateur connecter son propre Google Calendar.
+  <Card title="Équipe & Google Agenda" icon="user-clock" href="/fr/scheduling/team-google-calendar">
+    Laissez chaque professionnel connecter son propre Google Agenda.
   </Card>
   <Card title="Rappels" icon="bell" href="/fr/scheduling/reminders">
     Envoyez des rappels de confirmation avant chaque rendez-vous pour réduire les absences.

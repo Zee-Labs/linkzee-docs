@@ -1,60 +1,76 @@
 ---
 title: Google Calendar
 icon: calendar-plus
-description: "Conecta tu Google Calendar para que cada cita llegue directo a tu teléfono, con enlaces de Google Meet automáticos para los servicios en línea."
+description: "Conecta tu Google Calendar para que cada cita llegue a tu celular, con aviso antes del horario y link de Google Meet automático para servicios online."
 ---
 
-Conecta tu **Google Calendar** para que tus citas aparezcan directo en tu teléfono,
-junto a todo lo demás de tu día. Una vez enlazado, Linkzee y Google se mantienen
-sincronizados en ambos sentidos: las nuevas citas fluyen hacia Google, y los horarios
-en los que estás ocupado en Google dejan de ofrecerse en Linkzee.
+Conecta tu **Google Calendar** para que tus citas aparezcan directo en tu celular, junto a todo lo
+que tienes en el día. Linkzee crea un calendario propio dentro de tu Google Calendar —
+**"Linkzee · {nombre de tu negocio}"** — y pone en él cada cita, con aviso en el celular antes del
+horario.
 
 ## Conecta tu calendario
 
 <Steps>
-  <Step title="Abre la configuración de tu agenda">
+  <Step title="Abre la configuración de la agenda">
     Ve a **Agenda → Configuración**.
   </Step>
   <Step title="Conecta la tarjeta de Google">
     Haz clic en **Conectar** en la tarjeta de Google.
   </Step>
   <Step title="Autoriza el acceso">
-    Inicia sesión con tu cuenta de Google y autoriza a Linkzee. Volverás al
-    panel con la confirmación de **"Google Calendar conectado"** — y desde
-    ese momento las reservas empiezan a aparecer en tu calendario
-    automáticamente.
+    Entra con tu cuenta de Google y marca el permiso para **crear calendarios secundarios y
+    gestionar sus eventos**. Vuelves al panel con **"Google Calendar conectado"**, y el calendario
+    "Linkzee" ya aparece en Google.
   </Step>
 </Steps>
 
-## Qué pasa una vez conectado
+<Note>
+  Linkzee solo toca el calendario que creó. Tus otros eventos nunca se leen, editan ni borran —
+  para respetar tus horarios ocupados, Linkzee solo ve "libre" u "ocupado", sin títulos ni detalles.
+</Note>
 
-- **Cada cita se agrega a tu Google Calendar** automáticamente, así aparece
-  dondequiera que consultes Google: teléfono, laptop o reloj.
-- **Los servicios con la opción de reunión en línea reciben un enlace de Google Meet**
-  creado automáticamente, listo para compartir con el visitante (ver [Servicios](/es/scheduling/services)).
+## Qué pasa después de conectar
+
+- **Cada cita entra en el calendario "Linkzee"**, que aparece en tu lista de calendarios de Google
+  (celular, computadora o reloj) con color propio. Puedes mostrarlo u ocultarlo con un toque.
+- **Aviso en el celular antes de cada cita.** En la tarjeta de Google, elige el tiempo: sin aviso,
+  10, 15 o 30 minutos, 1 o 2 horas o 1 día antes (por defecto: 30 minutos). Vale para las citas
+  sincronizadas desde el cambio.
+- **Los servicios con reunión online reciben un link de Google Meet** creado automáticamente (mira
+  [Servicios](/es/scheduling/services)). Algunas cuentas de empresa tienen Meet desactivado por el
+  administrador; en ese caso la tarjeta avisa y los servicios por video quedan sin link automático.
+- **¿Reagendaste o cancelaste en Linkzee?** El evento acompaña al instante. Los cambios hechos
+  directo en Google no vuelven a Linkzee — reagenda siempre por Linkzee.
 
 ## Respeta tus eventos de Google
 
-Activa **Respetar mis eventos de Google** para evitar que tus dos calendarios choquen.
-Cuando está activado, cualquier horario en el que ya estés ocupado en Google —un
-trámite personal, otra reunión, un día libre— se oculta de tus horarios de agenda de
-Linkzee. La sincronización funciona en ambos sentidos, así que nunca tienes citas dobles.
+Activa **Respetar mis eventos de Google** para evitar conflictos. Cuando está activado, cualquier
+horario en que estés ocupado en tu calendario **principal** de Google — un compromiso personal, otra
+reunión, un día libre — deja de ofrecerse en Linkzee.
+
+## ¿Conectaste antes de noviembre de 2026?
+
+Las conexiones antiguas usaban otro permiso de Google y ponían las citas en tu calendario principal.
+Siguen funcionando, pero la tarjeta muestra **Conectar de nuevo**: al reconectar, las próximas citas
+van al calendario "Linkzee", con aviso en el celular. Las ya agendadas siguen donde están — con el
+mismo link de Meet.
 
 <Note>
-  Puedes desconectar en cualquier momento desde la misma pantalla. Tus citas
-  existentes permanecen en tu agenda de Linkzee.
+  ¿Borraste el calendario "Linkzee" en Google sin querer? Se vuelve a crear solo en la próxima cita.
+  Puedes desconectar cuando quieras desde la misma pantalla.
 </Note>
 
 ## Google Calendar y agendas vinculadas
 
-Los eventos de Google bloquean solo el negocio donde se conectó la cuenta; **no** pasan a las otras agendas de la persona en Linkzee. Para que un horario de un negocio quede ocupado en otro, usa [Agendas vinculadas](/es/scheduling/linked-calendars).
+Los compromisos de Google bloquean solo el negocio en el que se conectó la cuenta; **no** pasan a las otras agendas de la persona en Linkzee. Para que un horario de un negocio quede ocupado en el otro, usa [Agendas vinculadas](/es/scheduling/linked-calendars).
 
 <CardGroup cols={2}>
   <Card title="Servicios" icon="list-check" href="/es/scheduling/services">
-    Configura lo que la gente puede reservar, incluidas reuniones en línea con Google Meet.
+    Define qué se puede agendar, incluidas reuniones online con Google Meet.
   </Card>
   <Card title="Equipo y Google Calendar" icon="user-clock" href="/es/scheduling/team-google-calendar">
-    Permite que cada profesional conecte su propio Google Calendar.
+    Deja que cada profesional conecte su propio Google Calendar.
   </Card>
   <Card title="Recordatorios" icon="bell" href="/es/scheduling/reminders">
     Envía recordatorios de confirmación antes de cada cita para reducir las ausencias.

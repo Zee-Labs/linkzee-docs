@@ -1,85 +1,75 @@
 ---
 title: Google Kalender fürs Team
 icon: user-clock
-description: "Lassen Sie jedes Teammitglied seinen eigenen Google Kalender über einen Verbindungslink verbinden, den Sie teilen."
+description: "Lassen Sie jede Fachkraft ihren eigenen Google Kalender über einen Verbindungslink verbinden, den Sie teilen."
 ---
 
-Im Modus **Mein Team** kann jedes Teammitglied **seinen eigenen** Google Kalender
-verbinden — das ist optional, und der Kalender jeder Person bleibt von Ihrem
-getrennt.
+Im Modus **Team** kann jede Fachkraft ihren **eigenen** Google Kalender verbinden — optional, und der
+Kalender jeder Person bleibt von Ihrem getrennt.
 
-Da sich Ihre Teammitglieder nicht bei Linkzee anmelden, erzeugen Sie für sie
-einen **Verbindungslink** und teilen ihn. Sobald sie verbunden sind, blockieren
-ihre belegten Zeiten nur **ihre** eigenen Slots, und ihre Termine sowie die
-**Google Meet**-Links landen in **ihrem** Kalender.
+Sie erstellen einen **Verbindungslink** und teilen ihn mit der Fachkraft (oder sie verbindet sich in
+ihrem eigenen Dashboard unter **Einstellungen → Integrationen**). Danach legt Linkzee im Google-Konto
+**der Fachkraft** den Kalender **„Linkzee · {Name des Geschäfts}“** an: Ihre Buchungen und
+**Google-Meet**-Links landen dort, mit Erinnerung auf dem Handy vor jedem Termin, und belegte Zeiten in
+ihrem Hauptkalender blockieren nur **ihre** Zeitfenster.
 
-## Den Kalender eines Teammitglieds verbinden
+## Google Kalender einer Fachkraft verbinden
 
 <Steps>
-  <Step title="Das Teammitglied öffnen">
-    Gehen Sie zu **Kalender → Team** und öffnen Sie die Person, die Sie verbinden
-    möchten.
+  <Step title="Öffnen Sie die Fachkraft">
+    Gehen Sie zu **Kalender → Team** und öffnen Sie die Person, die verbunden werden soll.
   </Step>
-  <Step title="Den Verbindungslink erzeugen">
-    Klicken Sie auf **Verbinden**, um einen persönlichen Verbindungslink für dieses
-    Teammitglied zu erstellen.
+  <Step title="Verbindungslink erstellen">
+    Klicken Sie auf **Verbinden**, um einen persönlichen Verbindungslink zu erstellen.
   </Step>
-  <Step title="Den Link teilen">
-    Senden Sie ihm den Link — zum Beispiel über WhatsApp — damit er Google auf
-    seinem eigenen Gerät autorisieren kann. Wenn Sie bereits an seinem Gerät sind,
-    können Sie ihn selbst öffnen.
+  <Step title="Link teilen">
+    Senden Sie den Link — etwa per WhatsApp —, damit die Fachkraft Google auf dem eigenen Gerät
+    freigibt. Wenn Sie schon an ihrem Gerät sind, können Sie ihn selbst öffnen.
   </Step>
-  <Step title="Er autorisiert Google">
-    Er öffnet den Link und meldet sich bei seinem Google-Konto an, um die
-    Verbindung abzuschließen.
+  <Step title="Google freigeben">
+    Die Fachkraft öffnet den Link, meldet sich im Google-Konto an und aktiviert die Berechtigung,
+    **sekundäre Kalender zu erstellen und deren Termine zu verwalten**.
   </Step>
 </Steps>
 
-Der Verbindungslink ist nur **begrenzte Zeit** gültig — bitten Sie Ihr
-Teammitglied daher, ihn bald nach dem Versand zu öffnen. Falls er abläuft,
-erzeugen Sie einfach einen neuen.
+Der Verbindungslink gilt nur **begrenzt**, bitten Sie also darum, ihn bald nach dem Senden zu öffnen.
+Ist er abgelaufen, erstellen Sie einfach einen neuen.
 
 <Note>
-  Die Verbindung jedes Teammitglieds ist unabhängig. Eine Person kann verbunden
-  sein, während eine andere es nicht ist — Buchungen funktionieren so oder so für
-  alle. Hat ein Teammitglied kein eigenes Google verbunden, landen seine
-  Buchungen (und Google-Meet-Links) stattdessen in **Ihrem** Kalender — dem
-  des Geschäfts.
+  Jede Verbindung ist unabhängig. Hat eine Fachkraft ihr eigenes Google nicht verbunden, gehen ihre
+  Termine (und Google-Meet-Links) in **Ihren** Kalender „Linkzee“ — den des Geschäfts. Die Vorlaufzeit
+  der Erinnerung ist die, die Sie auf der Google-Karte gewählt haben.
 </Note>
 
-## Was passiert, sobald sie verbunden sind
+## Was nach dem Verbinden passiert
 
-- Ihre **belegten Zeiten** in Google werden nur noch für **ihre** eigenen Slots
-  nicht mehr angeboten.
-- Jede Buchung mit diesem Teammitglied wird zu **seinem** Google Kalender
-  hinzugefügt.
-- Bei Leistungen mit der Option **Online-Meeting** wird der **Google Meet**-Link
-  in **seinem** Kalender erstellt.
-- Wenn Sie **einen Termin an ein anderes Teammitglied übertragen**, verschwindet
-  der Eintrag aus dem bisherigen Kalender und erscheint im neuen.
-- Wer den Zugang verliert, dessen **Google Kalender wird gleichzeitig** von
-  Ihrem Geschäft getrennt.
+- Jeder Termin mit dieser Fachkraft landet im Kalender **„Linkzee“** in **ihrem** Google.
+- Bei Leistungen mit **Online-Meeting** wird der **Google-Meet**-Link in diesem Kalender erstellt.
+- Ihre **belegten Zeiten** im Hauptkalender werden nur in **ihren** Zeitfenstern nicht mehr angeboten —
+  Linkzee sieht nur „frei“ oder „belegt“, ohne Details.
+- Wenn Sie **einen Termin einer anderen Fachkraft zuweisen**, verlässt der Termin den bisherigen
+  Kalender und erscheint im neuen.
+- Wenn Sie jemandem den Zugang entziehen, wird **dessen Google Kalender** gleichzeitig getrennt.
+- Verbindungen vor November 2026 zeigen **Link zum erneuten Verbinden**: Link erstellen und um erneutes
+  Verbinden bitten. Bereits gebuchte Termine bleiben, wo sie sind.
 
 <Warning>
-  Auf dem Google-Zustimmungsbildschirm muss das Kästchen **„Alle Kalender, auf
-  die Sie über Google Kalender zugreifen können, ansehen, bearbeiten, freigeben
-  und endgültig löschen"** angehakt sein. Bleibt es leer, lehnt Linkzee die
-  Verbindung ab und der Status erklärt, was anzuhaken ist — einfach den Link
-  erneut öffnen.
+  Im Google-Berechtigungsdialog muss das Kästchen zum **Erstellen sekundärer Kalender und Verwalten
+  ihrer Termine** aktiviert sein. Andernfalls lehnt Linkzee die Verbindung ab und der Status erklärt,
+  was zu aktivieren ist — einfach den Link erneut öffnen.
 </Warning>
 
 <Warning>
-  Teilen Sie den Verbindungslink nur mit diesem Teammitglied — er verbindet dessen
-  persönliches Google-Konto.
+  Teilen Sie den Verbindungslink nur mit dieser Fachkraft — sie verbindet ihr persönliches Google-Konto.
 </Warning>
 
 ## Und die anderen Kalender der Fachkraft?
 
-Das Google der Fachkraft blockiert nur ihre Zeiten in **diesem** Betrieb. Nimmt sie auch anderswo über Linkzee Termine an, hilft das [Verknüpfen der Kalender](/de/scheduling/linked-calendars): Ein Termin dort blockiert die Zeit hier – und umgekehrt, ganz ohne Google.
+Das Google der Fachkraft blockiert nur ihre Zeiten in **diesem** Geschäft. Nimmt sie auch anderswo über Linkzee Termine an, hilft es, [die Kalender zu verknüpfen](/de/scheduling/linked-calendars): ein dort gebuchter Termin ist hier belegt und umgekehrt, ohne Umweg über Google.
 
 <CardGroup cols={2}>
   <Card title="Team" icon="users" href="/de/scheduling/team">
-    Fügen Sie Teammitglieder, ihre Leistungen und ihre eigenen Zeiten hinzu.
+    Fügen Sie Fachkräfte, ihre Leistungen und ihre eigenen Zeiten hinzu.
   </Card>
   <Card title="Google Kalender" icon="calendar-plus" href="/de/scheduling/google-calendar">
     Verbinden Sie Ihren eigenen Google Kalender und Meet.

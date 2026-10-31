@@ -1,77 +1,75 @@
 ---
 title: Google Agenda de l'équipe
 icon: user-clock
-description: "Laissez chaque collaborateur connecter son propre Google Agenda grâce à un lien de connexion que vous partagez."
+description: "Laissez chaque professionnel connecter son propre Google Agenda avec un lien de connexion que vous partagez."
 ---
 
-En mode **Équipe**, chaque collaborateur peut connecter **son propre** Google Agenda —
-c'est facultatif, et l'agenda de chaque personne reste séparé du vôtre.
+En mode **Équipe**, chaque professionnel peut connecter son **propre** Google Agenda — c'est
+facultatif, et l'agenda de chacun reste séparé du vôtre.
 
-Comme vos collaborateurs ne se connectent pas à Linkzee, vous générez un **lien de connexion**
-que vous leur partagez. Une fois connectés, leurs créneaux occupés bloquent uniquement **leurs**
-créneaux, et leurs événements ainsi que leurs liens **Google Meet** sont créés sur **leur** agenda.
+Vous générez un **lien de connexion** et le partagez avec le professionnel (ou il se connecte depuis
+son propre tableau de bord, dans **Paramètres → Intégrations**). Une fois connecté, Linkzee crée
+l'agenda **« Linkzee · {nom de l'établissement} »** dans **son** Google : ses rendez-vous et les liens
+**Google Meet** y arrivent, avec un rappel sur le téléphone avant chacun, et les créneaux occupés de
+son agenda principal ne bloquent que **ses** créneaux.
 
-## Connecter l'agenda d'un collaborateur
+## Connecter le Google Agenda d'un professionnel
 
 <Steps>
-  <Step title="Ouvrez le collaborateur">
-    Allez dans **Agenda → Équipe** et ouvrez la personne que vous souhaitez connecter.
+  <Step title="Ouvrez le professionnel">
+    Allez dans **Agenda → Équipe** et ouvrez la personne à connecter.
   </Step>
   <Step title="Générez le lien de connexion">
-    Cliquez sur **Connecter Google** pour créer un lien de connexion personnel pour ce
-    collaborateur.
+    Cliquez sur **Connecter** pour créer un lien de connexion personnel pour ce professionnel.
   </Step>
   <Step title="Partagez le lien">
-    Envoyez-lui le lien — par exemple sur WhatsApp — pour qu'il puisse autoriser
-    Google sur son propre appareil. Si vous êtes déjà sur son appareil, vous pouvez l'ouvrir
-    vous-même.
+    Envoyez-lui le lien — par WhatsApp, par exemple — pour qu'il autorise Google sur son propre
+    appareil. Si vous êtes déjà sur son appareil, vous pouvez l'ouvrir vous-même.
   </Step>
   <Step title="Il autorise Google">
-    Il ouvre le lien et se connecte à son compte Google pour finaliser la connexion.
+    Il ouvre le lien, se connecte à son compte Google et coche l'autorisation de **créer des agendas
+    secondaires et d'en gérer les événements**.
   </Step>
 </Steps>
 
-Le lien de connexion est valable pour une **durée limitée** ; demandez donc à votre collaborateur de
-l'ouvrir peu après l'envoi. S'il expire, il suffit d'en générer un nouveau.
+Le lien de connexion est valable pour une **durée limitée** : demandez-lui de l'ouvrir peu après
+l'envoi. S'il expire, générez-en simplement un nouveau.
 
 <Note>
-  La connexion de chaque collaborateur est indépendante. Une personne peut être connectée
-  pendant qu'une autre ne l'est pas — les réservations fonctionnent pour tout le monde dans les deux cas.
-  Quand un collaborateur n'a pas connecté son propre Google, ses réservations
-  (et les liens Google Meet) vont dans **votre** agenda — celui de
-  l'établissement.
+  La connexion de chaque professionnel est indépendante. Quand un professionnel n'a pas connecté son
+  propre Google, ses rendez-vous (et les liens Google Meet) vont dans **votre** agenda « Linkzee » —
+  celui de l'établissement. Le délai du rappel est celui que vous avez choisi sur la carte Google.
 </Note>
 
-## Ce qui se passe une fois qu'ils sont connectés
+## Ce qui se passe après sa connexion
 
-- Leurs **créneaux occupés** dans Google cessent d'être proposés pour **leurs** créneaux uniquement.
-- Chaque réservation avec ce collaborateur est ajoutée à **son** Google Agenda.
-- Pour les services avec l'option **réunion en ligne**, le lien **Google Meet** est
-  créé sur **son** agenda.
-- Si vous **transférez un rendez-vous à un autre collaborateur**, l'événement
-  quitte l'agenda précédent et apparaît sur le nouveau.
-- Retirer l'accès à quelqu'un **déconnecte son Google Agenda** de votre
-  activité en même temps.
+- Chaque rendez-vous avec ce professionnel arrive dans l'agenda **« Linkzee »** de **son** Google.
+- Pour les services avec **réunion en ligne**, le lien **Google Meet** est créé dans cet agenda.
+- Ses **créneaux occupés** dans son agenda principal ne sont plus proposés, uniquement sur **ses**
+  créneaux — Linkzee ne voit que « libre » ou « occupé », sans détail.
+- Si vous **transférez un rendez-vous à un autre professionnel**, l'événement quitte l'agenda précédent
+  et apparaît dans le nouveau.
+- Retirer l'accès de quelqu'un **déconnecte son Google Agenda** de votre établissement en même temps.
+- Les connexions faites avant novembre 2026 affichent **Lien de reconnexion** : générez le lien et
+  demandez-lui de se reconnecter. Les rendez-vous déjà pris restent où ils sont.
 
 <Warning>
-  Sur l'écran d'autorisation Google, la case **« Afficher, modifier, partager
-  et supprimer définitivement tous les agendas auxquels vous avez accès »** doit
-  être cochée. Si elle reste décochée, Linkzee refuse la connexion et l'état
-  explique quoi cocher — il suffit de rouvrir le lien.
+  Sur l'écran d'autorisation de Google, la case pour **créer des agendas secondaires et en gérer les
+  événements** doit être cochée. Sinon, Linkzee refuse la connexion et le statut explique quoi cocher —
+  il suffit de rouvrir le lien.
 </Warning>
 
 <Warning>
-  Ne partagez le lien de connexion qu'avec ce collaborateur — il connecte son
-  compte Google personnel.
+  Ne partagez le lien de connexion qu'avec ce professionnel — il connecte son compte Google personnel.
 </Warning>
 
 ## Et les autres agendas du professionnel ?
 
-Le Google du professionnel ne bloque que ses créneaux dans **cette** activité. S'il reçoit aussi ailleurs via Linkzee, la solution est de [lier les agendas](/fr/scheduling/linked-calendars) : un rendez-vous là-bas bloque le créneau ici, et inversement, sans passer par Google.
+Le Google du professionnel ne bloque que ses créneaux dans **cet** établissement. S'il reçoit aussi ailleurs via Linkzee, la solution est de [lier les agendas](/fr/scheduling/linked-calendars) : un rendez-vous pris là-bas est occupé ici, et inversement, sans passer par Google.
 
 <CardGroup cols={2}>
   <Card title="Équipe" icon="users" href="/fr/scheduling/team">
-    Ajoutez des collaborateurs, leurs services et leurs propres horaires.
+    Ajoutez des professionnels, leurs services et leurs propres horaires.
   </Card>
   <Card title="Google Agenda" icon="calendar-plus" href="/fr/scheduling/google-calendar">
     Connectez votre propre Google Agenda et Meet.

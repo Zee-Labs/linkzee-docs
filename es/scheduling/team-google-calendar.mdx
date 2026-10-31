@@ -1,76 +1,74 @@
 ---
 title: Google Calendar del equipo
 icon: user-clock
-description: "Permite que cada profesional conecte su propio Google Calendar con un enlace de conexión que tú compartes."
+description: "Deja que cada profesional conecte su propio Google Calendar con un link de conexión que compartes."
 ---
 
-En el modo **Equipo**, cada profesional puede conectar **su propio** Google Calendar —
-es opcional, y el calendario de cada persona se mantiene separado del tuyo.
+En el modo **Equipo**, cada profesional puede conectar su **propio** Google Calendar — es opcional,
+y el calendario de cada persona queda separado del tuyo.
 
-Como tu equipo no inicia sesión en Linkzee, generas un **enlace de conexión**
-para ellos y se lo compartes. Una vez que se conectan, sus horarios ocupados bloquean solo **sus**
-huecos, y sus eventos y enlaces de **Google Meet** van a **su** calendario.
+Generas un **link de conexión** y lo compartes con el profesional (o él conecta desde su propio
+panel, en **Configuración → Integraciones**). Después de conectar, Linkzee crea el calendario
+**"Linkzee · {nombre del negocio}"** en el Google **de él**: sus citas y los links de **Google Meet**
+van allí, con aviso en el celular antes de cada una, y los horarios ocupados de su calendario
+principal bloquean solo **sus** horarios.
 
-## Conectar el calendario de un profesional
+## Conectar el Google Calendar de un profesional
 
 <Steps>
-  <Step title="Abre al miembro del equipo">
+  <Step title="Abre al profesional">
     Ve a **Agenda → Equipo** y abre a la persona que quieres conectar.
   </Step>
-  <Step title="Genera el enlace de conexión">
-    Haz clic en **Conectar Google** para crear un enlace de conexión personal para ese
-    profesional.
+  <Step title="Genera el link de conexión">
+    Haz clic en **Conectar** para crear un link de conexión personal para ese profesional.
   </Step>
-  <Step title="Comparte el enlace">
-    Envíaselo — por ejemplo por WhatsApp — para que pueda autorizar
-    Google en su propio dispositivo. Si ya estás en su dispositivo, puedes abrirlo
-    tú mismo.
+  <Step title="Comparte el link">
+    Envíale el link — por WhatsApp, por ejemplo — para que autorice Google en su propio
+    dispositivo. Si ya estás en su dispositivo, puedes abrirlo tú.
   </Step>
   <Step title="Autoriza Google">
-    Abre el enlace e inicia sesión en su cuenta de Google para terminar de conectar.
+    Abre el link, entra en su cuenta de Google y marca el permiso para **crear calendarios
+    secundarios y gestionar sus eventos**.
   </Step>
 </Steps>
 
-El enlace de conexión es válido por un **tiempo limitado**, así que pídele al profesional que
-lo abra poco después de enviárselo. Si caduca, simplemente genera uno nuevo.
+El link de conexión vale por **tiempo limitado**, así que pídele que lo abra apenas lo envíes. Si
+vence, solo genera uno nuevo.
 
 <Note>
-  La conexión de cada profesional es independiente. Una persona puede estar conectada
-  mientras que otra no lo esté — las reservas siguen funcionando para todos de cualquier forma.
-  Cuando un profesional no ha conectado su propio Google, sus reservas (y los
-  enlaces de Google Meet) van a **tu** calendario — el del negocio.
+  La conexión de cada profesional es independiente. Cuando un profesional no conectó su propio
+  Google, sus citas (y los links de Google Meet) van a **tu** calendario "Linkzee" — el de la tienda.
+  El tiempo del aviso en el celular es el que elegiste en la tarjeta de Google.
 </Note>
 
-## Qué ocurre una vez que se conectan
+## Qué pasa después de que conecta
 
-- Sus **horarios ocupados** en Google dejan de ofrecerse solo para **sus** huecos.
-- Cada reserva con ese profesional se añade a **su** Google Calendar.
-- Para los servicios con la opción de **reunión en línea**, el enlace de **Google Meet** se
-  crea en **su** calendario.
-- Si **pasas una cita a otro profesional**, el evento sale del calendario
-  anterior y aparece en el nuevo.
-- Retirar el acceso a alguien **desconecta su Google Calendar** de tu negocio
-  al mismo tiempo.
+- Toda cita con ese profesional entra en el calendario **"Linkzee"** de su Google.
+- Para servicios con **reunión online**, el link de **Google Meet** se crea en ese calendario.
+- Sus **horarios ocupados** en el calendario principal dejan de ofrecerse solo en **sus** horarios —
+  Linkzee solo ve "libre" u "ocupado", sin detalles.
+- Si **pasas una cita a otro profesional**, el evento sale del calendario anterior y aparece en el nuevo.
+- Quitar el acceso de alguien **desconecta su Google Calendar** de tu negocio al mismo tiempo.
+- Las conexiones hechas antes de noviembre de 2026 muestran **Link para reconectar**: genera el link y
+  pídele que conecte de nuevo. Las citas ya agendadas siguen donde están.
 
 <Warning>
-  En la pantalla de permisos de Google, la casilla **"Ver, editar, compartir y
-  eliminar permanentemente todos los calendarios a los que puedes acceder"**
-  debe estar marcada. Si queda sin marcar, Linkzee rechaza la conexión y el
-  estado explica qué marcar — basta abrir el enlace de nuevo.
+  En la pantalla de permisos de Google, la casilla para **crear calendarios secundarios y gestionar
+  sus eventos** debe estar marcada. Si queda sin marcar, Linkzee rechaza la conexión y el estado
+  explica qué marcar — solo abre el link de nuevo.
 </Warning>
 
 <Warning>
-  Comparte el enlace de conexión solo con ese profesional — conecta su
-  cuenta personal de Google.
+  Comparte el link de conexión solo con ese profesional — él conecta su cuenta personal de Google.
 </Warning>
 
 ## ¿Y las otras agendas del profesional?
 
-El Google del profesional bloquea solo sus horarios en **este** negocio. Si también atiende en otro lugar con Linkzee, lo que resuelve es [vincular las agendas](/es/scheduling/linked-calendars): una cita allí ocupa el horario aquí, y viceversa, sin pasar por Google.
+El Google del profesional bloquea solo sus horarios en **este** negocio. Si también atiende en otro lugar con Linkzee, lo que resuelve es [vincular las agendas](/es/scheduling/linked-calendars): una cita agendada allá queda ocupada aquí, y viceversa, sin pasar por Google.
 
 <CardGroup cols={2}>
   <Card title="Equipo" icon="users" href="/es/scheduling/team">
-    Añade profesionales, sus servicios y sus propios horarios.
+    Agrega profesionales, sus servicios y sus propios horarios.
   </Card>
   <Card title="Google Calendar" icon="calendar-plus" href="/es/scheduling/google-calendar">
     Conecta tu propio Google Calendar y Meet.

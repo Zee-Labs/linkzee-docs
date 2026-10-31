@@ -4,73 +4,72 @@ icon: user-clock
 description: "Let each staff member connect their own Google Calendar with a connection link you share."
 ---
 
-In **Team** mode, every staff member can connect **their own** Google Calendar —
-it's optional, and each person's calendar stays separate from yours.
+In **Team** mode, each staff member can connect their **own** Google Calendar — it's optional, and
+each person's calendar stays separate from yours.
 
-Because your staff don't sign in to Linkzee, you generate a **connection link**
-for them and share it. Once they connect, their busy times block only **their**
-slots, and their events and **Google Meet** links go to **their** calendar.
+You generate a **connection link** and share it with the staff member (or they connect from their
+own dashboard, under **Settings → Integrations**). Once they connect, Linkzee creates the
+**"Linkzee · {business name}"** calendar in **their** Google: their bookings and **Google Meet** links
+go there, with a phone reminder before each one, and busy times in their main calendar block only
+**their** slots.
 
-## Connect a staff member's calendar
+## Connect a staff member's Google Calendar
 
 <Steps>
-  <Step title="Open the team member">
+  <Step title="Open the staff member">
     Go to **Scheduling → Team** and open the person you want to connect.
   </Step>
   <Step title="Generate the connection link">
-    Click **Connect Google** to create a personal connection link for that
-    staff member.
+    Click **Connect** to create a personal connection link for that staff member.
   </Step>
   <Step title="Share the link">
-    Send the link to them — for example on WhatsApp — so they can authorize
-    Google on their own device. If you're already on their device, you can open
-    it yourself.
+    Send them the link — over WhatsApp, for example — so they can authorize Google on their own
+    device. If you're already on their device, you can open it yourself.
   </Step>
   <Step title="They authorize Google">
-    They open the link and sign in to their Google account to finish connecting.
+    They open the link, sign in to their Google account and tick the permission **"Make secondary
+    Google calendars, and see, create, change, and delete events on them"**.
   </Step>
 </Steps>
 
-The connection link is valid for a **limited time**, so ask your staff member to
-open it soon after you send it. If it expires, just generate a new one.
+The connection link is valid for a **limited time**, so ask them to open it soon after you send it.
+If it expires, just generate a new one.
 
 <Note>
-  Each staff member's connection is independent. One person can be connected
-  while another isn't — bookings still work for everyone either way. When a
-  team member hasn't connected their own Google, their bookings (and Google
-  Meet links) go to **your** calendar — the store's — instead.
+  Each staff member's connection is independent. When a staff member hasn't connected their own
+  Google, their bookings (and Google Meet links) go to **your** "Linkzee" calendar — the store's.
+  The phone reminder timing is the one you chose on the Google card.
 </Note>
 
 ## What happens once they connect
 
-- Their **busy times** in Google stop being offered for **their** slots only.
-- Every booking with that staff member is added to **their** Google Calendar.
-- For services with the **online meeting** option, the **Google Meet** link is
-  created on **their** calendar.
-- If you **move an appointment to another team member**, the event leaves the
-  previous calendar and appears on the new one.
-- Removing someone's access **disconnects their Google Calendar** from your
-  business at the same time.
+- Every booking with that staff member goes into the **"Linkzee"** calendar in **their** Google.
+- For services with **online meetings**, the **Google Meet** link is created in that calendar.
+- Their **busy times** in their main calendar stop being offered only in **their** slots — Linkzee
+  only sees "free" or "busy", with no details.
+- If you **move a booking to another professional**, the event leaves the previous calendar and
+  shows up in the new one.
+- Removing someone's access **disconnects their Google Calendar** from your business at the same time.
+- Connections made before November 2026 show a **Reconnect link** button: generate the link and ask
+  them to connect again. Bookings already made stay where they are.
 
 <Warning>
-  On Google's consent screen, the box **"See, edit, share and permanently
-  delete all the calendars you can access using Google Calendar"** must be
-  ticked. If it's left unticked, Linkzee refuses the connection and the status
-  explains what to tick — just open the link again.
+  On Google's permission screen, the box **"Make secondary Google calendars, and see, create, change,
+  and delete events on them"** must be ticked. If it's left unticked, Linkzee refuses the connection
+  and the status explains what to tick — just open the link again.
 </Warning>
 
 <Warning>
-  Share the connection link only with that staff member — it connects their
-  personal Google account.
+  Share the connection link only with that staff member — they connect their personal Google account.
 </Warning>
 
 ## What about the staff member's other calendars?
 
-The staff member's Google blocks only their times in **this** business. If they also take bookings elsewhere on Linkzee, the answer is [linking the calendars](/scheduling/linked-calendars): a booking there blocks the time here, and vice versa, with no Google involved.
+The staff member's Google only blocks their times in **this** business. If they also take bookings elsewhere on Linkzee, [link the calendars](/scheduling/linked-calendars): a booking made there is busy here, and vice versa, without going through Google.
 
 <CardGroup cols={2}>
   <Card title="Team" icon="users" href="/scheduling/team">
-    Add staff, their services and their own hours.
+    Add staff members, their services and their own hours.
   </Card>
   <Card title="Google Calendar" icon="calendar-plus" href="/scheduling/google-calendar">
     Connect your own Google Calendar and Meet.

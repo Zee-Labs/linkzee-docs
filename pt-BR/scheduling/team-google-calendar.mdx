@@ -4,13 +4,14 @@ icon: user-clock
 description: "Deixe cada atendente conectar o próprio Google Agenda com um link de conexão que você compartilha."
 ---
 
-No modo **Equipe**, cada atendente pode conectar o **próprio** Google Agenda —
-é opcional, e a agenda de cada pessoa fica separada da sua.
+No modo **Equipe**, cada atendente pode conectar o **próprio** Google Agenda — é opcional, e a
+agenda de cada pessoa fica separada da sua.
 
-Como seus atendentes não fazem login no Linkzee, você gera um **link de conexão**
-para eles e compartilha. Depois que conectam, os horários ocupados bloqueiam
-apenas os slots **deles**, e os eventos e links do **Google Meet** vão para a
-agenda **deles**.
+Você gera um **link de conexão** e compartilha com o atendente (ou ele conecta pelo próprio
+painel, em **Configurações → Integrações**). Depois que ele conecta, o Linkzee cria a agenda
+**"Linkzee · {nome do negócio}"** no Google **dele**: os atendimentos e os links do **Google
+Meet** vão para lá, com aviso no celular antes de cada um, e os horários ocupados na agenda
+principal dele bloqueiam apenas os slots **dele**.
 
 ## Conectar o Google Agenda de um atendente
 
@@ -19,52 +20,47 @@ agenda **deles**.
     Vá em **Agenda → Equipe** e abra a pessoa que você quer conectar.
   </Step>
   <Step title="Gere o link de conexão">
-    Clique em **Conectar Google** para criar um link de conexão pessoal para
-    aquele atendente.
+    Clique em **Conectar** para criar um link de conexão pessoal para aquele atendente.
   </Step>
   <Step title="Compartilhe o link">
-    Envie o link para ele — pelo WhatsApp, por exemplo — para que ele possa
-    autorizar o Google no próprio dispositivo. Se você já estiver no dispositivo
-    dele, pode abrir você mesmo.
+    Envie o link para ele — pelo WhatsApp, por exemplo — para que ele autorize o Google no
+    próprio dispositivo. Se você já estiver no dispositivo dele, pode abrir você mesmo.
   </Step>
   <Step title="Ele autoriza o Google">
-    Ele abre o link e faz login na conta Google dele para concluir a conexão.
+    Ele abre o link, entra na conta Google dele e marca a permissão **"Criar agendas
+    secundárias do Google e ver, criar, mudar e excluir eventos nelas"**.
   </Step>
 </Steps>
 
-O link de conexão vale por **tempo limitado**, então peça ao atendente para
-abri-lo logo depois de enviar. Se expirar, é só gerar um novo.
+O link de conexão vale por **tempo limitado**, então peça ao atendente para abri-lo logo depois
+de enviar. Se expirar, é só gerar um novo.
 
 <Note>
-  A conexão de cada atendente é independente. Uma pessoa pode estar conectada
-  enquanto outra não está — os agendamentos continuam funcionando para todos de
-  qualquer forma. Quando o atendente não conectou o próprio Google, os
-  agendamentos dele (e os links do Google Meet) vão para a **sua** agenda — a
-  da loja.
+  A conexão de cada atendente é independente. Quando o atendente não conectou o próprio Google,
+  os agendamentos dele (e os links do Google Meet) vão para a **sua** agenda "Linkzee" — a da
+  loja. O tempo do aviso no celular é o que você escolheu no card do Google.
 </Note>
 
 ## O que acontece depois que ele conecta
 
-- Os **horários ocupados** dele no Google deixam de ser oferecidos apenas para
-  os slots **dele**.
-- Todo agendamento com aquele atendente é adicionado ao Google Agenda **dele**.
-- Para serviços com a opção de **reunião online**, o link do **Google Meet** é
-  criado na agenda **dele**.
-- Se você **transferir um atendimento para outro profissional**, o evento sai
-  da agenda anterior e aparece na nova.
-- Remover o acesso de alguém **desconecta o Google Agenda dele** do seu negócio
-  ao mesmo tempo.
+- Todo agendamento com aquele atendente entra na agenda **"Linkzee"** do Google **dele**.
+- Para serviços com **reunião online**, o link do **Google Meet** é criado nessa agenda.
+- Os **horários ocupados** na agenda principal dele deixam de ser oferecidos apenas nos slots
+  **dele** — o Linkzee vê só "livre" ou "ocupado", sem detalhes.
+- Se você **transferir um atendimento para outro profissional**, o evento sai da agenda anterior
+  e aparece na nova.
+- Remover o acesso de alguém **desconecta o Google Agenda dele** do seu negócio ao mesmo tempo.
+- Conexões feitas antes de novembro de 2026 aparecem com **Link para reconectar**: gere o link e
+  peça para ele conectar de novo. Os atendimentos já marcados continuam onde estão.
 
 <Warning>
-  Na tela de permissão do Google, a caixa **"Ver, editar, compartilhar e
-  excluir permanentemente todas as agendas que você pode acessar"** precisa
-  estar marcada. Se ficar desmarcada, o Linkzee recusa a conexão e o status
-  explica o que marcar — é só abrir o link de novo.
+  Na tela de permissão do Google, a caixa **"Criar agendas secundárias do Google e ver, criar,
+  mudar e excluir eventos nelas"** precisa estar marcada. Se ficar desmarcada, o Linkzee recusa
+  a conexão e o status explica o que marcar — é só abrir o link de novo.
 </Warning>
 
 <Warning>
-  Compartilhe o link de conexão só com aquele atendente — ele conecta a conta
-  Google pessoal dele.
+  Compartilhe o link de conexão só com aquele atendente — ele conecta a conta Google pessoal dele.
 </Warning>
 
 ## E as outras agendas do atendente?
