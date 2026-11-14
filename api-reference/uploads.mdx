@@ -182,7 +182,7 @@ When the job is `ready`, `result` contains the optimized video — and it is
 | `width` | integer | Width in pixels. |
 | `height` | integer | Height in pixels. |
 | `bytes` | integer | Size of the optimized file. |
-| `trimmed` | boolean | `true` when the original was longer than 15 seconds and was cut. |
+| `trimmed` | boolean | `true` when the original was longer than 30 seconds and was cut. |
 
 ### Polling and managing video jobs
 
@@ -208,14 +208,16 @@ Every video is encoded to the same profile so it starts instantly on mobile:
 | Resolution | **720p** on the short side — never upscaled |
 | Frame rate | 24 fps |
 | Codec | H.264 (MP4) |
-| Length | The **first 15 seconds** |
+| Length | The **first 30 seconds** |
 | Audio | Removed — videos are always silent |
-| Size | Usually **≤ ~3&nbsp;MB** |
+| Size | At most **~6&nbsp;MB** |
 
 <Note>
-Videos longer than 15 seconds are never rejected for their length — they are
+Videos longer than 30 seconds are never rejected for their length: they are
 trimmed, and the result reports `trimmed: true`. An upload is rejected only when
 the file is over 40&nbsp;MB or isn't a valid video file.
+High-frame-rate slow motion is cut a little earlier: a 240 fps clip keeps its
+first 15 seconds.
 </Note>
 
 <Note>

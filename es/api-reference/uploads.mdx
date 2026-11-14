@@ -182,7 +182,7 @@ Cuando el job está `ready`, `result` contiene el video optimizado — y ya est�
 | `width` | integer | Ancho en píxeles. |
 | `height` | integer | Alto en píxeles. |
 | `bytes` | integer | Tamaño del archivo optimizado. |
-| `trimmed` | boolean | `true` cuando el original duraba más de 15 segundos y se recortó. |
+| `trimmed` | boolean | `true` cuando el original duraba más de 30 segundos y se recortó. |
 
 ### Consultar y gestionar jobs de video
 
@@ -209,14 +209,16 @@ en el móvil:
 | Resolución | **720p** en el lado corto — nunca se escala hacia arriba |
 | Fotogramas por segundo | 24 fps |
 | Códec | H.264 (MP4) |
-| Duración | Los **primeros 15 segundos** |
+| Duración | Los **primeros 30 segundos** |
 | Audio | Eliminado — los videos siempre son silenciosos |
-| Tamaño | Normalmente **≤ ~3&nbsp;MB** |
+| Tamaño | Como máximo **~6&nbsp;MB** |
 
 <Note>
-Los videos de más de 15 segundos nunca se rechazan por su duración: se recortan,
+Los videos de más de 30 segundos nunca se rechazan por su duración: se recortan,
 y el resultado indica `trimmed: true`. Una subida solo se rechaza cuando el
 archivo supera los 40&nbsp;MB o no es un archivo de video válido.
+La cámara lenta con muchos cuadros por segundo se recorta un poco antes: un
+clip de 240 fps conserva sus primeros 15 segundos.
 </Note>
 
 <Note>

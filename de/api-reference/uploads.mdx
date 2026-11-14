@@ -185,7 +185,7 @@ nötig:
 | `width` | integer | Breite in Pixeln. |
 | `height` | integer | Höhe in Pixeln. |
 | `bytes` | integer | Größe der optimierten Datei. |
-| `trimmed` | boolean | `true`, wenn das Original länger als 15 Sekunden war und gekürzt wurde. |
+| `trimmed` | boolean | `true`, wenn das Original länger als 30 Sekunden war und gekürzt wurde. |
 
 ### Video-Jobs abfragen und verwalten
 
@@ -213,14 +213,16 @@ startet:
 | Auflösung | **720p** auf der kurzen Seite — nie hochskaliert |
 | Bildrate | 24 fps |
 | Codec | H.264 (MP4) |
-| Länge | Die **ersten 15 Sekunden** |
+| Länge | Die **ersten 30 Sekunden** |
 | Audio | Entfernt — Videos sind immer stumm |
-| Größe | Meist **≤ ~3&nbsp;MB** |
+| Größe | Höchstens **~6&nbsp;MB** |
 
 <Note>
-Videos, die länger als 15 Sekunden sind, werden nie wegen ihrer Länge abgelehnt —
+Videos, die länger als 30 Sekunden sind, werden nie wegen ihrer Länge abgelehnt,
 sie werden gekürzt, und das Ergebnis meldet `trimmed: true`. Ein Upload wird nur
 abgelehnt, wenn die Datei größer als 40&nbsp;MB oder keine gültige Videodatei ist.
+Zeitlupen mit hoher Bildrate werden etwas früher gekürzt: Ein Clip mit
+240 fps behält seine ersten 15 Sekunden.
 </Note>
 
 <Note>

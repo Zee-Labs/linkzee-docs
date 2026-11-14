@@ -48,6 +48,33 @@ Para elegir qué servicio aparece ahí, ve a **Links**, en la tarjeta de la agen
 y elige un **Servicio destacado**. En **Automático**, mostramos el servicio más
 reservado de los últimos 30 días.
 
+### Ocultar la tarjeta de reservas
+
+La tarjeta de reservas viene activada. Para ocultarla, ve a **Agenda →
+Configuración** y desactiva **Mostrar la tarjeta de reserva en la parte superior
+de la página**, justo debajo de **Agenda activa en mi página**. Solo la tarjeta
+sale de tu página: la agenda sigue activa y tus visitantes todavía pueden
+reservar con:
+
+- tu [link de reserva](/es/scheduling/booking-link) (`linkz.ee/tu-nombre?agenda=1`);
+- la [lista de servicios](/es/scheduling/services) de tu página;
+- los botones **"Lo quiero"** de tus [links](/es/your-page/links) y cualquier otro
+  botón vinculado a un servicio o paquete.
+
+Quien ya reservó desde su dispositivo conserva un acceso directo arriba: ve **Tu
+próxima cita** cuando tiene una pendiente, o **Mis citas** si no.
+
+<Warning>
+  Si la lista de servicios también está desactivada, el panel te avisa: sin la
+  tarjeta superior, tus clientes solo pueden reservar con tu link de reserva o
+  con botones vinculados a servicios. Toca **Ver enlace de reserva** para ir
+  hasta él y compartirlo, así no pierdes reservas.
+</Warning>
+
+Con el [servidor MCP](/es/integrations/mcp/tools-reference), `configure_agenda`
+hace lo mismo con `showTopCard: false` (o `true` para volver a mostrar la
+tarjeta).
+
 ## Configúrala
 
 <CardGroup cols={2}>

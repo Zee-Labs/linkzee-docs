@@ -49,6 +49,34 @@ Welche Leistung dort erscheint, wählen Sie unter **Links** in der Agenda-Karte 
 **Hervorgehobene Leistung**. Bei **Automatisch** zeigen wir die in den letzten
 30 Tagen am häufigsten gebuchte Leistung.
 
+### Die Buchungskarte ausblenden
+
+Die Buchungskarte ist standardmäßig eingeschaltet. Um sie auszublenden, gehen
+Sie zu **Kalender → Einstellungen** und schalten Sie **Buchungskarte oben auf
+der Seite anzeigen** aus, direkt unter **Kalender auf meiner Seite aktiv**. Nur
+die Karte verschwindet von Ihrer Seite: Die Terminbuchung bleibt aktiv, und
+Besucher buchen weiterhin über:
+
+- Ihren [Buchungslink](/de/scheduling/booking-link) (`linkz.ee/ihr-name?agenda=1`);
+- die [Leistungsübersicht](/de/scheduling/services) auf Ihrer Seite;
+- die Schaltflächen **„Jetzt buchen“** Ihrer [Links](/de/your-page/links) und jede
+  andere Schaltfläche, die mit einer Leistung oder einem Paket verknüpft ist.
+
+Kunden, die auf ihrem Gerät schon gebucht haben, behalten oben eine Abkürzung:
+Sie sehen **Dein nächster Termin**, wenn einer ansteht, sonst **Meine
+Buchungen**.
+
+<Warning>
+  Ist auch die Leistungsübersicht ausgeschaltet, warnt Sie das Panel: Ohne die
+  Karte oben können Kunden nur über Ihren Buchungslink oder mit Leistungen
+  verknüpfte Schaltflächen buchen. Tippen Sie auf **Buchungslink ansehen**, um
+  dorthin zu springen und ihn zu teilen, damit Ihnen keine Buchungen entgehen.
+</Warning>
+
+Über den [MCP-Server](/de/integrations/mcp/tools-reference) macht
+`configure_agenda` dasselbe mit `showTopCard: false` (oder `true`, um die Karte
+wieder anzuzeigen).
+
 ## Einrichten
 
 <CardGroup cols={2}>
