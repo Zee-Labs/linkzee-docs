@@ -57,6 +57,7 @@ Send these as multipart form fields.
 | `wallpaperPoster` | Legacy — the poster for a video wallpaper is now generated automatically from the video | — |
 | `banner` | Your header banner | — |
 | `cutout` | A header cutout image | — |
+| `wordmark` | The horizontal logo shown in place of the store name (title style **Logo**). Save the returned URL in `headerSettings.wordmarkUrl` with `PATCH /v1/store`; an empty string removes it | — |
 | `link` | A link thumbnail | `linkId` |
 | `linkMedia` | A link card cover | `linkId` |
 | `linkPoster` | A link video poster | `linkId` |
@@ -112,10 +113,10 @@ the product or link — for example, pass it as the product's `image` when you
 create or update it.
 </Note>
 
-## Video uploads (hero and wallpaper)
+## Video uploads (hero, wallpaper and showcase items)
 
 ```
-POST /v1/uploads/video?kind=hero|wallpaper
+POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
 Uploads a short video for your **Hero** header or your page **wallpaper** and
@@ -132,8 +133,19 @@ curl -X POST \
 
 | Parameter | In | Required | Description |
 | --- | --- | --- | --- |
-| `kind` | query | Yes | `hero` for the Hero header video, `wallpaper` for the page background. |
-| `file` | multipart | Yes | The video to upload — MP4 or MOV, up to **40&nbsp;MB**. |
+| `kind` | query | Yes | `hero` for the Hero header video, `wallpaper` for the page background, `media` for a video item of a vertical showcase. |
+| `linkId` | query | With `kind=media` | The gallery block (layout `reel`) the video belongs to. It must be a link in your own store. |
+| `slot` | query | With `kind=media` | The item slot, `0` to `9`. |
+| `file` | multipart | Yes | The video to upload, MP4 or MOV, up to **40&nbsp;MB**. |
+
+### Video items of a vertical showcase
+
+With `kind=media`, the video becomes one item of a gallery block that uses the
+`reel` layout. Unlike hero and wallpaper videos, an item **keeps its audio**
+(visitors can turn the sound on); it also keeps the first 30 seconds. After
+the upload, save the item with `PATCH /v1/links/{id}`, sending
+`{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems`. The
+video is filled in automatically when the job is ready.
 
 ### Response
 
