@@ -57,6 +57,7 @@ Sende diese als Multipart-Formularfelder.
 | `wallpaperPoster` | Veraltet — das Poster eines Video-Hintergrunds wird jetzt automatisch aus dem Video erzeugt | — |
 | `banner` | Dein Header-Banner | — |
 | `cutout` | Ein Header-Freistellerbild | — |
+| `wordmark` | Das horizontale Logo, das anstelle des Shop-Namens erscheint (Titelstil **Logo**). Speichere die zurückgegebene URL mit `PATCH /v1/store` in `headerSettings.wordmarkUrl`; ein leerer String entfernt es | — |
 | `link` | Ein Link-Vorschaubild | `linkId` |
 | `linkMedia` | Ein Link-Karten-Cover | `linkId` |
 | `linkPoster` | Ein Link-Video-Poster | `linkId` |
@@ -112,10 +113,10 @@ und setze sie am Produkt oder Link — übergib sie zum Beispiel als `image` des
 wenn du es erstellst oder aktualisierst.
 </Note>
 
-## Video-Uploads (Hero und Hintergrund)
+## Video-Uploads (Hero, Hintergrund und Galerie-Elemente)
 
 ```
-POST /v1/uploads/video?kind=hero|wallpaper
+POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
 Lädt ein kurzes Video für deinen **Hero**-Header oder den **Hintergrund** deiner
@@ -133,8 +134,20 @@ curl -X POST \
 
 | Parameter | Wo | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `kind` | query | Ja | `hero` für das Video des Hero-Headers, `wallpaper` für den Seitenhintergrund. |
-| `file` | multipart | Ja | Das hochzuladende Video — MP4 oder MOV, bis zu **40&nbsp;MB**. |
+| `kind` | query | Ja | `hero` für das Video des Hero-Headers, `wallpaper` für den Seitenhintergrund, `media` für ein Video-Element einer Hochformat-Galerie. |
+| `linkId` | query | Bei `kind=media` | Der Galerie-Block (Layout `reel`), zu dem das Video gehört. Er muss ein Link deines eigenen Shops sein. |
+| `slot` | query | Bei `kind=media` | Der Platz des Elements, `0` bis `9`. |
+| `file` | multipart | Ja | Das hochzuladende Video, MP4 oder MOV, bis zu **40&nbsp;MB**. |
+
+### Video-Elemente einer Hochformat-Galerie
+
+Mit `kind=media` wird das Video zu einem Element eines Galerie-Blocks mit dem
+Layout `reel`. Anders als Hero- und Hintergrundvideos **behält ein Element
+seinen Ton** (Besucher können den Ton einschalten); außerdem bleiben die ersten
+30 Sekunden erhalten. Speichere das Element nach dem Upload mit
+`PATCH /v1/links/{id}` und sende dabei
+`{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems`. Das Video
+wird automatisch eingesetzt, sobald der Job fertig ist.
 
 ### Antwort
 

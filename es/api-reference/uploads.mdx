@@ -57,6 +57,7 @@ Envía estos como campos de formulario multipart.
 | `wallpaperPoster` | Heredado — el póster de un fondo de video ahora se genera automáticamente a partir del video | — |
 | `banner` | El banner de tu perfil | — |
 | `cutout` | Una imagen recortada del perfil | — |
+| `wordmark` | El logotipo horizontal que se muestra en lugar del nombre de la tienda (estilo de título **Logo**). Guarda la URL devuelta en `headerSettings.wordmarkUrl` con `PATCH /v1/store`; una cadena vacía lo quita | — |
 | `link` | La miniatura de un link | `linkId` |
 | `linkMedia` | La portada de la tarjeta de un link | `linkId` |
 | `linkPoster` | El póster de un video de un link | `linkId` |
@@ -112,10 +113,10 @@ el producto o el link; por ejemplo, pásala como el `image` del producto cuando 
 crees o lo actualices.
 </Note>
 
-## Subida de video (hero y fondo)
+## Subida de video (hero, fondo y elementos de la vitrina)
 
 ```
-POST /v1/uploads/video?kind=hero|wallpaper
+POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
 Sube un video corto para tu encabezado **Hero** o para el **fondo** de tu página
@@ -132,8 +133,20 @@ curl -X POST \
 
 | Parámetro | Dónde | Obligatorio | Descripción |
 | --- | --- | --- | --- |
-| `kind` | query | Sí | `hero` para el video del encabezado Hero, `wallpaper` para el fondo de la página. |
-| `file` | multipart | Sí | El video a subir — MP4 o MOV, hasta **40&nbsp;MB**. |
+| `kind` | query | Sí | `hero` para el video del encabezado Hero, `wallpaper` para el fondo de la página, `media` para un video de una vitrina vertical. |
+| `linkId` | query | Con `kind=media` | El bloque de galería (diseño `reel`) al que pertenece el video. Debe ser un link de tu propia tienda. |
+| `slot` | query | Con `kind=media` | La posición del elemento, de `0` a `9`. |
+| `file` | multipart | Sí | El video a subir, MP4 o MOV, hasta **40&nbsp;MB**. |
+
+### Videos de una vitrina vertical
+
+Con `kind=media`, el video se convierte en un elemento de un bloque de galería
+que usa el diseño `reel`. A diferencia de los videos de hero y de fondo, un
+elemento **conserva su audio** (los visitantes pueden activar el sonido);
+también conserva los primeros 30 segundos. Después de subirlo, guarda el
+elemento con `PATCH /v1/links/{id}`, enviando
+`{ "type": "video", "slot": 0, "jobId": "<id del job>" }` en `mediaItems`. El
+video se completa automáticamente cuando el job está listo.
 
 ### Respuesta
 
