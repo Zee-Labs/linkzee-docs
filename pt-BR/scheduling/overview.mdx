@@ -47,6 +47,31 @@ Para escolher qual serviço aparece ali, vá em **Links**, no cartão da agenda,
 em **Serviço em destaque**. No **Automático**, mostramos o serviço mais agendado
 nos últimos 30 dias.
 
+### Esconder o cartão de agendamento
+
+O cartão de agendamento vem ligado. Para escondê-lo, vá em **Agenda →
+Configurações** e desligue **Mostrar cartão de agendamento no topo da página**,
+logo abaixo de **Agenda ativa na minha página**. Só o cartão sai da sua página:
+a agenda continua ligada, e o visitante ainda agenda por:
+
+- seu [link de agendamento](/pt-BR/scheduling/booking-link) (`linkz.ee/seu-nome?agenda=1`);
+- a [tabela de serviços](/pt-BR/scheduling/services) da sua página;
+- os botões **"Quero esse"** dos seus [links](/pt-BR/your-page/links) e qualquer
+  outro botão ligado a um serviço ou pacote.
+
+Quem já agendou pelo aparelho continua com um atalho no topo: vê **Seu próximo
+horário** quando tem um marcado, ou **Meus agendamentos** quando não tem.
+
+<Warning>
+  Se a tabela de serviços também estiver desligada, o painel avisa: sem o cartão
+  do topo, o cliente só consegue agendar pelo seu link de agendamento ou por
+  botões ligados a serviços. Toque em **Ver link de agendamento** para ir até ele
+  e compartilhá-lo, assim você não perde agendamentos.
+</Warning>
+
+Pelo [servidor MCP](/pt-BR/integrations/mcp/tools-reference), `configure_agenda`
+faz o mesmo com `showTopCard: false` (ou `true` para mostrar o cartão de novo).
+
 ## Configure
 
 <CardGroup cols={2}>

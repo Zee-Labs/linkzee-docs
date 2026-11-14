@@ -149,7 +149,8 @@
               {
                 "group": "Analytics",
                 "pages": [
-                  "analytics/overview"
+                  "analytics/overview",
+                  "analytics/tracked-links"
                 ]
               },
               {
@@ -366,7 +367,8 @@
               {
                 "group": "Desempenho",
                 "pages": [
-                  "pt-BR/analytics/overview"
+                  "pt-BR/analytics/overview",
+                  "pt-BR/analytics/tracked-links"
                 ]
               },
               {
@@ -583,7 +585,8 @@
               {
                 "group": "Rendimiento",
                 "pages": [
-                  "es/analytics/overview"
+                  "es/analytics/overview",
+                  "es/analytics/tracked-links"
                 ]
               },
               {
@@ -800,7 +803,8 @@
               {
                 "group": "Performances",
                 "pages": [
-                  "fr/analytics/overview"
+                  "fr/analytics/overview",
+                  "fr/analytics/tracked-links"
                 ]
               },
               {
@@ -1017,7 +1021,8 @@
               {
                 "group": "Analysen",
                 "pages": [
-                  "de/analytics/overview"
+                  "de/analytics/overview",
+                  "de/analytics/tracked-links"
                 ]
               },
               {

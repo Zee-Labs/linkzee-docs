@@ -1,79 +1,146 @@
 ---
-title: Resumen de rendimiento
+title: Resumen de Analytics
 icon: chart-line
-description: "Descubre cómo va tu página — clics totales, clics por elemento, visualizaciones de página y tus mejores elementos — durante el periodo que elijas."
+description: "Mira cuántas personas visitan tu página, de dónde vienen, en qué hacen clic y cuántas terminan reservando o dejando su contacto — en el periodo que elijas."
 ---
 
-La pantalla de **Rendimiento** muestra cómo va tu página de Linkzee. Convierte cada
-toque y cada visita en una imagen clara, para que veas lo que le encanta a tu
-audiencia y hagas más de eso.
+La pantalla de **Analytics** muestra cómo va tu página de Linkzee. Sigue cada
+visita desde el momento en que alguien abre tu página hasta el clic, la reserva o
+el contacto, para que veas lo que funciona y hagas más de eso.
 
-<Frame caption="Analytics: visitantes únicos, tasa de clics y tus visitas por día.">
-  <img src="/images/analytics/analytics-es.webp" alt="Captura de pantalla de Linkzee" />
-</Frame>
+La pantalla tiene tres pestañas — **Resumen**, **De dónde vinieron** y
+**Botones** — y un selector de periodo arriba. Debajo del título ves cuándo se
+actualizaron los números por última vez: se renuevan **más o menos cada hora**.
 
-## Lo que puedes ver
+## Tu historial según el plan
 
-<CardGroup cols={2}>
-  <Card title="Clics totales" icon="hand-pointer">
-    Cada toque en tus enlaces y productos, sumado para el periodo que elijas.
-  </Card>
-  <Card title="Clics por elemento" icon="list">
-    Cómo se desempeña cada enlace y producto individual, uno junto a otro.
-  </Card>
-  <Card title="Visualizaciones de página" icon="eye">
-    Cuántas personas abrieron tu página pública en `linkz.ee/your-name`.
-  </Card>
-  <Card title="Mejores elementos" icon="trophy">
-    Tus enlaces y productos con mejor rendimiento, clasificados para que los ganadores destaquen.
-  </Card>
-</CardGroup>
+Hasta dónde puedes mirar hacia atrás depende del plan de la tienda en la que
+estás:
 
-## Elige tu periodo y filtros
+| Plan | Historial | Periodos que puedes elegir |
+| --- | --- | --- |
+| Free | 7 días | Hoy · 7 días |
+| Essential | 90 días | Hoy · 7 días · 30 días · 90 días |
+| Pro y Scale | 12 meses | Hoy · 7 días · 30 días · 90 días · 12 meses |
 
-Elige el **periodo** que quieras analizar para ver tus números durante ese lapso de
-tiempo — un día de lanzamiento con mucha actividad, la última semana o una
-tendencia más larga. Aplica **filtros** para acotar la vista y centrarte
-exactamente en los elementos o la actividad que te importan.
+Los periodos por encima de tu plan aparecen con una **corona**. Al tocar uno,
+ves lo que muestra cada plan y puedes mejorar el tuyo. Tus datos se siguen
+guardando de todos modos: al suscribirte, el historial más largo aparece al
+instante.
 
 <Note>
-  Los clics se actualizan a medida que los visitantes interactúan con tu página,
-  así que vuelve a consultarlos para ver cómo se construyen tus tendencias con el
-  tiempo.
+  Todos los periodos terminan **hoy** y usan la zona horaria de tu tienda. Las
+  comparaciones ("vs. 30 días anteriores") solo usan días dentro del historial de
+  tu plan, así que no hay comparación con el año anterior. **Hoy** y **12 meses**
+  no muestran comparación, y ves "—" cuando no hay historial suficiente para
+  comparar.
+</Note>
+
+## Resumen
+
+La pestaña **Resumen** te da la imagen completa en una sola pantalla:
+
+- **Una frase destacada** — por ejemplo, *"De cada 100 visitas, 41 hicieron clic
+  en algo y 3 reservaron."* Con menos de 100 visitas usa los números reales.
+- **Cuatro números clave** — **Visitas**, **Visitantes**, **% que hizo clic** y
+  **Clics**, cada uno con su variación frente al periodo anterior.
+- **Visitas y clics** — un gráfico por día (por mes en 12 meses).
+- **El embudo** — el camino de quienes visitaron (ver abajo).
+- **De dónde vinieron** — tus principales orígenes, con **Ver todo** para abrir
+  la siguiente pestaña.
+- **Más clicados** — tus botones más usados, con **Ver todos** para abrir la
+  pestaña Botones.
+- **Dispositivos**, **Ciudades** y **Países**.
+- Un acceso a **Rendimiento de los productos** (ver [La pantalla de Rendimiento](#la-pantalla-de-rendimiento)).
+
+Si tu página aún no tiene visitas, la pestaña muestra **Compartir mi enlace**,
+que abre la hoja para compartir — ver [Enlaces rastreados y código QR](/es/analytics/tracked-links).
+
+## El embudo
+
+El embudo muestra cuántos visitantes avanzaron en cada paso y qué parte siguió de
+un paso al siguiente. Cada paso solo cuenta personas del paso anterior, así que
+un paso nunca es mayor que el anterior.
+
+| Tu página tiene… | Embudo |
+| --- | --- |
+| Agenda | Visitaron → Hicieron clic en algo → Abrieron la agenda → Reservaron |
+| Captura de contactos, sin agenda | Visitaron → Hicieron clic en algo → Se volvieron contactos |
+| Ninguno de los dos | Visitaron → Hicieron clic en algo |
+
+## De dónde vinieron
+
+La pestaña **De dónde vinieron** responde *"¿qué lugar me trae clientes?"*:
+
+- **Por origen** — Instagram, TikTok, WhatsApp, Google, QR impreso, etc., con la
+  parte de las visitas, el % que hizo clic y cuántos reservaron en cada uno. Abre
+  un origen para ver de qué punto de esa red llegó la visita — **Bio**,
+  **Historias**, **Mensaje directo**… — o **Sin enlace rastreado** cuando la
+  visita llegó sin uno de tus enlaces.
+- **Directo (sin origen)** — visitas sin información de dónde vinieron (alguien
+  escribió tu dirección o la app ocultó el origen). Cuando esta parte es alta, un
+  aviso sugiere **Obtener mis enlaces**, para que cada red tenga su propio enlace.
+- **Enlaces de campaña** — las visitas y reservas que trajo cada uno de tus
+  enlaces de campaña. Toca uno para ver los detalles. Ver [Enlaces de campaña](/es/analytics/tracked-links#enlaces-de-campa%C3%B1a).
+- **Anuncios y Google Analytics** (avanzado) — los parámetros UTM que llegaron de
+  anuncios y herramientas externas (`utm_source`, `utm_campaign`…).
+
+## Botones
+
+La pestaña **Botones** ordena todos los botones de tu página, del más al menos
+clicado: enlaces, productos, el botón de reservar, redes sociales, el mapa y
+otros. Usa los filtros de arriba (**Todos**, **Enlaces**, **Productos**,
+**Agenda**, **Redes sociales**, **Mapa**) para filtrar.
+
+Toca un botón para ver sus clics por día, de dónde vinieron esos clics y — en el
+botón de reservar — cuántas personas reservaron. **Editar este botón** te lleva
+directo a donde lo cambias.
+
+## Qué significa cada número
+
+| Número | Qué cuenta |
+| --- | --- |
+| **Visitas** | Cada vez que alguien abre tu página. Recargar o moverse por la página en la misma visita no vuelve a contar; una nueva visita empieza tras 30 minutos fuera o cuando la persona llega por otro enlace. |
+| **Visitantes** | Navegadores o dispositivos distintos que abrieron tu página en el periodo. La misma persona en el navegador de Instagram y en Safari cuenta como 2. |
+| **Clics** | Toques en tus enlaces, productos, botón de reservar, redes sociales, mapa y botones de apoyo y de reseñas. |
+| **% que hizo clic** | De todas las visitas, la parte en la que la persona hizo clic en al menos una cosa. |
+| **Clics por visita** ("15 de cada 100 visitas") | Cuántos clics recibió un botón por cada 100 visitas. Puede pasar de 100 cuando la gente hace clic en el mismo botón más de una vez. |
+| **Abrieron la agenda** | Visitas en las que la persona abrió tu agenda. |
+| **Reservaron** | Reservas hechas desde una visita a tu página en el periodo, en cualquier estado. |
+| **Se volvieron contactos** | Contactos nuevos captados desde una visita a tu página en el periodo. |
+| **Sobre todo de** | El origen que envió más clics a ese botón. |
+| **vs. anterior** | La variación frente al periodo de la misma duración justo antes. Los conteos varían en %; las tasas varían en puntos ("+3 puntos"). |
+
+<Note>
+  Linkzee mide tu página con una **medición propia y anónima**, sin cookies de
+  terceros. Estos datos nunca se comparten con nadie y solo se usan para las
+  estadísticas de tu tienda. Los visitantes que desactivan la medición en el aviso
+  de cookies siguen contando como visitas, pero no como visitantes.
 </Note>
 
 ## La pantalla de Rendimiento
 
 Junto a Analytics en el menú hay una pantalla dedicada de **Rendimiento**: una
 tabla de tus **productos**, cada uno con sus vistas, clics y tasa de clics para
-el periodo que elijas (**7, 30 o 90 días**). Úsala para detectar qué productos
-se ganan su lugar en la página — y cuáles necesitan una mejor imagen, título o
-posición.
-
-## Campañas (UTM)
-
-¿Traes tráfico de anuncios, un correo o un post concreto? Añade parámetros UTM
-a tu enlace (por ejemplo
-`linkz.ee/tu-nombre?utm_source=instagram&utm_campaign=lanzamiento`) y la
-tarjeta **Campañas** muestra de dónde vinieron las visitas — fuente, medio y
-campaña — para saber qué canal llena de verdad tu página.
-
-## Haz que trabaje para ti
-
-Usa tus números de Rendimiento para saber qué toca más tu audiencia y luego
-redobla la apuesta en lo que funciona: mueve tus elementos más fuertes arriba,
-renueva las ofertas que están perdiendo fuerza y apuéstale a los productos que tus
-visitantes ya adoran.
-
-<CardGroup cols={2}>
-  <Card title="Aumenta tus clics" icon="arrow-trend-up" href="/es/best-practices/growing-clicks">
-    Consejos prácticos para convertir más visitas en toques.
-  </Card>
-  <Card title="Tu página" icon="table-cells" href="/es/your-page/overview">
-    Organiza tus enlaces y productos según lo que esté funcionando.
-  </Card>
-</CardGroup>
+el periodo que elijas (**7 días, 30 días, 90 días o 12 meses**, dentro del
+historial de tu plan). Úsala para detectar qué productos se ganan su lugar en la
+página — y cuáles necesitan una mejor imagen, título o posición.
 
 <Frame caption="Rendimiento: clics por enlace y producto, con totales del período.">
   <img src="/images/analytics/performance-es.webp" alt="Captura de pantalla de Linkzee" />
 </Frame>
+
+## Haz que trabaje para ti
+
+Usa tus números para saber de dónde vienen tus clientes y qué tocan más, y luego
+apuesta por lo que funciona: dale a cada red su propio enlace, mueve tus botones
+más fuertes arriba y renueva las ofertas que están perdiendo fuerza.
+
+<CardGroup cols={2}>
+  <Card title="Enlaces rastreados y código QR" icon="qrcode" href="/es/analytics/tracked-links">
+    Un enlace para cada lugar donde compartes tu página, enlaces de campaña y un cartel con QR para imprimir.
+  </Card>
+  <Card title="Aumenta tus clics" icon="arrow-trend-up" href="/es/best-practices/growing-clicks">
+    Consejos prácticos para convertir más visitas en toques.
+  </Card>
+</CardGroup>

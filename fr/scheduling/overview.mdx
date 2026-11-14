@@ -50,6 +50,35 @@ Pour choisir la prestation affichée, allez dans **Liens**, sur la carte de
 l’agenda, et choisissez une **Prestation mise en avant**. En **Automatique**, nous
 affichons la prestation la plus réservée des 30 derniers jours.
 
+### Masquer la carte de réservation
+
+La carte de réservation est activée par défaut. Pour la masquer, allez dans
+**Agenda → Paramètres** et désactivez **Afficher la carte de réservation en haut
+de la page**, juste sous **Agenda actif sur ma page**. Seule la carte disparaît
+de votre page : l’agenda reste actif, et vos visiteurs peuvent toujours réserver
+via :
+
+- votre [lien de réservation](/fr/scheduling/booking-link) (`linkz.ee/votre-nom?agenda=1`) ;
+- la [liste des prestations](/fr/scheduling/services) de votre page ;
+- les boutons **« Je réserve »** de vos [liens](/fr/your-page/links) et tout autre
+  bouton lié à une prestation ou à un forfait.
+
+Les clients qui ont déjà réservé depuis leur appareil gardent un raccourci en
+haut : ils voient **Votre prochain rendez-vous** s’ils en ont un à venir, sinon
+**Mes réservations**.
+
+<Warning>
+  Si la liste des prestations est aussi désactivée, le panneau vous prévient :
+  sans la carte du haut, vos clients ne peuvent réserver que via votre lien de
+  réservation ou des boutons liés à des prestations. Touchez **Voir le lien de
+  réservation** pour y accéder et le partager, afin de ne perdre aucune
+  réservation.
+</Warning>
+
+Via le [serveur MCP](/fr/integrations/mcp/tools-reference), `configure_agenda`
+fait la même chose avec `showTopCard: false` (ou `true` pour réafficher la
+carte).
+
 ## Configurez-le
 
 <CardGroup cols={2}>

@@ -186,7 +186,7 @@ nécessaire :
 | `width` | integer | Largeur en pixels. |
 | `height` | integer | Hauteur en pixels. |
 | `bytes` | integer | Taille du fichier optimisé. |
-| `trimmed` | boolean | `true` lorsque l'original dépassait 15 secondes et a été coupé. |
+| `trimmed` | boolean | `true` lorsque l'original dépassait 30 secondes et a été coupé. |
 
 ### Suivre et gérer les jobs vidéo
 
@@ -214,14 +214,16 @@ mobile :
 | Résolution | **720p** sur le petit côté — jamais agrandie |
 | Fréquence d'images | 24 i/s |
 | Codec | H.264 (MP4) |
-| Durée | Les **15 premières secondes** |
+| Durée | Les **30 premières secondes** |
 | Audio | Supprimé — les vidéos sont toujours muettes |
-| Taille | Généralement **≤ ~3&nbsp;Mo** |
+| Taille | Au maximum **~6&nbsp;Mo** |
 
 <Note>
-Les vidéos de plus de 15 secondes ne sont jamais rejetées pour leur durée — elles
+Les vidéos de plus de 30 secondes ne sont jamais rejetées pour leur durée : elles
 sont coupées, et le résultat indique `trimmed: true`. Un envoi n'est rejeté que
 si le fichier dépasse 40&nbsp;Mo ou n'est pas un fichier vidéo valide.
+Les ralentis à fréquence d'images élevée sont coupés un peu plus tôt : un clip
+à 240 fps garde ses 15 premières secondes.
 </Note>
 
 <Note>

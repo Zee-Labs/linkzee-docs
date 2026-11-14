@@ -182,7 +182,7 @@ aplicado** à sua loja, então não é preciso nenhum `PATCH` extra:
 | `width` | integer | Largura em pixels. |
 | `height` | integer | Altura em pixels. |
 | `bytes` | integer | Tamanho do arquivo otimizado. |
-| `trimmed` | boolean | `true` quando o original tinha mais de 15 segundos e foi cortado. |
+| `trimmed` | boolean | `true` quando o original tinha mais de 30 segundos e foi cortado. |
 
 ### Consultar e gerenciar jobs de vídeo
 
@@ -208,14 +208,16 @@ Todo vídeo é codificado no mesmo perfil, para começar na hora no celular:
 | Resolução | **720p** no lado menor — nunca ampliado |
 | Taxa de quadros | 24 fps |
 | Codec | H.264 (MP4) |
-| Duração | Os **primeiros 15 segundos** |
+| Duração | Os **primeiros 30 segundos** |
 | Áudio | Removido — os vídeos são sempre sem som |
-| Tamanho | Geralmente **≤ ~3&nbsp;MB** |
+| Tamanho | No máximo **~6&nbsp;MB** |
 
 <Note>
-Vídeos com mais de 15 segundos nunca são rejeitados pela duração — são cortados,
+Vídeos com mais de 30 segundos nunca são rejeitados pela duração: são cortados,
 e o resultado informa `trimmed: true`. Um upload só é rejeitado quando o arquivo
 passa de 40&nbsp;MB ou não é um arquivo de vídeo válido.
+Câmera lenta com taxa de quadros alta é cortada um pouco antes: um clipe de
+240 fps fica com os primeiros 15 segundos.
 </Note>
 
 <Note>

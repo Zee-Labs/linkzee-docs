@@ -46,6 +46,32 @@ To choose which service shows there, go to **Links**, open the agenda card and
 pick a **Featured service**. On **Automatic**, we show your most booked service
 from the last 30 days.
 
+### Hide the booking card
+
+The booking card is on by default. To hide it, go to **Scheduling → Settings**
+and turn off **Show booking card at the top of the page**, right below
+**Booking active on my page**. Only the card leaves your page: scheduling stays
+on, and visitors can still book through:
+
+- your [booking link](/scheduling/booking-link) (`linkz.ee/your-name?agenda=1`);
+- the [services menu](/scheduling/services) on your page;
+- the **"Book this"** buttons on your [links](/your-page/links) and any other
+  button tied to a service or package.
+
+Customers who already booked on their device keep a shortcut at the top: they
+see **Your next appointment** when one is coming up, or **My bookings**
+otherwise.
+
+<Warning>
+  If the services menu is also off, the panel warns you: without the top card,
+  clients can only book through your booking link or buttons tied to services.
+  Tap **View booking link** to jump to it and share it, so you don't miss
+  bookings.
+</Warning>
+
+Through the [MCP server](/integrations/mcp/tools-reference), `configure_agenda`
+does the same with `showTopCard: false` (or `true` to show the card again).
+
 ## Set it up
 
 <CardGroup cols={2}>
