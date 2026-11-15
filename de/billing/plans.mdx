@@ -48,7 +48,6 @@ Alles aus Essential, plus:
 Alles aus Pro, plus:
 - **Team-Terminplanung** (mehrere Mitarbeitende; der Besucher wählt, bei wem er bucht)
 - Erweiterte KI — **10.000 Gespräche/Monat** pro Geschäft
-- **WhatsApp-Erinnerungen** — Terminerinnerung, Beleg, Bewertungsanfrage und Wartelisten-Benachrichtigung per WhatsApp an deine Kunden
 - **Zee — KI-Sprachcopilot**, der deinen Shop per Sprache und Text steuert (nur Scale)
 
 ## Vergleich
@@ -64,8 +63,7 @@ Alles aus Pro, plus:
 | Kampagnenlinks | — | 10 | Unbegrenzt | Unbegrenzt |
 | KI-Assistent (verkauft und bucht) | — | — | 1.500/Monat | 10.000/Monat |
 | Terminplanung + Google Meet + E-Mail-Erinnerungen | — | — | ✓ | ✓ |
-| WhatsApp-Erinnerungen an Kunden | — | — | — | ✓ |
-| Linkzee-Gebühr auf Buchungszahlungen | 4 % | 2 % | 1 % | **0 %** |
+| Linkzee-Gebühr auf Buchungszahlungen | — | — | 1 % | **0 %** |
 | Meta Conversion API (CAPI) | — | — | ✓ | ✓ |
 | Öffentliche API + MCP | — | — | ✓ | ✓ |
 | Lead-Webhook | — | — | ✓ | ✓ |
@@ -74,10 +72,11 @@ Alles aus Pro, plus:
 
 <Note>
   Jede Grenze und jede Funktion in dieser Tabelle wird aus dem Tarif **eines
-  Geschäfts** gelesen — auch das Kontingent an KI-Gesprächen und die
+  Geschäfts** gelesen, auch das Kontingent an KI-Gesprächen und die
   Linkzee-Gebühr auf Buchungszahlungen. Ein Geschäft im Free-Tarif behält die
-  Free-Grenzen und seine 4 % Gebühr, selbst wenn ein anderes Geschäft in deinem
-  Konto im Scale-Tarif ist.
+  Free-Grenzen, selbst wenn ein anderes Geschäft in deinem Konto im
+  Scale-Tarif ist. Zahlungen bei der Buchung setzen die Terminplanung voraus
+  und gibt es daher nur in Pro und Scale.
 </Note>
 
 ## Preise
@@ -93,9 +92,10 @@ Beim **Jahres**tarif erhältst du **2 Monate gratis** (du zahlst das 10-Fache de
 
 <Note>
   Wenn du vor einer Preisänderung abonniert hast, **behältst du den Preis, zu
-  dem du abgeschlossen hast** — solange dieses Abonnement aktiv bleibt. Der Preis
-  hängt am jeweiligen Abo: Für ein Geschäft, das du später abonnierst, gilt der
-  Preis, der am Tag des Abschlusses gültig ist.
+  dem du abgeschlossen hast**, solange dieses Abonnement **im selben Tarif**
+  aktiv bleibt. Ein Tarifwechsel (Up- oder Downgrade) stellt das Abo auf den
+  an diesem Tag gültigen Preis um. Für ein Geschäft, das du später abonnierst,
+  gilt der Preis, der am Tag des Abschlusses gültig ist.
 </Note>
 
 ### Währung und Länder
@@ -104,7 +104,11 @@ Beim **Jahres**tarif erhältst du **2 Monate gratis** (du zahlst das 10-Fache de
 - **Jedes andere Land:** Der Preis basiert auf dem oben genannten US-Dollar-Betrag und
   wird beim Bezahlen automatisch in deiner **Landeswährung** angezeigt und abgebucht
   (der umgerechnete Betrag kann je nach Wechselkurs leicht variieren). Das funktioniert
-  weltweit — es gibt keine separate Preistabelle pro Land.
+  weltweit, ohne separate Preistabelle pro Land.
+
+Das Land wird danach erkannt, wo du bist, wenn du die Bezahlseite öffnest, nicht
+nach deinem Profil. Bist du auf Reisen oder nutzt ein VPN, siehst du eventuell
+Preise in Dollar und kein Pix. Nach dem Abschluss behält das Abo diese Währung.
 
 ## 14 Tage kostenlos
 
@@ -113,6 +117,9 @@ die alle Funktionen freischaltet** (das Scale-Niveau) — **ohne Kreditkarte**. 
 damit den KI-Assistenten, die Terminplanung, das Tracking und alles andere. Nach 14
 Tagen bleibt dieses Geschäft auf Free, sofern du keinen kostenpflichtigen Tarif
 abschließt.
+
+Während der Testphase kann der KI-Assistent bis zu **1.500 Gespräche** führen,
+so viele wie im Pro-Tarif.
 
 Während der Testphase zeigt der Bildschirm **Inhalt** die Karte **Dein Test in
 Zahlen**: die verbleibenden Tage, eine kurze Liste von Missionen, um das Beste
@@ -128,48 +135,75 @@ gelöschtes Geschäft gibt die Testphase nicht zurück. Siehe
 
 ## Tarif wechseln
 
-- **Jederzeit up- oder downgraden** über **Dashboard → Tarif** — dort steht immer
-  der Tarif des **Geschäfts, in dem du gerade bist**. Führst du mehr als ein
-  Geschäft, wechsle vorher in das richtige.
-- Wechsel zwischen Tarifen im **gleichen Abrechnungszyklus** werden **anteilig**
-  berechnet: Beim Upgrade zahlst du nur die Differenz für die verbleibenden Tage;
-  beim Downgrade wird das Guthaben auf die nächste Rechnung **dieses Geschäfts**
-  angerechnet. Bevor du eine Änderung bestätigst, zeigt dir Linkzee den **genauen
+- **Jederzeit up- oder downgraden** über **Dashboard → Tarif**. Dort steht
+  immer der Tarif des **Geschäfts, in dem du gerade bist**. Führst du mehr als
+  ein Geschäft, wechsle vorher in das richtige.
+- Wechsel zwischen Tarifen im **gleichen Abrechnungszyklus** werden
+  **anteilig** berechnet. Bevor du bestätigst, zeigt dir Linkzee den **genauen
   anteiligen Betrag**.
-- **Der Wechsel zwischen monatlich und jährlich** funktioniert wie ein neues Abo:
-  Kündige das aktuelle, lass den bereits bezahlten Zeitraum auslaufen und
-  abonniere erst dann im neuen Zyklus (ein neues Abo kann erst starten, wenn das
-  aktuelle vollständig beendet ist).
-- **Kündigen** behält die kostenpflichtigen Funktionen bis zum Ende des bereits bezahlten
-  Zeitraums; danach kehrt **dieses Geschäft** zu Free zurück. Deine anderen
-  Geschäfte behalten ihre eigenen Tarife.
-- Zahlungen werden sicher über **Stripe** abgewickelt.
+  - **Upgrade:** Du zahlst nur die Differenz für die verbleibenden Tage, sofort
+    abgebucht. Der neue Tarif startet, sobald diese Zahlung durchgeht. Geht sie
+    nicht durch (abgelehnte Karte oder unbezahlter Pix-Code), **bleibt dein
+    aktueller Tarif aktiv** und nichts ändert sich.
+  - **Downgrade:** Der nicht genutzte Betrag wird deinem Konto gutgeschrieben
+    und von deiner nächsten Rechnung abgezogen. Führst du mehr als ein
+    Geschäft, kann das Guthaben auf der nächsten Rechnung jedes dieser
+    Geschäfte verwendet werden.
+- Ein **Upgrade** ist in den **24 Stunden vor einer Verlängerung** nicht
+  möglich, egal mit welcher Zahlungsmethode. Mach das Upgrade nach der
+  Verlängerung. Ein Downgrade geht jederzeit.
+- **Ein Wechsel nach dem anderen.** Solange ein Wechsel auf Zahlung wartet,
+  bezahle ihn oder lass ihn ablaufen, bevor du einen weiteren machst. Steht
+  eine Verlängerung aus, bezahle zuerst die Rechnung.
+- **Der Wechsel zwischen monatlich und jährlich** funktioniert wie ein neues
+  Abo: Kündige das aktuelle, lass den bereits bezahlten Zeitraum auslaufen und
+  abonniere erst dann im neuen Zyklus (ein neues Abo kann erst starten, wenn
+  das aktuelle vollständig beendet ist).
+- **Kündigen** behält die kostenpflichtigen Funktionen bis zum Ende des
+  bereits bezahlten Zeitraums; danach kehrt **dieses Geschäft** zu Free
+  zurück. Deine anderen Geschäfte behalten ihre eigenen Tarife.
 
 ## Zahlungsmethoden
 
-Beim Bezahlen zeigt Linkzee automatisch die in deinem Land verfügbaren Zahlungsmethoden an:
+Beim Bezahlen zeigt Linkzee automatisch die in deinem Land verfügbaren
+Zahlungsmethoden an:
 - **Brasilien:** Kreditkarte und **wiederkehrendes Pix** (Pix Automático).
-- **Andere Länder:** internationale Karten sowie lokale Methoden, die automatisch erscheinen (Klarna, Cash App, Amazon Pay, Bancontact und mehr, je nach deinem Land).
+- **Andere Länder:** internationale Karten und, je nach Land, weitere
+  Methoden, die wiederkehrende Zahlungen unterstützen, etwa Apple Pay, Klarna,
+  Cash App Pay, Amazon Pay oder Satispay.
 
-Alle Zahlungen werden sicher über **Stripe** abgewickelt.
+Alle Zahlungen werden sicher über **Stripe** abgewickelt. Linkzee wird von der
+**Zee Labs LLC** betrieben, einem US-Unternehmen, und Kartenzahlungen erscheinen
+auf deiner Abrechnung als **LINKZEE**. Bei Pix zeigt deine Banking-App **Ebanx**,
+den Pix-Partner von Stripe, als Empfänger.
+
+### IOF bei Zahlungen aus Brasilien
+
+Da Linkzee ein US-Unternehmen ist, sind Zahlungen aus Brasilien
+Auslandskäufe und enthalten die **IOF**, die brasilianische Steuer auf
+Auslandskäufe (derzeit 3,5 %):
+
+- **Pix:** Die IOF wird zum Tarifpreis addiert. Den Gesamtbetrag siehst du beim
+  Bezahlen und in deiner Banking-App, bevor du bestätigst.
+- **Karte:** Deine Bank berechnet die IOF auf deiner Kartenabrechnung, wie bei
+  jedem Auslandskauf.
 
 ### Mit wiederkehrendem Pix bezahlen
 
 Wenn du mit Pix abonnierst, autorisierst du **Pix Automático** einmal in deiner
-Banking-App. Danach wird jede Verlängerung automatisch abgebucht, meist wenige
-Tage nach dem Verlängerungsdatum, sodass du nichts von Hand bezahlen musst.
+Banking-App. Danach wird jede Verlängerung automatisch abgebucht: Deine Bank
+kündigt dir den Betrag vorher an, und die Abbuchung erfolgt meist etwa
+**3 Tage nach dem Verlängerungsdatum**. Du musst nichts von Hand bezahlen.
 
 - **Jahrestarif:** Beim Bezahlen siehst du das Jahreslimit, das du
   autorisierst. Das Limit liegt als Sicherheitspuffer etwas über dem
-  Tarifpreis, berechnet wird aber immer nur dein Tarifpreis.
+  Tarifpreis, berechnet wird aber nur dein Tarifpreis, zuzüglich IOF (siehe oben).
 - **Upgrade mit Pix:** Die anteilige Differenz ist von der automatischen
   Abbuchung nicht gedeckt, daher bezahlst du sie einmalig mit einem Pix-Code
   (oder einer Karte). Bis du bezahlst, **bleibt dein aktueller Tarif aktiv**,
   und es wird nichts berechnet. Läuft der Code ab, öffne die Rechnung erneut,
   und ein neuer Code wird erzeugt. Wird die Differenz nicht innerhalb von etwa
   einem Tag bezahlt, wird der Wechsel abgebrochen und dein Tarif bleibt gleich.
-- In den **24 Stunden vor einer Verlängerung** ist kein Tarifwechsel möglich.
-  Wechsle nach der Verlängerung.
 - Für ein Upgrade eines **mit Pix bezahlten Jahrestarifs** wende dich an den
   Support.
 - Wird die Pix-Automático-Autorisierung in deiner Banking-App pausiert oder
@@ -179,16 +213,22 @@ Tage nach dem Verlängerungsdatum, sodass du nichts von Hand bezahlen musst.
 
 ## Wenn eine Zahlung aussteht
 
-Wird eine Verlängerung nicht bezahlt, stuft Linkzee dein Geschäft **nicht
-sofort herab**. **Dashboard → Tarif** zeigt **Zahlung ausstehend**, mit dem
-Datum, bis zu dem dein Tarif aktiv bleibt, und einen Button **Jetzt bezahlen**,
-der die offene Rechnung öffnet (Pix oder Karte). Im Zahlungsverlauf zeigt die
-Rechnung außerdem **Bezahlen**.
+Wird eine Verlängerung nicht bezahlt, per Karte oder per Pix, **hält Linkzee
+deinen Tarif in der Regel noch ein paar Tage aktiv**, damit du bezahlen kannst.
+**Dashboard → Tarif** zeigt **Zahlung ausstehend**, mit dem Datum, bis zu dem
+dein Tarif aktiv bleibt, und einen Button **Jetzt bezahlen**, der die offene
+Rechnung öffnet (Pix oder Karte). Im Zahlungsverlauf zeigt die Rechnung
+außerdem **Bezahlen**.
+
+Ist eine Zahlung dieses Abos erst vor Kurzem fehlgeschlagen, gibt es diese
+zusätzliche Zeit eventuell nicht noch einmal, und das Geschäft kehrt sofort zu
+Free zurück, bis die Rechnung bezahlt ist.
 
 Ist die Rechnung an diesem Datum noch offen, werden die kostenpflichtigen
 Funktionen dieses Geschäfts pausiert, und es kehrt zu Free zurück. **Nichts
-wird gelöscht**: Sobald die Rechnung bezahlt ist, ist alles wieder da, wo du
-aufgehört hast. Linkzee informiert dich vorher und in dem Moment per E-Mail.
+wird gelöscht** (Produkte über der Free-Grenze werden nur ausgeblendet): Sobald
+die Rechnung bezahlt ist, ist alles wieder da, wo du aufgehört hast. Linkzee
+informiert dich vorher und in dem Moment per E-Mail.
 
 ## Rechnungen und Belege
 
