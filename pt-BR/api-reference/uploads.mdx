@@ -57,6 +57,7 @@ Envie-os como campos de formulário multipart.
 | `wallpaperPoster` | Legado — o pôster de um papel de parede em vídeo agora é gerado automaticamente a partir do vídeo | — |
 | `banner` | O banner do seu cabeçalho | — |
 | `cutout` | Uma imagem recortada do cabeçalho | — |
+| `wordmark` | O logotipo horizontal exibido no lugar do nome da loja (estilo de título **Logo**). Salve a URL retornada em `headerSettings.wordmarkUrl` com `PATCH /v1/store`; uma string vazia remove | — |
 | `link` | A miniatura de um link | `linkId` |
 | `linkMedia` | A capa do card de um link | `linkId` |
 | `linkPoster` | O pôster de vídeo de um link | `linkId` |
@@ -112,10 +113,10 @@ produto ou link — por exemplo, passe-a como o `image` do produto ao criá-lo o
 atualizá-lo.
 </Note>
 
-## Upload de vídeo (hero e papel de parede)
+## Upload de vídeo (hero, papel de parede e itens da vitrine)
 
 ```
-POST /v1/uploads/video?kind=hero|wallpaper
+POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
 Envia um vídeo curto para o topo **Hero** ou para o **papel de parede** da sua
@@ -132,8 +133,19 @@ curl -X POST \
 
 | Parâmetro | Onde | Obrigatório | Descrição |
 | --- | --- | --- | --- |
-| `kind` | query | Sim | `hero` para o vídeo do topo Hero, `wallpaper` para o fundo da página. |
-| `file` | multipart | Sim | O vídeo a enviar — MP4 ou MOV, até **40&nbsp;MB**. |
+| `kind` | query | Sim | `hero` para o vídeo do topo Hero, `wallpaper` para o fundo da página, `media` para um item em vídeo de uma vitrine vertical. |
+| `linkId` | query | Com `kind=media` | O bloco de galeria (layout `reel`) ao qual o vídeo pertence. Precisa ser um link da sua própria loja. |
+| `slot` | query | Com `kind=media` | A posição do item, de `0` a `9`. |
+| `file` | multipart | Sim | O vídeo a enviar, MP4 ou MOV, até **40&nbsp;MB**. |
+
+### Itens em vídeo de uma vitrine vertical
+
+Com `kind=media`, o vídeo vira um item de um bloco de galeria que usa o layout
+`reel`. Diferente dos vídeos de hero e de papel de parede, um item **mantém o
+áudio** (o visitante pode ligar o som); ele também fica com os primeiros 30
+segundos. Depois do upload, salve o item com `PATCH /v1/links/{id}`, enviando
+`{ "type": "video", "slot": 0, "jobId": "<id do job>" }` em `mediaItems`. O
+vídeo é preenchido automaticamente quando o job fica pronto.
 
 ### Resposta
 

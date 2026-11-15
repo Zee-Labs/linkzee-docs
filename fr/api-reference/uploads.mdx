@@ -57,6 +57,7 @@ Transmettez ces valeurs sous forme de champs de formulaire multipart.
 | `wallpaperPoster` | Hérité — l'image d'aperçu d'un fond d'écran vidéo est désormais générée automatiquement à partir de la vidéo | — |
 | `banner` | La bannière de votre en-tête | — |
 | `cutout` | Une image découpée d'en-tête | — |
+| `wordmark` | Le logo horizontal affiché à la place du nom de la boutique (style de titre **Logo**). Enregistrez l'URL renvoyée dans `headerSettings.wordmarkUrl` avec `PATCH /v1/store` ; une chaîne vide le retire | — |
 | `link` | Une miniature de lien | `linkId` |
 | `linkMedia` | Une couverture de carte de lien | `linkId` |
 | `linkPoster` | Une image d'aperçu de vidéo de lien | `linkId` |
@@ -113,10 +114,10 @@ définissez-la sur le produit ou le lien — par exemple, passez-la comme `image
 du produit lorsque vous le créez ou le mettez à jour.
 </Note>
 
-## Envoi de vidéos (hero et fond d'écran)
+## Envoi de vidéos (hero, fond d'écran et éléments de vitrine)
 
 ```
-POST /v1/uploads/video?kind=hero|wallpaper
+POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
 Envoie une courte vidéo pour votre en-tête **Hero** ou pour le **fond d'écran**
@@ -134,8 +135,20 @@ curl -X POST \
 
 | Paramètre | Où | Requis | Description |
 | --- | --- | --- | --- |
-| `kind` | query | Oui | `hero` pour la vidéo de l'en-tête Hero, `wallpaper` pour le fond de la page. |
-| `file` | multipart | Oui | La vidéo à envoyer — MP4 ou MOV, jusqu'à **40&nbsp;Mo**. |
+| `kind` | query | Oui | `hero` pour la vidéo de l'en-tête Hero, `wallpaper` pour le fond de la page, `media` pour une vidéo d'élément d'une vitrine verticale. |
+| `linkId` | query | Avec `kind=media` | Le bloc galerie (disposition `reel`) auquel appartient la vidéo. Il doit s'agir d'un lien de votre propre boutique. |
+| `slot` | query | Avec `kind=media` | L'emplacement de l'élément, de `0` à `9`. |
+| `file` | multipart | Oui | La vidéo à envoyer, MP4 ou MOV, jusqu'à **40&nbsp;Mo**. |
+
+### Vidéos d'éléments d'une vitrine verticale
+
+Avec `kind=media`, la vidéo devient un élément d'un bloc galerie qui utilise
+la disposition `reel`. Contrairement aux vidéos du hero et du fond, un élément
+**garde son audio** (les visiteurs peuvent activer le son) ; il garde aussi
+les 30 premières secondes. Après l'envoi, enregistrez l'élément avec
+`PATCH /v1/links/{id}`, en envoyant
+`{ "type": "video", "slot": 0, "jobId": "<id du job>" }` dans `mediaItems`.
+La vidéo est renseignée automatiquement quand le job est prêt.
 
 ### Réponse
 

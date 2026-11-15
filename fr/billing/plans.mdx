@@ -48,7 +48,6 @@ Tout ce qu'il y a dans Essential, et en plus :
 Tout ce qu'il y a dans Pro, et en plus :
 - **Agenda en équipe** (plusieurs agents ; le visiteur choisit avec qui il réserve)
 - IA étendue — **10 000 conversations/mois** par boutique
-- **Rappels WhatsApp** — rappel de rendez-vous, reçu, demande d'avis et alerte de liste d'attente envoyés à vos clients sur WhatsApp
 - **Zee — copilote IA vocal** qui pilote votre boutique à la voix et au texte (Scale uniquement)
 
 ## Comparaison
@@ -64,8 +63,7 @@ Tout ce qu'il y a dans Pro, et en plus :
 | Liens de campagne | — | 10 | Illimités | Illimités |
 | Assistant IA (vend et réserve) | — | — | 1 500/mois | 10 000/mois |
 | Agenda + Google Meet + rappels par e-mail | — | — | ✓ | ✓ |
-| Rappels WhatsApp au client | — | — | — | ✓ |
-| Commission Linkzee sur les paiements de réservation | 4 % | 2 % | 1 % | **0 %** |
+| Commission Linkzee sur les paiements de réservation | — | — | 1 % | **0 %** |
 | Meta Conversion API (CAPI) | — | — | ✓ | ✓ |
 | API publique + MCP | — | — | ✓ | ✓ |
 | Webhook de leads | — | — | ✓ | ✓ |
@@ -74,10 +72,11 @@ Tout ce qu'il y a dans Pro, et en plus :
 
 <Note>
   Chaque limite et chaque fonctionnalité de ce tableau sont lues sur le forfait
-  d'**une seule boutique** — y compris le quota de conversations IA et la
+  d'**une seule boutique**, y compris le quota de conversations IA et la
   commission Linkzee sur les paiements de réservation. Une boutique en Free
-  conserve les limites du Free et sa commission de 4 % même si une autre boutique
-  de votre compte est en Scale.
+  conserve les limites du Free même si une autre boutique de votre compte est
+  en Scale. Le paiement à la réservation nécessite l'agenda : il n'existe donc
+  qu'avec Pro et Scale.
 </Note>
 
 ## Tarifs
@@ -93,8 +92,9 @@ Avec le forfait **annuel**, vous obtenez **2 mois offerts** (vous payez 10× le 
 
 <Note>
   Si vous vous êtes abonné avant un changement de prix, **vous conservez le
-  prix auquel vous avez souscrit** tant que cet abonnement reste actif. Le prix
-  est lié à chaque abonnement : une boutique que vous abonnez plus tard est donc
+  prix auquel vous avez souscrit** tant que cet abonnement reste actif **sur le
+  même forfait**. Changer de forfait (montée ou baisse) fait passer l'abonnement
+  au prix en vigueur ce jour-là. Une boutique que vous abonnez plus tard est
   facturée au prix en vigueur le jour où vous l'abonnez.
 </Note>
 
@@ -104,7 +104,12 @@ Avec le forfait **annuel**, vous obtenez **2 mois offerts** (vous payez 10× le 
 - **Tout autre pays :** le prix est basé sur le montant en dollars ci-dessus et, au
   paiement, il est affiché et débité automatiquement dans votre **devise locale** (le
   montant converti peut varier légèrement selon le taux de change). Cela fonctionne
-  partout dans le monde — il n'y a pas de grille tarifaire distincte par pays.
+  partout dans le monde, sans grille tarifaire distincte par pays.
+
+Le pays est détecté selon l'endroit où vous êtes quand vous ouvrez la page de
+paiement, et non selon votre profil. Si vous voyagez ou utilisez un VPN, vous
+pouvez voir le prix en dollars et sans Pix. Une fois abonné, l'abonnement garde
+cette devise.
 
 ## 14 jours gratuits
 
@@ -113,6 +118,15 @@ débloque toutes les fonctionnalités** (le niveau Scale) — **sans carte banca
 Profitez-en pour tester l'assistant IA, l'agenda, le suivi et tout le reste. À la fin
 des 14 jours, cette boutique reste en Free, sauf si vous souscrivez à un forfait payant.
 
+Pendant l'essai, l'assistante IA peut tenir jusqu'à **1 500 conversations**,
+comme avec Pro.
+
+Pendant l'essai, l'écran **Contenu** affiche **Votre essai en chiffres** :
+les jours restants, une courte liste de missions pour en tirer le meilleur
+(publier 3 produits, connecter un réseau social, recevoir votre premier clic,
+activer l'assistante IA, partager votre lien) et vos résultats jusqu'ici
+(visites de la bio, clics sur les produits et votre produit vedette).
+
 L'essai est **unique par personne**, pas par boutique. Toute boutique que vous
 créez après la première démarre en **Free, sans essai**, et supprimer une
 boutique ne redonne pas l'essai. Voir
@@ -120,30 +134,104 @@ boutique ne redonne pas l'essai. Voir
 
 ## Changer de forfait
 
-- **Passez à un forfait supérieur ou inférieur à tout moment** depuis **Dashboard → Forfait**,
-  qui affiche toujours le forfait de la **boutique où vous vous trouvez**. Si vous
-  gérez plusieurs boutiques, basculez d'abord sur la bonne.
+- **Passez à un forfait supérieur ou inférieur à tout moment** depuis
+  **Dashboard → Forfait**, qui affiche toujours le forfait de la **boutique où
+  vous vous trouvez**. Si vous gérez plusieurs boutiques, basculez d'abord sur
+  la bonne.
 - Les changements de forfait au sein du **même cycle de facturation** sont
-  **calculés au prorata** : lors d'une montée en gamme, vous ne payez que la
-  différence pour les jours restants ; lors d'une baisse, le crédit est appliqué
-  à la prochaine facture **de cette boutique**. Avant que vous confirmiez un
-  changement, Linkzee vous indique le **montant exact calculé au prorata**.
-- **Le passage entre mensuel et annuel** fonctionne comme un nouvel abonnement :
-  annulez l'abonnement en cours, laissez la période déjà réglée arriver à son
-  terme, puis seulement abonnez-vous sur la nouvelle périodicité (un nouvel
-  abonnement ne peut démarrer qu'une fois l'actuel entièrement terminé).
-- **L'annulation** conserve vos fonctionnalités payantes jusqu'à la fin de la période
-  déjà réglée ; ensuite **cette boutique** revient au Free. Vos autres boutiques
-  conservent leur propre forfait.
-- Les paiements sont traités en toute sécurité par **Stripe**.
+  **calculés au prorata**. Avant que vous confirmiez, Linkzee vous indique le
+  **montant exact calculé au prorata**.
+  - **Montée en gamme :** vous ne payez que la différence pour les jours
+    restants, débitée tout de suite. Le nouveau forfait démarre dès que ce
+    paiement est accepté. S'il ne l'est pas (carte refusée ou code Pix non
+    payé), **votre forfait actuel reste actif** et rien ne change.
+  - **Baisse de gamme :** le montant non utilisé devient un crédit sur votre
+    compte et il est déduit de votre prochaine facture. Si vous gérez
+    plusieurs boutiques, ce crédit peut servir sur la prochaine facture de
+    n'importe laquelle d'entre elles.
+- Une **montée en gamme** n'est pas possible dans les **24 heures qui
+  précèdent un renouvellement**, quel que soit le moyen de paiement. Faites-la
+  après le renouvellement. Une baisse de gamme reste possible à tout moment.
+- **Un changement à la fois.** Tant qu'un changement attend son paiement,
+  payez-le ou laissez-le expirer avant d'en faire un autre. Si un
+  renouvellement est en attente, payez la facture avant de changer de forfait.
+- **Le passage entre mensuel et annuel** fonctionne comme un nouvel
+  abonnement : annulez l'abonnement en cours, laissez la période déjà réglée
+  arriver à son terme, puis seulement abonnez-vous sur la nouvelle périodicité
+  (un nouvel abonnement ne peut démarrer qu'une fois l'actuel entièrement
+  terminé).
+- **L'annulation** conserve vos fonctionnalités payantes jusqu'à la fin de la
+  période déjà réglée ; ensuite **cette boutique** revient au Free. Vos autres
+  boutiques conservent leur propre forfait.
 
 ## Moyens de paiement
 
-Au moment du paiement, Linkzee affiche automatiquement les moyens de paiement disponibles dans votre pays :
-- **Brésil :** carte de crédit et **Pix**.
-- **Autres pays :** cartes internationales ainsi que des moyens locaux qui apparaissent automatiquement (Klarna, Cash App, Amazon Pay, Bancontact et d'autres, selon votre pays).
+Au moment du paiement, Linkzee affiche automatiquement les moyens de paiement
+disponibles dans votre pays :
+- **Brésil :** carte de crédit et **Pix récurrent** (Pix Automático).
+- **Autres pays :** cartes internationales et, selon votre pays, d'autres
+  moyens qui acceptent les paiements récurrents, comme Apple Pay, Klarna,
+  Cash App Pay, Amazon Pay ou Satispay.
 
-Tous les paiements sont traités en toute sécurité par **Stripe**.
+Tous les paiements sont traités en toute sécurité par **Stripe**. Linkzee est
+exploité par **Zee Labs LLC**, une société américaine, et le débit par carte apparaît
+sur votre relevé sous le nom **LINKZEE**. Avec Pix, l'application de votre banque
+affiche **Ebanx**, partenaire Pix de Stripe, comme bénéficiaire.
+
+### IOF pour les paiements depuis le Brésil
+
+Comme Linkzee est une société américaine, les paiements effectués depuis le
+Brésil sont des achats internationaux et incluent l'**IOF**, la taxe
+brésilienne sur les achats internationaux (actuellement 3,5 %) :
+
+- **Pix :** l'IOF s'ajoute au prix du forfait. Vous voyez le total au paiement
+  et dans l'application de votre banque avant de confirmer.
+- **Carte :** votre banque prélève l'IOF sur votre relevé de carte, comme pour
+  tout achat international.
+
+### Payer avec le Pix récurrent
+
+Quand vous vous abonnez avec Pix, vous autorisez une seule fois le **Pix
+Automático** dans l'application de votre banque. Ensuite, chaque
+renouvellement est prélevé automatiquement : votre banque vous prévient du
+montant à l'avance, et le prélèvement a généralement lieu environ **3 jours
+après la date de renouvellement**. Rien à payer à la main.
+
+- **Offre annuelle :** le paiement affiche la limite annuelle que vous
+  autorisez. Cette limite est un peu supérieure au prix de l'offre, par
+  sécurité, mais vous n'êtes débité que du prix de votre offre, plus l'IOF (voir ci-dessus).
+- **Passer à une offre supérieure avec Pix :** la différence au prorata n'est
+  pas couverte par le prélèvement automatique, vous la réglez donc une fois
+  avec un code Pix (ou une carte). Tant que vous ne payez pas, **votre forfait
+  actuel reste actif** et rien n'est débité. Si le code expire, rouvrez la
+  facture et un nouveau code est généré. Si la différence n'est pas payée en
+  environ une journée, le changement est annulé et votre forfait reste le même.
+- Pour passer à une offre supérieure sur une **offre annuelle payée avec
+  Pix**, contactez le support.
+- Si l'autorisation Pix Automático est suspendue ou annulée dans
+  l'application de votre banque, ou si la banque ne programme pas un
+  renouvellement, vous recevez un e-mail pour pouvoir payer le renouvellement
+  avant toute interruption.
+
+## Quand un paiement est en attente
+
+Si un renouvellement n'est pas payé, par carte ou par Pix, Linkzee **garde
+généralement votre forfait actif quelques jours de plus** pour que vous
+puissiez payer. **Dashboard → Forfait** affiche **Paiement en attente**, avec
+la date jusqu'à laquelle votre forfait reste actif, et un bouton **Payer
+maintenant** qui ouvre la facture en attente (Pix ou carte). La facture
+affiche aussi **Payer** dans votre historique des paiements.
+
+Si un paiement de cet abonnement a déjà échoué récemment, ce délai
+supplémentaire peut ne pas être accordé de nouveau, et la boutique repasse en
+Free tout de suite, jusqu'au paiement de la facture.
+
+Si la facture n'est toujours pas payée à cette date, les fonctionnalités
+payantes de cette boutique sont mises en pause et elle repasse en Free.
+**Rien n'est supprimé** (les produits au-delà de la limite du Free sont
+seulement masqués) : dès que la facture est payée, tout revient là où vous
+l'aviez laissé. Linkzee vous envoie un e-mail avant et au moment où cela
+arrive.
 
 ## Factures et reçus
 
