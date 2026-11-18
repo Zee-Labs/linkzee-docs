@@ -92,8 +92,8 @@ qué pedir.
 ## Nombres de las herramientas
 
 Si quieres saber exactamente qué herramientas ve tu agente, aquí tienes la lista
-completa. Con una clave **read**, el agente obtiene las 11 herramientas de
-lectura; una clave **write** añade además las 33 herramientas de escritura. Una
+completa. Con una clave **read**, el agente obtiene las 13 herramientas de
+lectura; una clave **write** añade además las 34 herramientas de escritura. Una
 clave con el ámbito **finance** también obtiene `get_earnings` (y una clave solo
 finance obtiene únicamente esa).
 
@@ -112,6 +112,8 @@ finance obtiene únicamente esa).
 | `list_reviews` | Lista las reseñas que has recibido, incluidas las ocultas. |
 | `list_waitlist` | Lista los visitantes que esperan una franja. |
 | `search_leads` | Busca un cliente existente por nombre, teléfono, email o Instagram. |
+| `get_onboarding_brief` | Durante el onboarding guiado: leer lo que la persona ya respondió y el guion para armar la bio en su idioma. |
+| `get_bio_playbook` | Después del onboarding: el estándar Linkzee para mejorar una bio publicada, con el plan actual (para avisar antes de funciones de pago) y la regla de área regulada. |
 
 ### Herramientas financieras
 
@@ -137,7 +139,8 @@ finance obtiene únicamente esa).
 | `reorder_content` | Reordena el contenido de tu página. |
 | `configure_vitrine` | Configura la vitrina — visibilidad, columnas, ajuste de las fotos y diseño (`grid`, `masonry` o `carousel`). |
 | `configure_tracking` | Configura los píxeles, la Conversion API, GTM y las UTM predeterminadas. |
-| `update_design` | Ajusta el diseño: tema, colores, botones, fuente, encabezado (incluido `heroMedia`: `photo` o `video`, y `wordmarkUrl`, el logotipo que se muestra en lugar del nombre) y fondos, incluidos `mesh` y `duotone`. Los videos en sí se definen con las herramientas dedicadas de abajo. |
+| `update_design` | Ajusta el diseño: tema, colores, botones, fuente, encabezado (incluido `heroMedia`: `photo` o `video`, y `wordmarkUrl`, el logotipo que se muestra en lugar del nombre) y fondos, incluidos `mesh`, `duotone` y el fondo liso en el color de la marca (`bgFill`, con `background: solid`). Los videos en sí se definen con las herramientas dedicadas de abajo. |
+| `propose_onboarding_bio` | Durante el onboarding guiado: guardar la propuesta de bio en el borrador (la persona la revisa y la publica en Linkzee). Acepta un tema listo **o** un estilo con los colores de la marca (`brandStyle`), nunca los dos; cada ítem descartado vuelve con el motivo (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
 | `set_hero_video` | Dale una URL pública de video — Linkzee lo descarga, lo optimiza y lo aplica al diseño **Hero**, cambiando tu encabezado a Hero. Devuelve un job. Requiere plan Premium. |
 | `set_background_video` | Lo mismo, para el fondo de tu página. Devuelve un job. Requiere plan Premium. |
 | `get_media_job` | Consulta un job de video hasta que esté `ready` o `failed`. |

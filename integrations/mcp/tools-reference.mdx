@@ -87,8 +87,8 @@ can do, grouped by area, so you know what to ask for.
 ## Tool names
 
 If you want to know exactly which tools your agent sees, here is the full list.
-With a **read** key the agent gets the 11 read tools; a **write** key adds the
-33 write tools on top. A key with the **finance** scope also gets `get_earnings`
+With a **read** key the agent gets the 13 read tools; a **write** key adds the
+34 write tools on top. A key with the **finance** scope also gets `get_earnings`
 (and a finance-only key gets just that one).
 
 ### Read tools
@@ -106,6 +106,8 @@ With a **read** key the agent gets the 11 read tools; a **write** key adds the
 | `list_reviews` | List the reviews you've received, including hidden ones. |
 | `list_waitlist` | List visitors waiting for a slot. |
 | `search_leads` | Find an existing client by name, phone, email or Instagram. |
+| `get_onboarding_brief` | During guided onboarding: read what the person already answered and the script to build the bio in their language. |
+| `get_bio_playbook` | After onboarding: the Linkzee standard to make a published bio even better, with the current plan (to warn before paid features) and the regulated field rule. |
 
 ### Finance tools
 
@@ -131,7 +133,8 @@ With a **read** key the agent gets the 11 read tools; a **write** key adds the
 | `reorder_content` | Reorder your page content. |
 | `configure_vitrine` | Configure the showcase — visibility, columns, photo fit, and layout (`grid`, `masonry` or `carousel`). |
 | `configure_tracking` | Set pixels, Conversion API, GTM and default UTMs. |
-| `update_design` | Adjust the design: theme, colors, buttons, font, header (including `heroMedia`: `photo` or `video`, and `wordmarkUrl`, the logo shown in place of the name) and backgrounds including `mesh` and `duotone`. Videos themselves are set with the dedicated tools below. |
+| `update_design` | Adjust the design: theme, colors, buttons, font, header (including `heroMedia`: `photo` or `video`, and `wordmarkUrl`, the logo shown in place of the name) and backgrounds, including `mesh`, `duotone` and the solid brand color background (`bgFill`, with `background: solid`). Videos themselves are set with the dedicated tools below. |
+| `propose_onboarding_bio` | During guided onboarding: save the bio proposal to the draft (the person reviews and publishes it in Linkzee). Accepts a ready theme **or** a brand color style (`brandStyle`), never both; every dropped item comes back with its reason (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
 | `set_hero_video` | Give it a public video URL — Linkzee downloads, optimizes and applies it to the **Hero** layout, switching your header to Hero. Returns a job. Needs a Premium plan. |
 | `set_background_video` | Same, for your page wallpaper. Returns a job. Needs a Premium plan. |
 | `get_media_job` | Poll a video job until it is `ready` or `failed`. |
