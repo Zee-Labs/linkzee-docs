@@ -42,6 +42,34 @@ out so your analytics attribute it to the right source and campaign.
   **Google Tag Manager**.
 </Note>
 
+## How Linkzee measures its own ads
+
+The settings above are yours and run on your public page. Separately, on
+Linkzee's own pages (website, quiz, sign-up and subscription), and only if you
+accept advertising cookies, Linkzee measures the results of its ads with Meta
+(Pixel and Conversions API) and Google Tag Manager. For this, Linkzee sends Meta:
+
+- Email, phone and name in encrypted form (SHA-256 hash), and an internal
+  identifier, also hashed.
+- Your approximate location derived from your IP address (city, state and
+  country, never the postal code).
+- The IP address and browser used at the time of the event.
+- Meta's advertising identifiers (the `_fbp` and `_fbc` cookies).
+
+For payments, the billing address you give Stripe may complement this data. The
+phone may come from your account or from the WhatsApp or phone number you
+entered when setting up your page.
+
+This measurement data is kept for a short time: the payment context for up to
+**30 days** and the sign-up context (without the IP address) for up to
+**90 days**. You can withdraw consent at any time in **Cookie preferences**;
+withdrawing deletes these contexts and stops new sends. Linkzee applies Meta's
+Limited Data Use mode where the law requires it. If sending to Meta fails, the
+event stays in a resend queue for up to 2 days, and Linkzee keeps a minimal
+record of conversions already sent (only the event identifier, no personal data)
+so the same conversion is never counted twice. The queue is also deleted when
+you withdraw consent.
+
 ## Next steps
 
 <CardGroup cols={2}>
