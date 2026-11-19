@@ -43,6 +43,35 @@ envia, para que suas análises o atribuam à origem e à campanha corretas.
   container no **Google Tag Manager**.
 </Note>
 
+## Como a Linkzee mede os próprios anúncios
+
+As configurações acima são suas e rodam na sua página pública. À parte, nas
+páginas da própria Linkzee (site, quiz, cadastro e assinatura), e só se você
+aceitar os cookies de publicidade, a Linkzee mede os resultados dos anúncios
+dela com a Meta (Pixel e API de Conversões) e o Google Tag Manager. Para isso, a
+Linkzee envia à Meta:
+
+- E-mail, telefone e nome em formato criptografado (hash SHA-256), e um
+  identificador interno também em hash.
+- Sua localização aproximada derivada do endereço IP (cidade, estado e país,
+  nunca o CEP).
+- O endereço IP e o navegador usados no momento do evento.
+- Os identificadores de anúncio da Meta (cookies `_fbp` e `_fbc`).
+
+Nos pagamentos, o endereço de cobrança informado ao Stripe pode complementar
+esses dados. O telefone pode vir da sua conta ou do WhatsApp ou telefone que
+você informou ao configurar a sua página.
+
+Esses dados de medição ficam guardados por pouco tempo: o contexto do pagamento
+por até **30 dias** e o contexto do cadastro (sem o endereço IP) por até
+**90 dias**. Você pode retirar o consentimento a qualquer momento em
+**Preferências de cookies**; a retirada apaga esses contextos e interrompe novos
+envios. A Linkzee aplica o modo de uso limitado de dados da Meta onde a lei
+exige. Se o envio à Meta falhar, o evento fica numa fila de reenvio por até 2
+dias, e a Linkzee guarda um registro mínimo das conversões já enviadas (só o
+identificador do evento, sem dados pessoais) para nunca contar a mesma conversão
+duas vezes. A fila também é apagada quando você retira o consentimento.
+
 ## Próximos passos
 
 <CardGroup cols={2}>

@@ -44,6 +44,36 @@ Kampagne zuordnet.
   Tag Manager**.
 </Note>
 
+## Wie Linkzee die eigenen Anzeigen misst
+
+Die Einstellungen oben gehören Ihnen und gelten für Ihre öffentliche Seite.
+Unabhängig davon misst Linkzee auf den eigenen Seiten (Website, Quiz,
+Registrierung und Abonnement), und nur wenn Sie Werbe-Cookies akzeptieren, die
+Ergebnisse der eigenen Anzeigen mit Meta (Pixel und Conversions API) und Google
+Tag Manager. Dazu sendet Linkzee an Meta:
+
+- E-Mail, Telefonnummer und Name in verschlüsselter Form (SHA-256-Hash) sowie
+  eine interne Kennung, ebenfalls gehasht.
+- Ihren ungefähren Standort aus der IP-Adresse (Stadt, Bundesland und Land, nie
+  die Postleitzahl).
+- Die IP-Adresse und den Browser zum Zeitpunkt des Ereignisses.
+- Die Werbekennungen von Meta (Cookies `_fbp` und `_fbc`).
+
+Bei Zahlungen kann die gegenüber Stripe angegebene Rechnungsadresse diese Daten
+ergänzen. Die Telefonnummer kann aus Ihrem Konto stammen oder aus der WhatsApp-
+oder Telefonnummer, die Sie beim Einrichten Ihrer Seite angegeben haben.
+
+Diese Messdaten werden nur kurz gespeichert: der Zahlungskontext bis zu
+**30 Tage** und der Registrierungskontext (ohne IP-Adresse) bis zu **90 Tage**.
+Sie können Ihre Einwilligung jederzeit unter **Cookie-Einstellungen** widerrufen;
+der Widerruf löscht diese Kontexte und beendet neue Übermittlungen. Wo das Gesetz
+es verlangt, nutzt Linkzee den Modus zur eingeschränkten Datennutzung von Meta.
+Schlägt die Übermittlung an Meta fehl, bleibt das Ereignis bis zu 2 Tage in einer
+Warteschlange für den erneuten Versand, und Linkzee speichert einen minimalen
+Nachweis bereits gesendeter Conversions (nur die Ereigniskennung, keine
+personenbezogenen Daten), damit dieselbe Conversion nie doppelt gezählt wird. Die
+Warteschlange wird auch gelöscht, wenn Sie Ihre Einwilligung widerrufen.
+
 ## Nächste Schritte
 
 <CardGroup cols={2}>

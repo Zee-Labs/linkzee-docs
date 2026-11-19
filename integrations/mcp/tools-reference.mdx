@@ -134,7 +134,7 @@ With a **read** key the agent gets the 13 read tools; a **write** key adds the
 | `configure_vitrine` | Configure the showcase — visibility, columns, photo fit, and layout (`grid`, `masonry` or `carousel`). |
 | `configure_tracking` | Set pixels, Conversion API, GTM and default UTMs. |
 | `update_design` | Adjust the design: theme, colors, buttons, font, header (including `heroMedia`: `photo` or `video`, and `wordmarkUrl`, the logo shown in place of the name) and backgrounds, including `mesh`, `duotone` and the solid brand color background (`bgFill`, with `background: solid`). Videos themselves are set with the dedicated tools below. |
-| `propose_onboarding_bio` | During guided onboarding: save the bio proposal to the draft (the person reviews and publishes it in Linkzee). Accepts a ready theme **or** a brand color style (`brandStyle`), never both; every dropped item comes back with its reason (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
+| `propose_onboarding_bio` | During guided onboarding: save the bio proposal to the draft (the person reviews and publishes it in Linkzee). The theme comes from the logo colors unless the person asks for a specific ready theme, and a link without a title gets a default label for its type; every dropped item comes back with its reason (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
 | `set_hero_video` | Give it a public video URL — Linkzee downloads, optimizes and applies it to the **Hero** layout, switching your header to Hero. Returns a job. Needs a Premium plan. |
 | `set_background_video` | Same, for your page wallpaper. Returns a job. Needs a Premium plan. |
 | `get_media_job` | Poll a video job until it is `ready` or `failed`. |
