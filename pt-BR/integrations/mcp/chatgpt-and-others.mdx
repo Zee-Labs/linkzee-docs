@@ -4,54 +4,95 @@ icon: plug
 description: "Conecte o Linkzee ao ChatGPT, ao Cursor e a qualquer agente compatível com MCP para gerenciar sua página em linguagem natural."
 ---
 
-O Linkzee funciona com **qualquer agente compatível com MCP** — não só o Claude. Se
-a sua ferramenta tem suporte a MCP, você pode conectá-la ao Linkzee e gerenciar sua
-página em linguagem natural: **ChatGPT**, **Cursor** e muito mais.
-
-A configuração é a mesma em qualquer lugar. Você aponta o seu cliente para o endpoint
-MCP do Linkzee e faz login com a sua chave de API. Depois disso, é só pedir.
+O Linkzee funciona com **qualquer agente compatível com MCP**, não só o Claude.
+Se a sua ferramenta tem suporte a MCP, você pode conectá-la ao Linkzee e
+gerenciar sua página em linguagem natural: **ChatGPT**, **Cursor**, ferramentas
+de automação e muito mais.
 
 ## Conecte o seu cliente
 
 <Steps>
   <Step title="Crie uma chave de API">
-    No seu painel, abra as configurações de **API e MCP** e crie uma chave de API.
-    Você vai usá-la para autenticar o seu agente. Veja
-    [Chaves de API](/pt-BR/integrations/api/api-keys) para o passo a passo completo.
+    No seu painel, abra **Configurações**, **API e MCP**, e crie uma chave de API.
+    Escolha **write** se o agente vai alterar sua página (ela também lê), ou
+    **read** para um agente só de leitura. Veja [Chaves de API](/pt-BR/integrations/api/api-keys)
+    para o passo a passo completo.
   </Step>
   <Step title="Adicione um servidor MCP">
-    No seu cliente, adicione um novo servidor MCP apontando para o endpoint do Linkzee:
+    No seu cliente, adicione um novo servidor MCP (Streamable HTTP) apontando para:
 
     ```
     https://api.linkz.ee/mcp
     ```
   </Step>
   <Step title="Informe a sua chave de API">
-    Autentique-se com a sua chave como autorização:
+    Envie a sua chave no cabeçalho de autorização:
 
     ```
-    Bearer lzk_...
+    Authorization: Bearer lzk_your_key
+    ```
+
+    Em clientes configurados por JSON, o bloco costuma ficar assim:
+
+    ```json
+    {
+      "mcpServers": {
+        "linkzee": {
+          "type": "http",
+          "url": "https://api.linkz.ee/mcp",
+          "headers": { "Authorization": "Bearer lzk_your_key" }
+        }
+      }
+    }
     ```
   </Step>
   <Step title="Peça em linguagem natural">
-    Depois de conectado, converse com o seu agente como você conversaria com um assistente:
-    "adiciona esse produto", "o que está agendado esta semana?" ou "muda o meu tema."
+    Depois de conectado, converse com o seu agente como você conversaria com um
+    assistente: "adiciona esse produto", "o que está agendado esta semana?" ou
+    "muda o meu tema".
   </Step>
 </Steps>
 
 <Note>
   Cada cliente adiciona servidores MCP de um jeito um pouco diferente. Consulte a
-  documentação do próprio cliente para saber exatamente onde colar o endpoint e a
-  sua chave.
+  documentação do próprio cliente para saber onde colar o endpoint e o
+  cabeçalho. Entrar com a sua conta Linkzee (OAuth), sem chave, funciona com o
+  conector do Claude e com apps que rodam no seu próprio computador. Outros
+  clientes hospedados usam uma chave de API.
 </Note>
 
-As ações disponíveis são as mesmas em todos os clientes. Veja a
-[referência de ferramentas](/pt-BR/integrations/mcp/tools-reference) para tudo o que um
-agente pode fazer via MCP.
+## Envio de fotos e vídeos
+
+Muitos apps de chat mostram seus anexos ao modelo, mas não entregam o arquivo às
+ferramentas. Quando o agente não tem uma URL pública para uma foto ou vídeo, ele
+usa um **link de envio**:
+
+1. O agente chama `create_upload_link` e passa para você uma página como
+   `https://linkz.ee/u/...`.
+2. Você abre no celular ou no computador e escolhe os arquivos (até 10; fotos de
+   até 8 MB, vídeos de até 40 MB). O link fica aberto por 15 minutos.
+3. Você avisa o agente que terminou. Ele lê os arquivos com `get_upload` e usa
+   cada `uploadId` no lugar certo da sua página.
+
+Agentes que rodam com acesso a arquivos (Cursor, scripts, automações) também
+podem enviar os arquivos direto para o mesmo link. Quando uma foto já está
+online, o agente só passa a URL pública dela. Veja [Envio de arquivos](/pt-BR/integrations/mcp/sending-files).
+
+## Todos os clientes, as mesmas ferramentas
+
+As ações disponíveis são as mesmas em todos os clientes, limitadas apenas pelos
+escopos da sua chave. Veja a [referência de ferramentas](/pt-BR/integrations/mcp/tools-reference)
+para tudo o que um agente pode fazer via MCP.
 
 <CardGroup cols={2}>
   <Card title="Conectar o Claude" icon="comment" href="/pt-BR/integrations/mcp/claude">
-    Configuração passo a passo para usar o Linkzee com o Claude.
+    O conector para o claude.ai e a configuração do Claude Code.
+  </Card>
+  <Card title="Envio de arquivos" icon="upload" href="/pt-BR/integrations/mcp/sending-files">
+    URL ou link de envio, limites e jobs de vídeo.
+  </Card>
+  <Card title="Monte uma bio com um agente" icon="wand-magic-sparkles" href="/pt-BR/integrations/mcp/build-bio-with-agent">
+    O fluxo de uma página vazia até uma bio publicada.
   </Card>
   <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/pt-BR/integrations/mcp/tools-reference">
     Veja todas as ações que um agente de IA pode executar no seu Linkzee.

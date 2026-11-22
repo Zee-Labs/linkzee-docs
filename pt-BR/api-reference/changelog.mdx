@@ -1,0 +1,104 @@
+---
+title: Changelog
+icon: clock-rotate-left
+description: "Mudanças na API pública e no MCP que importam para quem integra."
+---
+
+Esta página lista as mudanças no contrato da API e nas ferramentas MCP que podem
+afetar uma integração. Cada entrada diz o que mudou e o que fazer.
+
+<Update label="Novembro de 2026" description="A bio completa pelo MCP e pela API" tags={["MCP", "API"]}>
+
+Um agente agora consegue montar a bio inteira: ler o estado real, enviar fotos e
+vídeos, preencher blocos de mídia, definir o design e os cards especiais, e
+decidir a ordem da página. Veja [Monte uma bio com um agente](/pt-BR/integrations/mcp/build-bio-with-agent).
+
+### Novidades
+
+- **Ferramentas MCP:** `get_store`, `list_links`, `get_content_tree`,
+  `list_collections`, `list_categories`, `get_product`, `list_ai_assistants`,
+  `list_staff`, `list_blocks`, `create_upload_link`, `get_upload`,
+  `set_block_media`, `set_link_media`, `configure_bio_cards`, `configure_tips`,
+  `update_page`, `update_review`, `manage_package`, `import_from_url` e
+  `import_bio`. O catálogo agora tem 70 ferramentas. Veja a
+  [referência de ferramentas](/pt-BR/integrations/mcp/tools-reference).
+- **Imagens por URL ou por envio:** todo campo de imagem das ferramentas MCP
+  aceita uma URL pública ou `{ "uploadId": "..." }` de um link de envio. Veja
+  [Envio de arquivos](/pt-BR/integrations/mcp/sending-files).
+- **Rotas da API:** `POST /v1/upload-links`, mais `POST /upload-tickets/files` e
+  `GET /upload-tickets/status` com o segredo `lzu_`; `GET`, `POST`, `PATCH` e
+  `DELETE` em `/v1/agenda/packages` e `/v1/agenda/subscription-plans`;
+  `POST /v1/import`; `POST /v1/links/parse`.
+- **Cards especiais na ordem:** `PUT /v1/content/order` e `reorder_content`
+  aceitam entradas `{ "type": "section", "key": "..." }` e o servidor posiciona
+  todos os cards. Veja [Conteúdo](/pt-BR/api-reference/content).
+- **Avaliações:** `PATCH /v1/agenda/reviews/{id}` aceita `featured`.
+
+### Mudanças
+
+- **`GET` e `PATCH /v1/store` retornam uma lista de permissões** (a mesma visão
+  do `get_store`). Pixels, GTM e UTM foram para um objeto `tracking`
+  (`capiTokenPreview` saiu; `tracking.capiTokenConfigured` continua), o webhook
+  de leads mostra só `host` e `enabled`, e o PIX mostra só `pixKeyPreview`.
+  `GET /v1/products/{id}` também é uma lista de permissões. Leia os novos campos
+  se a sua integração usava os antigos.
+- **Herança do tema:** `themeId` sem `overrides` aplica o preset limpo (as
+  personalizações antigas e o nível de movimento são zerados). Os outros campos
+  de design personalizam só a seção deles. Isso vale para o MCP e para o
+  `PATCH /v1/store`.
+- **`publicPreferences` é mesclado** em vez de substituído, `timezone` é
+  validado (nome inválido: `400`) e `socialOrder` aceita só chaves de rede
+  válidas.
+- **`PATCH /v1/agenda/reviews/{id}` altera só os campos enviados.** Antes, um
+  corpo sem `hidden` mostrava a avaliação de novo.
+- **Chaves de idempotência** são obrigatórias para criar pacotes, planos de
+  assinatura e para aplicar uma importação. A mesma chave com um corpo diferente
+  retorna `409`. Veja [Limites de requisições](/pt-BR/api-reference/rate-limits).
+- **Jobs de vídeo são leituras:** `GET /v1/uploads/video/jobs/{id}` e
+  `get_media_job` exigem só o escopo `read`.
+- **`GET /v1/links`** retorna todos os links, incluindo os ocultos e os
+  incompletos, sem as chaves internas de armazenamento dos vídeos.
+- **`GET /v1/content`** responde também com a página oculta, com
+  `pageHidden: true`.
+- **Links:** o fim de um agendamento precisa ser depois do início, também quando
+  você envia só uma das datas. Use ISO 8601 com o offset. A capa de um embed vem
+  só do provedor do embed.
+- **Ordem da vitrine:** `GET /v1/products` e `list_products` retornam os produtos
+  na ordem que os visitantes veem. `PUT /v1/products/order` voltou a funcionar
+  (até 5000 itens) e passa a vitrine para a ordem manual. Os itens públicos de
+  produto incluem `order`, e o formato do cursor do catálogo muda na ordem
+  manual: trate sempre `nextCursor` como um valor opaco.
+- **Limites por loja** para downloads, uploads, importações e prévias de links.
+  Veja [Limites de requisições](/pt-BR/api-reference/rate-limits).
+- **Onboarding guiado:** enquanto um onboarding guiado está aberto, uma escrita
+  na página pela API (loja, conteúdo, links, uploads, importação) o encerra, como
+  as escritas pelo MCP já faziam. Produtos, categorias e coleções não encerram.
+  Se você roda automações (n8n, scripts) em lojas novas, espere o onboarding ser
+  publicado.
+
+### MCP
+
+- **Escopos:** no MCP, `write` implica `read`. Uma chave só de finanças vê
+  apenas `get_earnings`. `disconnect_agenda_google` agora é **só por chave**,
+  como `configure_tracking` e `configure_tips`.
+- **Respostas:** um segundo bloco de texto repete o resultado em JSON, e
+  `structuredContent` traz `published`, `reason`, `warnings` e `pending`.
+- **Mídia falha fechada:** as novas ferramentas de mídia nunca publicam um
+  arquivo que não conseguiram copiar. As imagens de produtos continuam ignorando
+  uma foto ruim com um aviso.
+- **HEIC é recusado** (também no `POST /v1/uploads/image`), como SVG, TIFF e
+  PDF. No iPhone, use o formato de câmera **Mais Compatível** ou escolha pela
+  galeria.
+- **Importação dividida em duas:** `import_from_url` só lê (`prefill_link`,
+  `preview_bio`); importar é a ferramenta `import_bio`.
+
+### Obsoletos
+
+`set_appearance` (use `update_design`), `set_review_hidden` (use
+`update_review`), `op: "list"` em `manage_category` e `manage_collection` (use
+`list_categories` e `list_collections`), os campos sociais de `update_profile`
+(use `update_socials`), `vitrineEnabled` no `configure_vitrine` e `enabled` e
+`showTopCard` no `configure_agenda` (use `configure_bio_cards`), e `agendaOrder`
+(sem efeito). Eles ainda funcionam por mais uma versão.
+
+</Update>

@@ -1,0 +1,204 @@
+---
+title: Envoyer des fichiers
+icon: upload
+description: "Comment un agent d'IA fait arriver des photos et des vidéos dans votre Linkzee : une URL publique ou un lien d'envoi, avec les limites et les jobs vidéo."
+---
+
+Chaque photo et vidéo qu'un agent met sur votre page arrive dans Linkzee de l'une
+de deux façons. Linkzee copie toujours le fichier sur son propre CDN, vérifie le
+format à partir de ses octets et le stocke dans votre boutique. Un fichier qui ne
+peut pas être copié n'est jamais publié depuis un autre endroit.
+
+| Méthode | Quand l'utiliser | Ce que l'agent envoie |
+| --- | --- | --- |
+| **URL publique** | La photo ou la vidéo est déjà en ligne (votre site, un CDN, un lien de partage public qui ouvre le fichier lui-même). | L'URL, par exemple `"https://example.com/team.jpg"`. |
+| **Lien d'envoi** | Les fichiers sont sur votre téléphone, votre ordinateur ou joints à la conversation, sans URL publique. | `{ "uploadId": "..." }`, une fois les fichiers envoyés vers le lien. |
+
+## URL publique
+
+Tout champ d'image des outils MCP accepte une URL publique `http` ou `https` :
+logo, bannière, logotype, image détourée, photo hero, fond d'écran, miniature de
+lien, photos de bloc, couvertures de carte, cartes de réseaux sociaux, avatars de
+l'équipe et de l'assistant, et images de produit. Linkzee la télécharge, la
+vérifie et l'héberge.
+
+- L'URL doit ouvrir le fichier lui-même, pas une page qui l'affiche.
+- Les adresses privées et locales sont refusées.
+- Les URL vidéo fonctionnent pour la vidéo hero, la vidéo de fond et les éléments
+  vidéo d'une galerie Reel. Une **vidéo de carte de lien** ne vient jamais d'une
+  URL : envoyez-la via un lien d'envoi.
+
+## Lien d'envoi
+
+Un lien d'envoi est une page de courte durée où une personne choisit des fichiers,
+plus une adresse où un agent ou un script peut les envoyer directement. Un lien
+accepte jusqu'à 10 fichiers.
+
+<Steps>
+  <Step title="L'agent crée le lien">
+    Il appelle `create_upload_link` (MCP) ou `POST /v1/upload-links` (clé API).
+    Réglages facultatifs : `maxFiles` (de 1 à 10, 10 par défaut) et `accept`
+    (`image`, `video` ou `any`, `any` par défaut).
+
+    ```json
+    {
+      "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+      "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+      "directUpload": {
+        "method": "POST",
+        "url": "https://api.linkz.ee/upload-tickets/files",
+        "header": "Authorization: Bearer lzu_AbC123...",
+        "field": "file"
+      },
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any"
+    }
+    ```
+  </Step>
+  <Step title="Les fichiers sont envoyés">
+    **Une personne** ouvre `uploadPageUrl` sur un téléphone ou un ordinateur et
+    choisit les fichiers. La page affiche chaque fichier à mesure qu'il arrive.
+
+    **Un agent ayant accès aux fichiers** (Claude Code, Cursor, n8n, un script)
+    envoie chaque fichier vers `directUpload.url`, un fichier par requête :
+
+    ```bash
+    curl -X POST \
+      -H "Authorization: Bearer lzu_AbC123..." \
+      -F "file=@/path/to/before.jpg" \
+      https://api.linkz.ee/upload-tickets/files
+    ```
+
+    ```json
+    {
+      "error": false,
+      "message": "File received",
+      "data": {
+        "uploadId": "6740b2a1c3d4e5f6a7b8c9d1",
+        "kind": "image",
+        "status": "done",
+        "name": "before.jpg",
+        "size": 482113,
+        "w": 1600,
+        "h": 1200
+      }
+    }
+    ```
+  </Step>
+  <Step title="L'agent lit les uploadIds">
+    Il appelle `get_upload` avec le `ticketId` (ou
+    `GET https://api.linkz.ee/upload-tickets/status` avec le même en-tête
+    `Authorization: Bearer lzu_...`). Le lien est `open`, `full` ou `expired`, et
+    chaque fichier est `uploading`, `done` ou `failed`.
+
+    ```json
+    {
+      "status": "open",
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any",
+      "storeName": "Studio Ana",
+      "files": [
+        { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1", "kind": "image", "status": "done", "name": "before.jpg", "size": 482113 }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="L'agent utilise chaque fichier">
+    Il place `{ "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }` dans un champ d'image
+    ou de vidéo d'un outil MCP, par exemple dans `set_block_media`,
+    `update_design` ou `create_product`. Le fichier n'est déplacé vers son
+    emplacement définitif qu'à ce moment-là.
+  </Step>
+</Steps>
+
+<Note>
+  Les valeurs `uploadId` sont utilisées par les outils MCP. Les points de
+  terminaison REST de l'API prennent des URL : avec une clé API, envoyez les
+  images avec [`POST /v1/uploads/image`](/fr/api-reference/uploads) et passez
+  l'URL renvoyée.
+</Note>
+
+### Règles d'un lien d'envoi
+
+| Règle | Valeur |
+| --- | --- |
+| Fichiers par lien | Jusqu'à 10 (un fichier en échec n'occupe pas de place) |
+| Délai d'envoi | 15 minutes à partir de la création |
+| Durée de validité d'un `uploadId` | 24 heures, jusqu'à 5 utilisations |
+| Liens ouverts par boutique | Jusqu'à 20 en même temps, et 60 nouveaux liens par heure |
+| Qui peut en créer un | Une clé avec la portée **write**, ou le connecteur Claude |
+
+Le secret `lzu_...` fait partie de l'adresse de la page et de l'en-tête. Toute
+personne qui le possède peut envoyer des fichiers vers votre boutique jusqu'à la
+fermeture du lien, ne le partagez donc qu'avec la personne qui envoie les
+fichiers.
+
+## Formats et limites
+
+| Type | Accepté | Taille |
+| --- | --- | --- |
+| Photo | JPEG, PNG, WebP, GIF, AVIF | Jusqu'à 8 Mo |
+| Vidéo | MP4 ou MOV (H.264 ou HEVC) | Jusqu'à 40 Mo |
+
+Refusés : les photos **HEIC**, SVG, TIFF et PDF. Sur un iPhone, réglez le format
+de l'appareil photo sur **Le plus compatible**, ou choisissez la photo dans la
+galerie : l'iPhone la convertit en JPEG lorsque la page n'accepte pas le HEIC.
+
+Les photos sont converties en WebP. Le format est déterminé par les octets du
+fichier, pas par son nom ni par son type déclaré.
+
+## Vidéos et jobs
+
+Les vidéos sont optimisées en arrière-plan, l'outil répond donc immédiatement avec
+un job :
+
+| Destination | Outil | Source |
+| --- | --- | --- |
+| Vidéo hero | `set_hero_video` | URL, `uploadId`, ou `fromProducts` (générée à partir de 3 à 6 photos de produits) |
+| Vidéo de fond | `set_background_video` | URL ou `uploadId` |
+| Élément vidéo d'une galerie Reel | `set_block_media` | `{ "uploadId": "..." }` ou `{ "url": "..." }` |
+| Vidéo de carte de lien | `set_link_media` (`type: "video"`) | Uniquement `{ "uploadId": "..." }`, plus une image d'affiche |
+
+L'agent suit chaque job avec `get_media_job` jusqu'à ce qu'il soit `ready` ou
+`failed`. Lorsqu'il est prêt, la page est déjà mise à jour ; rien n'est publié
+avant. Les vidéos hero et de fond sont coupées aux 30 premières secondes et
+perdent le son ; les éléments Reel gardent le son.
+
+## Limites par boutique
+
+Les téléchargements et les envois sont comptés par boutique, quels que soient
+l'agent ou le réseau utilisés :
+
+| Quoi | Limite |
+| --- | --- |
+| Images depuis des URL | 200 par heure, 1 000 par jour, 500 Mo par jour |
+| Vidéos depuis des URL | 10 par heure, 30 par jour, 600 Mo par jour |
+| Fichiers envoyés vers des liens d'envoi | 26 par minute (photos 20, vidéos 6), 60 vidéos par jour, 2 560 Mo par jour |
+| Vidéos de carte de lien | 6 par minute, 1 536 Mo par jour |
+| Téléchargements simultanés | 2 par boutique ; un troisième attend jusqu'à 10 secondes |
+
+Au-delà d'une limite, l'appel répond `429` et vous pouvez réessayer plus tard.
+
+## Erreurs lors de l'envoi
+
+| Statut | Signification |
+| --- | --- |
+| `200` avec `status: "failed"` | Le fichier est arrivé mais son contenu a été refusé (format, fichier endommagé). Le message indique pourquoi ; envoyez un autre fichier. |
+| `400` | Aucun fichier, ou un type de fichier que le lien n'accepte pas. |
+| `401` | Lien invalide ou révoqué. |
+| `403` | La clé ou la connexion derrière le lien a été révoquée, ou l'offre n'inclut plus l'API. |
+| `409` | Le lien est plein. |
+| `410` | Le lien a expiré. Demandez-en un nouveau à l'agent. |
+| `413` | Fichier trop volumineux. |
+| `429` | Une limite de la boutique a été atteinte. |
+
+<CardGroup cols={2}>
+  <Card title="Construire une bio avec un agent" icon="wand-magic-sparkles" href="/fr/integrations/mcp/build-bio-with-agent">
+    Où les fichiers s'insèrent dans le parcours complet.
+  </Card>
+  <Card title="Envois de fichiers (API)" icon="image" href="/fr/api-reference/uploads">
+    Envoi d'images et de vidéos avec une clé API.
+  </Card>
+</CardGroup>

@@ -1,19 +1,26 @@
 ---
 title: Ratenbegrenzungen
 icon: gauge
-description: "Wie die Linkzee-API Anfragen drosselt und wie du Clients baust, die innerhalb der Limits bleiben."
+description: "Wie die Linkzee-API Anfragen drosselt, welche Limits pro Store gelten und wie Idempotency-Keys Wiederholungen sicher machen."
 ---
 
 Die Linkzee-API ist ratenbegrenzt, damit jede Integration einen fairen,
-zuverlässigen Anteil an der Kapazität erhält. Die Limits gelten pro API-Schlüssel
-und zusätzlich als Sicherheitsnetz pro Client-IP. Wenn du Anfragen in einem
-normalen, ausgewogenen Tempo sendest, wirst du sie kaum bemerken.
+zuverlässigen Anteil an der Kapazität erhält. Es gibt zwei Ebenen:
+
+- **Rate pro Anfrage**, pro Client-IP, als Sicherheitsnetz (allgemein 100
+  Anfragen pro Minute, niedriger auf den aufwendigen Routen wie Uploads und
+  Importe).
+- **Limits pro Store**, im Store gezählt, egal welcher Schlüssel, welcher Agent
+  oder welches Netzwerk die Anfrage sendet. Sie schützen die teuren Vorgänge:
+  Downloads, Uploads, Importe und Linkvorschauen.
+
+Wenn du Anfragen in einem normalen, ausgewogenen Tempo sendest, wirst du sie
+kaum bemerken.
 
 ## Wenn du ein Limit überschreitest
 
-Wenn du in einem kurzen Zeitfenster zu viele Anfragen sendest, nimmt die API
-für einen Moment keine neuen mehr an und antwortet mit HTTP `429 Too Many
-Requests`. Die Antwort verwendet das Standard-Fehlerformat:
+Wenn du in kurzer Zeit zu viele Anfragen sendest, antwortet die API mit HTTP
+`429 Too Many Requests` im Standard-Fehlerformat:
 
 ```json
 {
@@ -23,28 +30,82 @@ Requests`. Die Antwort verwendet das Standard-Fehlerformat:
 }
 ```
 
-Ein `429` ist vorübergehend. Warte einen kurzen Moment, und dieselbe Anfrage
-wird erfolgreich sein – es gehen keine Daten verloren und für den abgelehnten
-Aufruf wird deinem Konto nichts berechnet.
+Ein `429` ist vorübergehend. Warte einen Moment, und dieselbe Anfrage gelingt.
+Es gehen keine Daten verloren, und für den abgelehnten Aufruf wird nichts
+berechnet.
 
 <Note>
-Behandle `429` als „gleich noch mal versuchen", nicht als Fehler. Es bedeutet
-lediglich, dass du die Obergrenze für dieses kurze Zeitfenster erreicht hast.
+Behandle `429` als "versuch es gleich noch einmal", nicht als Fehler. Es
+bedeutet, dass du die Obergrenze für dieses Zeitfenster erreicht hast.
 </Note>
+
+## Limits pro Store
+
+Dies sind die aktuellen Werte. Sie gelten für die API, für MCP und für die
+Upload-Links gleichermaßen.
+
+| Vorgang | Limit |
+| --- | --- |
+| Eine Bio importieren (`POST /v1/import` mit `mode: "apply"`, MCP `import_bio`) | 3 pro Stunde |
+| Eine Seite lesen, um einen Link vorauszufüllen oder eine Importvorschau zu erstellen (`POST /v1/links/parse`, `POST /v1/import` mit `mode: "preview"`, MCP `import_from_url`) | 30 pro Stunde |
+| Aus URLs heruntergeladene Bilder | 200 pro Stunde, 1.000 pro Tag, 500 MB pro Tag |
+| Aus URLs heruntergeladene Videos | 10 pro Stunde, 30 pro Tag, 600 MB pro Tag |
+| Neue Upload-Links | 20 gleichzeitig offen, 60 pro Stunde |
+| An Upload-Links gesendete Dateien | 26 pro Minute (Fotos 20, Videos 6), 60 Videos pro Tag, 2.560 MB pro Tag |
+| Videos von Linkkarten | 6 pro Minute, 1.536 MB pro Tag |
+| Gleichzeitig laufende Downloads | 2; eine dritte Anfrage wartet bis zu 10 Sekunden auf einen freien Platz und erhält dann `429` |
+
+## Idempotency-Keys
+
+Einige Erstellungsvorgänge akzeptieren einen **Idempotency-Key**: einen
+eindeutigen Wert, den du für jede logische Erstellung wählst. Wenn nach einem
+Timeout, einem `429` oder einem Netzwerkaussetzer erneut versucht wird, gibt die
+API zurück, was bereits erstellt wurde, statt es doppelt zu erstellen.
+
+### Wo er gilt
+
+| Vorgang | Key |
+| --- | --- |
+| `POST /v1/products` | Optional, Header `Idempotency-Key` |
+| `POST /v1/agenda/packages` | **Erforderlich**, Header `Idempotency-Key` oder Body-Feld `idempotencyKey` |
+| `POST /v1/agenda/subscription-plans` | **Erforderlich**, Header oder Body-Feld |
+| `POST /v1/import` mit `mode: "apply"` | **Erforderlich**, Header oder Body-Feld |
+| MCP `create_link`, `create_product`, `create_products_bulk` (pro Element), `create_appointment`, `create_lead` | Optional, Argument `idempotencyKey` |
+| MCP `manage_package` mit `op: "create"`, `import_bio` | **Erforderlich**, Argument `idempotencyKey` |
+
+Wenn sowohl der Header als auch das Body-Feld gesendet werden, gewinnt der
+Header. Keys sind bis zu 200 Zeichen lang.
+
+### Wie er sich verhält
+
+| Situation | Ergebnis |
+| --- | --- |
+| Erste Anfrage mit einem neuen Key | Erstellt das Element und merkt sich den Key 24 Stunden lang. |
+| Derselbe Key, derselbe Body, innerhalb von 24 Stunden | Gibt das beim ersten Mal erstellte Element zurück (ein Import antwortet mit `replayed: true`). Es wird nichts Neues erstellt. |
+| Derselbe Key, **anderer** Body | `409 Conflict`. Verwende einen neuen Key für ein neues Element. |
+| Derselbe Key, während die erste Anfrage noch läuft | Wartet einige Sekunden, bis die erste fertig ist, und gibt ihr Ergebnis zurück, oder `409`, wenn es zu lange dauert. Versuch es nach einem Moment erneut. |
+| Key fehlt, wo er erforderlich ist | `400 Bad Request`. |
+
+Ein Key gehört zu deinem Store, zum API-Schlüssel (oder zur Verbindung), der
+ihn gesendet hat, und zum Vorgang, sodass derselbe Wert in einem anderen
+Vorgang nicht kollidiert.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
 
 ## Bewährte Vorgehensweisen
 
-Ein paar Gewohnheiten sorgen dafür, dass deine Integration bequem unter den
-Limits bleibt und widerstandsfähig ist, wenn sie doch einmal gedrosselt wird.
-
 ### Erneut versuchen mit Backoff
 
-Wenn du einen `429` erhältst, pausiere vor dem erneuten Versuch und verlängere
-die Pause bei jedem aufeinanderfolgenden Fehler (exponentielles Backoff). Füge
-etwas Zufälligkeit hinzu („Jitter"), damit nicht viele Clients gleichzeitig im
-Gleichschritt erneut versuchen.
-
-Ein einfaches, wirksames Muster:
+Wenn du ein `429` erhältst, pausiere vor dem erneuten Versuch und verlängere die
+Pause bei jedem weiteren Fehlschlag (exponentieller Backoff). Füge etwas Zufall
+hinzu ("Jitter"), damit viele Clients nicht im Gleichschritt erneut versuchen.
 
 ```bash
 # Retry with growing delays: 1s, 2s, 4s, 8s...
@@ -60,41 +121,21 @@ done
 
 ### Verteile deine Anfragen
 
-Verteile die Arbeit, anstatt alles auf einmal abzufeuern. Wenn du einen großen
+Verteile die Arbeit, statt alles auf einmal abzufeuern. Wenn du einen großen
 Katalog synchronisierst, füge eine kleine Verzögerung zwischen den Aufrufen ein,
 statt Hunderte parallel zu senden. Gleichmäßig schlägt stoßweise.
 
 ### Einmal abrufen, lokal wiederverwenden
 
 Lese-Endpunkte geben den vollständigen aktuellen Zustand zurück (zum Beispiel
-deine Produkt- oder Linkliste). Rufe ihn einmal ab, halte ihn im Speicher und
-arbeite mit deiner lokalen Kopie, anstatt dieselben Daten in einer Schleife
-erneut anzufragen.
-
-### Schreibvorgänge sicher wiederholen mit einem Idempotency-Key
-
-Beim Erstellen eines Produkts wird ein optionaler `Idempotency-Key`-Header
-akzeptiert. Sende pro logischer Erstellung einen eindeutigen Wert, und wenn nach
-einem `429` oder einem Netzwerkaussetzer ein erneuter Versuch erfolgt, gibt die
-API das bereits erstellte Produkt zurück, anstatt ein Duplikat anzulegen.
-
-```bash
-curl -X POST \
-  -H "Authorization: Bearer lzk_your_key" \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
-  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
-  https://api.linkz.ee/v1/products
-```
-
-So kannst du aggressiv erneut versuchen, ohne dir Sorgen zu machen, dasselbe
-Element zweimal zu erstellen.
+deine Produkt- oder Linkliste). Rufe ihn einmal ab, behalte ihn im Speicher und
+arbeite mit deiner lokalen Kopie, statt dieselben Daten in einer Schleife
+anzufordern.
 
 <Warning>
-Die Schwellenwerte der Ratenbegrenzung können sich im Laufe der Zeit ändern,
-während wir die Kapazität feinjustieren. Baue deinen Client so, dass er auf eine
-`429`-Antwort reagiert, statt eine feste Anzahl von Anfragen pro Sekunde fest zu
-codieren.
+Die Limits können sich im Laufe der Zeit ändern, wenn wir die Kapazität
+anpassen. Baue deinen Client so, dass er auf eine `429`-Antwort reagiert, statt
+eine feste Anzahl von Anfragen pro Sekunde fest einzuprogrammieren.
 </Warning>
 
 ## Verwandt
@@ -104,9 +145,9 @@ codieren.
     Basis-URL, Schlüssel, Scopes und Statuscodes.
   </Card>
   <Card title="Produkte" icon="box" href="/de/api-reference/products">
-    Produkte in deinem Katalog erstellen, aktualisieren und auflisten.
+    Erstelle, aktualisiere und liste Produkte in deinem Katalog auf.
   </Card>
-  <Card title="Links & Sammlungen" icon="link" href="/de/api-reference/links-collections">
-    Verwalte die Links in deiner Bio.
+  <Card title="Import" icon="file-import" href="/de/api-reference/import">
+    Importiere eine Bio und fülle Links vorab aus.
   </Card>
 </CardGroup>

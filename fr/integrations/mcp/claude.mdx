@@ -1,53 +1,96 @@
 ---
 title: Connecter Linkzee dans Claude
 icon: comment
-description: "Laissez Claude gérer votre Linkzee en langage naturel via MCP."
+description: "Laissez Claude construire et gérer votre Linkzee en langage naturel via MCP."
 ---
 
 Connectez Linkzee à **Claude** et vous pourrez gérer votre page simplement en le
-demandant — « ajoute ce produit », « qu'est-ce que j'ai de réservé cette
-semaine ? », « change mon thème ». Claude dialogue avec Linkzee via MCP à l'aide
-de votre clé API, sans que vous ayez à quitter la conversation.
+demandant : « crée ma bio », « ajoute ce produit », « qu'est-ce que j'ai de réservé
+cette semaine ? », « change mon thème ». Claude dialogue avec Linkzee via MCP, sans
+que vous ayez à quitter la conversation.
 
-## Configuration
+Il existe deux façons de se connecter. Utilisez le **connecteur** dans claude.ai et
+les applications Claude, et une **clé API** dans Claude Code.
+
+## claude.ai et les applications Claude (connecteur)
+
+Aucune clé à copier : vous vous connectez à Linkzee et vous approuvez l'accès.
 
 <Steps>
-  <Step title="Créer une clé API">
-    Dans votre tableau de bord, ouvrez la section **API et MCP** et créez une
-    clé. Copiez-la lorsqu'elle s'affiche et conservez-la en lieu sûr. Consultez
-    [Clés API](/fr/integrations/api/api-keys) pour la procédure complète.
+  <Step title="Ajouter Linkzee comme connecteur">
+    Dans Claude, ouvrez **Paramètres**, puis **Connecteurs**, et ajoutez un
+    connecteur personnalisé avec l'URL `https://api.linkz.ee/mcp`.
   </Step>
-  <Step title="Ajouter un nouveau serveur MCP dans Claude">
-    Dans **Claude Code**, l'**application de bureau Claude** ou **claude.ai**,
-    ajoutez un nouveau serveur MCP pointant vers `https://api.linkz.ee/mcp`.
-  </Step>
-  <Step title="Fournir votre clé API">
-    Définissez votre clé comme autorisation du serveur, sous la forme
-    `Bearer lzk_...`. C'est ainsi que Claude prouve qu'il agit sur votre compte.
+  <Step title="Se connecter et choisir l'accès">
+    Claude ouvre Linkzee. Connectez-vous, choisissez la boutique et ce que Claude
+    peut utiliser : **content** (votre page, toujours inclus) et, en option,
+    **agenda**, **leads** et **finance**. Les groupes facultatifs demandent une
+    connexion récente.
   </Step>
   <Step title="Demander à Claude en langage naturel">
-    Une fois connecté, décrivez simplement ce que vous voulez — « ajoute mon
-    nouveau produit en promotion », « réorganise mes liens », « change mes
-    couleurs » — et Claude s'en occupe.
+    Ouvrez une conversation et décrivez ce que vous voulez. Pour créer une
+    nouvelle page, dites « Crée ma bio sur Linkzee. ». Claude demande le reste.
   </Step>
 </Steps>
 
+Vous pouvez voir et déconnecter chaque application connectée dans **Paramètres**,
+**API et MCP**, sous **Connexions**. La déconnexion prend effet immédiatement.
+
 <Note>
-  Claude fonctionne avec le même ensemble d'actions listées dans la
-  [référence des outils](/fr/integrations/mcp/tools-reference) : tout ce qu'un agent
-  peut faire via MCP, vous pouvez le demander dans la conversation.
+  Le connecteur ne voit jamais trois outils : les pixels de suivi et GTM
+  (`configure_tracking`), la clé PIX des pourboires (`configure_tips`) et la
+  déconnexion de Google Agenda (`disconnect_agenda_google`). Utilisez une clé API
+  pour eux, ou modifiez-les dans le tableau de bord.
 </Note>
 
+## Claude Code (clé API)
+
+<Steps>
+  <Step title="Créer une clé API">
+    Dans votre tableau de bord, ouvrez **Paramètres**, **API et MCP**, et créez
+    une clé avec la portée **write** (elle permet aussi de lire). Copiez-la
+    lorsqu'elle s'affiche. Consultez [Clés API](/fr/integrations/api/api-keys)
+    pour la procédure complète.
+  </Step>
+  <Step title="Ajouter le serveur">
+    Exécutez ceci dans votre terminal, en remplaçant `lzk_your_key` par votre clé :
+
+    ```bash
+    claude mcp add --transport http linkzee https://api.linkz.ee/mcp \
+      --header "Authorization: Bearer lzk_your_key"
+    ```
+  </Step>
+  <Step title="Demander à Claude">
+    Lancez Claude Code et demandez, par exemple, « liste mes liens et masque ceux
+    qui pointent vers d'anciennes promotions ».
+  </Step>
+</Steps>
+
+## Photos et vidéos depuis la conversation
+
+Lorsque vous joignez une photo dans claude.ai, Claude voit l'image mais ne reçoit
+pas le fichier pour l'envoyer. Dans ce cas, Claude crée un **lien d'envoi** et vous
+le donne : ouvrez-le, choisissez les photos ou les vidéos sur votre téléphone ou
+votre ordinateur, et prévenez Claude quand vous avez terminé. Claude Code peut
+envoyer lui-même des fichiers locaux vers ce lien. Voir
+[Envoyer des fichiers](/fr/integrations/mcp/sending-files).
+
 <Warning>
-  Votre clé API agit sur votre compte. Ne la collez jamais dans une conversation
-  publique et ne la partagez pas — traitez-la comme un mot de passe.
+  Votre clé API agit sur votre boutique. Ne la collez jamais dans une conversation
+  publique et ne la partagez pas. Traitez-la comme un mot de passe.
 </Warning>
 
 <CardGroup cols={2}>
+  <Card title="Construire une bio avec un agent" icon="wand-magic-sparkles" href="/fr/integrations/mcp/build-bio-with-agent">
+    Le parcours que Claude suit pour construire votre page de zéro.
+  </Card>
   <Card title="Référence des outils" icon="screwdriver-wrench" href="/fr/integrations/mcp/tools-reference">
     Découvrez tout ce que Claude peut faire avec votre Linkzee via MCP.
   </Card>
+  <Card title="Envoyer des fichiers" icon="upload" href="/fr/integrations/mcp/sending-files">
+    Photos et vidéos par URL ou par lien d'envoi.
+  </Card>
   <Card title="Clés API" icon="key" href="/fr/integrations/api/api-keys">
-    Créez, limitez et révoquez les clés qui connectent Claude à votre compte.
+    Créez, limitez et révoquez les clés qui connectent Claude Code.
   </Card>
 </CardGroup>

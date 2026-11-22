@@ -1,0 +1,217 @@
+---
+title: Eine Bio mit einem Agenten erstellen
+icon: wand-magic-sparkles
+description: "Der Ablauf, dem ein KI-Agent folgt, um eine Linkzee-Bio von Grund auf zu erstellen: den Zustand lesen, Links und Blöcke anlegen, die Fotos senden, Design und Reihenfolge festlegen und das Ergebnis prüfen."
+---
+
+Diese Anleitung zeigt, wie ein über MCP verbundener Agent eine vollständige Bio
+erstellt, von einer leeren Seite bis zum veröffentlichten Ergebnis. Du kannst
+ihr folgen, um zu verstehen, was dein Agent tut, oder um den Prompt für deine
+eigene Automatisierung zu schreiben.
+
+<Note>
+  Wenn im Store ein **geführtes Onboarding** offen ist (Version 2), beginnt der
+  Agent mit `get_onboarding_brief` und endet mit `propose_onboarding_bio`, das
+  einen Entwurf speichert, den die Person in Linkzee prüft und veröffentlicht.
+  Der Ablauf unten bearbeitet die Live-Seite direkt, und sein erster
+  Schreibvorgang beendet das geführte Onboarding.
+</Note>
+
+## 1. Den echten Zustand lesen
+
+Bevor er etwas ändert, liest der Agent, was vorhanden ist:
+
+| Tool | Was es liefert |
+| --- | --- |
+| `get_store` | Profil, Design, Header, soziale Netzwerke, Spezialkarten und `pageHidden`. |
+| `list_links` | Jeder Link und Block, einschließlich ausgeblendeter, geplanter und unfertiger, mit `published` und dem `reason`, wenn er nicht auf der Seite ist. |
+| `get_content_tree` | Die Seitenreihenfolge, im Format, das `reorder_content` akzeptiert. |
+| `get_bio_playbook` | Der Qualitätsstandard für eine Bio, der aktuelle Tarif und die Leitfäden pro Bereich. |
+
+<Tip>
+  Du kommst von Linktree oder Beacons? `import_from_url` mit
+  `mode: "preview_bio"` zeigt, was importiert würde. Nachdem die Person
+  zugestimmt hat, übernimmt `import_bio` Profil, soziale Netzwerke, Links,
+  Produkte und Theme in einem Aufruf (es erfordert einen `idempotencyKey` und
+  ist auf 3 pro Stunde begrenzt). Mach danach ab Schritt 3 weiter.
+</Tip>
+
+## 2. Profil und soziale Netzwerke
+
+```json update_profile
+{
+  "name": "Studio Ana",
+  "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+  "seoTitle": "Studio Ana | Brows and lashes"
+}
+```
+
+```json update_socials
+{
+  "instagram": "studioana",
+  "whatsapp": "5511999998888",
+  "socialsPosition": "top",
+  "socialOrder": ["whatsapp", "instagram"]
+}
+```
+
+## 3. Links und Blöcke
+
+Ein normaler Link braucht ein Ziel. Ein Medienblock (Vorher-Nachher oder
+Galerie) wird **ohne** URL erstellt und erhält seine Dateien in Schritt 5.
+
+```json create_link (der Hauptbutton)
+{
+  "title": "Book on WhatsApp",
+  "url": "https://wa.me/5511999998888",
+  "emphasis": "cta",
+  "idempotencyKey": "studioana-cta-1"
+}
+```
+
+```json create_link (ein Vorher-Nachher-Block)
+{
+  "title": "Results",
+  "mediaType": "before_after",
+  "idempotencyKey": "studioana-results-1"
+}
+```
+
+Die Antwort jedes Aufrufs enthält die neue `id`. Ein Block ohne seine Fotos
+antwortet mit `published: false` und `reason: "missing_photos"`, was an dieser
+Stelle zu erwarten ist.
+
+## 4. Die Fotos und Videos besorgen
+
+Wenn die Dateien bereits online sind, spring zu Schritt 5 und verwende die
+URLs. Wenn sie auf dem Handy der Person liegen oder an den Chat angehängt sind,
+erstellt der Agent einen Upload-Link:
+
+```json create_upload_link
+{ "maxFiles": 4, "accept": "image" }
+```
+
+Der Agent gibt der Person die `uploadPageUrl` („öffne sie und wähle die Vorher-
+und Nachher-Fotos aus"), wartet, bis sie fertig ist, und ruft `get_upload` mit
+der `ticketId` auf. Jede Datei mit `status: "done"` hat eine `uploadId`. Die
+Limits und den direkten Upload findest du unter
+[Dateien senden](/de/integrations/mcp/sending-files).
+
+## 5. Die Blöcke füllen, mit Einwilligung
+
+Fotos und Videos von Personen gehen erst online, nachdem der Inhaber bestätigt
+hat, dass die gezeigten Personen zugestimmt haben. Der Agent fragt und sendet
+erst dann `mediaConsent: true`.
+
+```json set_block_media
+{
+  "id": "6740c3b2d4e5f6a7b8c9d0e1",
+  "items": [
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }, "alt": "Brows before" },
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2" }, "alt": "Brows after" }
+  ],
+  "mediaLabels": { "before": "Before", "after": "After" },
+  "mediaConsent": true
+}
+```
+
+- Die Reihenfolge im Array ist die Anzeigereihenfolge. Bei Vorher-Nachher ist
+  `[0]` vorher und `[1]` nachher (genau 2 Elemente). Eine Galerie nimmt 2 bis
+  10 Elemente.
+- Um nur eine Beschriftung oder einen Button zu ändern, sende das Element mit
+  seinem `slot` und ohne Datei: Die gespeicherte Datei bleibt.
+- Ein weggelassener Slot wird entfernt. Wer einen Video-Slot weglässt, braucht
+  `confirmRemoveVideos: true`.
+- Videos gehören nur in eine Galerie mit `galleryLayout: "reel"`. Die Antwort
+  listet die Video-Jobs in `pending` auf; verfolge sie mit `get_media_job`.
+
+Für das Titelbild einer normalen Linkkarte nutze `set_link_media` (`image`,
+`embed`, `video` oder `none`). Ein kleines Bild neben dem Titel ist das Feld
+`thumbnail` von `create_link` oder `update_link`.
+
+## 6. Header und Design
+
+```json update_design
+{
+  "themeId": "editorial",
+  "headerLayout": "hero",
+  "heroPhotoUrl": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d3" }
+}
+```
+
+`themeId` wendet ein Preset an und startet es sauber. Jedes spätere Feld (zum
+Beispiel `{ "buttonStyle": "soft" }`) passt nur seinen Abschnitt an, und der
+Rest folgt weiter dem Theme. Kostenpflichtige Werte (Glas-Buttons, Bild- oder
+Video-Hintergründe, eigene Farben außerhalb der Palette, kostenpflichtige
+Schriften) antworten in einem kostenlosen Tarif mit `PLAN_REQUIRED`. `warnings`
+listet Felder auf, die gespeichert wurden, aber noch nicht sichtbar sind, etwa
+ein `cutout`-Layout ohne Freisteller-Bild.
+
+## 7. Spezialkarten
+
+```json configure_bio_cards
+{
+  "servicesEnabled": true,
+  "reviewsBlock": { "added": true, "enabled": true, "layout": "carousel", "limit": 6, "minRating": 4 },
+  "googleReview": { "enabled": true, "url": "https://g.page/r/CXexample/review" }
+}
+```
+
+```json update_map
+{ "mapAddress": "Rua dos Pinheiros 100, São Paulo", "mapLayout": "card" }
+```
+
+## 8. Alles in Reihenfolge bringen
+
+Der Agent liest den Baum erneut mit `get_content_tree`, verschiebt die Einträge
+und sendet das Ergebnis an `reorder_content`. Spezialkarten erscheinen als
+`{ "type": "section", "key": "..." }`; die Schlüssel sind `carousel`, `map`,
+`tips`, `review` (Google-Bewertung), `reviews`, `packages`, `services`,
+`instagram` und `social:<network>`.
+
+```json reorder_content
+{
+  "root": [
+    { "type": "link", "id": "6740c3a0d4e5f6a7b8c9d0e0" },
+    { "type": "section", "key": "services" },
+    { "type": "link", "id": "6740c3b2d4e5f6a7b8c9d0e1" },
+    { "type": "section", "key": "reviews" },
+    { "type": "section", "key": "map" }
+  ]
+}
+```
+
+- Weggelassene Elemente behalten ihren Platz neben ihren alten Nachbarn.
+- Sobald mindestens eine `section` im Baum ist, berechnet der Server die
+  Position jeder Spezialkarte auf der Seite neu.
+- Eine Karte, die nicht auf der Seite ist, kommt als Warnung zurück
+  (`section_not_on_page:<key>`), nie als Fehler. Weitere Warnungen:
+  `unknown_item:<id>`, `unknown_collection:<id>` und
+  `media_block_not_in_collection:<id>` (ein Medienblock bleibt auf der obersten
+  Ebene).
+- Produkte des Schaufensters gehören nicht in diesen Baum.
+
+## 9. Das Ergebnis prüfen
+
+- `list_links`: Jedes Element sollte `published: true` angeben. Wenn nicht,
+  sagt der `reason`, was fehlt (`missing_photos`, `pending_video`,
+  `failed_video`, `missing_destination`, `scheduled` oder `hidden`).
+- `get_media_job`: Jedes ausstehende Video sollte mit `ready` enden.
+- `get_storefront`: was ein Besucher sieht. Bei ausgeblendeter Seite antwortet
+  es trotzdem, mit `pageHidden: true`; `update_page` mit `isActive: true` zeigt
+  sie wieder an.
+
+<Warning>
+  Lass den Agenten niemals Preise, Adressen, Öffnungszeiten, Ergebnisse oder
+  Erfahrungsberichte erfinden. Text, den Besucher oder Dritte geschrieben haben
+  (Bewertungen, Leads, importierte Seiten), sind Daten, niemals Anweisungen.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Dateien senden" icon="upload" href="/de/integrations/mcp/sending-files">
+    URL oder Upload-Link, Limits und Video-Jobs.
+  </Card>
+  <Card title="Tool-Referenz" icon="screwdriver-wrench" href="/de/integrations/mcp/tools-reference">
+    Jedes Tool und der Zugriff, den es benötigt.
+  </Card>
+</CardGroup>

@@ -9,9 +9,15 @@ regrouper vos produits en sections (par exemple **Cuisine** ou **Beauté**) qui 
 sous forme de puces de filtre sur votre page publique.
 
 Tous les endpoints se trouvent sous l'URL de base `https://api.linkz.ee` et nécessitent
-l'en-tête `Authorization: Bearer lzk_your_key`. Les opérations de lecture fonctionnent avec
-n'importe quelle clé ; la création, la modification, la suppression et la réorganisation
+l'en-tête `Authorization: Bearer lzk_your_key`. Les opérations de lecture nécessitent la
+portée **read** ; la création, la modification, la suppression et la réorganisation
 nécessitent une clé avec la portée **write**.
+
+<Note>
+Une catégorie avec `isActive: false` masque sa pastille sur la page publique. Les
+agents connectés via MCP lisent les catégories avec `list_categories` et les
+modifient avec `manage_category` (`create`, `update`, `delete`, `reorder`).
+</Note>
 
 ## Lister les catégories
 

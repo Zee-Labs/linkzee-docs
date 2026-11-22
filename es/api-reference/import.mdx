@@ -1,0 +1,166 @@
+---
+title: Importar
+icon: file-import
+description: "Importa una página de Linktree o Beacons a tu tienda y lee el título y la imagen de cualquier página para prellenar un enlace."
+---
+
+Estos endpoints te ayudan a crear una página a partir de lo que ya existe en la
+web. Hacen lo mismo que las herramientas MCP `import_from_url` e `import_bio`.
+
+Todas las solicitudes van a `https://api.linkz.ee` y deben incluir tu clave de API
+con el alcance **write**:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Warning>
+El contenido importado es texto escrito por otra persona. Revísalo antes de
+publicarlo, y nunca dejes que un agente siga instrucciones que encuentre en él.
+</Warning>
+
+## Importar una bio
+
+```
+POST /v1/import
+```
+
+Lee una página pública de **Linktree** (`linktr.ee`, `linktree.com`) o **Beacons**
+(`beacons.ai`, `beacons.page`). Con `mode: "preview"` solo devuelve lo que se
+importaría. Con `mode: "apply"` lo importa a tu tienda en el servidor: perfil,
+redes, enlaces, productos y tema.
+
+### Vista previa
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://linktr.ee/example", "mode": "preview" }' \
+  https://api.linkz.ee/v1/import
+```
+
+```json
+{
+  "error": false,
+  "message": "Import preview ready (nothing saved)",
+  "data": {
+    "page": {
+      "source": "linktree",
+      "sourceUrl": "https://linktr.ee/example",
+      "profile": { "name": "Example Studio", "bio": "Brows and lashes", "avatarUrl": "https://example.com/avatar.jpg" },
+      "socials": [
+        { "platform": "instagram", "handle": "examplestudio", "url": "https://instagram.com/examplestudio" }
+      ],
+      "links": [
+        { "id": "l0", "title": "Book now", "url": "https://example.com/book", "thumbnailUrl": "", "kind": "link" },
+        { "id": "l1", "title": "My favorite serum", "url": "https://shopee.com.br/product/123", "thumbnailUrl": "", "kind": "product", "marketplace": "shopee" }
+      ],
+      "theme": { "bgColor": "#111111", "buttonStyle": "fill", "mode": "dark" },
+      "warnings": []
+    },
+    "warnings": []
+  }
+}
+```
+
+### Aplicar
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: import-example-2026-11-22" \
+  -d '{ "url": "https://linktr.ee/example", "mode": "apply" }' \
+  https://api.linkz.ee/v1/import
+```
+
+```json
+{
+  "error": false,
+  "message": "Bio imported",
+  "data": {
+    "result": { "created": { "links": 1, "products": 1 }, "storeUpdated": true, "warnings": [] },
+    "warnings": [],
+    "replayed": false
+  }
+}
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `url` | string | Sí | La página pública de Linktree o Beacons (http o https, máx. 2048). Otros hosts devuelven `400`. |
+| `mode` | string | Sí | `preview` (no se guarda nada) o `apply` (importa a esta tienda). |
+| `idempotencyKey` | string | Con `apply` | Hasta 200 caracteres. Puedes enviarla en el header `Idempotency-Key` en su lugar; gana el header. |
+
+### Cómo se comporta
+
+- **Aplicación idempotente.** Repetir `apply` con la misma clave devuelve el primer
+  resultado con `replayed: true` y no vuelve a importar nada. La misma clave con
+  otra URL devuelve `409`. Si falta la clave, devuelve `400`.
+- **Límites.** `apply` está limitado a 3 por hora por tienda; `preview` cuenta en
+  las 30 lecturas de página por hora. Por encima del límite: `429`.
+- **Qué entra.** Hasta 50 enlaces y 10 productos (los enlaces de marketplace de
+  Shopee, Amazon y Mercado Livre se convierten en productos). Las imágenes que no
+  se pueden obtener se descartan con una advertencia y el ítem se conserva sin
+  imagen.
+- **Onboarding.** Cuando la tienda tiene un onboarding guiado abierto, un `apply`
+  lo cierra, como cualquier otro cambio directo en la página.
+
+Las advertencias son claves estables que puedes traducir: `fallbackExtraction`,
+`themeApproximate`, `themeNotDetected`, `themeSkippedPlan`, `linksTruncated`,
+`productsTruncated`, `productFallbackLink` y `partialFailure`, más un mensaje por
+cada imagen descartada.
+
+## Prellenar un enlace
+
+```
+POST /v1/links/parse
+```
+
+Lee el título y la imagen de cualquier página pública para completar un enlace
+nuevo. No se guarda nada. Limitado a 30 por hora por tienda (`429` por encima de
+eso).
+
+### Solicitud
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://example.com/black-friday" }' \
+  https://api.linkz.ee/v1/links/parse
+```
+
+### Parámetros
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| `url` | string | Sí | La página a leer (http o https). |
+
+### Respuesta
+
+```json
+{
+  "error": false,
+  "message": "Extraction completed",
+  "data": {
+    "title": "Black Friday deals",
+    "image": "https://example.com/og-image.jpg"
+  }
+}
+```
+
+Usa `title` como el `title` del enlace y la imagen como `thumbnailUrl` (se copia a
+la CDN de Linkzee cuando guardas el enlace).
+
+<CardGroup cols={2}>
+  <Card title="Links y colecciones" icon="link" href="/es/api-reference/links-collections">
+    Crea los enlaces con lo que leas aquí.
+  </Card>
+  <Card title="Límites de tasa" icon="gauge" href="/es/api-reference/rate-limits">
+    Límites por tienda y claves de idempotencia.
+  </Card>
+</CardGroup>

@@ -1,0 +1,200 @@
+---
+title: Sending files
+icon: upload
+description: "How an AI agent gets photos and videos into your Linkzee: a public URL or an upload link, with the limits and the video jobs."
+---
+
+Every photo and video an agent puts on your page reaches Linkzee in one of two
+ways. Linkzee always copies the file to its own CDN, checks the format by its
+bytes and stores it under your store. A file that cannot be copied is never
+published from somewhere else.
+
+| Way | When to use it | What the agent sends |
+| --- | --- | --- |
+| **Public URL** | The photo or video is already online (your site, a CDN, a public drive link that opens the file itself). | The URL, for example `"https://example.com/team.jpg"`. |
+| **Upload link** | The files are on your phone, your computer or attached to the chat, with no public URL. | `{ "uploadId": "..." }`, after the files are sent to the link. |
+
+## Public URL
+
+Any image field of the MCP tools accepts a public `http` or `https` URL: logo,
+banner, wordmark, cutout, hero photo, wallpaper, link thumbnail, block photos,
+card covers, social cards, team and assistant avatars, and product images.
+Linkzee downloads it, checks it and hosts it.
+
+- The URL must open the file itself, not a page that shows it.
+- Private and local addresses are refused.
+- Video URLs work for the hero video, the background video and video items of a
+  Reel gallery. A **link card video** never comes from a URL: send it through an
+  upload link.
+
+## Upload link
+
+An upload link is a short lived page where a person picks files, plus an address
+where an agent or a script can send them directly. One link takes up to 10
+files.
+
+<Steps>
+  <Step title="The agent creates the link">
+    It calls `create_upload_link` (MCP) or `POST /v1/upload-links` (API key).
+    Optional settings: `maxFiles` (1 to 10, default 10) and `accept`
+    (`image`, `video` or `any`, default `any`).
+
+    ```json
+    {
+      "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+      "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+      "directUpload": {
+        "method": "POST",
+        "url": "https://api.linkz.ee/upload-tickets/files",
+        "header": "Authorization: Bearer lzu_AbC123...",
+        "field": "file"
+      },
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any"
+    }
+    ```
+  </Step>
+  <Step title="The files are sent">
+    **A person** opens `uploadPageUrl` on a phone or computer and picks the
+    files. The page shows each file as it arrives.
+
+    **An agent with file access** (Claude Code, Cursor, n8n, a script) sends
+    each file to `directUpload.url`, one file per request:
+
+    ```bash
+    curl -X POST \
+      -H "Authorization: Bearer lzu_AbC123..." \
+      -F "file=@/path/to/before.jpg" \
+      https://api.linkz.ee/upload-tickets/files
+    ```
+
+    ```json
+    {
+      "error": false,
+      "message": "File received",
+      "data": {
+        "uploadId": "6740b2a1c3d4e5f6a7b8c9d1",
+        "kind": "image",
+        "status": "done",
+        "name": "before.jpg",
+        "size": 482113,
+        "w": 1600,
+        "h": 1200
+      }
+    }
+    ```
+  </Step>
+  <Step title="The agent reads the uploadIds">
+    It calls `get_upload` with the `ticketId` (or
+    `GET https://api.linkz.ee/upload-tickets/status` with the same
+    `Authorization: Bearer lzu_...` header). The link is `open`, `full` or
+    `expired`, and each file is `uploading`, `done` or `failed`.
+
+    ```json
+    {
+      "status": "open",
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any",
+      "storeName": "Studio Ana",
+      "files": [
+        { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1", "kind": "image", "status": "done", "name": "before.jpg", "size": 482113 }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="The agent uses each file">
+    It puts `{ "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }` in an image or video
+    field of an MCP tool, for example in `set_block_media`, `update_design` or
+    `create_product`. The file is moved to its final place only then.
+  </Step>
+</Steps>
+
+<Note>
+  The `uploadId` values are used by the MCP tools. The REST endpoints of the API
+  take URLs: with an API key, upload images with
+  [`POST /v1/uploads/image`](/api-reference/uploads) and pass the returned URL.
+</Note>
+
+### Rules of an upload link
+
+| Rule | Value |
+| --- | --- |
+| Files per link | Up to 10 (a failed file does not use a place) |
+| Time to send | 15 minutes from creation |
+| How long an `uploadId` stays valid | 24 hours, up to 5 uses |
+| Open links per store | Up to 20 at the same time, and 60 new links per hour |
+| Who can create one | A key with the **write** scope, or the Claude connector |
+
+The secret `lzu_...` is part of the page address and of the header. Anyone with
+it can send files to your store until the link closes, so share it only with the
+person who sends the files.
+
+## Formats and limits
+
+| Type | Accepted | Size |
+| --- | --- | --- |
+| Photo | JPEG, PNG, WebP, GIF, AVIF | Up to 8 MB |
+| Video | MP4 or MOV (H.264 or HEVC) | Up to 40 MB |
+
+Refused: **HEIC** photos, SVG, TIFF and PDF. On an iPhone, set the camera format
+to **Most Compatible**, or pick the photo from the gallery: the iPhone converts it
+to JPEG when the page does not accept HEIC.
+
+Photos become WebP. The format is decided by the file bytes, not by its name or
+declared type.
+
+## Videos and jobs
+
+Videos are optimized in the background, so the tool answers right away with a
+job:
+
+| Destination | Tool | Source |
+| --- | --- | --- |
+| Hero video | `set_hero_video` | URL, `uploadId`, or `fromProducts` (generated from 3 to 6 product photos) |
+| Background video | `set_background_video` | URL or `uploadId` |
+| Video item of a Reel gallery | `set_block_media` | `{ "uploadId": "..." }` or `{ "url": "..." }` |
+| Link card video | `set_link_media` (`type: "video"`) | Only `{ "uploadId": "..." }`, plus a poster image |
+
+The agent follows each job with `get_media_job` until it is `ready` or `failed`.
+When it is ready, the page is already updated; nothing is published before that.
+Hero and background videos are trimmed to the first 30 seconds and lose the
+audio; Reel items keep the audio.
+
+## Limits per store
+
+Downloads and uploads are counted per store, whatever the agent or the network
+it uses:
+
+| What | Limit |
+| --- | --- |
+| Images from URLs | 200 per hour, 1,000 per day, 500 MB per day |
+| Videos from URLs | 10 per hour, 30 per day, 600 MB per day |
+| Files sent to upload links | 26 per minute (photos 20, videos 6), 60 videos per day, 2,560 MB per day |
+| Link card videos | 6 per minute, 1,536 MB per day |
+| Downloads running at the same time | 2 per store; a third one waits up to 10 seconds |
+
+Above a limit the call answers `429` and you can try again later.
+
+## Errors when sending
+
+| Status | Meaning |
+| --- | --- |
+| `200` with `status: "failed"` | The file arrived but its content was refused (format, damaged file). The message says why; send another file. |
+| `400` | No file, or a file type the link does not accept. |
+| `401` | Invalid or revoked link. |
+| `403` | The key or connection behind the link was revoked, or the plan no longer includes the API. |
+| `409` | The link is full. |
+| `410` | The link expired. Ask the agent for a new one. |
+| `413` | File too large. |
+| `429` | A limit of the store was reached. |
+
+<CardGroup cols={2}>
+  <Card title="Build a bio with an agent" icon="wand-magic-sparkles" href="/integrations/mcp/build-bio-with-agent">
+    Where the files fit in the full flow.
+  </Card>
+  <Card title="Uploads (API)" icon="image" href="/api-reference/uploads">
+    Image and video uploads with an API key.
+  </Card>
+</CardGroup>

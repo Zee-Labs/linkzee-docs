@@ -1,13 +1,13 @@
 ---
 title: Content
 icon: table-cells
-description: "Read the public content tree of a page and reorder its links and collections."
+description: "Read the content tree of a page and reorder its links, collections, AI assistants and special cards."
 ---
 
-The content endpoints expose everything a visitor sees on a page's link zone —
-loose links, collections (groups of links), and AI assistant items — plus a `meta`
+The content endpoints expose what a visitor sees in the links zone of a page:
+loose links, collections (groups of links) and AI assistant items, plus a `meta`
 block that summarizes the product showcase (counters, category chips, featured
-products, and the first page of the catalog).
+products and the first page of the catalog).
 
 All requests go to `https://api.linkz.ee` and must include your API key:
 
@@ -16,9 +16,10 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-Products are not part of the reorderable tree. The showcase is ordered
-automatically (newest first), so reordering only affects links, collections, and
-AI assistant items. Product entries sent to the reorder endpoint are ignored.
+Products are not part of the reorderable tree. The showcase follows its own
+order (newest first, or the manual order set with
+[`PUT /v1/products/order`](/api-reference/products)). Product entries sent to the
+reorder endpoint are ignored.
 </Note>
 
 ## Get content tree
@@ -27,8 +28,9 @@ AI assistant items. Product entries sent to the reorder endpoint are ignored.
 GET /v1/content
 ```
 
-Returns the public content tree for your page, plus a `meta` summary of the
-product showcase.
+Returns the content tree of your page, plus a `meta` summary of the product
+showcase. It is the owner view: it answers even when the page is hidden, and
+then `pageHidden` is `true` (the public page returns `404` in that case).
 
 ### Request
 
@@ -40,9 +42,9 @@ curl -X GET \
 
 ### Response
 
-The `data` object has two parts: `meta` (showcase summary) and `root` (the
-ordered list of content entries). Each `root` entry is one of `link`,
-`collection`, or `ai_assistant`.
+The `data` object has three parts: `meta` (showcase summary), `root` (the ordered
+list of content entries, each one a `link`, a `collection` or an
+`ai_assistant`) and `pageHidden`.
 
 ```json
 {
@@ -58,13 +60,11 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "categoryId": "507f1f77bcf86cd799439040",
           "name": "Wireless Headphones",
           "slug": "wireless-headphones",
-          "description": "Noise cancelling, 30h battery",
           "price": 249.9,
           "priceOriginal": 349.9,
           "installments": "12x R$ 20,82",
           "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
           "externalLink": "https://shopee.com.br/product/...",
-          "affiliateSource": "shopee",
           "buttonText": "Buy now",
           "badge": "OFFER",
           "isActive": true,
@@ -76,6 +76,7 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "showCountdown": true,
           "cardSize": "normal",
           "imageRatio": 1,
+          "order": 0,
           "createdAt": "2026-07-18T12:00:00.000Z"
         }
       ],
@@ -93,6 +94,7 @@ ordered list of content entries). Each `root` entry is one of `link`,
             "externalLink": "https://amazon.com.br/dp/...",
             "isActive": true,
             "clicks": 44,
+            "order": 1,
             "createdAt": "2026-07-18T10:00:00.000Z"
           }
         ],
@@ -112,7 +114,7 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "order": 0,
           "isActive": true,
           "highlightFx": "",
-          "mediaType": "video",
+          "mediaType": "embed",
           "mediaUrl": "https://youtube.com/watch?v=...",
           "posterUrl": null,
           "mediaProvider": "youtube"
@@ -149,34 +151,28 @@ ordered list of content entries). Each `root` entry is one of `link`,
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
           "opening": "Hi! How can I help you shop today?",
           "starterButtons": ["Best deals", "Track my order"],
-          "order": 2,
-          "leadCapture": {
-            "enabled": true,
-            "timing": "end",
-            "fields": [{ "key": "email", "enabled": true, "required": true }],
-            "introText": "Leave your email for exclusive offers",
-            "consentRequired": true,
-            "consentText": "I agree to receive messages",
-            "consentVersion": "v1",
-            "allowSkip": false
-          }
+          "order": 2
         }
       }
-    ]
+    ],
+    "pageHidden": false
   }
 }
 ```
 
 <Note>
-When the showcase is hidden, `meta` counters return `0` and `featured`,
-`categories`, and `catalog.items` come back empty. Empty collections (no active
-children) are dropped from `root`.
+When the showcase is hidden, the `meta` counters return `0` and `featured`,
+`categories` and `catalog.items` come back empty. Empty collections (no active
+children) are dropped from `root`. Special cards (map, reviews, services and the
+others) are not part of this response; their position is set with the reorder
+endpoint below.
 </Note>
 
-A few fields worth knowing: `highlightFx` is a string — `""` (none), `"shake"`,
-`"shine"`, `"pulse"`, or `"bounce"` (the Premium animated highlight);
-`cardSize` is `"normal"` or `"wide"` (a wide card spans both grid columns); and
-`imageRatio` is a number (image width divided by height, e.g. `1` for square).
+A few fields worth knowing: `highlightFx` is a string, `""` (none), `"shake"`,
+`"shine"`, `"pulse"` or `"bounce"` (the Premium animated highlight); `cardSize`
+is `"normal"` or `"wide"` (a wide card spans both grid columns); `imageRatio` is
+the image width divided by its height (`1` for square); and `order` is the
+product position, used by the catalog cursor in manual order.
 
 ## Reorder content
 
@@ -184,9 +180,10 @@ A few fields worth knowing: `highlightFx` is a string — `""` (none), `"shake"`
 PUT /v1/content/order
 ```
 
-Sets the order of the entire link zone in one call. Send the full tree in the
-order you want — each entry's position in the array becomes its new order.
-Requires a key with the **write** scope.
+Sets the order of the links zone in one call: links, collections, AI assistants
+and the special cards. Each entry's position in the array becomes its new order.
+Requires a key with the **write** scope. The MCP tool `reorder_content` uses the
+same rules, and `get_content_tree` returns the tree in this exact format.
 
 ### Request
 
@@ -197,6 +194,7 @@ curl -X PUT \
   -d '{
     "root": [
       { "type": "link", "id": "507f1f77bcf86cd799439011" },
+      { "type": "section", "key": "services" },
       {
         "type": "collection",
         "id": "507f1f77bcf86cd799439020",
@@ -204,7 +202,9 @@ curl -X PUT \
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
           { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
-      }
+      },
+      { "type": "section", "key": "reviews" },
+      { "type": "section", "key": "map" }
     ]
   }' \
   https://api.linkz.ee/v1/content/order
@@ -214,17 +214,38 @@ curl -X PUT \
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `root` | array | Yes | Top-level entries in their new order. May be empty. |
-| `root[].type` | string | Yes | One of `link`, `collection`, `ai_assistant`, or `product`. |
-| `root[].id` | string | Yes | The entry's ID. |
+| `root` | array | Yes | Top level entries in their new order. May be empty. |
+| `root[].type` | string | Yes | `link`, `collection`, `ai_assistant`, `section` or `product` (ignored). |
+| `root[].id` | string | Except for `section` | The entry's ID. |
+| `root[].key` | string | With `section` | The special card: `carousel`, `map`, `tips`, `review` (Google review), `reviews`, `packages`, `services`, `instagram` or `social:<network>` (for example `social:instagram`). |
 | `root[].children` | array | No | Child items, in order. Only used when `type` is `collection`. |
-| `root[].children[].type` | string | Yes | One of `link`, `ai_assistant`, or `product`. |
+| `root[].children[].type` | string | Yes | `link`, `ai_assistant` or `product` (ignored). |
 | `root[].children[].id` | string | Yes | The child item's ID. |
 
+### How the server applies the tree
+
+- **Incomplete tree.** Links and collections you leave out are not lost: they
+  keep their place next to their old neighbors. The children of a collection sent
+  without `children` stay as they are. AI assistants move only when they are in
+  the tree.
+- **Special cards.** With at least one `section` in the tree, the server
+  recalculates the position of **every** special card on the page (the cards you
+  left out keep their relative place). Without any `section`, the cards are not
+  touched.
+- **Invalid entries never fail the call.** They are skipped and reported in
+  `warnings`:
+
+| Warning | Meaning |
+| --- | --- |
+| `section_not_on_page:<key>` | The card is not on the page (for example, no map address). |
+| `unknown_item:<id>` | No link or AI assistant with this ID in your store. |
+| `unknown_collection:<id>` | No collection with this ID in your store. |
+| `media_block_not_in_collection:<id>` | A media block cannot go inside a collection; it stays at the root, right after it. |
+
 <Warning>
-Product entries (at the root or inside a collection) are accepted but ignored —
-the showcase orders itself. Send only `link`, `collection`, and `ai_assistant`
-entries to change what actually reorders. Unknown IDs are silently skipped.
+The items are saved first, then the card positions. In the rare case of a failure
+between the two writes, the items are already in the new order and the cards
+keep their previous position; sending the same tree again fixes it.
 </Warning>
 
 ### Response
@@ -233,21 +254,26 @@ entries to change what actually reorders. Unknown IDs are silently skipped.
 {
   "error": false,
   "message": "Content reordered successfully",
-  "data": { "ok": true }
+  "data": {
+    "ok": true,
+    "warnings": ["section_not_on_page:map"]
+  }
 }
 ```
 
+`warnings` is present only when something was skipped.
+
 <CardGroup cols={2}>
   <Card title="Links and collections" icon="link" href="/api-reference/links-collections">
-    Create, update, and delete the links and groups that make up the tree.
+    Create, update and delete the links and groups that make up the tree.
   </Card>
   <Card title="Products" icon="box" href="/api-reference/products">
-    Manage the products that populate the showcase.
+    Manage the products and their order in the showcase.
   </Card>
   <Card title="Store" icon="store" href="/api-reference/store">
-    Read the page profile, theme catalog, and performance summary.
+    Turn the special cards on or off.
   </Card>
   <Card title="Authentication" icon="lock" href="/api-reference/authentication">
-    Base URL, API keys, scopes, and response format.
+    Base URL, API keys, scopes and response format.
   </Card>
 </CardGroup>

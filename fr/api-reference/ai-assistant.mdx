@@ -1,27 +1,27 @@
 ---
 title: Assistant IA
 icon: robot
-description: "Créez et gérez les assistants IA de votre page bio — persona, message d'accueil, boutons de démarrage et capture de leads."
+description: "Créez et gérez les assistants IA de votre page bio : persona, message d'accueil, boutons de démarrage et capture de leads."
 ---
 
 Un assistant IA est une carte de chat sur votre page bio : les visiteurs la
 touchent et discutent avec un assistant qui répond avec la voix de votre
 boutique, les guide vers vos produits et services, et peut capturer leur contact
-sous forme de lead. Ces endpoints gèrent les assistants eux-mêmes — leur titre,
+sous forme de lead. Ces endpoints gèrent les assistants eux-mêmes : leur titre,
 leur avatar, leur message d'accueil, leurs boutons de démarrage et leurs
 paramètres de capture de leads.
 
 Tous les chemins se trouvent sous `https://api.linkz.ee/v1/ai-assistant`. Chaque
 requête nécessite l'en-tête `Authorization: Bearer lzk_your_key`, et les
-opérations d'écriture (POST/PATCH/DELETE) requièrent une clé disposant du scope
+opérations d'écriture (POST/PATCH/DELETE) requièrent une clé disposant de la portée
 **write**.
 
 <Note>
-Le comportement global de l'assistant — le ton de voix (`aiAssistantTone`) et le
-texte de connaissance « à propos de votre activité » (`aboutBusiness`) — vit sur
+Le comportement global de l'assistant (le ton de voix, `aiAssistantTone`, et le
+texte de connaissance « à propos de votre activité », `aboutBusiness`) vit sur
 la boutique, pas sur chaque assistant. Définissez-les via
-[`PATCH /v1/store`](/fr/api-reference/store#modifier-le-profil-de-la-boutique).
-La base de connaissances PDF possède ses propres endpoints — voir la
+[`PATCH /v1/store`](/fr/api-reference/store).
+La base de connaissances PDF possède ses propres endpoints : voir la
 [référence Knowledge](/fr/api-reference/knowledge).
 </Note>
 
@@ -82,9 +82,10 @@ curl -X GET \
 POST /v1/ai-assistant
 ```
 
-Crée un nouvel assistant. Chaque champ est optionnel — vous pouvez le créer vide
+Crée un nouvel assistant. Chaque champ est optionnel : vous pouvez le créer vide
 et le remplir plus tard, ou envoyer toute la configuration en un seul appel. Les
-nouveaux assistants sont actifs par défaut.
+nouveaux assistants sont actifs par défaut ; envoyez `isActive: false` pour en
+créer un masqué.
 
 ### Requête
 
@@ -105,13 +106,14 @@ curl -X POST \
 | Paramètre | Type | Requis | Description |
 | --- | --- | --- | --- |
 | `title` | string | Non | Nom affiché sur la carte de l'assistant (max. 80 caractères). |
-| `avatarUrl` | string | Non | URL de l'image de l'avatar. Téléversez-la d'abord avec [`POST /v1/uploads/image`](/fr/api-reference/uploads) en utilisant `kind=aiAssistantAvatar`, puis transmettez l'URL renvoyée (max. 500 caractères). |
+| `avatarUrl` | string | Non | URL de l'image de l'avatar (max. 500 caractères). Envoyez-la avec [`POST /v1/uploads/image`](/fr/api-reference/uploads) en utilisant `kind=aiAssistantAvatar` et transmettez l'URL renvoyée, ou passez une URL d'image publique : elle est copiée sur le CDN de Linkzee lorsqu'elle change. |
 | `opening` | string | Non | Le message d'accueil avec lequel l'assistant ouvre la conversation (max. 2000 caractères). |
-| `personality` | string | Non | Avancé : l'image que l'assistant doit renvoyer — sa manière de servir les gens (max. 600 caractères). |
+| `personality` | string | Non | Avancé : l'image que l'assistant doit renvoyer, sa manière de servir les gens (max. 600 caractères). |
 | `instructions` | string | Non | Avancé : règles et préférences que l'assistant doit suivre (max. 1500 caractères). |
 | `starterButtons` | array of string | Non | Jusqu'à 6 boutons de démarrage rapide affichés avant que le visiteur n'écrive (max. 120 caractères chacun). |
 | `leadCapture` | object | Non | Paramètres de capture de leads (voir ci-dessous). |
 | `collectionId` | string | Non | Place l'assistant dans une collection de votre page. |
+| `isActive` | boolean | Non | Affiche l'assistant sur votre page. Vaut `true` par défaut. |
 
 L'objet `leadCapture` contrôle la façon dont l'assistant demande le contact du
 visiteur :

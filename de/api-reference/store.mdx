@@ -1,16 +1,14 @@
 ---
 title: Store
 icon: store
-description: "Store-Profil lesen und aktualisieren, den Theme-Katalog durchsuchen und eine Leistungsübersicht abrufen."
+description: "Profil, Design und Einstellungen des Stores lesen und aktualisieren, den Theme-Katalog durchsuchen und eine Leistungsübersicht abrufen."
 ---
 
 Ein Store trägt eine öffentliche Seite: seinen Namen, die Bio, die
-Social-Handles, das Theme, die SEO-Felder, die Tracking-Pixel und die
-Marketing-Einstellungen. Ein Linkzee-Konto kann **mehrere Stores** enthalten —
-diese Endpunkte wirken deshalb immer auf **einen** davon: auf den Store, an den
-dein API-Schlüssel gebunden ist. Mit ihnen kannst du das vollständige Profil
-lesen, Änderungen anwenden, die vorgefertigten Themes auflisten und eine schnelle
-Leistungsübersicht abrufen.
+Social-Handles, das Design, die Spezialkarten, die SEO-Felder sowie die
+Tracking- und Marketing-Einstellungen. Ein Linkzee-Konto kann **mehrere
+Stores** enthalten, daher wirken diese Endpunkte immer auf **einen** davon: den
+Store, an den dein API-Schlüssel gebunden ist.
 
 Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel
 enthalten:
@@ -20,14 +18,10 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-  Lesezugriffe funktionieren mit jedem Schlüssel. Aktualisierungen erfordern
-  einen Schlüssel mit dem **write**-Scope.
-</Note>
-
-<Note>
-  Um mit einem anderen Store zu arbeiten, verwende einen Schlüssel, der in
-  diesem Store erstellt wurde — siehe
-  [Authentifizierung](/de/api-reference/authentication#auf-welchen-store-ein-schl%C3%BCssel-wirkt).
+  Lesezugriffe benötigen den Scope **read**. Aktualisierungen erfordern einen
+  Schlüssel mit dem Scope **write**. Um mit einem anderen Store zu arbeiten,
+  verwende einen Schlüssel, der in diesem Store erstellt wurde. Siehe
+  [Authentifizierung](/de/api-reference/authentication).
 </Note>
 
 ## Store-Profil abrufen
@@ -36,8 +30,9 @@ Authorization: Bearer lzk_your_key
 GET /v1/store
 ```
 
-Gibt das vollständige Profil des Stores zurück, zu dem der Schlüssel gehört —
-Identität, Theme, Socials, SEO und Marketing-Einstellungen.
+Gibt die Inhaberansicht des Stores zurück. Es ist eine **Positivliste**: Nur die
+unten aufgeführten Felder werden zurückgegeben, Geheimnisse nie. Es ist dieselbe
+Ansicht, die das MCP-Tool `get_store` zurückgibt.
 
 ### Anfrage
 
@@ -55,32 +50,72 @@ curl -X GET \
   "message": "Store loaded successfully",
   "data": {
     "id": "665f1c9a4b2e8a0012a3c9d1",
-    "slug": "achadinhos-da-gabi",
-    "name": "Achadinhos da Gabi",
-    "bio": "As melhores ofertas dos marketplaces, todo dia.",
+    "name": "Studio Ana",
+    "slug": "studioana",
+    "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+    "seoTitle": "Studio Ana | Brows and lashes",
+    "timezone": "America/Sao_Paulo",
+    "themeId": "editorial",
+    "overrides": ["buttons"],
+    "buttonStyle": "soft",
+    "buttonRadius": "rounded",
+    "headerLayout": "hero",
     "titleStyle": "text",
-    "themeId": "aurora",
-    "themeMode": "dark",
-    "socialsPosition": "top",
-    "socialOrder": ["instagram", "tiktok", "whatsapp"],
-    "productsPosition": "top",
-    "social": {
-      "instagram": "achadinhosdagabi",
-      "tiktok": "achadinhosdagabi"
+    "logoUrl": "https://cdn.linkz.ee/u/abc/logo.webp?v=1732190000000",
+    "headerSettings": {
+      "heroPhotoUrl": "https://cdn.linkz.ee/u/abc/hero-photo.webp?v=1732190000000"
     },
-    "seoTitle": "Achadinhos da Gabi",
-    "seoDescription": "Ofertas selecionadas de Shopee, Amazon e Mercado Livre.",
-    "gtmId": "GTM-ABC123",
-    "capiTokenConfigured": true,
-    "capiTokenPreview": "9f3a",
-    "isActive": true
+    "social": { "instagram": "studioana" },
+    "whatsapp": "5511999998888",
+    "socialsPosition": "top",
+    "socialOrder": ["whatsapp", "instagram"],
+    "socialCards": [],
+    "vitrineEnabled": true,
+    "vitrineStyle": "classic",
+    "vitrineLayout": "grid",
+    "mapAddress": "Rua dos Pinheiros 100, São Paulo",
+    "mapLayout": "card",
+    "servicesEnabled": true,
+    "reviewsBlock": { "added": true, "enabled": true, "layout": "carousel", "limit": 6, "minRating": 4 },
+    "publicPreferences": { "locale": "pt-BR", "translationFallback": "original" },
+    "pageHidden": false,
+    "publicUrl": "https://linkz.ee/studioana",
+    "tips": { "enabled": true, "pixKeyType": "random", "pixKeyPreview": "…9f3a", "recipientName": "Ana Souza" },
+    "agenda": { "enabled": true, "title": "Book a time", "timezone": "America/Sao_Paulo", "approvalMode": "auto" },
+    "leadWebhook": { "host": "hooks.example.com", "enabled": true },
+    "tracking": {
+      "metaPixelId": "123456789012345",
+      "tiktokPixelId": "",
+      "gaMeasurementId": "",
+      "gtmId": "GTM-ABC123",
+      "utmSource": "linkzee",
+      "utmMedium": "bio",
+      "utmCampaign": "",
+      "capiTokenConfigured": true
+    }
   }
 }
 ```
 
+### Was die Ansicht enthält
+
+| Gruppe | Felder |
+| --- | --- |
+| Profil | `id`, `name`, `slug`, `bio`, `bioSignature`, `seoTitle`, `seoDescription`, `timezone`, `location`, `publicPreferences`, `publicUrl`, `pageHidden` |
+| Design | `themeId`, `overrides`, Farben (`themeColor`, `buttonColor`, `buttonTextColor`, `buttonShadowColor`, `textColor`), `themeMode`, Hintergrundfelder (`background`, `bgColor2`, `bgFill`, `bgAngle`, `gradientPreset`, `bgAnimated`, `wallpaperUrl` und seine Optionen, Optionen für Aurora, Mesh und Muster), Buttons (`buttonStyle`, `buttonRadius`, `buttonShadow`, `buttonText`), `fontId`, `fontPairId`, `cardStyle`, `cardRadius`, `texture`, `motionLevel`, `stageMode`, `saleStyle`, `socialStyle`, `avatarFx`, `wallpaperVideo` |
+| Header | `headerLayout`, `titleStyle`, `logoUrl`, `bannerUrl`, `headerSettings` (`heroMedia`, `heroAvatar`, `shapeId`, `shapeColor`, `wordmarkUrl`, `heroPhotoUrl`, `cutoutUrl`, `heroVideo`) |
+| Soziale Netzwerke | `social`, `whatsapp`, `socialsPosition`, `socialOrder`, `socialCards` |
+| Schaufenster und Karten | `vitrineEnabled`, `vitrineStyle`, `gridDensity`, `vitrineLayout`, `vitrinePhotoFit`, `mapAddress`, `mapTheme`, `mapLayout`, `openingHours`, `servicesEnabled`, `packagesEnabled`, `instagramEnabled`, `googleReviewEnabled`, `googleReviewUrl`, `reviewsBlock` |
+| KI-Assistent | `aiAssistantTone`, `aiEmoji` |
+| PIX-Trinkgelder | `tips` als Zusammenfassung: `enabled`, `pixKeyType`, `pixKeyPreview` (letzte 4 Zeichen), `recipientName`. Nie der Schlüssel. |
+| Agenda | `agenda`-Einstellungen (keine personenbezogenen Daten). |
+| Lead-Webhook | `leadWebhook` nur mit `host` und `enabled`. Nie der Pfad oder das Signaturgeheimnis. |
+| Tracking | `tracking`: Pixel-IDs, `gtmId`, UTM-Standards und `capiTokenConfigured`. Nie das Token der Conversion API. |
+
 <Note>
-  Der Conversion-API-Token wird nie vollständig zurückgegeben — du siehst nur
-  `capiTokenConfigured` und die letzten vier Zeichen in `capiTokenPreview`.
+  `pageHidden: true` bedeutet, dass die öffentliche Seite ausgeschaltet ist
+  (`isActive: false`). Das alte Feld `instagram` auf oberster Ebene wird für
+  ältere Leser weiterhin zurückgegeben; verwende `social.instagram`.
 </Note>
 
 ## Store-Profil aktualisieren
@@ -89,9 +124,9 @@ curl -X GET \
 PATCH /v1/store
 ```
 
-Aktualisiert eines oder mehrere Felder des Stores. Sende nur die Felder, die du
-ändern möchtest — alles, was du weglässt, bleibt unverändert. Die Änderungen
-werden sofort auf der öffentlichen Seite wirksam.
+Aktualisiert ein oder mehrere Felder des Stores. Sende nur die Felder, die du
+ändern möchtest; alles, was du weglässt, bleibt, wie es ist. Änderungen gehen
+sofort auf der öffentlichen Seite live.
 
 ### Anfrage
 
@@ -100,11 +135,10 @@ curl -X PATCH \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
   -d '{
-        "name": "Achadinhos da Gabi",
-        "bio": "As melhores ofertas dos marketplaces.",
-        "themeId": "aurora",
+        "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+        "themeId": "editorial",
         "socialsPosition": "top",
-        "seoTitle": "Achadinhos da Gabi"
+        "publicPreferences": { "locale": "en" }
       }' \
   https://api.linkz.ee/v1/store
 ```
@@ -116,38 +150,68 @@ Jedes Feld ist optional; sende nur, was du ändern möchtest.
 | Parameter | Typ | Beschreibung |
 | --- | --- | --- |
 | `name` | string | Anzeigename des Stores (max. 120 Zeichen). |
-| `bio` | string | Kurze Beschreibung, die unter dem Namen angezeigt wird (max. 500 Zeichen). |
-| `bioSignature` | string | Optionale einzeilige Signatur unter der Bio (max. 60 Zeichen, ohne Zeilenumbrüche). |
-| `titleStyle` | string | Titelstil des Profils: `text` oder `logo`. |
-| `logoUrl` | string | URL des Logo-Bilds (http/https). |
-| `bannerUrl` | string | URL des Banner-Bilds (http/https). |
-| `themeId` | string | Id eines vorgefertigten Themes (siehe [Themes](#browse-the-theme-catalog)); ein leerer String bedeutet ein individuelles Design. |
-| `themeMode` | string | Farbmodus: `dark` oder `light`. |
-| `socialsPosition` | string | Wo die Social-Zeile erscheint: `top` oder `bottom`. |
-| `socialOrder` | string[] | Anzeigereihenfolge der sozialen Netzwerke. |
-| `productsPosition` | string | Position der Vitrine relativ zu den Links: `top` oder `bottom`. |
-| `vitrineLayout` | string | Layout der Vitrine: `grid` (klassisches Raster), `masonry` (Mosaik) oder `carousel` (ein horizontales Regal pro Kategorie mit einem eingebetteten „Alle ansehen"). |
-| `vitrineStyle` | string | Stil der Produktkarte: `classic` (Foto, Text und Button gestapelt) oder `spotlight` (das Foto füllt die Karte; Name, Preis und Glas-Button darüber, plus Fokus-Karte und Kategorien mit Foto). |
-| `mapLayout` | string | Darstellung des Kartenblocks: `map` (offene Karte) oder `card` (kompakte Adresskarte mit „Route“). |
-| `agenda` | object | Kalender-Einstellungen (aktivieren/deaktivieren, Titel, Zeitzone, Geschäftszeiten, Erinnerungen und mehr). Wird partiell zusammengeführt — sende nur die Schlüssel, die du ändern möchtest. Siehe die [Kalender-Referenz](/de/api-reference/agenda). |
-| `social` | object | Social-Handles, z. B. `{ "instagram": "handle", "tiktok": "handle" }`. |
+| `bio` | string | Kurze Beschreibung unter dem Namen (max. 500 Zeichen). |
+| `bioSignature` | string | Einzeilige Signatur unter der Bio (max. 60 Zeichen, keine Zeilenumbrüche). |
+| `titleStyle` | string | Titelstil des Headers: `text` oder `logo`. |
+| `logoUrl`, `bannerUrl`, `wallpaperUrl` | string | Bild-URLs. Lade sie zuerst mit [`POST /v1/uploads/image`](/de/api-reference/uploads) hoch. |
+| `headerLayout` | string | `classic`, `hero`, `banner`, `cutout` oder `shape`. |
+| `headerSettings` | object | Header-Details: `wordmarkUrl`, `heroPhotoUrl`, `cutoutUrl`, `heroMedia`, `heroAvatar`, `shapeId`, `shapeColor`, `frames` und `media` (Layouts und Slots außerhalb der erlaubten Liste werden verworfen, und die Werte werden begrenzt). |
+| `themeId` | string | ID eines vorgefertigten Themes (siehe den Theme-Katalog unten). |
+| `overrides` | string[] | Fortgeschritten: die über `themeId` angepassten Designabschnitte. |
+| Designfelder | verschiedene | Dieselben Designfelder wie beim MCP-Tool `update_design`: Farben, `themeMode`, Hintergrund, Buttons, `fontId`, `fontPairId`, `cardStyle`, `cardRadius`, `texture`, `motionLevel`, `stageMode`, `saleStyle`, `vitrineStyle`, `socialStyle`, `avatarFx`. |
+| `social` | object | Social-Handles, zum Beispiel `{ "instagram": "handle", "tiktok": "handle" }`. Ein leerer String entfernt ein Netzwerk. |
+| `whatsapp` | string | Nummer mit Ländervorwahl, nur Ziffern. |
+| `socialsPosition` | string | Wo die Social-Leiste erscheint: `top` oder `bottom`. |
+| `socialOrder` | string[] | Anzeigereihenfolge der Social-Icons. Nur gültige Netzwerkschlüssel (`whatsapp`, `instagram`, `tiktok`, `youtube` und die anderen). |
+| `productsPosition` | string | Position des Schaufensters relativ zu den Links: `top` oder `bottom`. |
+| `vitrineEnabled`, `vitrineLayout`, `vitrineStyle`, `gridDensity`, `vitrinePhotoFit` | verschiedene | Einstellungen des Schaufensters. `vitrineLayout`: `grid`, `masonry` oder `carousel`. `vitrineStyle`: `classic` oder `spotlight`. |
+| `servicesEnabled`, `packagesEnabled`, `instagramEnabled` | boolean | Schaltet die Karten für Leistungen, Pakete und Instagram ein oder aus. |
+| `googleReviewEnabled`, `googleReviewUrl` | boolean, string | Google-Bewertungskarte (Link von Google Maps, `g.page` oder `g.co`). |
+| `reviewsBlock` | object | Bewertungskarte: `added`, `enabled`, `layout`, `limit` (1 bis 10), `minRating` (1 bis 5). |
+| `mapAddress`, `mapTheme`, `mapLayout` | string | Kartenkarte. Ein leeres `mapAddress` entfernt sie; `mapLayout` ist `map` oder `card`. |
+| `openingHours` | object | Das Badge "Jetzt geöffnet": `source`, `showStatus`, `week`, `closedDates`. |
+| `agenda` | object | Einstellungen der Terminplanung, teilweise zusammengeführt. Siehe die [Referenz zur Terminplanung](/de/api-reference/agenda). |
+| `tips` | object | PIX-Trinkgeldkarte: `enabled`, `pixKey`, `pixKeyType` (`email` oder `random`), `recipientName` (max. 25), `recipientCity` (max. 15), `message`, `amounts`, `thanksMessage`, `highlight`. Mit einem Schlüssel sind Name und Stadt erforderlich. Der Inhaber erhält eine E-Mail, wenn sich der Schlüssel ändert. |
+| `timezone` | string | IANA-Zeitzone, zum Beispiel `America/Sao_Paulo`. Ein ungültiger Name gibt `400` zurück. |
+| `location` | object | `countryCode` (ISO, 2 Buchstaben), `state`, `city`. Steuert den Feiertagskalender. |
+| `publicPreferences` | object | `locale` der öffentlichen Seite (`pt-BR`, `en`, `es`, `fr`, `de`) und `translationFallback` (`original` oder `dashboardLocale`). Wird mit dem Gespeicherten **zusammengeführt**: Wer nur `locale` sendet, behält den Fallback. |
 | `seoTitle` | string | Titel der öffentlichen Seite für Suchmaschinen (max. 70 Zeichen). |
 | `seoDescription` | string | Meta-Beschreibung der öffentlichen Seite (max. 160 Zeichen). |
-| `gtmId` | string | Google-Tag-Manager-Container-Id, z. B. `GTM-ABC123`. |
-| `utmSource` | string | Standard-UTM-Quelle, die ausgehenden Links hinzugefügt wird. |
-| `utmMedium` | string | Standard-UTM-Medium. |
-| `utmCampaign` | string | Standard-UTM-Kampagne. |
-| `pixels` | object | Tracking-Pixel-Ids: `metaPixelId`, `tiktokPixelId`, `gaMeasurementId`. |
-| `capiToken` | string | Meta-Conversion-API-Token. Wird im Klartext gesendet, verschlüsselt gespeichert. Leer bedeutet „den aktuellen beibehalten". |
-| `isActive` | boolean | Ob die Seite veröffentlicht und live ist. |
+| `gtmId` | string | ID des Google-Tag-Manager-Containers, zum Beispiel `GTM-ABC123`. |
+| `utmSource`, `utmMedium`, `utmCampaign` | string | Standard-UTM-Parameter, die an ausgehende Links angehängt werden. |
+| `pixels` | object | IDs der Tracking-Pixel: `metaPixelId`, `tiktokPixelId`, `gaMeasurementId`. |
+| `capiToken` | string | Token der Meta Conversion API. Im Klartext gesendet, verschlüsselt gespeichert. Leer bedeutet "das aktuelle behalten". |
+| `isActive` | boolean | Ob die öffentliche Seite live ist. `false` blendet sie aus. |
+
+### Theme-Vererbung
+
+Aktualisierungen über die API folgen denselben Regeln wie der Editor:
+
+- `themeId` **ohne** `overrides` wendet das Preset sauber an: Die zuvor
+  gespeicherten Overrides und die Bewegungsstufe werden zurückgesetzt.
+- Jedes andere Designfeld in einem Store mit Preset passt **nur seinen
+  Abschnitt** an (Farben, Hintergrund, Buttons, Text, Verlauf, Karte, Textur,
+  Bewegung), der von der Palette des Themes startet. Der Rest folgt weiter dem
+  Theme.
+- Farben, die der Palette des Presets entsprechen, zählen nicht als eigene
+  Farben und lösen daher die Premium-Sperre nicht aus. Kostenpflichtige Werte
+  (Glas-Buttons, Bild-, Mesh-, Duotone- oder Video-Hintergründe, animierte oder
+  vorgefertigte Verläufe, eigene Farben, kostenpflichtige Schriften,
+  `stageMode`) geben in einem kostenlosen Tarif `403` mit
+  `code: "PLAN_REQUIRED"` zurück.
+- Sende `overrides`, wenn du die angepassten Abschnitte selbst auflisten
+  willst.
 
 <Warning>
   Der `slug` des Stores kann über die API nicht geändert werden. Ihn zu senden
-  hat keine Wirkung — er wird ignoriert, damit dein veröffentlichter Bio-Link
-  niemals bricht.
+  hat keine Wirkung: Er wird ignoriert, damit dein veröffentlichter Bio-Link nie
+  kaputtgeht.
 </Warning>
 
 ### Antwort
+
+Die Antwort ist dieselbe Positivlisten-Ansicht wie bei `GET /v1/store`, dazu
+`agentNotes`, wenn es etwas zu melden gibt:
 
 ```json
 {
@@ -155,16 +219,31 @@ Jedes Feld ist optional; sende nur, was du ändern möchtest.
   "message": "Store updated successfully",
   "data": {
     "id": "665f1c9a4b2e8a0012a3c9d1",
-    "slug": "achadinhos-da-gabi",
-    "name": "Achadinhos da Gabi",
-    "bio": "As melhores ofertas dos marketplaces.",
-    "themeId": "aurora",
+    "name": "Studio Ana",
+    "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+    "themeId": "editorial",
+    "overrides": [],
     "socialsPosition": "top",
-    "seoTitle": "Achadinhos da Gabi",
-    "isActive": true
+    "publicPreferences": { "locale": "en", "translationFallback": "original" },
+    "pageHidden": false,
+    "agentNotes": {
+      "warnings": []
+    }
   }
 }
 ```
+
+`agentNotes.warnings` listet Felder auf, die gespeichert wurden, aber noch nicht
+sichtbar sind (zum Beispiel ein `cutout`-Header ohne Freisteller-Bild oder eine
+`wallpaperUrl` ohne Bildhintergrund). Wenn sich der PIX-Schlüssel oder die
+WhatsApp-Nummer ändert, enthält `agentNotes` auch die Änderung, nur mit den
+letzten 4 Zeichen.
+
+<Note>
+  Die Reihenfolge des Schaufensters ist kein Store-Feld. Sie ist "neueste
+  zuerst" bis zum ersten [`PUT /v1/products/order`](/de/api-reference/products),
+  das sie ändert; ab dann folgt das Schaufenster deiner manuellen Reihenfolge.
+</Note>
 
 ## Theme-Katalog durchsuchen
 
@@ -172,9 +251,10 @@ Jedes Feld ist optional; sende nur, was du ändern möchtest.
 GET /v1/themes
 ```
 
-Listet die **15** vorgefertigten Themes auf, die du mit `themeId` anwenden kannst. Jeder
-Eintrag enthält eine kurze Beschreibung, die dir hilft, einen Look zum Stil eines
-Stores zu finden.
+Listet die **18** vorgefertigten Themes auf, die du mit `themeId` anwenden
+kannst. Jeder Eintrag enthält eine kurze Beschreibung, damit du einen Look zum
+Stil eines Stores passend auswählen kannst, und `premium` für die
+kostenpflichtigen.
 
 ### Anfrage
 
@@ -195,32 +275,29 @@ curl -X GET \
       "id": "pure",
       "name": "Pure",
       "mode": "light",
-      "description": "Minimal light, near-white background, full focus on the products."
+      "description": "Minimal light, near-white background, full focus on the products.",
+      "premium": false
     },
     {
       "id": "noir",
       "name": "Noir",
       "mode": "dark",
-      "description": "Sober dark, graphite grey, elegant and neutral."
-    },
-    {
-      "id": "aurora",
-      "name": "Aurora",
-      "mode": "dark",
-      "description": "Animated violet/blue gradient, modern and premium."
+      "description": "Sober dark, graphite grey, elegant and neutral.",
+      "premium": false
     }
   ]
 }
 ```
 
-Der vollständige Katalog umfasst 15 Themes: `pure`, `noir`, `gesso`, `solar`,
+Der vollständige Katalog hat 18 Themes: `pure`, `noir`, `gesso`, `solar`,
 `midnight`, `groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`,
-`brutalista`, `editorial` und `pista`.
+`brutalista`, `editorial`, `onix`, `perola`, `cinema` und `pista`. `onix`,
+`perola` und `cinema` sind kostenpflichtig.
 
 <Note>
   Verwende eine beliebige `id` aus dieser Liste als `themeId`, wenn du den Store
-  aktualisierst. Die `id`s sind stabil — `name` und `description` sind rein
-  informativ und werden auf Englisch zurückgegeben.
+  aktualisierst. Die `id`s sind stabil; `name` und `description` dienen nur der
+  Information und werden auf Englisch zurückgegeben.
 </Note>
 
 ## Leistungsübersicht abrufen
@@ -229,8 +306,8 @@ Der vollständige Katalog umfasst 15 Themes: `pure`, `noir`, `gesso`, `solar`,
 GET /v1/analytics/summary
 ```
 
-Gibt die wichtigsten Kennzahlen für die Vitrine zurück — Gesamtwerte sowie die
-Top-Produkte und die zuletzt hinzugefügten Produkte.
+Gibt die wichtigsten Kennzahlen des Schaufensters zurück: Summen sowie die
+Top-Produkte und die neuesten Produkte.
 
 ### Anfrage
 
@@ -253,7 +330,7 @@ curl -X GET \
     "topProducts": [
       {
         "id": "665f2a114b2e8a0012a3ca07",
-        "name": "Fone Bluetooth TWS",
+        "name": "Bluetooth earbuds",
         "price": 79.9,
         "clicks": 312
       }
@@ -261,7 +338,7 @@ curl -X GET \
     "latestProducts": [
       {
         "id": "665f2b884b2e8a0012a3ca19",
-        "name": "Luminária de mesa articulada",
+        "name": "Desk lamp",
         "price": 129.9,
         "clicks": 4
       }
@@ -272,20 +349,20 @@ curl -X GET \
 
 | Feld | Typ | Beschreibung |
 | --- | --- | --- |
-| `totalProducts` | number | Gesamtzahl der Produkte in der Vitrine. |
+| `totalProducts` | number | Gesamtzahl der Produkte im Schaufenster. |
 | `totalCategories` | number | Gesamtzahl der Kategorien. |
 | `totalClicks` | number | Summe aller Produktklicks. |
-| `topProducts` | array | Bis zu 5 meistgeklickte Produkte. |
-| `latestProducts` | array | Bis zu 5 zuletzt hinzugefügte Produkte. |
+| `topProducts` | array | Bis zu 5 der meistgeklickten Produkte. |
+| `latestProducts` | array | Bis zu 5 der zuletzt hinzugefügten Produkte. |
 
 <CardGroup cols={2}>
-  <Card title="Content" icon="table-cells" href="/de/api-reference/content">
-    Lies den öffentlichen Content-Baum und ordne Links, Kollektionen und Produkte neu an.
+  <Card title="Inhalt" icon="table-cells" href="/de/api-reference/content">
+    Lies den Inhaltsbaum und ordne Links, Sammlungen und Spezialkarten neu an.
   </Card>
-  <Card title="Products" icon="box" href="/de/api-reference/products">
-    Vitrinenprodukte auflisten, erstellen, aktualisieren und löschen.
+  <Card title="Produkte" icon="box" href="/de/api-reference/products">
+    Produkte des Schaufensters auflisten, erstellen, aktualisieren, löschen und neu anordnen.
   </Card>
-  <Card title="Authentication" icon="lock" href="/de/api-reference/authentication">
+  <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
     Basis-URL, API-Schlüssel, Scopes und das Standard-Antwortformat.
   </Card>
 </CardGroup>

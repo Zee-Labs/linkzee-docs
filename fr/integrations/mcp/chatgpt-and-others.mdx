@@ -4,35 +4,46 @@ icon: plug
 description: "Connectez Linkzee à ChatGPT, Cursor et n'importe quel agent compatible MCP pour gérer votre page en langage naturel."
 ---
 
-Linkzee fonctionne avec **n'importe quel agent compatible MCP** — pas seulement
+Linkzee fonctionne avec **n'importe quel agent compatible MCP**, pas seulement
 Claude. Si votre outil prend en charge MCP, vous pouvez le connecter à Linkzee et
-gérer votre page en langage naturel : **ChatGPT**, **Cursor**, et bien d'autres.
-
-La configuration est la même partout. Vous pointez votre client vers le point de
-terminaison MCP de Linkzee et vous vous connectez avec votre clé API. Ensuite, il
-vous suffit de demander.
+gérer votre page en langage naturel : **ChatGPT**, **Cursor**, des outils
+d'automatisation et bien d'autres.
 
 ## Connectez votre client
 
 <Steps>
   <Step title="Créez une clé API">
-    Dans votre tableau de bord, ouvrez les paramètres **API et MCP** et créez une
-    clé API. Vous l'utiliserez pour authentifier votre agent. Consultez
+    Dans votre tableau de bord, ouvrez **Paramètres**, **API et MCP**, et créez
+    une clé API. Choisissez **write** si l'agent doit modifier votre page (elle
+    permet aussi de lire), ou **read** pour un agent en lecture seule. Consultez
     [Clés API](/fr/integrations/api/api-keys) pour le guide complet.
   </Step>
   <Step title="Ajoutez un serveur MCP">
-    Dans votre client, ajoutez un nouveau serveur MCP pointant vers le point de
-    terminaison Linkzee :
+    Dans votre client, ajoutez un nouveau serveur MCP (Streamable HTTP) pointant vers :
 
     ```
     https://api.linkz.ee/mcp
     ```
   </Step>
   <Step title="Fournissez votre clé API">
-    Authentifiez-vous avec votre clé comme autorisation :
+    Envoyez votre clé dans l'en-tête d'autorisation :
 
     ```
-    Bearer lzk_...
+    Authorization: Bearer lzk_your_key
+    ```
+
+    Pour les clients configurés en JSON, le bloc ressemble généralement à ceci :
+
+    ```json
+    {
+      "mcpServers": {
+        "linkzee": {
+          "type": "http",
+          "url": "https://api.linkz.ee/mcp",
+          "headers": { "Authorization": "Bearer lzk_your_key" }
+        }
+      }
+    }
     ```
   </Step>
   <Step title="Demandez en langage naturel">
@@ -44,17 +55,48 @@ vous suffit de demander.
 
 <Note>
   Chaque client ajoute les serveurs MCP d'une manière légèrement différente.
-  Consultez la documentation de votre client pour savoir exactement où coller le
-  point de terminaison et votre clé.
+  Consultez la documentation de votre client pour savoir où coller le point de
+  terminaison et l'en-tête. La connexion avec votre compte Linkzee (OAuth), sans
+  clé, fonctionne avec le connecteur Claude et avec les applications qui
+  s'exécutent sur votre propre ordinateur. Les autres clients hébergés utilisent
+  une clé API.
 </Note>
 
-Les actions disponibles sont les mêmes sur tous les clients. Consultez la
-[référence des outils](/fr/integrations/mcp/tools-reference) pour tout ce qu'un agent
-peut faire via MCP.
+## Envoyer des photos et des vidéos
+
+Beaucoup d'applications de conversation montrent vos pièces jointes au modèle mais
+ne transmettent pas le fichier aux outils. Lorsque l'agent n'a pas d'URL publique
+pour une photo ou une vidéo, il utilise un **lien d'envoi** :
+
+1. L'agent appelle `create_upload_link` et vous donne une page comme
+   `https://linkz.ee/u/...`.
+2. Vous l'ouvrez sur votre téléphone ou votre ordinateur et choisissez les
+   fichiers (jusqu'à 10 ; photos jusqu'à 8 Mo, vidéos jusqu'à 40 Mo). Le lien
+   reste ouvert pendant 15 minutes.
+3. Vous prévenez l'agent que vous avez terminé. Il lit les fichiers avec
+   `get_upload` et utilise chaque `uploadId` au bon endroit de votre page.
+
+Les agents qui ont accès aux fichiers (Cursor, scripts, automatisations) peuvent
+aussi envoyer les fichiers directement vers ce même lien. Lorsqu'une photo est déjà
+en ligne, l'agent transmet simplement son URL publique. Voir
+[Envoyer des fichiers](/fr/integrations/mcp/sending-files).
+
+## Tous les clients, les mêmes outils
+
+Les actions disponibles sont les mêmes sur tous les clients, limitées uniquement
+par les portées de votre clé. Consultez la
+[référence des outils](/fr/integrations/mcp/tools-reference) pour tout ce qu'un
+agent peut faire via MCP.
 
 <CardGroup cols={2}>
   <Card title="Connecter Claude" icon="comment" href="/fr/integrations/mcp/claude">
-    Configuration étape par étape pour utiliser Linkzee avec Claude.
+    Le connecteur pour claude.ai et la configuration pour Claude Code.
+  </Card>
+  <Card title="Envoyer des fichiers" icon="upload" href="/fr/integrations/mcp/sending-files">
+    URL ou lien d'envoi, limites et jobs vidéo.
+  </Card>
+  <Card title="Construire une bio avec un agent" icon="wand-magic-sparkles" href="/fr/integrations/mcp/build-bio-with-agent">
+    Le parcours d'une page vide à une bio publiée.
   </Card>
   <Card title="Référence des outils" icon="screwdriver-wrench" href="/fr/integrations/mcp/tools-reference">
     Découvrez toutes les actions qu'un agent IA peut réaliser sur votre Linkzee.

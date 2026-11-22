@@ -1,56 +1,96 @@
 ---
 title: ChatGPT and other MCP clients
 icon: plug
-description: "Connect Linkzee to ChatGPT, Cursor, and any MCP-compatible agent so you can manage your page in plain language."
+description: "Connect Linkzee to ChatGPT, Cursor and any MCP compatible agent so you can manage your page in plain language."
 ---
 
-Linkzee works with **any MCP-compatible agent** — not just Claude. If your tool
+Linkzee works with **any MCP compatible agent**, not just Claude. If your tool
 supports MCP, you can connect it to Linkzee and manage your page in natural
-language: **ChatGPT**, **Cursor**, and more.
-
-The setup is the same everywhere. You point your client at Linkzee's MCP
-endpoint and sign in with your API key. After that, you just ask.
+language: **ChatGPT**, **Cursor**, automation tools and more.
 
 ## Connect your client
 
 <Steps>
   <Step title="Create an API key">
-    In your dashboard, open the **API & MCP** settings and create an API key.
-    You'll use it to authenticate your agent. See
-    [API keys](/integrations/api/api-keys) for the full walkthrough.
+    In your dashboard, open **Settings**, **API and MCP**, and create an API key.
+    Choose **write** if the agent should change your page (it also reads), or
+    **read** for a read only agent. See [API keys](/integrations/api/api-keys)
+    for the full walkthrough.
   </Step>
   <Step title="Add an MCP server">
-    In your client, add a new MCP server pointing to the Linkzee endpoint:
+    In your client, add a new MCP server (Streamable HTTP) pointing to:
 
     ```
     https://api.linkz.ee/mcp
     ```
   </Step>
   <Step title="Provide your API key">
-    Authenticate with your key as the authorization:
+    Send your key in the authorization header:
 
     ```
-    Bearer lzk_...
+    Authorization: Bearer lzk_your_key
+    ```
+
+    For clients configured with JSON, the block usually looks like this:
+
+    ```json
+    {
+      "mcpServers": {
+        "linkzee": {
+          "type": "http",
+          "url": "https://api.linkz.ee/mcp",
+          "headers": { "Authorization": "Bearer lzk_your_key" }
+        }
+      }
+    }
     ```
   </Step>
   <Step title="Ask in natural language">
-    Once connected, talk to your agent the way you'd talk to an assistant:
-    "add this product", "what's booked this week?", or "change my theme."
+    Once connected, talk to your agent the way you would talk to an assistant:
+    "add this product", "what is booked this week?" or "change my theme".
   </Step>
 </Steps>
 
 <Note>
   Every client adds MCP servers a little differently. Check your client's own
-  documentation for exactly where to paste the endpoint and your key.
+  documentation for where to paste the endpoint and the header. Signing in with
+  your Linkzee account (OAuth), without a key, works with the Claude connector
+  and with apps that run on your own computer. Other hosted clients use an API
+  key.
 </Note>
 
-The available actions are the same across every client. See the
-[tools reference](/integrations/mcp/tools-reference) for everything an agent can
-do through MCP.
+## Sending photos and videos
+
+Many chat apps show your attachments to the model but do not hand the file to
+the tools. When the agent has no public URL for a photo or video, it uses an
+**upload link**:
+
+1. The agent calls `create_upload_link` and gives you a page such as
+   `https://linkz.ee/u/...`.
+2. You open it on your phone or computer and pick the files (up to 10; photos up
+   to 8 MB, videos up to 40 MB). The link stays open for 15 minutes.
+3. You tell the agent you are done. It reads the files with `get_upload` and
+   uses each `uploadId` in the right place of your page.
+
+Agents that run with file access (Cursor, scripts, automations) can also send the
+files straight to the same link. When a photo is already online, the agent just
+passes its public URL. See [Sending files](/integrations/mcp/sending-files).
+
+## Every client, the same tools
+
+The available actions are the same across every client, limited only by the
+scopes of your key. See the [tools reference](/integrations/mcp/tools-reference)
+for everything an agent can do through MCP.
 
 <CardGroup cols={2}>
   <Card title="Connect Claude" icon="comment" href="/integrations/mcp/claude">
-    Step-by-step setup for using Linkzee with Claude.
+    The connector for claude.ai and the setup for Claude Code.
+  </Card>
+  <Card title="Sending files" icon="upload" href="/integrations/mcp/sending-files">
+    URL or upload link, limits and video jobs.
+  </Card>
+  <Card title="Build a bio with an agent" icon="wand-magic-sparkles" href="/integrations/mcp/build-bio-with-agent">
+    The flow from an empty page to a published bio.
   </Card>
   <Card title="Tools reference" icon="screwdriver-wrench" href="/integrations/mcp/tools-reference">
     See every action an AI agent can take on your Linkzee.

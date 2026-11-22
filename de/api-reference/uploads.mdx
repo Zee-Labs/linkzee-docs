@@ -1,18 +1,18 @@
 ---
 title: Uploads
 icon: image
-description: "Lade ein Bild hoch und erhalte eine gehostete URL zurück, die du für dein Logo, Produkte, Links und mehr verwenden kannst."
+description: "Lade Bilder und Videos hoch, erstelle Upload-Links für Dateien, die nicht online sind, und verfolge Video-Jobs."
 ---
 
-Verwende den Uploads-Endpunkt, um ein Bild an Linkzee zu senden und eine dauerhafte,
-über ein CDN gehostete URL zurückzuerhalten. Jedes Bild wird in **WebP** umgewandelt,
-auf maximal 1600&nbsp;px skaliert und mit langfristigem Caching ausgeliefert, sodass die
-URL, die du erhältst, sofort in ein Produkt, einen Link oder dein Store-Profil eingefügt
-werden kann.
+Verwende diese Endpunkte, um Bilder und Videos auf Linkzee zu bringen. Bilder
+kommen als dauerhafte, über ein CDN gehostete URL zurück, die du an einem
+Produkt, einem Link oder deinem Store setzt. Videos werden im Hintergrund
+optimiert und auf deine Seite angewendet, sobald sie fertig sind.
 
-Der Endpunkt befindet sich unter der Basis-URL `https://api.linkz.ee` und erfordert den
-Header `Authorization: Bearer lzk_your_key`. Ein Upload verändert deinen Storefront und
-benötigt daher einen Schlüssel mit dem **write**-Scope.
+Die Endpunkte befinden sich unter der Basis-URL `https://api.linkz.ee` und
+erfordern den Header `Authorization: Bearer lzk_your_key`. Ein Upload verändert
+deine Seite und benötigt daher einen Schlüssel mit dem Scope **write**. Zum
+Lesen eines Video-Jobs genügt **read**.
 
 ## Ein Bild hochladen
 
@@ -20,8 +20,10 @@ benötigt daher einen Schlüssel mit dem **write**-Scope.
 POST /v1/uploads/image
 ```
 
-Lädt ein einzelnes Bild hoch und gibt dessen gehostete URL zurück. Sende die Anfrage als
-`multipart/form-data`, nicht als JSON.
+Lädt ein einzelnes Bild hoch und gibt dessen gehostete URL zurück. Sende die
+Anfrage als `multipart/form-data`, nicht als JSON. Jedes Bild wird in **WebP**
+umgewandelt, auf maximal 1600&nbsp;px skaliert und mit langfristigem Caching
+ausgeliefert.
 
 ### Anfrage
 
@@ -40,50 +42,46 @@ Sende diese als Multipart-Formularfelder.
 
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `file` | file | Ja | Das hochzuladende Bild. Jedes gängige Format (JPEG, PNG, WebP usw.), bis zu **8&nbsp;MB**. Es wird automatisch in WebP umgewandelt. |
-| `kind` | string | Nein | Wohin das Bild gehört. Legt einen stabilen Speicherort fest, sodass ein erneuter Upload derselben Art das vorherige Bild überschreibt, statt sich anzuhäufen. Siehe die Tabelle unten. |
-| `productId` | string | Nein | Erforderlich, wenn `kind` gleich `product` ist. Das Produkt, zu dem dieses Bild gehört. Es muss ein Produkt in deinem eigenen Store sein. |
-| `linkId` | string | Nein | Erforderlich, wenn `kind` gleich `link`, `linkMedia` oder `linkPoster` ist. Der Link, zu dem das Bild gehört. Es muss ein Link in deinem eigenen Store sein. |
-| `staffId` | string | Nein | Erforderlich, wenn `kind` gleich `staffAvatar` ist. Das Teammitglied, zu dem der Avatar gehört. |
-| `socialKey` | string | Nein | Erforderlich, wenn `kind` gleich `socialCard` ist. Das soziale Netzwerk, zu dem das Karten-Cover gehört (z. B. `instagram`, `tiktok`, `youtube`). |
+| `file` | file | Ja | Das Bild, bis zu **8&nbsp;MB**. JPEG, PNG, WebP, GIF oder AVIF. Das Format wird anhand der Bytes der Datei geprüft. HEIC, SVG, TIFF und PDF werden abgelehnt. |
+| `kind` | string | Ja | Wohin das Bild gehört. Es legt einen festen Speicherort fest, sodass ein neuer Upload derselben Art das vorherige Bild ersetzt. Siehe die Tabelle unten. Eine Anfrage ohne `kind` wird abgelehnt. |
+| `productId` | string | Bei `kind=product` | Das Produkt, zu dem das Bild gehört, in deinem eigenen Store. |
+| `linkId` | string | Bei `link`, `linkMedia`, `linkPoster` oder `linkMediaSlot` | Der Link, zu dem das Bild gehört, in deinem eigenen Store. |
+| `slot` | string | Bei `kind=linkMediaSlot` | Der Foto-Slot (`0` bis `9`) eines Vorher-Nachher- oder Galerieblocks. Ein erneuter Upload in denselben Slot ersetzt das Foto. |
+| `staffId` | string | Bei `kind=staffAvatar` | Das Teammitglied, zu dem der Avatar gehört. |
+| `socialKey` | string | Bei `kind=socialCard` | Das soziale Netzwerk des Kartentitelbilds, zum Beispiel `instagram`. |
 
 #### Werte für `kind`
 
-| `kind` | Verwendung für | Zusätzlich senden |
+| `kind` | Verwende es für | Sende außerdem |
 | --- | --- | --- |
-| `logo` | Dein Store-Logo | — |
+| `logo` | Dein Store-Logo | |
 | `product` | Ein Produktbild | `productId` |
-| `wallpaper` | Der Hintergrund deiner Seite | — |
-| `wallpaperPoster` | Veraltet — das Poster eines Video-Hintergrunds wird jetzt automatisch aus dem Video erzeugt | — |
-| `banner` | Dein Header-Banner | — |
-| `cutout` | Ein Header-Freistellerbild | — |
-| `wordmark` | Das horizontale Logo, das anstelle des Shop-Namens erscheint (Titelstil **Logo**). Speichere die zurückgegebene URL mit `PATCH /v1/store` in `headerSettings.wordmarkUrl`; ein leerer String entfernt es | — |
-| `link` | Ein Link-Vorschaubild | `linkId` |
-| `linkMedia` | Ein Link-Karten-Cover | `linkId` |
-| `linkPoster` | Ein Link-Video-Poster | `linkId` |
-| `aiAssistantAvatar` | Der Avatar deines KI-Assistenten | — |
+| `wallpaper` | Den Hintergrund deiner Seite | |
+| `banner` | Dein Header-Banner | |
+| `cutout` | Ein Freisteller-Bild für den Header (verwende ein PNG oder WebP mit Transparenz) | |
+| `wordmark` | Das horizontale Logo, das anstelle des Store-Namens angezeigt wird (Titelstil **Logo**). Speichere die URL in `headerSettings.wordmarkUrl` mit `PATCH /v1/store` | |
+| `heroPhoto` | Das Titelfoto des **Hero**-Headers, getrennt vom Logo. Speichere die URL in `headerSettings.heroPhotoUrl` | |
+| `link` | Ein Link-Thumbnail | `linkId` |
+| `linkMedia` | Ein Titelbild einer Linkkarte | `linkId` |
+| `linkPoster` | Ein Poster für ein Link-Video | `linkId` |
+| `linkMediaSlot` | Ein Foto eines Vorher-Nachher- oder Galerieblocks (Premium; skaliert, damit es in 1344×2016 passt) | `linkId`, `slot` |
+| `aiAssistantAvatar` | Der Avatar deines KI-Assistenten | |
 | `staffAvatar` | Das Foto eines Teammitglieds | `staffId` |
-| `heroPoster` | Veraltet — das Poster eines Hero-Videos wird jetzt automatisch aus dem Video erzeugt | — |
-| `socialCard` | Das Karten-Cover eines sozialen Netzwerks | `socialKey` |
-
-<Note>
-Wenn du ein `kind` (und die passende ID) sendest, wird das Bild an einem festen
-Speicherort für diese Ressource abgelegt, sodass ein neuer Upload den alten ersetzt.
-Lässt du `kind` weg, erhält jeder Upload stattdessen seine eigene, eindeutige URL.
-</Note>
+| `socialCard` | Das Titelbild einer Karte für ein soziales Netzwerk | `socialKey` |
+| `wallpaperPoster`, `heroPoster` | Veraltet. Video-Poster werden jetzt aus dem Video generiert | |
 
 <Warning>
-Dateien über 8&nbsp;MB werden abgelehnt. Es werden nur Bilddateien akzeptiert — andere
-Dateitypen liefern einen `400 Bad Request`. Wenn du `kind` auf `product` oder `link`
-setzt, muss die passende `productId` bzw. `linkId` auf eine Ressource in deinem eigenen
+Dateien über 8&nbsp;MB werden mit `413` abgelehnt. Eine Datei, die kein
+akzeptiertes Bild ist, gibt `400 Bad Request` zurück. Wenn du `productId`,
+`linkId` oder `staffId` sendest, muss es auf eine Ressource in deinem eigenen
 Store verweisen.
 </Warning>
 
 ### Antwort
 
-Die `url` ist dein gehostetes Bild. Da gespeicherte Bilder aggressiv gecacht werden,
-endet die URL mit einem `?v=`-Versionsmarker, der sich bei jedem Upload ändert —
-verwende immer genau die URL, die du zurückerhältst.
+Die URL endet mit einer Versionsmarke `?v=`, die sich bei jedem Upload ändert,
+sodass ein ersetztes Bild nie aus einem alten Cache ausgeliefert wird. Verwende
+immer genau die URL, die du zurückerhältst.
 
 ```json
 {
@@ -101,29 +99,167 @@ verwende immer genau die URL, die du zurückerhältst.
 
 | Feld | Typ | Beschreibung |
 | --- | --- | --- |
-| `url` | string | Die gehostete, cache-invalidierte Bild-URL. |
-| `width` | integer | Breite des verarbeiteten Bildes in Pixeln. |
-| `height` | integer | Höhe des verarbeiteten Bildes in Pixeln. |
+| `url` | string | Die gehostete Bild-URL mit Cache-Busting. |
+| `width` | integer | Breite des verarbeiteten Bildes, in Pixeln. |
+| `height` | integer | Höhe des verarbeiteten Bildes, in Pixeln. |
 | `format` | string | Immer `webp`. |
-| `hasAlpha` | boolean | Ob das Bild einen transparenten Kanal hat. |
+| `hasAlpha` | boolean | Ob das Bild einen Transparenzkanal hat. |
 
 <Note>
-Um ein hochgeladenes Bild an eine Ressource anzuhängen, nimm die zurückgegebene `url`
-und setze sie am Produkt oder Link — übergib sie zum Beispiel als `image` des Produkts,
-wenn du es erstellst oder aktualisierst.
+Um das Bild zuzuordnen, setze die zurückgegebene `url` an der Ressource: zum
+Beispiel `imageUrl` eines Produkts, `thumbnailUrl` eines Links oder `logoUrl`
+des Stores.
 </Note>
 
-## Video-Uploads (Hero, Hintergrund und Galerie-Elemente)
+## Einen Upload-Link erstellen
+
+```
+POST /v1/upload-links
+```
+
+Erstellt einen kurzlebigen Upload-Link für Dateien, die noch nicht online sind.
+Du gibst die Seite einer Person („öffne sie und wähle die Fotos aus") oder
+sendest die Dateien selbst an die Adresse für den direkten Upload. Es entspricht
+dem MCP-Tool `create_upload_link`. Erfordert den Scope **write**.
+
+### Anfrage
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "maxFiles": 4, "accept": "image" }' \
+  https://api.linkz.ee/v1/upload-links
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `maxFiles` | integer | Nein | Dateien, die der Link akzeptiert, 1 bis 10. Standard 10. |
+| `accept` | string | Nein | `image`, `video` oder `any`. Standard `any`. |
+
+### Antwort
+
+```json
+{
+  "error": false,
+  "message": "Upload link created",
+  "data": {
+    "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+    "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+    "directUpload": {
+      "method": "POST",
+      "url": "https://api.linkz.ee/upload-tickets/files",
+      "header": "Authorization: Bearer lzu_AbC123...",
+      "field": "file"
+    },
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image"
+  }
+}
+```
+
+Das Geheimnis `lzu_...` erscheint nur in `uploadPageUrl` und in
+`directUpload.header`. Der Link bleibt **15 Minuten** lang offen; pro Store
+können bis zu 20 Links gleichzeitig offen sein, und pro Stunde können 60
+erstellt werden.
+
+### Eine Datei an den Link senden
+
+```
+POST https://api.linkz.ee/upload-tickets/files
+```
+
+Sende eine Datei pro Anfrage, als `multipart/form-data` mit dem Feld `file` und
+dem Header `Authorization: Bearer lzu_...` (nie deinen `lzk_`-Schlüssel und nie
+das Geheimnis in der URL).
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzu_AbC123..." \
+  -F "file=@/path/to/after.jpg" \
+  https://api.linkz.ee/upload-tickets/files
+```
+
+```json
+{
+  "error": false,
+  "message": "File received",
+  "data": {
+    "uploadId": "6740b2a1c3d4e5f6a7b8c9d2",
+    "kind": "image",
+    "status": "done",
+    "name": "after.jpg",
+    "size": 512044,
+    "w": 1600,
+    "h": 1200
+  }
+}
+```
+
+| Regel | Wert |
+| --- | --- |
+| Fotos | JPEG, PNG, WebP, GIF oder AVIF, bis 8&nbsp;MB. HEIC wird abgelehnt (verwende auf einem iPhone das Kameraformat **Maximale Kompatibilität** oder wähle aus der Galerie). |
+| Videos | MP4 oder MOV (H.264 oder HEVC), bis 40&nbsp;MB. |
+| Pro Store | 26 Dateien pro Minute (Fotos 20, Videos 6), 60 Videos pro Tag, 2.560&nbsp;MB pro Tag. |
+
+Ein abgelehnter **Inhalt** (beschädigte Datei, falsches Format) gibt `200` mit
+`"status": "failed"` und einer `error`-Nachricht zurück; die Datei belegt keinen
+Platz. Eine abgelehnte **Anfrage** gibt den Standardfehler zurück: `400` keine
+Datei oder ein Typ, den der Link nicht akzeptiert, `401` ungültiger Link, `403`
+Schlüssel widerrufen oder Tarif ohne API, `409` Link voll, `410` Link
+abgelaufen, `413` Datei zu groß, `429` Limit des Stores.
+
+### Den Status des Links lesen
+
+```
+GET https://api.linkz.ee/upload-tickets/status
+```
+
+Mit demselben Header `Authorization: Bearer lzu_...`. Es verbraucht den Link
+nicht.
+
+```json
+{
+  "error": false,
+  "message": "Upload link loaded",
+  "data": {
+    "status": "open",
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image",
+    "storeName": "Studio Ana",
+    "files": [
+      { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2", "kind": "image", "status": "done", "name": "after.jpg", "size": 512044 }
+    ]
+  }
+}
+```
+
+`status` ist `open`, `full` oder `expired`; jede Datei ist `uploading`, `done`
+oder `failed`.
+
+<Note>
+Eine `uploadId` wird in den Bild- und Videofeldern der MCP-Tools als
+`{ "uploadId": "..." }` verwendet, 24 Stunden lang und bis zu 5 Mal. Die
+REST-Endpunkte nehmen URLs: Mit einem API-Schlüssel lädst du Bilder mit
+`POST /v1/uploads/image` hoch. Siehe
+[Dateien senden](/de/integrations/mcp/sending-files).
+</Note>
+
+## Video-Uploads (Hero, Hintergrund und Reel-Elemente)
 
 ```
 POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
-Lädt ein kurzes Video für deinen **Hero**-Header oder den **Hintergrund** deiner
-Seite hoch und optimiert es im Hintergrund. Sende es als `multipart/form-data`
-mit einem einzigen Feld `file` (MP4 oder MOV, bis zu **40&nbsp;MB**). Dieser
-Endpunkt erfordert einen Schlüssel mit dem **write**-Scope und einen Store in
-einem **Premium**-Tarif.
+Lädt ein kurzes Video für deinen **Hero**-Header, den **Hintergrund** deiner
+Seite oder ein Videoelement einer Reel-Galerie hoch und optimiert es im
+Hintergrund. Sende es als `multipart/form-data` mit einem einzigen Feld `file`
+(MP4 oder MOV, bis zu **40&nbsp;MB**). Erfordert den Scope **write** und einen
+**Premium**-Tarif.
 
 ```bash
 curl -X POST \
@@ -132,28 +268,33 @@ curl -X POST \
   "https://api.linkz.ee/v1/uploads/video?kind=hero"
 ```
 
-| Parameter | Wo | Erforderlich | Beschreibung |
+| Parameter | In | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `kind` | query | Ja | `hero` für das Video des Hero-Headers, `wallpaper` für den Seitenhintergrund, `media` für ein Video-Element einer Hochformat-Galerie. |
-| `linkId` | query | Bei `kind=media` | Der Galerie-Block (Layout `reel`), zu dem das Video gehört. Er muss ein Link deines eigenen Shops sein. |
-| `slot` | query | Bei `kind=media` | Der Platz des Elements, `0` bis `9`. |
-| `file` | multipart | Ja | Das hochzuladende Video, MP4 oder MOV, bis zu **40&nbsp;MB**. |
+| `kind` | query | Ja | `hero` für das Video des Hero-Headers, `wallpaper` für den Seitenhintergrund, `media` für ein Videoelement einer Reel-Galerie. |
+| `linkId` | query | Bei `kind=media` | Der Galerieblock (Layout `reel`), zu dem das Video gehört, in deinem eigenen Store. |
+| `slot` | query | Bei `kind=media` | Der Slot des Elements, `0` bis `9`. |
+| `file` | multipart | Ja | Das Video, MP4 oder MOV, bis zu **40&nbsp;MB**. |
 
-### Video-Elemente einer Hochformat-Galerie
+### Videoelemente einer Reel-Galerie
 
-Mit `kind=media` wird das Video zu einem Element eines Galerie-Blocks mit dem
-Layout `reel`. Anders als Hero- und Hintergrundvideos **behält ein Element
-seinen Ton** (Besucher können den Ton einschalten); außerdem bleiben die ersten
-30 Sekunden erhalten. Speichere das Element nach dem Upload mit
-`PATCH /v1/links/{id}` und sende dabei
-`{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems`. Das Video
-wird automatisch eingesetzt, sobald der Job fertig ist.
+Mit `kind=media` wird das Video zu einem Element eines Galerieblocks mit dem
+Layout `reel`. Ein Element **behält seinen Ton** (Besucher können den Ton
+einschalten) und die ersten 30 Sekunden. Speichere das Element nach dem Upload
+mit `PATCH /v1/links/{id}`, indem du
+`{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems` sendest.
+Das Video wird eingesetzt, sobald der Job fertig ist.
+
+<Note>
+Ein **Video einer Linkkarte** (`mediaType: "video"` an einem normalen Link)
+kann weder per URL noch über diesen Endpunkt gesendet werden. Es geht nur über
+einen Upload-Link und das MCP-Tool `set_link_media` mit
+`{ "uploadId": "..." }`.
+</Note>
 
 ### Antwort
 
-Die Anfrage liefert `200`, sobald die Datei empfangen wurde, mit einem **Job**,
-der die Optimierung beschreibt, plus einem Hinweis `pollMs`, wie oft du ihn
-abfragen solltest.
+Die Anfrage gibt `200` zurück, sobald die Datei empfangen wurde, mit einem
+**Job** und einem Hinweis `pollMs`, wie oft du ihn prüfen solltest.
 
 ```json
 {
@@ -176,25 +317,25 @@ abfragen solltest.
 
 | Feld | Typ | Beschreibung |
 | --- | --- | --- |
-| `id` | string | Die Job-ID. Verwende sie, um den Fortschritt abzufragen. |
-| `kind` | string | `hero` oder `wallpaper`. |
-| `status` | string | `queued` → `processing` → `ready`, `failed` oder `superseded`. `superseded` bedeutet, dass ein neuerer Upload derselben Art diesen ersetzt hat. |
-| `error` | string \| null | Eine lesbare Meldung, wenn der Job fehlgeschlagen ist. |
+| `id` | string | Die ID des Jobs. Verwende sie, um den Fortschritt abzufragen. |
+| `kind` | string | `hero`, `wallpaper` oder `media`. |
+| `status` | string | `queued`, `processing`, dann `ready`, `failed` oder `superseded` (ein neuerer Upload derselben Art hat diesen ersetzt). |
+| `error` | string \| null | Eine lesbare Nachricht, wenn der Job fehlgeschlagen ist. |
 | `errorCode` | string \| null | Ein stabiler Fehlercode, wenn der Job fehlgeschlagen ist. |
 | `tries` | integer | Wie oft die Optimierung versucht wurde. |
-| `result` | object \| null | Gefüllt, wenn `status` gleich `ready` ist — siehe unten. |
+| `result` | object \| null | Wird gefüllt, wenn `status` gleich `ready` ist. |
 | `createdAt` | string | Wann der Job erstellt wurde (ISO 8601). |
-| `finishedAt` | string \| null | Wann der Job beendet wurde, falls bereits geschehen. |
+| `finishedAt` | string \| null | Wann der Job beendet wurde, falls er beendet ist. |
 
-Ist der Job `ready`, enthält `result` das optimierte Video — und es ist
-**bereits auf deinen Store angewendet**, ein zusätzlicher `PATCH` ist also nicht
-nötig:
+Wenn der Job `ready` ist, enthält `result` das optimierte Video, und es ist
+**bereits auf deine Seite angewendet**, sodass kein zusätzliches `PATCH` nötig
+ist:
 
 | Feld | Typ | Beschreibung |
 | --- | --- | --- |
-| `url` | string | Die gehostete URL des optimierten Videos. |
-| `posterUrl` | string | Das Cover-Bild, erzeugt aus dem ersten Bild des Videos. |
-| `durationMs` | integer | Dauer des optimierten Videos in Millisekunden. |
+| `url` | string | Die gehostete, optimierte Video-URL. |
+| `posterUrl` | string | Das Titelbild, aus dem ersten Frame generiert. |
+| `durationMs` | integer | Dauer, in Millisekunden. |
 | `width` | integer | Breite in Pixeln. |
 | `height` | integer | Höhe in Pixeln. |
 | `bytes` | integer | Größe der optimierten Datei. |
@@ -208,81 +349,78 @@ GET    /v1/uploads/video/latest?kind=hero
 DELETE /v1/uploads/video/{kind}
 ```
 
-- `GET /v1/uploads/video/jobs/{id}` gibt den Job in seinem aktuellen Zustand
-  zurück — frage ihn alle `pollMs` Millisekunden ab, bis `status` gleich `ready`
-  oder `failed` ist.
-- `GET /v1/uploads/video/latest?kind=hero` (oder `kind=wallpaper`) gibt den
-  neuesten Job dieser Art zurück, oder `null`, wenn es noch nie einen gab.
-- `DELETE /v1/uploads/video/{kind}` entfernt das veröffentlichte Video (`hero`
-  oder `wallpaper`) von deiner Seite.
+- `GET /v1/uploads/video/jobs/{id}` (Scope **read**) gibt den Job in seinem
+  aktuellen Zustand zurück. Frage ihn alle `pollMs` Millisekunden ab, bis
+  `status` gleich `ready` oder `failed` ist. Es verfolgt auch Jobs, die im
+  Dashboard oder von einem Agenten gestartet wurden.
+- `GET /v1/uploads/video/latest?kind=hero` (oder `kind=wallpaper`, Scope
+  **read**) gibt den neuesten Job für diese Art zurück, oder `null`.
+- `DELETE /v1/uploads/video/{kind}` (Scope **write**) entfernt das
+  veröffentlichte `hero`- oder `wallpaper`-Video von deiner Seite.
 
 ### Ausgabeprofil
 
-Jedes Video wird mit demselben Profil kodiert, damit es auf dem Handy sofort
-startet:
+Hero- und Hintergrund-Videos werden mit demselben Profil kodiert, sodass sie auf
+einem Handy sofort starten:
 
 | Einstellung | Wert |
 | --- | --- |
-| Auflösung | **720p** auf der kurzen Seite — nie hochskaliert |
+| Auflösung | **720p** auf der kurzen Seite, nie hochskaliert |
 | Bildrate | 24 fps |
 | Codec | H.264 (MP4) |
 | Länge | Die **ersten 30 Sekunden** |
-| Audio | Entfernt — Videos sind immer stumm |
-| Größe | Höchstens **~6&nbsp;MB** |
+| Ton | Entfernt: Diese Videos sind immer stumm |
+| Größe | Höchstens **etwa 6&nbsp;MB** |
 
 <Note>
-Videos, die länger als 30 Sekunden sind, werden nie wegen ihrer Länge abgelehnt,
-sie werden gekürzt, und das Ergebnis meldet `trimmed: true`. Ein Upload wird nur
-abgelehnt, wenn die Datei größer als 40&nbsp;MB oder keine gültige Videodatei ist.
-Zeitlupen mit hoher Bildrate werden etwas früher gekürzt: Ein Clip mit
-240 fps behält seine ersten 15 Sekunden.
+Videos, die länger als 30 Sekunden sind, werden nie wegen ihrer Länge
+abgelehnt: Sie werden gekürzt, und das Ergebnis meldet `trimmed: true`. Ein
+Upload wird nur abgelehnt, wenn die Datei größer als 40&nbsp;MB oder kein
+gültiges Video ist. Zeitlupe mit hoher Bildrate wird etwas früher
+abgeschnitten: Ein Clip mit 240 fps behält seine ersten 15 Sekunden.
 </Note>
 
-<Note>
-`POST /v1/uploads/video` mit `kind=link` (das Video eines Links) speichert die
-Rohdatei weiterhin wie bisher — diese Optimierung wird dort nicht angewendet.
-</Note>
-
-<CardGroup cols={2}>
-  <Card title="Produkte" icon="box" href="/de/api-reference/products">
-    Erstelle Produkte und setze deren Bilder auf eine hochgeladene URL.
-  </Card>
-  <Card title="Links & Kollektionen" icon="link" href="/de/api-reference/links-collections">
-    Füge deinen Links Vorschaubilder und Cover hinzu.
-  </Card>
-  <Card title="Store" icon="store" href="/de/api-reference/store">
-    Aktualisiere dein Logo, deinen Hintergrund und deinen Header.
-  </Card>
-  <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
-    Basis-URL, Schlüssel, Scopes und Antwortstrukturen.
-  </Card>
-</CardGroup>
-
-## Ein Hero-Video aus Produktfotos erstellen
+## Ein Hero-Video aus Produktfotos generieren
 
 ```
 POST /v1/uploads/video/montage
 ```
 
-Erstellt eine kurze kinoreife Montage aus Ihren Produktfotos (langsame Zooms
-und Schwenks, Überblendungen, rund 14 Sekunden) und reiht sie als **Hero**-Video
-ein — derselbe Job und dasselbe Polling wie beim Upload, angewendet, sobald sie
-fertig ist. Verwendet die neuesten Produkte mit Foto oder die in `productIds`
-übergebenen (bis zu 6, in Reihenfolge). Erfordert einen Schlüssel mit dem Scope
-**write**, einen **Premium**-Shop und mindestens 3 Produkte mit einem bei
-Linkzee gehosteten Foto.
+Erstellt eine kurze Montage aus deinen Produktfotos (langsame Zooms und
+Schwenks, Überblendungen, etwa 14 Sekunden) und reiht sie als **Hero**-Video
+ein, mit demselben Job und derselben Abfrage wie bei einem Upload. Verwendet die
+neuesten Produkte mit Foto oder die, die du in `productIds` übergibst (bis zu 6,
+in Reihenfolge). Erfordert den Scope **write**, einen **Premium**-Tarif und
+mindestens 3 Produkte mit einem auf Linkzee gehosteten Foto. Es entspricht dem
+MCP-Tool `set_hero_video` mit `fromProducts`.
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{"productIds":["prod_a","prod_b","prod_c"]}' \
-  "https://api.linkz.ee/v1/uploads/video/montage"
+  -d '{"productIds":["665f1a2b9c4e1f0012a3b4c5","665f1a2b9c4e1f0012a3b4c6","665f1a2b9c4e1f0012a3b4c7"]}' \
+  https://api.linkz.ee/v1/uploads/video/montage
 ```
 
-| Parameter | Wo | Pflicht | Beschreibung |
+| Parameter | Wo | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `productIds` | body | Nein | Bis zu 6 Produkt-IDs in der gewünschten Reihenfolge. Fehlt der Wert: die neuesten Produkte mit Foto. |
+| `productIds` | body | Nein | Bis zu 6 Produkt-IDs, in der Reihenfolge, in der sie erscheinen sollen. Weggelassen: die neuesten Produkte mit Foto. |
 
-Gibt den Verarbeitungs-Job zurück (`{ id, kind, status, result, error }`), genau
-wie der Video-Upload. Fehler: `400`, wenn weniger als 3 Produkte ein Foto haben.
+Gibt den Verarbeitungsjob zurück, genau wie beim Video-Upload. Fehler: `400`,
+wenn weniger als 3 Produkte ein Foto haben, `403` mit `code: "PLAN_REQUIRED"` in
+einem kostenlosen Tarif.
+
+<CardGroup cols={2}>
+  <Card title="Dateien senden" icon="upload" href="/de/integrations/mcp/sending-files">
+    URL oder Upload-Link für KI-Agenten.
+  </Card>
+  <Card title="Produkte" icon="box" href="/de/api-reference/products">
+    Setze Produktbilder auf eine hochgeladene URL.
+  </Card>
+  <Card title="Links & Sammlungen" icon="link" href="/de/api-reference/links-collections">
+    Thumbnails, Titelbilder und Medienblöcke.
+  </Card>
+  <Card title="Store" icon="store" href="/de/api-reference/store">
+    Logo, Hintergrund und Header-Bilder.
+  </Card>
+</CardGroup>

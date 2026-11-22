@@ -1,23 +1,40 @@
 ---
 title: Produkte
 icon: box
-description: "Produkte in deiner Linkzee-Vitrine auflisten, abrufen, erstellen, aktualisieren und löschen."
+description: "Liste, lies, erstelle, aktualisiere, lösche und ordne die Produkte in deinem Linkzee-Schaufenster neu an."
 ---
 
-Produkte sind die Artikel in deiner öffentlichen Vitrine. Jedes Produkt hat einen
-Namen, einen optionalen Preis, ein Bild und einen Affiliate-Link. Verwende diese
-Endpunkte, um deinen Katalog aus deinen eigenen Systemen synchron zu halten.
+Produkte sind die Artikel in deinem öffentlichen Schaufenster. Jedes Produkt hat
+einen Namen, einen optionalen Preis, ein Bild und einen Affiliate- oder
+Produktlink. Verwende diese Endpunkte, um deinen Katalog aus deinen eigenen
+Systemen synchron zu halten.
 
-Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel enthalten:
+Alle Anfragen gehen an `https://api.linkz.ee` und müssen deinen API-Schlüssel
+enthalten:
 
 ```
 Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-Das Lesen von Produkten (`GET`) funktioniert mit jedem Schlüssel. Zum Erstellen,
-Aktualisieren oder Löschen eines Produkts ist ein Schlüssel mit dem **write**-Scope erforderlich.
+Das Lesen von Produkten (`GET`) benötigt den Scope **read**. Das Erstellen,
+Aktualisieren, Löschen oder Neuordnen eines Produkts erfordert einen Schlüssel
+mit dem Scope **write**.
 </Note>
+
+## Reihenfolge des Schaufensters
+
+Das Schaufenster hat zwei Sortiermodi:
+
+- **Neueste zuerst** (Standard): Die neuesten Produkte kommen zuerst.
+- **Manuell**: wird durch die erste Neuordnung aktiviert (siehe "Produkte neu
+  anordnen" unten), die die Reihenfolge ändert, die Besucher sehen. Ab dann
+  folgt das Schaufenster der `order` jedes Produkts, und neue Produkte kommen
+  oben hinzu.
+
+`GET /v1/products`, das MCP-Tool `list_products` und die öffentliche Seite
+geben die Produkte immer in der Reihenfolge zurück, die Besucher sehen. Es gibt
+keinen Endpunkt, um zu "neueste zuerst" zurückzukehren.
 
 ## Produkte auflisten
 
@@ -25,7 +42,7 @@ Aktualisieren oder Löschen eines Produkts ist ein Schlüssel mit dem **write**-
 GET /v1/products
 ```
 
-Gibt jedes Produkt in deinem Store in der Reihenfolge der Vitrine zurück.
+Gibt jedes Produkt in deinem Store in der Reihenfolge des Schaufensters zurück.
 
 ### Anfrage
 
@@ -58,6 +75,7 @@ curl -X GET \
       "categoryId": "665f0000aa11bb22cc33dd44",
       "externalId": "SKU-1042",
       "barcode": "7891234567895",
+      "order": 0,
       "clicks": 128,
       "createdAt": "2026-07-10T12:04:55.000Z"
     }
@@ -71,7 +89,9 @@ curl -X GET \
 GET /v1/products/{id}
 ```
 
-Gibt ein einzelnes Produkt anhand seiner ID zurück.
+Gibt ein einzelnes Produkt anhand seiner ID zurück. Die Antwort ist eine
+Positivliste der Produktfelder (dieselbe Ansicht wie beim MCP-Tool
+`get_product`); interne Felder werden nie zurückgegeben.
 
 ### Anfrage
 
@@ -104,16 +124,24 @@ curl -X GET \
     "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
     "gallery": [],
     "externalLink": "https://shopee.com.br/product/123",
+    "externalId": "SKU-1042",
+    "barcode": "7891234567895",
     "buttonText": "Buy",
     "badge": "Deal",
     "isActive": true,
     "isFeatured": false,
-    "categoryId": "665f0000aa11bb22cc33dd44",
-    "externalId": "SKU-1042",
-    "barcode": "7891234567895",
+    "highlightFx": "",
+    "imageRatio": 1,
+    "cardSize": "normal",
+    "offerEndsAt": null,
+    "offerDurationMinutes": 120,
     "showCountdown": false,
     "clicks": 128,
-    "createdAt": "2026-07-10T12:04:55.000Z"
+    "order": 0,
+    "categoryId": "665f0000aa11bb22cc33dd44",
+    "collectionId": null,
+    "createdAt": "2026-07-10T12:04:55.000Z",
+    "updatedAt": "2026-07-12T08:30:00.000Z"
   }
 }
 ```
@@ -124,12 +152,12 @@ curl -X GET \
 POST /v1/products
 ```
 
-Erstellt ein Produkt in deiner Vitrine. Erfordert den **write**-Scope.
+Erstellt ein Produkt in deinem Schaufenster. Erfordert den Scope **write**.
 
-Du kannst entweder die Produktfelder direkt senden oder nur eine Marketplace-`url`
-senden und Linkzee Namen, Preis und Bild für dich abrufen lassen. Falls die
-automatische Abfrage unvollständig zurückkommt, sende mindestens `name`, damit das
-Produkt gespeichert werden kann.
+Du kannst entweder die Produktfelder direkt senden oder nur eine
+Marktplatz-`url` senden und Linkzee Name, Preis und Bild für dich abrufen
+lassen. Wenn die automatische Abfrage unvollständig zurückkommt, sende
+mindestens `name`, damit das Produkt gespeichert werden kann.
 
 ### Anfrage
 
@@ -137,6 +165,7 @@ Produkt gespeichert werden kann.
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
+  -H "Idempotency-Key: sync-SKU-1042" \
   -d '{
     "name": "Wireless Headphones XYZ",
     "description": "Bluetooth 5.3, 30h battery",
@@ -145,7 +174,8 @@ curl -X POST \
     "imageUrl": "https://example.com/headphones.jpg",
     "externalLink": "https://shopee.com.br/product/123",
     "badge": "Deal",
-    "isFeatured": true
+    "isFeatured": true,
+    "externalId": "SKU-1042"
   }' \
   https://api.linkz.ee/v1/products
 ```
@@ -154,39 +184,35 @@ curl -X POST \
 
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `name` | string | Bedingt | Produktname (max. 160). Optional, wenn `url` gesendet wird — er wird aus der Marketplace-Abfrage gefüllt. |
-| `url` | string | Nein | Marketplace-URL. Wenn ohne `name`/`price` gesendet, versucht Linkzee, diese automatisch zu füllen. |
-| `slug` | string | Nein | Benutzerdefinierter Slug (max. 80). Wird aus dem Namen abgeleitet, wenn er weggelassen wird; pro Store eindeutig. |
+| `name` | string | Bedingt | Produktname (max. 160). Optional, wenn `url` gesendet wird: Er wird aus der Marktplatz-Abfrage gefüllt. |
+| `url` | string | Nein | Marktplatz-URL. Wenn sie ohne `name` oder `price` gesendet wird, versucht Linkzee, diese automatisch zu füllen. |
+| `slug` | string | Nein | Eigener Slug (max. 80). Wird aus dem Namen abgeleitet, wenn weggelassen; eindeutig pro Store. |
 | `description` | string | Nein | Kurze Beschreibung (max. 2000). |
-| `price` | number | Nein | Aktueller Preis in R$. Leer lassen für ein Produkt „ohne Preis". |
-| `priceOriginal` | number | Nein | Ursprünglicher Preis, wird verwendet, um einen Rabatt anzuzeigen. |
-| `installments` | string | Nein | Ratentext, z. B. `3x of R$ 33.30` (max. 80). |
-| `imageUrl` | string | Nein | URL des Hauptbilds (http/https). Externe URLs werden erneut auf dem CDN gehostet. |
+| `price` | number | Nein | Aktueller Preis in R$. Lass ihn weg für ein Produkt "ohne Preis". |
+| `priceOriginal` | number | Nein | Ursprünglicher Preis, um einen Rabatt anzuzeigen. |
+| `installments` | string | Nein | Text für Ratenzahlung, zum Beispiel `3x of R$ 33.30` (max. 80). |
+| `imageUrl` | string | Nein | URL des Hauptbilds (http oder https). Externe URLs werden in das Linkzee-CDN kopiert. |
 | `gallery` | string[] | Nein | Bis zu 10 zusätzliche Bild-URLs. |
-| `externalLink` | string | Nein | Affiliate-/Marketplace-Link (http/https). |
-| `buttonText` | string | Nein | Beschriftung des Call-to-Action (max. 60), z. B. `Buy`. |
-| `badge` | string | Nein | Kurzer Aktions-Tag (max. 40), z. B. `Deal`. |
+| `externalLink` | string | Nein | Affiliate- oder Produktlink (http oder https). Ein Produkt ohne Link bleibt ein ausgeblendeter Entwurf. |
+| `buttonText` | string | Nein | Beschriftung des Call to Action (max. 60), zum Beispiel `Buy`. |
+| `badge` | string | Nein | Kurzes Aktionsetikett (max. 28), zum Beispiel `Deal`. |
 | `categoryId` | string | Nein | ID der Kategorie, zu der dieses Produkt gehört. |
-| `isActive` | boolean | Nein | Ob das Produkt in der Vitrine sichtbar ist. Standardwert ist `true`. |
-| `isFeatured` | boolean | Nein | Zeigt das Produkt größer und oben in der Vitrine an. |
-| `cardSize` | string | Nein | `normal` oder `wide` (eine `wide`-Karte umfasst beide Rasterspalten). |
-| `offerDurationMinutes` | number | Nein | Dauer des Knappheits-Countdowns, in Minuten. |
-| `showCountdown` | boolean | Nein | Zeigt den Countdown-Timer auf der Karte an. |
-| `externalId` | string | Nein | Deine eigene Referenz für dieses Produkt — eine CRM-/ERP-ID oder SKU —, um es mit deinen Systemen abzugleichen (max. 64). Wird unverändert gespeichert und zurückgegeben; nie auf deiner öffentlichen Seite angezeigt. |
-| `barcode` | string | Nein | Produkt-Barcode: EAN, GTIN oder UPC (max. 32). Nie öffentlich angezeigt. |
+| `isActive` | boolean | Nein | Ob das Produkt im Schaufenster sichtbar ist. Standard ist `true`. |
+| `isFeatured` | boolean | Nein | Fügt das Produkt dem Highlight-Karussell hinzu. |
+| `highlightFx` | string | Nein | Animierte Hervorhebung (Premium): `""`, `"shake"`, `"shine"`, `"pulse"` oder `"bounce"`. |
+| `cardSize` | string | Nein | `normal` oder `wide` (eine `wide`-Karte erstreckt sich über beide Rasterspalten). |
+| `offerEndsAt` | string | Nein | Enddatum des Angebots (ISO 8601). |
+| `offerDurationMinutes` | number | Nein | Dauer des Knappheits-Countdowns, in Minuten (relativ, startet pro Besucher neu). |
+| `showCountdown` | boolean | Nein | Zeigt den Countdown-Timer auf der Karte. |
+| `externalId` | string | Nein | Deine eigene Referenz für dieses Produkt (eine CRM- oder ERP-ID oder eine SKU), um es mit deinen Systemen abzugleichen (max. 64). Wird nie auf deiner öffentlichen Seite angezeigt. |
+| `barcode` | string | Nein | Barcode des Produkts: EAN, GTIN oder UPC (max. 32). Wird nie öffentlich angezeigt. |
 
 <Note>
-`externalId` und `barcode` sind optional und werden nie öffentlich angezeigt. Sie
-werden von List/Get zurückgegeben und von Create/Update hier sowie über
-[MCP](/de/integrations/mcp/tools-reference) via `create_product`, `update_product`
-und `list_products` akzeptiert.
-</Note>
-
-<Note>
-Um zu vermeiden, dass bei einem erneuten Versuch dasselbe Produkt zweimal erstellt
-wird, sende einen `Idempotency-Key`-Header. Wenn eine Erstellung mit diesem
-Schlüssel bereits erfolgreich war, wird das ursprüngliche Produkt anstelle eines
-Duplikats zurückgegeben.
+Sende einen `Idempotency-Key`-Header, um sicher erneut zu versuchen: Wenn du die
+Anfrage innerhalb von 24 Stunden mit demselben Schlüssel und demselben Body
+wiederholst, erhältst du das beim ersten Mal erstellte Produkt statt eines
+Duplikats. Derselbe Schlüssel mit einem anderen Body gibt `409` zurück. Siehe
+[Ratenbegrenzungen](/de/api-reference/rate-limits).
 </Note>
 
 ### Antwort
@@ -219,7 +245,7 @@ PATCH /v1/products/{id}
 ```
 
 Aktualisiert eine beliebige Teilmenge der Felder eines Produkts. Erfordert den
-**write**-Scope. Nur die von dir gesendeten Felder werden geändert.
+Scope **write**. Nur die Felder, die du sendest, werden geändert.
 
 ### Anfrage
 
@@ -242,8 +268,9 @@ curl -X PATCH \
 | `id` | string (path) | Ja | Die Produkt-ID. |
 
 Der Body akzeptiert dieselben Felder wie **Ein Produkt erstellen**, außer `url`
-(die automatische Abfrage läuft nur bei der Erstellung). Alle Felder sind optional.
-Sende `categoryId: null`, um das Produkt aus seiner Kategorie zu entfernen.
+(die automatische Abfrage läuft nur beim Erstellen). Alle Felder sind optional.
+Sende `categoryId: null`, um das Produkt aus seiner Kategorie zu entfernen, und
+`offerEndsAt: null`, um das Enddatum des Angebots zu löschen.
 
 ### Antwort
 
@@ -267,7 +294,7 @@ Sende `categoryId: null`, um das Produkt aus seiner Kategorie zu entfernen.
 DELETE /v1/products/{id}
 ```
 
-Entfernt ein Produkt aus deiner Vitrine. Erfordert den **write**-Scope.
+Entfernt ein Produkt aus deinem Schaufenster. Erfordert den Scope **write**.
 
 ### Anfrage
 
@@ -292,12 +319,57 @@ curl -X DELETE \
 }
 ```
 
+## Produkte neu anordnen
+
+```
+PUT /v1/products/order
+```
+
+Legt die Position der Produkte im Schaufenster fest. Erfordert den Scope
+**write**. Jedes Element wird an die durch `order` angegebene Position
+verschoben (`0` ist ganz oben):
+
+- Sende die **vollständige** Liste für eine exakte Reihenfolge.
+- Sende nur die Produkte, die du verschieben möchtest: Die anderen behalten
+  ihre relative Reihenfolge.
+
+Die erste Neuordnung, die ändert, was Besucher sehen, stellt das Schaufenster
+auf manuelle Reihenfolge um (siehe "Reihenfolge des Schaufensters" oben).
+
+### Anfrage
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "665f1a2b9c4e1f0012a3b4c5", "order": 0 },
+      { "id": "665f1a2b9c4e1f0012a3b4c6", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/products/order
+```
+
+### Parameter
+
+| Parameter | Typ | Erforderlich | Beschreibung |
+| --- | --- | --- | --- |
+| `items` | array | Ja | 1 bis 5000 Elemente. |
+| `items[].id` | string | Ja | Die Produkt-ID. |
+| `items[].order` | integer | Ja | Neue Position (`0` ist ganz oben). |
+
+### Antwort
+
+Gibt die Produkte in der neuen Reihenfolge zurück, im selben Format wie
+`GET /v1/products`.
+
 <CardGroup cols={2}>
   <Card title="Kategorien" icon="layer-group" href="/de/api-reference/categories">
-    Produkte in Kategorien organisieren.
+    Organisiere Produkte in Kategorien.
   </Card>
   <Card title="Uploads" icon="image" href="/de/api-reference/uploads">
-    Produktbilder auf das CDN hochladen.
+    Lade Produktbilder in das CDN hoch.
   </Card>
   <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
     API-Schlüssel, Scopes und Antwortformat.

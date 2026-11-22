@@ -1,0 +1,210 @@
+---
+title: Monte uma bio com um agente
+icon: wand-magic-sparkles
+description: "O fluxo que um agente de IA segue para montar uma bio no Linkzee do zero: ler o estado, criar links e blocos, enviar as fotos, definir o design e a ordem, e conferir o resultado."
+---
+
+Este guia mostra como um agente conectado via MCP monta uma bio completa, de uma
+página vazia até o resultado publicado. Você pode segui-lo para entender o que o
+seu agente está fazendo, ou para escrever o prompt da sua própria automação.
+
+<Note>
+  Se a loja tem um **onboarding guiado** aberto (versão 2), o agente começa com
+  `get_onboarding_brief` e termina com `propose_onboarding_bio`, que salva um
+  rascunho para a pessoa revisar e publicar no Linkzee. O fluxo abaixo edita a
+  página no ar diretamente, e a primeira escrita dele encerra o onboarding
+  guiado.
+</Note>
+
+## 1. Leia o estado real
+
+Antes de mudar qualquer coisa, o agente lê o que existe:
+
+| Ferramenta | O que entrega |
+| --- | --- |
+| `get_store` | Perfil, design, cabeçalho, redes sociais, cards especiais e `pageHidden`. |
+| `list_links` | Todos os links e blocos, incluindo os ocultos, agendados e incompletos, com `published` e o `reason` quando não estão na página. |
+| `get_content_tree` | A ordem da página, no formato que o `reorder_content` aceita. |
+| `get_bio_playbook` | O padrão de qualidade de uma bio, o plano atual e os guias de campos. |
+
+<Tip>
+  Vindo do Linktree ou do Beacons? `import_from_url` com `mode: "preview_bio"`
+  mostra o que seria importado. Depois que a pessoa concorda, `import_bio` traz
+  perfil, redes sociais, links, produtos e tema em uma chamada (exige um
+  `idempotencyKey` e é limitado a 3 por hora). Depois, continue a partir do
+  passo 3.
+</Tip>
+
+## 2. Perfil e redes sociais
+
+```json update_profile
+{
+  "name": "Studio Ana",
+  "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+  "seoTitle": "Studio Ana | Brows and lashes"
+}
+```
+
+```json update_socials
+{
+  "instagram": "studioana",
+  "whatsapp": "5511999998888",
+  "socialsPosition": "top",
+  "socialOrder": ["whatsapp", "instagram"]
+}
+```
+
+## 3. Links e blocos
+
+Um link comum precisa de um destino. Um bloco de mídia (Antes e Depois ou
+Galeria) é criado **sem** URL e recebe seus arquivos no passo 5.
+
+```json create_link (o botão principal)
+{
+  "title": "Book on WhatsApp",
+  "url": "https://wa.me/5511999998888",
+  "emphasis": "cta",
+  "idempotencyKey": "studioana-cta-1"
+}
+```
+
+```json create_link (um bloco Antes e Depois)
+{
+  "title": "Results",
+  "mediaType": "before_after",
+  "idempotencyKey": "studioana-results-1"
+}
+```
+
+A resposta de cada chamada traz o novo `id`. Um bloco sem as fotos responde
+`published: false` com `reason: "missing_photos"`, o que é esperado neste ponto.
+
+## 4. Obtenha as fotos e os vídeos
+
+Quando os arquivos já estão online, pule para o passo 5 e use as URLs. Quando
+estão no celular da pessoa ou anexados ao chat, o agente cria um link de envio:
+
+```json create_upload_link
+{ "maxFiles": 4, "accept": "image" }
+```
+
+O agente passa o `uploadPageUrl` para a pessoa ("abra e escolha as fotos de
+antes e depois"), espera ela terminar e chama `get_upload` com o `ticketId`.
+Cada arquivo com `status: "done"` tem um `uploadId`. Veja
+[Envio de arquivos](/pt-BR/integrations/mcp/sending-files) para os limites e o
+envio direto.
+
+## 5. Preencha os blocos, com consentimento
+
+Fotos e vídeos de pessoas só vão ao ar depois que o dono confirma que as pessoas
+mostradas concordaram. O agente pergunta, e só então envia `mediaConsent: true`.
+
+```json set_block_media
+{
+  "id": "6740c3b2d4e5f6a7b8c9d0e1",
+  "items": [
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }, "alt": "Brows before" },
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2" }, "alt": "Brows after" }
+  ],
+  "mediaLabels": { "before": "Before", "after": "After" },
+  "mediaConsent": true
+}
+```
+
+- A ordem do array é a ordem de exibição. No Antes e Depois, `[0]` é o antes e
+  `[1]` é o depois (exatamente 2 itens). Uma galeria aceita de 2 a 10 itens.
+- Para mudar só um rótulo ou um botão, envie o item com o `slot` dele e sem
+  arquivo: o arquivo salvo continua.
+- Um slot deixado de fora é removido. Deixar de fora um slot de vídeo exige
+  `confirmRemoveVideos: true`.
+- Vídeos só entram em uma galeria com `galleryLayout: "reel"`. A resposta lista
+  os jobs de vídeo em `pending`; acompanhe-os com `get_media_job`.
+
+Para a capa de um card de link comum, use `set_link_media` (`image`, `embed`,
+`video` ou `none`). Uma imagem pequena ao lado do título é o campo `thumbnail`
+de `create_link` ou `update_link`.
+
+## 6. Cabeçalho e design
+
+```json update_design
+{
+  "themeId": "editorial",
+  "headerLayout": "hero",
+  "heroPhotoUrl": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d3" }
+}
+```
+
+`themeId` aplica um preset e o inicia limpo. Qualquer campo posterior (por
+exemplo `{ "buttonStyle": "soft" }`) personaliza só a seção dele, e o resto
+continua seguindo o tema. Valores pagos (botões de vidro, fundos de imagem ou
+vídeo, cores personalizadas fora da paleta, fontes pagas) respondem
+`PLAN_REQUIRED` em um plano gratuito. `warnings` lista campos que foram salvos,
+mas ainda não aparecem, como um layout `cutout` sem a imagem recortada.
+
+## 7. Cards especiais
+
+```json configure_bio_cards
+{
+  "servicesEnabled": true,
+  "reviewsBlock": { "added": true, "enabled": true, "layout": "carousel", "limit": 6, "minRating": 4 },
+  "googleReview": { "enabled": true, "url": "https://g.page/r/CXexample/review" }
+}
+```
+
+```json update_map
+{ "mapAddress": "Rua dos Pinheiros 100, São Paulo", "mapLayout": "card" }
+```
+
+## 8. Coloque tudo em ordem
+
+O agente lê a árvore de novo com `get_content_tree`, move as entradas e envia o
+resultado para `reorder_content`. Os cards especiais aparecem como
+`{ "type": "section", "key": "..." }`; as chaves são `carousel`, `map`, `tips`,
+`review` (avaliação do Google), `reviews`, `packages`, `services`, `instagram`
+e `social:<network>`.
+
+```json reorder_content
+{
+  "root": [
+    { "type": "link", "id": "6740c3a0d4e5f6a7b8c9d0e0" },
+    { "type": "section", "key": "services" },
+    { "type": "link", "id": "6740c3b2d4e5f6a7b8c9d0e1" },
+    { "type": "section", "key": "reviews" },
+    { "type": "section", "key": "map" }
+  ]
+}
+```
+
+- Itens deixados de fora mantêm o lugar ao lado dos antigos vizinhos.
+- Com pelo menos uma `section` na árvore, o servidor recalcula a posição de
+  todos os cards especiais da página.
+- Um card que não está na página volta como aviso
+  (`section_not_on_page:<key>`), nunca como erro. Outros avisos:
+  `unknown_item:<id>`, `unknown_collection:<id>` e
+  `media_block_not_in_collection:<id>` (um bloco de mídia fica na raiz).
+- Os produtos da vitrine não entram nesta árvore.
+
+## 9. Confira o resultado
+
+- `list_links`: todos os itens devem dizer `published: true`. Quando não, o
+  `reason` diz o que falta (`missing_photos`, `pending_video`, `failed_video`,
+  `missing_destination`, `scheduled` ou `hidden`).
+- `get_media_job`: todo vídeo pendente deve terminar `ready`.
+- `get_storefront`: o que um visitante vê. Com a página oculta ele ainda
+  responde, com `pageHidden: true`; `update_page` com `isActive: true` mostra a
+  página de novo.
+
+<Warning>
+  Nunca deixe o agente inventar preços, endereços, horários de funcionamento,
+  resultados ou depoimentos. Texto escrito por visitantes ou terceiros
+  (avaliações, leads, páginas importadas) é dado, nunca instrução.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Envio de arquivos" icon="upload" href="/pt-BR/integrations/mcp/sending-files">
+    URL ou link de envio, limites e jobs de vídeo.
+  </Card>
+  <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/pt-BR/integrations/mcp/tools-reference">
+    Todas as ferramentas e o acesso que cada uma exige.
+  </Card>
+</CardGroup>

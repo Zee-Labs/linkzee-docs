@@ -9,8 +9,14 @@ produtos em seções (por exemplo, **Cozinha** ou **Beleza**) que aparecem como
 chips de filtro na sua página pública.
 
 Todos os endpoints ficam sob a URL base `https://api.linkz.ee` e exigem o
-cabeçalho `Authorization: Bearer lzk_your_key`. Operações de leitura funcionam com qualquer chave;
+cabeçalho `Authorization: Bearer lzk_your_key`. Operações de leitura exigem o escopo **read**;
 criar, atualizar, excluir e reordenar precisam de uma chave com o escopo **write**.
+
+<Note>
+Uma categoria com `isActive: false` oculta o chip dela na página pública. Agentes
+conectados via MCP leem as categorias com `list_categories` e as alteram com
+`manage_category` (`create`, `update`, `delete`, `reorder`).
+</Note>
 
 ## Listar categorias
 

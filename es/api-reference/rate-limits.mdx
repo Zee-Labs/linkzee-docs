@@ -1,19 +1,25 @@
 ---
 title: Límites de tasa
 icon: gauge
-description: "Cómo la API de Linkzee limita las solicitudes y cómo crear clientes que se mantengan dentro de los límites."
+description: "Cómo la API de Linkzee limita las solicitudes, los límites por tienda y cómo las claves de idempotencia hacen seguros los reintentos."
 ---
 
-La API de Linkzee tiene límites de tasa para que cada integración reciba una
-parte justa y confiable de la capacidad. Los límites se aplican por clave de API
-y por IP de cliente como medida de seguridad. Si envías solicitudes a un ritmo
-normal y bien pausado, rara vez los notarás.
+La API de Linkzee tiene límites de tasa para que cada integración reciba una parte
+justa y confiable de la capacidad. Hay dos capas:
 
-## Cuándo superas un límite
+- **Tasa por solicitud**, por IP del cliente, como red de seguridad (100
+  solicitudes por minuto en general, y menos en las rutas pesadas como subidas e
+  importaciones).
+- **Límites por tienda**, contados en la tienda sin importar la clave, el agente o
+  la red que envía la solicitud. Protegen las operaciones costosas: descargas,
+  subidas, importaciones y vistas previas de enlaces.
 
-Cuando envías demasiadas solicitudes en un intervalo corto, la API deja de
-aceptar nuevas por un momento y responde con HTTP `429 Too Many Requests`. La
-respuesta usa el envoltorio de error estándar:
+Si envías solicitudes a un ritmo normal y bien espaciado, rara vez los notarás.
+
+## Cuando superas un límite
+
+Cuando envías demasiadas solicitudes en un intervalo corto, la API responde con
+HTTP `429 Too Many Requests`, usando la estructura de error estándar:
 
 ```json
 {
@@ -23,57 +29,63 @@ respuesta usa el envoltorio de error estándar:
 }
 ```
 
-Un `429` es temporal. Espera un breve momento y la misma solicitud tendrá éxito:
-no se pierde ningún dato ni se cobra nada a tu cuenta por la llamada rechazada.
+Un `429` es temporal. Espera un momento y la misma solicitud tendrá éxito. No se
+pierde ningún dato y no se cobra nada por la llamada rechazada.
 
 <Note>
-Trata el `429` como un "vuelve a intentarlo en un momento", no como un fallo.
-Simplemente significa que alcanzaste el tope para ese intervalo corto.
+Trata el `429` como "vuelve a intentarlo en un rato", no como una falla. Significa
+que alcanzaste el tope para ese intervalo.
 </Note>
 
-## Buenas prácticas
+## Límites por tienda
 
-Algunos hábitos mantienen tu integración cómodamente por debajo de los límites y
-resistente cuando sí es limitada.
+Estos son los valores actuales. Se aplican igual a la API, a MCP y a los enlaces de
+subida.
 
-### Reintenta con retroceso
+| Operación | Límite |
+| --- | --- |
+| Importar una bio (`POST /v1/import` con `mode: "apply"`, MCP `import_bio`) | 3 por hora |
+| Leer una página para prellenar un enlace o previsualizar una importación (`POST /v1/links/parse`, `POST /v1/import` con `mode: "preview"`, MCP `import_from_url`) | 30 por hora |
+| Imágenes descargadas desde URLs | 200 por hora, 1.000 por día, 500 MB por día |
+| Videos descargados desde URLs | 10 por hora, 30 por día, 600 MB por día |
+| Enlaces de subida nuevos | 20 abiertos al mismo tiempo, 60 por hora |
+| Archivos enviados a enlaces de subida | 26 por minuto (fotos 20, videos 6), 60 videos por día, 2.560 MB por día |
+| Videos de tarjeta de enlace | 6 por minuto, 1.536 MB por día |
+| Descargas en curso al mismo tiempo | 2; una tercera solicitud espera hasta 10 segundos por un lugar libre y luego recibe `429` |
 
-Cuando recibas un `429`, haz una pausa antes de reintentar, y aumenta la pausa en
-cada fallo consecutivo (retroceso exponencial). Añade un poco de aleatoriedad
-("jitter") para que muchos clientes no reintenten al mismo tiempo.
+## Claves de idempotencia
 
-Un patrón simple y eficaz:
+Algunas operaciones de creación aceptan una **clave de idempotencia**: un valor
+único que eliges para cada creación lógica. Cuando ocurre un reintento después de
+un timeout, un `429` o un fallo de red, la API devuelve lo que ya se creó en lugar
+de crearlo dos veces.
 
-```bash
-# Reintenta con retrasos crecientes: 1s, 2s, 4s, 8s...
-attempt=0
-until response=$(curl -sf -X GET \
-  -H "Authorization: Bearer lzk_your_key" \
-  https://api.linkz.ee/v1/products); do
-  attempt=$((attempt + 1))
-  [ "$attempt" -ge 5 ] && break
-  sleep $(( 2 ** (attempt - 1) ))
-done
-```
+### Dónde se aplica
 
-### Regula el ritmo de tus solicitudes
+| Operación | Clave |
+| --- | --- |
+| `POST /v1/products` | Opcional, header `Idempotency-Key` |
+| `POST /v1/agenda/packages` | **Obligatoria**, header `Idempotency-Key` o campo `idempotencyKey` en el cuerpo |
+| `POST /v1/agenda/subscription-plans` | **Obligatoria**, header o campo en el cuerpo |
+| `POST /v1/import` con `mode: "apply"` | **Obligatoria**, header o campo en el cuerpo |
+| MCP `create_link`, `create_product`, `create_products_bulk` (por ítem), `create_appointment`, `create_lead` | Opcional, argumento `idempotencyKey` |
+| MCP `manage_package` con `op: "create"`, `import_bio` | **Obligatoria**, argumento `idempotencyKey` |
 
-Distribuye el trabajo en lugar de disparar todo de una vez. Si estás
-sincronizando un catálogo grande, añade un pequeño retraso entre llamadas en vez
-de enviar cientos en paralelo. Lo constante gana a lo repentino.
+Cuando se envían tanto el header como el campo en el cuerpo, gana el header. Las
+claves tienen hasta 200 caracteres.
 
-### Obtén los datos una vez y reutilízalos localmente
+### Cómo se comporta
 
-Los endpoints de lectura devuelven el estado actual completo (por ejemplo, tu
-lista de productos o enlaces). Obtenlo una vez, guárdalo en memoria y trabaja con
-tu copia local en lugar de volver a solicitar los mismos datos en un bucle.
+| Situación | Resultado |
+| --- | --- |
+| Primera solicitud con una clave nueva | Crea el ítem y recuerda la clave durante 24 horas. |
+| Misma clave, mismo cuerpo, dentro de 24 horas | Devuelve el ítem creado la primera vez (una importación responde con `replayed: true`). No se crea nada nuevo. |
+| Misma clave, cuerpo **distinto** | `409 Conflict`. Usa una clave nueva para un ítem nuevo. |
+| Misma clave mientras la primera solicitud sigue en curso | Espera unos segundos a que termine la primera y devuelve su resultado, o `409` si tarda demasiado. Reintenta pasado un momento. |
+| Falta la clave donde es obligatoria | `400 Bad Request`. |
 
-### Reintenta las escrituras de forma segura con una clave de idempotencia
-
-La creación de un producto acepta un encabezado opcional `Idempotency-Key`. Envía
-un valor único por cada creación lógica y, si ocurre un reintento después de un
-`429` o un tropiezo de red, la API devuelve el producto que ya se había creado en
-lugar de crear un duplicado.
+Una clave pertenece a tu tienda, a la clave de API (o conexión) que la envió y a la
+operación, así que el mismo valor usado en otra operación no colisiona.
 
 ```bash
 curl -X POST \
@@ -84,25 +96,54 @@ curl -X POST \
   https://api.linkz.ee/v1/products
 ```
 
-Esto te permite reintentar de forma agresiva sin preocuparte por crear el mismo
-elemento dos veces.
+## Buenas prácticas
+
+### Reintenta con backoff
+
+Cuando recibas un `429`, haz una pausa antes de reintentar y aumenta la pausa en
+cada falla consecutiva (backoff exponencial). Agrega un poco de aleatoriedad
+("jitter") para que muchos clientes no reintenten al mismo tiempo.
+
+```bash
+# Retry with growing delays: 1s, 2s, 4s, 8s...
+attempt=0
+until response=$(curl -sf -X GET \
+  -H "Authorization: Bearer lzk_your_key" \
+  https://api.linkz.ee/v1/products); do
+  attempt=$((attempt + 1))
+  [ "$attempt" -ge 5 ] && break
+  sleep $(( 2 ** (attempt - 1) ))
+done
+```
+
+### Espacia tus solicitudes
+
+Distribuye el trabajo en lugar de lanzarlo todo de golpe. Al sincronizar un
+catálogo grande, agrega una pequeña pausa entre llamadas en vez de enviar cientos
+en paralelo. Lo constante gana a las ráfagas.
+
+### Obtén una vez, reutiliza localmente
+
+Los endpoints de lectura devuelven el estado actual completo (por ejemplo, tu lista
+de productos o de enlaces). Obténlo una vez, guárdalo en memoria y trabaja con tu
+copia local en lugar de pedir los mismos datos en un bucle.
 
 <Warning>
-Los umbrales de los límites de tasa pueden cambiar con el tiempo a medida que
-ajustamos la capacidad. Diseña tu cliente para que reaccione a una respuesta
-`429` en lugar de fijar un número fijo de solicitudes por segundo.
+Los límites pueden cambiar con el tiempo a medida que ajustamos la capacidad.
+Construye tu cliente para que reaccione a una respuesta `429` en lugar de fijar un
+número de solicitudes por segundo.
 </Warning>
 
 ## Relacionado
 
 <CardGroup cols={2}>
   <Card title="Autenticación" icon="lock" href="/es/api-reference/authentication">
-    URL base, claves, ámbitos y códigos de estado.
+    URL base, claves, alcances y códigos de estado.
   </Card>
   <Card title="Productos" icon="box" href="/es/api-reference/products">
-    Crea, actualiza y lista productos en tu catálogo.
+    Crea, actualiza y lista los productos de tu catálogo.
   </Card>
-  <Card title="Enlaces y colecciones" icon="link" href="/es/api-reference/links-collections">
-    Gestiona los enlaces de tu bio.
+  <Card title="Importar" icon="file-import" href="/es/api-reference/import">
+    Importa una bio y prellena enlaces.
   </Card>
 </CardGroup>

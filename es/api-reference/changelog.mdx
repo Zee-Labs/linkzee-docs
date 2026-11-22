@@ -1,0 +1,103 @@
+---
+title: Registro de cambios
+icon: clock-rotate-left
+description: "Cambios en la API pública y en MCP que importan a quienes integran."
+---
+
+Esta página lista los cambios en el contrato de la API y en las herramientas MCP que
+pueden afectar una integración. Cada entrada indica qué cambió y qué hacer.
+
+<Update label="Noviembre de 2026" description="La bio completa por MCP y por la API" tags={["MCP", "API"]}>
+
+Un agente ahora puede crear toda la bio: leer el estado real, enviar fotos y
+videos, llenar bloques de medios, definir el diseño y las tarjetas especiales, y
+decidir el orden de la página. Consulta [Crear una bio con un agente](/es/integrations/mcp/build-bio-with-agent).
+
+### Novedades
+
+- **Herramientas MCP:** `get_store`, `list_links`, `get_content_tree`,
+  `list_collections`, `list_categories`, `get_product`, `list_ai_assistants`,
+  `list_staff`, `list_blocks`, `create_upload_link`, `get_upload`,
+  `set_block_media`, `set_link_media`, `configure_bio_cards`, `configure_tips`,
+  `update_page`, `update_review`, `manage_package`, `import_from_url` e
+  `import_bio`. El catálogo ahora tiene 70 herramientas. Consulta la
+  [referencia de herramientas](/es/integrations/mcp/tools-reference).
+- **Imágenes por URL o por subida:** cada campo de imagen de las herramientas MCP
+  acepta una URL pública o `{ "uploadId": "..." }` de un enlace de subida. Consulta
+  [Enviar archivos](/es/integrations/mcp/sending-files).
+- **Rutas de la API:** `POST /v1/upload-links`, más `POST /upload-tickets/files` y
+  `GET /upload-tickets/status` con el secreto `lzu_`; `GET`, `POST`, `PATCH` y
+  `DELETE` en `/v1/agenda/packages` y `/v1/agenda/subscription-plans`;
+  `POST /v1/import`; `POST /v1/links/parse`.
+- **Tarjetas especiales en el orden:** `PUT /v1/content/order` y `reorder_content`
+  aceptan entradas `{ "type": "section", "key": "..." }` y el servidor coloca cada
+  tarjeta. Consulta [Contenido](/es/api-reference/content).
+- **Reseñas:** `PATCH /v1/agenda/reviews/{id}` acepta `featured`.
+
+### Cambios
+
+- **`GET` y `PATCH /v1/store` devuelven una lista permitida** (la misma vista que
+  `get_store`). Los píxeles, GTM y UTM pasaron a un objeto `tracking`
+  (`capiTokenPreview` ya no existe; `tracking.capiTokenConfigured` se mantiene), el
+  webhook de leads muestra solo `host` y `enabled`, y PIX muestra solo
+  `pixKeyPreview`. `GET /v1/products/{id}` también es una lista permitida. Lee los
+  campos nuevos si tu integración usaba los antiguos.
+- **Herencia del tema:** `themeId` sin `overrides` aplica el preset limpio (se
+  restablecen las personalizaciones anteriores y el nivel de movimiento). Los demás
+  campos de diseño personalizan solo su sección. Esto se aplica a MCP y a
+  `PATCH /v1/store`.
+- **`publicPreferences` se combina** en lugar de reemplazarse, `timezone` se valida
+  (nombre inválido: `400`) y `socialOrder` acepta solo claves de red válidas.
+- **`PATCH /v1/agenda/reviews/{id}` cambia solo los campos enviados.** Antes, un
+  cuerpo sin `hidden` volvía a mostrar la reseña.
+- **Las claves de idempotencia** son obligatorias para crear paquetes, planes de
+  suscripción y para aplicar una importación. La misma clave con un cuerpo distinto
+  devuelve `409`. Consulta [Límites de tasa](/es/api-reference/rate-limits).
+- **Los trabajos de video son lecturas:** `GET /v1/uploads/video/jobs/{id}` y
+  `get_media_job` solo necesitan el alcance `read`.
+- **`GET /v1/links`** devuelve todos los enlaces, incluidos los ocultos y sin
+  terminar, sin las claves internas de almacenamiento de los videos.
+- **`GET /v1/content`** también responde con una página oculta, con
+  `pageHidden: true`.
+- **Enlaces:** el fin de una programación debe ser posterior al inicio, también
+  cuando envías solo una de las fechas. Usa ISO 8601 con el offset. La portada de un
+  embed viene solo del proveedor del embed.
+- **Orden de la vitrina:** `GET /v1/products` y `list_products` devuelven los
+  productos en el orden que ven los visitantes. `PUT /v1/products/order` vuelve a
+  funcionar (hasta 5000 ítems) y pasa la vitrina a orden manual. Los ítems públicos
+  de producto incluyen `order`, y el formato del cursor del catálogo cambia en el
+  orden manual: trata siempre `nextCursor` como un valor opaco.
+- **Límites por tienda** para descargas, subidas, importaciones y vistas previas de
+  enlaces. Consulta [Límites de tasa](/es/api-reference/rate-limits).
+- **Onboarding guiado:** mientras haya un onboarding guiado abierto, una escritura
+  en la página por la API (tienda, contenido, enlaces, subidas, importación) lo
+  cierra, como ya hacían las escrituras por MCP. Los productos, las categorías y las
+  colecciones no. Si ejecutas automatizaciones (n8n, scripts) en tiendas nuevas,
+  espera a que el onboarding se publique.
+
+### MCP
+
+- **Alcances:** en MCP, `write` implica `read`. Una clave solo finance ve solo
+  `get_earnings`. `disconnect_agenda_google` ahora es **solo con clave**, como
+  `configure_tracking` y `configure_tips`.
+- **Respuestas:** un segundo bloque de texto repite el resultado en JSON, y
+  `structuredContent` trae `published`, `reason`, `warnings` y `pending`.
+- **Los medios fallan de forma cerrada:** las nuevas herramientas de medios nunca
+  publican un archivo que no pudieron copiar. Las imágenes de productos siguen
+  omitiendo una foto defectuosa con una advertencia.
+- **HEIC se rechaza** (también en `POST /v1/uploads/image`), como SVG, TIFF y PDF.
+  En un iPhone, usa el formato de cámara **Más compatible** o elige desde la
+  galería.
+- **Importación dividida en dos:** `import_from_url` solo lee (`prefill_link`,
+  `preview_bio`); importar es la herramienta `import_bio`.
+
+### Obsoleto
+
+`set_appearance` (usa `update_design`), `set_review_hidden` (usa
+`update_review`), `op: "list"` en `manage_category` y `manage_collection` (usa
+`list_categories` y `list_collections`), los campos de redes de `update_profile`
+(usa `update_socials`), `vitrineEnabled` en `configure_vitrine` y `enabled` y
+`showTopCard` en `configure_agenda` (usa `configure_bio_cards`), y `agendaOrder`
+(sin efecto). Todavía funcionan durante una versión más.
+
+</Update>
