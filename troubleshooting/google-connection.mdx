@@ -9,33 +9,38 @@ isn't linking up, find your symptom below and follow the fix.
 
 ## Google Calendar won't connect
 
-**Symptom:** you start the connection but it never finishes.
+**Symptom:** you start the connection but it never finishes, or you land back on the dashboard
+with a connection error.
 
-**Cause:** the Google authorization window was closed or interrupted before you
-granted access.
+**Cause:** the Google window was closed before you clicked **Continue**, or the connection finished
+in a different browser (for example, Google opened in another app) or with a different Linkzee
+account logged in.
 
-**Fix:** complete the authorization in the Google window — sign in and accept the
-requested permissions. Then try again from your **Scheduling** settings.
+**Fix:** click **Connect** again and finish in the same browser. Google asks for a single
+permission, with no box to tick: sign in and click **Continue**.
 
 ## My Google events aren't blocking times
 
 **Symptom:** visitors can book you at times when you're already busy in Google
 Calendar.
 
-**Cause:** Linkzee isn't set to treat your Google events as busy time.
+**Cause:** **Respect my Google events** is off, or Google hasn't granted the availability check
+yet. That permission is asked separately, only when you turn the option on.
 
-**Fix:** turn on **respect my Google events** in your **Scheduling** settings. Your
-existing Google appointments will then block those slots from being booked.
+**Fix:** turn on **Respect my Google events** in your **Scheduling** settings and allow the
+availability check on the Google screen. If the card shows a warning, click **Allow in Google**.
+Declining keeps your connection working; only your Google events stop blocking times.
 
 ## A staff connection link doesn't work
 
 **Symptom:** a team member opens the link you sent to connect their calendar and it
 fails.
 
-**Cause:** the link expired.
+**Cause:** the link expired, or they finished the connection in a different browser from the one
+where they opened the link.
 
-**Fix:** generate a new staff connection link and share it again. Ask them to open
-it promptly, before it expires.
+**Fix:** ask them to open the link again and finish in the same browser. If it has expired,
+generate a new staff connection link and share it again.
 
 ## No Meet link on my appointment
 
@@ -48,7 +53,7 @@ booking was made.
 service will then include a Meet link.
 
 <Note>
-  Everything you change auto-saves and your live page updates right away — there's
+  Everything you change auto-saves and your live page updates right away. There's
   no Save button to press.
 </Note>
 

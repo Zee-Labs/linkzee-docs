@@ -10,36 +10,40 @@ der Lösung.
 
 ## Google Calendar lässt sich nicht verbinden
 
-**Symptom:** Sie starten die Verbindung, aber sie wird nie abgeschlossen.
+**Symptom:** Sie starten die Verbindung, aber sie wird nie abgeschlossen, oder Sie landen mit einem
+Verbindungsfehler wieder im Dashboard.
 
-**Ursache:** Das Google-Autorisierungsfenster wurde geschlossen oder unterbrochen,
-bevor Sie den Zugriff erteilt haben.
+**Ursache:** Das Google-Fenster wurde geschlossen, bevor Sie auf **Weiter** geklickt haben, oder
+die Verbindung wurde in einem anderen Browser abgeschlossen (zum Beispiel hat sich Google in einer
+anderen App geöffnet) oder mit einem anderen angemeldeten Linkzee-Konto.
 
-**Lösung:** Schließen Sie die Autorisierung im Google-Fenster ab — melden Sie sich an
-und akzeptieren Sie die angeforderten Berechtigungen. Versuchen Sie es dann erneut
-in Ihren **Kalender**-Einstellungen.
+**Lösung:** Klicken Sie erneut auf **Verbinden** und schließen Sie im selben Browser ab. Google
+fragt nur eine einzige Berechtigung an, ohne Kästchen: Melden Sie sich an und klicken Sie auf
+**Weiter**.
 
 ## Meine Google-Termine blockieren keine Zeiten
 
-**Symptom:** Besucher können Sie zu Zeiten buchen, in denen Sie in Google Calendar
-bereits belegt sind.
+**Symptom:** Besucher können Termine buchen, zu denen Sie in Google Kalender bereits belegt sind.
 
-**Ursache:** Linkzee ist nicht so eingestellt, dass Ihre Google-Termine als belegte
-Zeit behandelt werden.
+**Ursache:** **Meine Google-Termine berücksichtigen** ist ausgeschaltet, oder Google hat die
+Verfügbarkeitsabfrage noch nicht freigegeben. Diese Berechtigung wird separat angefragt, erst wenn
+Sie die Option einschalten.
 
-**Lösung:** Aktivieren Sie **Meine Google-Termine berücksichtigen** in Ihren
-**Kalender**-Einstellungen. Ihre bestehenden Google-Termine blockieren dann diese
-Zeitfenster für Buchungen.
+**Lösung:** Schalten Sie **Meine Google-Termine berücksichtigen** in Ihren **Kalender**-Einstellungen
+ein und erlauben Sie die Verfügbarkeitsabfrage im Google-Dialog. Zeigt die Karte einen Hinweis,
+klicken Sie auf **In Google erlauben**. Wenn Sie ablehnen, bleibt die Verbindung bestehen; nur Ihre
+Google-Termine blockieren dann keine Zeiten.
 
 ## Ein Verbindungslink für Mitarbeitende funktioniert nicht
 
-**Symptom:** Ein Teammitglied öffnet den Link, den Sie zum Verbinden seines Kalenders
-gesendet haben, und es schlägt fehl.
+**Symptom:** Eine Fachkraft öffnet den Link, den Sie zum Verbinden ihres Kalenders geschickt haben,
+und es schlägt fehl.
 
-**Ursache:** Der Link ist abgelaufen.
+**Ursache:** Der Link ist abgelaufen, oder die Verbindung wurde in einem anderen Browser
+abgeschlossen als dem, in dem der Link geöffnet wurde.
 
-**Lösung:** Erstellen Sie einen neuen Verbindungslink für Mitarbeitende und teilen Sie
-ihn erneut. Bitten Sie die Person, ihn zeitnah zu öffnen, bevor er abläuft.
+**Lösung:** Bitten Sie die Fachkraft, den Link erneut zu öffnen und im selben Browser abzuschließen.
+Ist er abgelaufen, erstellen Sie einen neuen Verbindungslink und teilen Sie ihn erneut.
 
 ## Kein Meet-Link bei meinem Termin
 
@@ -54,7 +58,7 @@ Buchungen für diese Leistung enthalten dann einen Meet-Link.
 
 <Note>
   Alles, was Sie ändern, wird automatisch gespeichert, und Ihre Live-Seite wird
-  sofort aktualisiert — es gibt keinen Speichern-Button zum Drücken.
+  sofort aktualisiert. Es gibt keinen Speichern-Button zum Drücken.
 </Note>
 
 <CardGroup cols={2}>

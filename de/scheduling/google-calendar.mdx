@@ -5,8 +5,7 @@ description: "Verbinden Sie Ihren Google Kalender, damit jede Buchung auf Ihrem 
 ---
 
 Verbinden Sie Ihren **Google Kalender**, damit Ihre Termine direkt auf Ihrem Handy erscheinen, neben
-allem anderen an Ihrem Tag. Linkzee legt in Ihrem Google Kalender einen eigenen Kalender an —
-**„Linkzee · \{Name Ihres Geschäfts\}“** — und trägt dort jede Buchung ein, mit Erinnerung auf dem Handy
+allem anderen an Ihrem Tag. Linkzee legt in Ihrem Google Kalender einen eigenen Kalender an (**„Linkzee · \{Name Ihres Geschäfts\}“**) und trägt dort jede Buchung ein, mit Erinnerung auf dem Handy
 vor dem Termin.
 
 ## Kalender verbinden
@@ -19,15 +18,16 @@ vor dem Termin.
     Klicken Sie auf der Google-Karte auf **Verbinden**.
   </Step>
   <Step title="Zugriff erlauben">
-    Melden Sie sich mit Ihrem Google-Konto an und aktivieren Sie die Berechtigung, **sekundäre
-    Kalender zu erstellen und deren Termine zu verwalten**. Sie kehren mit **„Google Kalender
-    verbunden“** zum Dashboard zurück, und der Kalender „Linkzee“ erscheint bereits in Google.
+    Melden Sie sich mit Ihrem Google-Konto an und klicken Sie auf **Weiter**. Google fragt nur
+    eine einzige Berechtigung an: den Kalender „Linkzee“ anzulegen und nur dessen Termine zu
+    verwalten, ohne Kästchen zum Anklicken. Sie kehren mit **„Google Kalender verbunden“** zum
+    Dashboard zurück, und der Kalender „Linkzee“ erscheint bereits in Google.
   </Step>
 </Steps>
 
 <Note>
   Linkzee greift nur auf den Kalender zu, den es selbst angelegt hat. Ihre anderen Termine werden nie
-  gelesen, bearbeitet oder gelöscht — um belegte Zeiten zu respektieren, sieht Linkzee nur „frei“ oder
+  gelesen, bearbeitet oder gelöscht. Um belegte Zeiten zu respektieren, sieht Linkzee nur „frei“ oder
   „belegt“, ohne Titel oder Details.
 </Note>
 
@@ -42,27 +42,38 @@ vor dem Termin.
   [Leistungen](/de/scheduling/services)). Bei manchen Geschäftskonten hat der Administrator Meet
   deaktiviert; dann weist die Karte darauf hin, und Video-Leistungen erhalten keinen automatischen Link.
 - **In Linkzee verschoben oder abgesagt?** Der Termin folgt sofort. Änderungen direkt in Google
-  fließen nicht zurück zu Linkzee — verschieben Sie immer in Linkzee.
+  fließen nicht zurück zu Linkzee. Verschieben Sie immer in Linkzee.
 
 ## Google-Termine berücksichtigen
 
 Aktivieren Sie **Meine Google-Termine berücksichtigen**, um Konflikte zu vermeiden. Dann werden Zeiten,
-zu denen Sie in Ihrem **Haupt**kalender bei Google belegt sind — ein privater Termin, ein anderes
-Meeting, ein freier Tag — auf Linkzee nicht mehr angeboten.
+zu denen Sie in Ihrem **Haupt**kalender bei Google belegt sind (ein privater Termin, ein anderes
+Meeting, ein freier Tag) auf Linkzee nicht mehr angeboten.
 
 <Note>
-  Dafür muss im Google-Berechtigungsdialog das Kästchen zum **Anzeigen Ihrer Verfügbarkeit in
-  Ihren Kalendern** aktiviert sein. Es ist optional: Ohne es funktioniert die Verbindung, aber Ihre
-  Termine blockieren keine Zeiten — die Karte weist darauf hin; einfach erneut verbinden und das
-  Kästchen aktivieren.
+  Für die Berücksichtigung Ihrer Termine braucht es eine weitere Google-Berechtigung: zu sehen,
+  wann Sie belegt sind, ohne Titel oder Details. Linkzee fragt sie erst an, wenn Sie die Option
+  einschalten. Google öffnet einen kurzen Dialog nur mit dieser Berechtigung; erlauben Sie sie, und
+  die Option ist aktiv. Lehnen Sie ab, bleibt die Option aus und Ihre Verbindung funktioniert wie
+  bisher weiter. Sie können sie jederzeit erneut einschalten.
 </Note>
+
+## Trennen und erneut verbinden
+
+- **Dasselbe Google-Konto:** Linkzee verwendet denselben Kalender „Linkzee“ weiter. Es legt nie
+  einen zweiten an, und die Termine darin behalten ihren Meet-Link.
+- **Ein anderes Google-Konto:** In diesem Konto wird ein neuer Kalender „Linkzee“ angelegt. Bereits
+  gebuchte Termine bleiben dort, wo sie angelegt wurden.
+- **Im selben Browser abschließen.** Aus Sicherheitsgründen muss die Verbindung im selben Browser
+  und mit demselben Linkzee-Konto beginnen und enden. Öffnet sich Google in einer anderen App oder
+  einem anderen Browser, lehnt Linkzee die Verbindung ab; klicken Sie einfach erneut auf **Verbinden**.
 
 ## Zeigt die Karte „Erneut verbinden“?
 
 Ältere Verbindungen nutzten eine andere Google-Berechtigung und trugen Termine in Ihren Hauptkalender
 ein. Sie funktionieren weiter, aber die Karte zeigt **Erneut verbinden**: Nach dem erneuten Verbinden
 gehen kommende Termine in den Kalender „Linkzee“, mit Erinnerung auf dem Handy. Bereits gebuchte
-bleiben, wo sie sind — mit demselben Meet-Link.
+bleiben, wo sie sind, mit demselben Meet-Link.
 
 <Note>
   Den Kalender „Linkzee“ in Google versehentlich gelöscht? Er wird beim nächsten Termin automatisch neu
