@@ -1,7 +1,7 @@
 ---
 title: Suivi
 icon: chart-simple
-description: "Mesurez les conversions avec vos propres outils — connectez le Meta Pixel, la Conversion API, Google Tag Manager et des UTM par défaut."
+description: "Mesurez les conversions avec vos propres outils : connectez le Meta Pixel, la Conversion API, Google Tag Manager et des UTM par défaut."
 ---
 
 Linkzee dispose de son propre écran [Performance](/fr/analytics/overview), mais vous
@@ -13,7 +13,7 @@ visiteurs interagissent avec votre page.
   <img src="/images/account/settings-integrations-fr.webp" alt="Capture d’écran de Linkzee" />
 </Frame>
 
-Tout ici s'enregistre automatiquement à mesure que vous saisissez — il n'y a pas
+Tout ici s'enregistre automatiquement à mesure que vous saisissez : il n'y a pas
 de bouton Enregistrer.
 
 ## Meta Pixel
@@ -33,15 +33,42 @@ Ajoutez l'ID de conteneur **Google Tag Manager** pour charger votre conteneur GT
 sur votre page publique. De là, vous pouvez gérer vos propres balises et
 déclencheurs dans Google Tag Manager.
 
+Pour protéger vos visiteurs, votre conteneur s'exécute sur votre page en **mode
+restreint**. Toutes les bios partagent la même adresse Linkzee : les balises
+capables d'exécuter n'importe quel code sont donc désactivées.
+
+**Ce qui fonctionne :**
+
+- Les balises Google : Google Analytics 4, Google Ads et le linker de
+  conversion.
+- Les balises Meta Pixel et TikTok Pixel de la Galerie de modèles de la
+  communauté.
+- La balise **Image personnalisée**.
+
+**Ce qui ne s'exécute pas :**
+
+- Les balises **HTML personnalisé** et les variables **JavaScript
+  personnalisé**.
+- Les variables **Variable JavaScript**, **Cookie propriétaire** et **Élément
+  DOM**.
+- Les balises intégrées d'autres fournisseurs qui chargent leur propre script
+  ou cadre.
+- Les balises Universal Analytics, et un second conteneur chargé depuis le
+  vôtre.
+
+Si une de vos balises ne se déclenche pas sur votre page, vérifiez si elle
+figure dans la liste de ce qui ne s'exécute pas. Pour Meta, les champs Meta
+Pixel et Conversion API ci-dessus restent l'option la plus fiable.
+
 ## Paramètres UTM
 
-Définissez des paramètres **UTM** par défaut — comme la source, le support et la
-campagne — que Linkzee ajoute automatiquement à vos liens sortants. Cela étiquette
+Définissez des paramètres **UTM** par défaut, comme la source, le support et la
+campagne, que Linkzee ajoute automatiquement à vos liens sortants. Cela étiquette
 le trafic que vous envoyez pour que vos statistiques l'attribuent à la bonne source
 et à la bonne campagne.
 
 <Note>
-  Vous trouverez ces valeurs dans vos outils marketing — votre ID de Pixel et le
+  Vous trouverez ces valeurs dans vos outils marketing : votre ID de Pixel et le
   token de la Conversion API dans le **Gestionnaire d'événements Meta**, et votre
   ID de conteneur dans **Google Tag Manager**.
 </Note>
