@@ -1,25 +1,47 @@
 ---
 title: Espace client
 icon: circle-user
-description: "Une page privée où vos clients consultent leurs réservations, leurs crédits de forfait et leurs abonnements — sans mot de passe."
+description: "Une page privée où vos clients voient, déplacent et annulent leurs réservations et consultent leurs crédits de forfait et leurs abonnements, sans mot de passe."
 ---
 
-Chaque page Linkzee avec agenda dispose d'un **espace client** à l'adresse
-`linkz.ee/votrenomdutilisateur/me` — un espace privé où vos clients consultent
-leurs prochains rendez-vous, leurs crédits de forfait et leurs abonnements, en
-toute autonomie.
+Chaque page Linkzee avec agenda dispose d'un **espace client** : un espace privé
+où vos clients consultent leurs prochains rendez-vous, leurs crédits de forfait
+et leurs abonnements, en toute autonomie. Il fonctionne pour les réservations
+faites sur l'agenda Linkzee et sur l'[agenda Qzee](/fr/scheduling/qzee-booking)
+de votre bio.
+
+Les clients y accèdent depuis votre bio ou à l'adresse
+`linkz.ee/votrenomdutilisateur/me`. Les deux mènent à la même page, dans un
+espace Linkzee séparé et isolé : l'adresse dans le navigateur devient donc
+`vault.linkz.ee` (voir la section Confidentialité ci-dessous).
+
+## Mes réservations sur votre bio
+
+Qui a déjà réservé sur un appareil voit, en haut de votre bio :
+
+- **Votre prochain rendez-vous**, une carte avec le jour, l'heure et la
+  personne qui le recevra, quand un rendez-vous approche ;
+- **Mes réservations**, dans la carte de réservation, qui ouvre l'espace
+  client.
+
+Rien à configurer : les deux apparaissent seuls après la première réservation
+sur cet appareil, qu'elle ait été faite sur l'agenda Linkzee ou sur l'agenda
+Qzee.
 
 ## Comment les clients se connectent
 
-Pas de mot de passe. L'identité du client, c'est le **numéro de téléphone
-qu'il utilise pour réserver et acheter** :
+**Sur l'appareil qui a servi à réserver**, ni code ni mot de passe. L'espace
+client s'ouvre avec les réservations faites sur cet appareil.
 
-1. Il ouvre `linkz.ee/votrenomdutilisateur/me` et saisit le numéro de
-   téléphone qu'il utilise pour réserver et acheter.
+**Sur un autre appareil**, ils touchent **Réservé depuis un autre appareil ?**
+puis **Recevoir un code**. L'identité du client, c'est le **numéro de
+téléphone qu'il utilise pour réserver et acheter** :
+
+1. Il saisit le numéro de téléphone qu'il utilise pour réserver et acheter.
 2. Linkzee envoie un **code d'accès à 6 chiffres** à l'e-mail enregistré sur
    sa fiche (et par WhatsApp, quand c'est disponible).
-3. Il saisit le code et il est connecté. La session est de courte durée et
-   valable uniquement pour votre page — sûre sur les appareils partagés.
+3. Il saisit le code et il est connecté. La session dure 90 jours et n'est
+   valable que pour votre page.
 
 <Note>
   Le code n'est envoyé que si le numéro de téléphone correspond à un client
@@ -27,34 +49,71 @@ qu'il utilise pour réserver et acheter** :
   renvoi est limité pour vous protéger, vous et vos clients, contre les abus.
 </Note>
 
-<Tip>
-  **Pas de code sur le téléphone habituel.** Qui a déjà réservé sur cet appareil
-  entre dans `linkz.ee/votrenom/me` directement, et votre page affiche le bouton
-  **Mes rendez-vous** et la carte **Votre prochain rendez-vous** en haut. Le code
-  n'est demandé que sur un autre appareil ; la session dure alors 90 jours.
-</Tip>
+Le code fait revenir les réservations de l'agenda Linkzee, les crédits de
+forfait et les abonnements. Les réservations faites sur l'agenda Qzee
+apparaissent sur l'appareil qui a servi à réserver.
 
 ## Ce qu'ils peuvent faire
 
 | Section | Ce qu'on y trouve |
 | --- | --- |
-| **Rendez-vous** | Réservations à venir et passées ; ils peuvent **annuler** dans le cadre de votre politique d'annulation. |
-| **Crédits de forfait** | Les séances restantes par forfait et la date d'expiration. |
-| **Abonnements** | Formule active, avantages, utilisation du cycle en cours et date de renouvellement — plus **Gérer la facturation**, qui ouvre le portail Stripe sécurisé pour mettre à jour la carte ou annuler. |
+| **Mes rendez-vous** | Réservations à venir et passées, avec **Reprogrammer** et **Annuler**. |
+| **Mes forfaits** | Les séances restantes par forfait et la date d'expiration. |
+| **Mes abonnements** | Formule active, avantages, utilisation du cycle en cours et date de renouvellement, plus **Gérer la facturation**, qui ouvre le portail Stripe sécurisé pour mettre à jour la carte ou annuler. |
 
 La liste met en avant le **prochain rendez-vous** (date, « dans 2 jours »,
-professionnel, boutons Reprogrammer et Annuler), puis les suivants dans l'ordre
-et les passés repliés, chacun avec **Réserver à nouveau**.
+professionnel, boutons Reprogrammer et Annuler), puis les rendez-vous **À
+venir** dans l'ordre et les **Passés** repliés, chacun avec **Réserver à
+nouveau**. Les heures s'affichent dans le fuseau horaire de chaque réservation.
+Pour les prestations par ordre d'arrivée, l'heure s'affiche sous la forme « à
+partir de 9:00 ».
+
+### Réservations sur l'agenda Qzee
+
+Les réservations Qzee figurent dans la même liste que les autres :
+
+- **Reprogrammer** ouvre votre agenda Qzee dans un panneau, directement à
+  l'étape du choix du nouvel horaire.
+- **Annuler** se fait directement dans l'espace client, après confirmation du
+  client. La règle vient de votre agenda Qzee : annuler avant le délai que vous
+  y avez fixé ne compte pas comme une annulation tardive, et après ce délai le
+  client peut encore annuler jusqu'à l'heure du rendez-vous.
+- Les boutons suivent ce que Qzee autorise pour chaque réservation. Quand il
+  n'est possible ni de déplacer ni d'annuler, le client voit **Contacter** avec
+  le nom de votre activité.
+- Si l'activité a modifié le rendez-vous après le chargement de la liste, rien
+  n'est annulé : le client voit le nouvel horaire et confirme à nouveau.
+- **Réserver à nouveau** n'apparaît que tant que l'établissement prend des
+  réservations en ligne.
+
+Les réservations faites sur le même appareil dans l'agenda Qzee d'une autre
+activité apparaissent sous **Autres rendez-vous sur cet appareil**, avec le nom
+de cette activité.
+
+## Confidentialité
+
+Ce qui permet au client de voir et de modifier une réservation reste sur son
+propre appareil, dans un espace Linkzee séparé et isolé (`vault.linkz.ee`).
+Cela ne se trouve jamais sur la page de votre bio : aucun script de la page,
+pas même vos propres balises de suivi, ne peut y accéder. Votre bio retient
+seulement que l'appareil a déjà réservé chez vous et un court rappel du
+prochain rendez-vous, pour afficher **Votre prochain rendez-vous**.
+
+<Note>
+  Les clients qui s'étaient connectés avec un code sur un appareil avant ce
+  changement confirment un code une fois de plus. Aucune réservation n'est
+  perdue.
+</Note>
 
 ## Pourquoi c'est utile pour vous
 
-- Moins de messages « c'était à quelle heure, mon rendez-vous ? » — les
+- Moins de messages « c'était à quelle heure, mon rendez-vous ? » : les
   clients se débrouillent seuls.
 - Les acheteurs de forfaits et d'abonnements voient à tout moment ce qu'ils
   ont payé, ce qui renforce la confiance dans les offres prépayées.
-- Les annulations respectent le **délai d'annulation** que vous définissez
-  dans Agenda → Paramètres, et les réservations couvertes rendent leurs
-  crédits automatiquement.
+- Les annulations de l'agenda Linkzee respectent le **délai d'annulation** que
+  vous définissez dans Agenda → Paramètres, et les réservations couvertes
+  rendent leurs crédits automatiquement.
 
 <Note>
   Partagez l'espace client avec qui vous voulez : c'est simplement l'URL de

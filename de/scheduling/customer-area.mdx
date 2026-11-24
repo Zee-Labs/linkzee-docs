@@ -1,24 +1,44 @@
 ---
 title: Kundenbereich
 icon: circle-user
-description: "Eine private Seite, auf der deine Kunden ihre Buchungen, Paket-Guthaben und Abonnements sehen — ganz ohne Passwort."
+description: "Eine private Seite, auf der deine Kunden ihre Buchungen sehen, verschieben und absagen und Paket-Guthaben und Abonnements prüfen, ganz ohne Passwort."
 ---
 
-Jede Linkzee-Seite mit Terminplanung erhält einen **Kundenbereich** unter
-`linkz.ee/deinbenutzername/me` — ein privater Bereich, in dem deine Kunden
-ihre anstehenden Termine, Paket-Guthaben und Abonnements selbst einsehen.
+Jede Linkzee-Seite mit Terminplanung erhält einen **Kundenbereich**: einen
+privaten Bereich, in dem deine Kunden ihre anstehenden Termine, Paket-Guthaben
+und Abonnements selbst einsehen. Er gilt für Buchungen im Linkzee-Kalender und
+im [Qzee-Kalender](/de/scheduling/qzee-booking) deiner Bio.
+
+Kunden erreichen ihn über deine Bio oder unter `linkz.ee/deinbenutzername/me`.
+Beides führt zur selben Seite in einem getrennten, isolierten Linkzee-Bereich,
+deshalb wechselt die Adresse im Browser zu `vault.linkz.ee` (siehe
+[Datenschutz](#datenschutz)).
+
+## Meine Buchungen in deiner Bio
+
+Wer auf einem Gerät schon gebucht hat, sieht oben in deiner Bio:
+
+- **Dein nächster Termin**, eine Karte mit Tag, Uhrzeit und wer den Termin
+  übernimmt, wenn ein Termin ansteht;
+- **Meine Buchungen** in der Buchungskarte, das den Kundenbereich öffnet.
+
+Nichts einzurichten: Beides erscheint von selbst nach der ersten Buchung auf
+diesem Gerät, ob im Linkzee-Kalender oder im Qzee-Kalender.
 
 ## Wie sich Kunden anmelden
 
-Keine Passwörter. Die Identität des Kunden ist die **Telefonnummer, mit der
-er bucht und kauft**:
+**Auf dem Gerät, mit dem gebucht wurde**, gibt es weder Code noch Passwort. Der
+Kundenbereich öffnet sich mit den Buchungen dieses Geräts.
 
-1. Er öffnet `linkz.ee/deinbenutzername/me` und gibt die Telefonnummer ein,
-   die er zum Buchen und Kaufen nutzt.
+**Auf einem anderen Gerät** tippen sie auf **Auf einem anderen Gerät gebucht?**
+und dann auf **Code erhalten**. Die Identität ist die **Telefonnummer, mit der
+sie buchen und kaufen**:
+
+1. Sie geben die Telefonnummer ein, die sie zum Buchen und Kaufen nutzen.
 2. Linkzee sendet einen **6-stelligen Zugangscode** an die hinterlegte E-Mail
    (und per WhatsApp, wo verfügbar).
-3. Er gibt den Code ein und ist drin. Die Sitzung ist kurzlebig und nur für
-   deine Seite gültig — sicher auf geteilten Geräten.
+3. Sie geben den Code ein und sind drin. Die Sitzung gilt 90 Tage und nur für
+   deine Seite.
 
 <Note>
   Der Code wird nur gesendet, wenn die Telefonnummer zu einem bestehenden
@@ -26,34 +46,69 @@ er bucht und kauft**:
   Senden ist begrenzt, um dich und deine Kunden vor Missbrauch zu schützen.
 </Note>
 
-<Tip>
-  **Kein Code auf dem gewohnten Handy.** Wer auf diesem Gerät schon gebucht hat,
-  kommt direkt in `linkz.ee/deinname/me`, und deine Seite zeigt oben den Button
-  **Meine Termine** und die Karte **Dein nächster Termin**. Der Code wird nur auf
-  einem anderen Gerät verlangt; die Sitzung gilt dann 90 Tage.
-</Tip>
+Der Code holt die Buchungen des Linkzee-Kalenders, die Paket-Guthaben und die
+Abonnements zurück. Buchungen im Qzee-Kalender erscheinen auf dem Gerät, mit
+dem gebucht wurde.
 
 ## Was sie tun können
 
 | Bereich | Was dort steht |
 | --- | --- |
-| **Termine** | Anstehende und vergangene Buchungen; sie können innerhalb deiner Stornierungsrichtlinie **stornieren**. |
-| **Paket-Guthaben** | Verbleibende Sitzungen pro Paket und das Ablaufdatum. |
-| **Abonnements** | Aktives Abo, Vorteile, Nutzung im aktuellen Zyklus und Verlängerungsdatum — plus **Abrechnung verwalten**, das das sichere Stripe-Portal öffnet, um die Karte zu aktualisieren oder zu kündigen. |
+| **Meine Termine** | Anstehende und vergangene Buchungen, mit **Verschieben** und **Stornieren**. |
+| **Meine Pakete** | Verbleibende Sitzungen pro Paket und das Ablaufdatum. |
+| **Meine Abos** | Aktives Abo, Vorteile, Nutzung im aktuellen Zyklus und Verlängerungsdatum, dazu **Zahlung verwalten**, das das sichere Stripe-Portal öffnet, um die Karte zu aktualisieren oder zu kündigen. |
 
 Die Liste hebt den **nächsten Termin** hervor (Datum, „in 2 Tagen“, Fachkraft,
-Buttons Verschieben und Stornieren), dann die kommenden der Reihe nach und die
-vergangenen eingeklappt, jeweils mit **Erneut buchen**.
+Buttons Verschieben und Stornieren), dann die Termine unter **Demnächst** der
+Reihe nach und die **Vergangenen** eingeklappt, jeweils mit **Erneut buchen**.
+Die Uhrzeiten erscheinen in der Zeitzone der jeweiligen Buchung. Bei Leistungen
+nach Reihenfolge des Eintreffens steht die Uhrzeit als „ab 9:00“.
+
+### Buchungen im Qzee-Kalender
+
+Qzee-Buchungen stehen in derselben Liste wie die anderen:
+
+- **Verschieben** öffnet deinen Qzee-Kalender in einem Fenster, direkt beim
+  Schritt zur Wahl der neuen Uhrzeit.
+- **Stornieren** passiert direkt im Kundenbereich, nachdem der Kunde bestätigt
+  hat. Die Regel kommt aus deinem Qzee-Kalender: Wer vor der dort festgelegten
+  Frist absagt, sagt nicht verspätet ab, und danach kann der Kunde noch bis zur
+  Terminzeit absagen.
+- Die Buttons folgen dem, was Qzee für jede Buchung erlaubt. Ist weder
+  Verschieben noch Stornieren möglich, sieht der Kunde stattdessen
+  **[Name deines Unternehmens] kontaktieren**.
+- Hat das Unternehmen den Termin geändert, nachdem die Liste geladen wurde, wird
+  nichts storniert: Der Kunde sieht die neue Uhrzeit und bestätigt erneut.
+- **Erneut buchen** erscheint nur, solange der Standort Online-Buchungen
+  annimmt.
+
+Buchungen, die auf demselben Gerät im Qzee-Kalender eines anderen Unternehmens
+gemacht wurden, erscheinen unter **Weitere Termine auf diesem Gerät**, mit dem
+Namen dieses Unternehmens.
+
+## Datenschutz
+
+Was es einem Kunden erlaubt, eine Buchung zu sehen und zu ändern, bleibt auf
+seinem eigenen Gerät, in einem getrennten und isolierten Linkzee-Bereich
+(`vault.linkz.ee`). Es liegt nie auf der Seite deiner Bio, daher kann kein
+Skript der Seite, auch nicht deine eigenen Tracking-Tags, darauf zugreifen.
+Deine Bio merkt sich nur, dass das Gerät schon bei dir gebucht hat, und eine
+kurze Erinnerung an den nächsten Termin, um **Dein nächster Termin** zu zeigen.
+
+<Note>
+  Wer sich vor dieser Änderung auf einem Gerät mit Code angemeldet hatte,
+  bestätigt einmal erneut einen Code. Keine Buchung geht verloren.
+</Note>
 
 ## Warum dir das hilft
 
-- Weniger „Wann war nochmal mein Termin?"-Nachrichten — Kunden helfen sich
+- Weniger „Wann war nochmal mein Termin?"-Nachrichten: Kunden helfen sich
   selbst.
-- Käufer von Paketen und Abos sehen jederzeit, wofür sie bezahlt haben — das
+- Käufer von Paketen und Abos sehen jederzeit, wofür sie bezahlt haben. Das
   schafft Vertrauen in vorausbezahlte Bündel.
-- Stornierungen respektieren das **Stornierungsfenster**, das du unter
-  Kalender → Einstellungen festlegst, und gedeckte Buchungen geben ihre
-  Guthaben automatisch zurück.
+- Stornierungen im Linkzee-Kalender respektieren das **Stornierungsfenster**,
+  das du unter Kalender → Einstellungen festlegst, und gedeckte Buchungen geben
+  ihre Guthaben automatisch zurück.
 
 <Note>
   Teile den Kundenbereich mit wem du willst: Es ist einfach deine Seiten-URL
