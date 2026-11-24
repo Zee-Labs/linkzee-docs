@@ -1,19 +1,24 @@
 ---
 title: Rate limits
 icon: gauge
-description: "How the Linkzee API throttles requests and how to build clients that stay within the limits."
+description: "How the Linkzee API throttles requests, the limits per store, and how idempotency keys make retries safe."
 ---
 
 The Linkzee API is rate limited so that every integration gets a fair, reliable
-share of capacity. Limits are applied per API key, and per client IP as a
-safety net. If you send requests at a normal, well-paced rate you will rarely
-notice them.
+share of capacity. There are two layers:
+
+- **Per request rate**, per client IP, as a safety net (100 requests per minute
+  in general, and lower on the heavy routes such as uploads and imports).
+- **Limits per store**, counted in the store whatever the key, the agent or the
+  network that sends the request. They protect the expensive operations:
+  downloads, uploads, imports and link previews.
+
+If you send requests at a normal, well paced rate you will rarely notice them.
 
 ## When you exceed a limit
 
-When you send too many requests in a short window, the API stops accepting new
-ones for a moment and responds with HTTP `429 Too Many Requests`. The response
-uses the standard error envelope:
+When you send too many requests in a short window, the API responds with HTTP
+`429 Too Many Requests`, using the standard error envelope:
 
 ```json
 {
@@ -23,27 +28,80 @@ uses the standard error envelope:
 }
 ```
 
-A `429` is temporary. Wait a short moment and the same request will succeed —
-no data is lost and nothing is charged against your account for the rejected
-call.
+A `429` is temporary. Wait a moment and the same request succeeds. No data is
+lost and nothing is charged for the rejected call.
 
 <Note>
-Treat `429` as "try again in a bit", not as a failure. It simply means you
-reached the ceiling for that short window.
+Treat `429` as "try again in a bit", not as a failure. It means you reached the
+ceiling for that window.
 </Note>
 
-## Best practices
+## Limits per store
 
-A few habits keep your integration comfortably under the limits and resilient
-when it does get throttled.
+These are the current values. They apply to the API, to MCP and to the upload
+links in the same way.
+
+| Operation | Limit |
+| --- | --- |
+| Import a bio (`POST /v1/import` with `mode: "apply"`, MCP `import_bio`) | 3 per hour |
+| Read a page to prefill a link or preview an import (`POST /v1/links/parse`, `POST /v1/import` with `mode: "preview"`, MCP `import_from_url`) | 30 per hour |
+| Images downloaded from URLs | 200 per hour, 1,000 per day, 500 MB per day |
+| Videos downloaded from URLs | 10 per hour, 30 per day, 600 MB per day |
+| New upload links | 20 open at the same time, 60 per hour |
+| Files sent to upload links | 26 per minute (photos 20, videos 6), 60 videos per day, 2,560 MB per day |
+| Link card videos | 6 per minute, 1,536 MB per day |
+| Downloads running at the same time | 2; a third request waits up to 10 seconds for a free place, then gets `429` |
+
+## Idempotency keys
+
+Some create operations accept an **idempotency key**: a unique value you choose
+for each logical creation. When a retry happens after a timeout, a `429` or a
+network hiccup, the API returns what was already created instead of creating it
+twice.
+
+### Where it applies
+
+| Operation | Key |
+| --- | --- |
+| `POST /v1/products` | Optional, `Idempotency-Key` header |
+| `POST /v1/agenda/packages` | **Required**, `Idempotency-Key` header or `idempotencyKey` body field |
+| `POST /v1/agenda/subscription-plans` | **Required**, header or body field |
+| `POST /v1/import` with `mode: "apply"` | **Required**, header or body field |
+| MCP `create_link`, `create_product`, `create_products_bulk` (per item), `create_appointment`, `create_lead` | Optional, `idempotencyKey` argument |
+| MCP `manage_package` with `op: "create"`, `import_bio` | **Required**, `idempotencyKey` argument |
+
+When both the header and the body field are sent, the header wins. Keys are up
+to 200 characters.
+
+### How it behaves
+
+| Situation | Result |
+| --- | --- |
+| First request with a new key | Creates the item and remembers the key for 24 hours. |
+| Same key, same body, within 24 hours | Returns the item created the first time (an import answers with `replayed: true`). Nothing new is created. |
+| Same key, **different** body | `409 Conflict`. Use a new key for a new item. |
+| Same key while the first request is still running | Waits a few seconds for the first one to finish and returns its result, or `409` if it takes too long. Retry after a moment. |
+| Key missing where it is required | `400 Bad Request`. |
+
+A key belongs to your store, the API key (or connection) that sent it and the
+operation, so the same value used in another operation does not collide.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+## Best practices
 
 ### Retry with backoff
 
 When you receive a `429`, pause before retrying, and increase the pause on each
 consecutive failure (exponential backoff). Add a little randomness ("jitter") so
-that many clients don't retry in lockstep.
-
-A simple, effective pattern:
+that many clients do not retry in lockstep.
 
 ```bash
 # Retry with growing delays: 1s, 2s, 4s, 8s...
@@ -59,39 +117,20 @@ done
 
 ### Pace your requests
 
-Spread work out instead of firing everything at once. If you are syncing a large
+Spread work out instead of firing everything at once. When syncing a large
 catalog, add a small delay between calls rather than sending hundreds in
 parallel. Steady beats bursty.
 
 ### Fetch once, reuse locally
 
 Read endpoints return the full current state (for example, your product or link
-list). Fetch that once, keep it in memory, and work from your local copy instead
-of re-requesting the same data in a loop.
-
-### Retry writes safely with an idempotency key
-
-Creating a product accepts an optional `Idempotency-Key` header. Send a unique
-value per logical creation, and if a retry happens after a `429` or a network
-hiccup, the API returns the product that was already created instead of making a
-duplicate.
-
-```bash
-curl -X POST \
-  -H "Authorization: Bearer lzk_your_key" \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
-  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
-  https://api.linkz.ee/v1/products
-```
-
-This lets you retry aggressively without worrying about creating the same item
-twice.
+list). Fetch it once, keep it in memory and work from your local copy instead of
+requesting the same data in a loop.
 
 <Warning>
-Rate limit thresholds may change over time as we tune capacity. Build your
-client to react to a `429` response rather than hard-coding a fixed
-requests-per-second number.
+The limits may change over time as we tune capacity. Build your client to react
+to a `429` response rather than hard coding a fixed number of requests per
+second.
 </Warning>
 
 ## Related
@@ -103,7 +142,7 @@ requests-per-second number.
   <Card title="Products" icon="box" href="/api-reference/products">
     Create, update and list products in your catalog.
   </Card>
-  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
-    Manage the links in your bio.
+  <Card title="Import" icon="file-import" href="/api-reference/import">
+    Import a bio and prefill links.
   </Card>
 </CardGroup>

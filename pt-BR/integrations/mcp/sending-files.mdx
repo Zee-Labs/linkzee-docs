@@ -1,0 +1,204 @@
+---
+title: Envio de arquivos
+icon: upload
+description: "Como um agente de IA leva fotos e vídeos para o seu Linkzee: uma URL pública ou um link de envio, com os limites e os jobs de vídeo."
+---
+
+Toda foto e todo vídeo que um agente coloca na sua página chega ao Linkzee de
+uma de duas formas. O Linkzee sempre copia o arquivo para a própria CDN, confere
+o formato pelos bytes e o guarda na sua loja. Um arquivo que não pode ser
+copiado nunca é publicado a partir de outro lugar.
+
+| Forma | Quando usar | O que o agente envia |
+| --- | --- | --- |
+| **URL pública** | A foto ou o vídeo já está online (seu site, uma CDN, um link público de drive que abre o próprio arquivo). | A URL, por exemplo `"https://example.com/team.jpg"`. |
+| **Link de envio** | Os arquivos estão no seu celular, no seu computador ou anexados ao chat, sem URL pública. | `{ "uploadId": "..." }`, depois que os arquivos são enviados ao link. |
+
+## URL pública
+
+Todo campo de imagem das ferramentas MCP aceita uma URL pública `http` ou
+`https`: logo, banner, wordmark, recorte, foto do hero, papel de parede,
+miniatura de link, fotos de blocos, capas de cards, cards de redes sociais,
+avatares da equipe e do assistente, e imagens de produtos. O Linkzee baixa,
+confere e hospeda o arquivo.
+
+- A URL precisa abrir o próprio arquivo, não uma página que o mostra.
+- Endereços privados e locais são recusados.
+- URLs de vídeo funcionam para o vídeo do hero, o vídeo de fundo e os itens de
+  vídeo de uma galeria Reel. Um **vídeo de card de link** nunca vem de uma URL:
+  envie-o por um link de envio.
+
+## Link de envio
+
+Um link de envio é uma página de vida curta onde uma pessoa escolhe arquivos,
+mais um endereço para onde um agente ou um script pode enviá-los diretamente.
+Um link aceita até 10 arquivos.
+
+<Steps>
+  <Step title="O agente cria o link">
+    Ele chama `create_upload_link` (MCP) ou `POST /v1/upload-links` (chave de
+    API). Configurações opcionais: `maxFiles` (de 1 a 10, padrão 10) e `accept`
+    (`image`, `video` ou `any`, padrão `any`).
+
+    ```json
+    {
+      "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+      "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+      "directUpload": {
+        "method": "POST",
+        "url": "https://api.linkz.ee/upload-tickets/files",
+        "header": "Authorization: Bearer lzu_AbC123...",
+        "field": "file"
+      },
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any"
+    }
+    ```
+  </Step>
+  <Step title="Os arquivos são enviados">
+    **Uma pessoa** abre o `uploadPageUrl` no celular ou no computador e escolhe
+    os arquivos. A página mostra cada arquivo à medida que ele chega.
+
+    **Um agente com acesso a arquivos** (Claude Code, Cursor, n8n, um script)
+    envia cada arquivo para `directUpload.url`, um arquivo por requisição:
+
+    ```bash
+    curl -X POST \
+      -H "Authorization: Bearer lzu_AbC123..." \
+      -F "file=@/path/to/before.jpg" \
+      https://api.linkz.ee/upload-tickets/files
+    ```
+
+    ```json
+    {
+      "error": false,
+      "message": "File received",
+      "data": {
+        "uploadId": "6740b2a1c3d4e5f6a7b8c9d1",
+        "kind": "image",
+        "status": "done",
+        "name": "before.jpg",
+        "size": 482113,
+        "w": 1600,
+        "h": 1200
+      }
+    }
+    ```
+  </Step>
+  <Step title="O agente lê os uploadIds">
+    Ele chama `get_upload` com o `ticketId` (ou
+    `GET https://api.linkz.ee/upload-tickets/status` com o mesmo cabeçalho
+    `Authorization: Bearer lzu_...`). O link fica `open`, `full` ou `expired`,
+    e cada arquivo fica `uploading`, `done` ou `failed`.
+
+    ```json
+    {
+      "status": "open",
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any",
+      "storeName": "Studio Ana",
+      "files": [
+        { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1", "kind": "image", "status": "done", "name": "before.jpg", "size": 482113 }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="O agente usa cada arquivo">
+    Ele coloca `{ "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }` em um campo de
+    imagem ou vídeo de uma ferramenta MCP, por exemplo em `set_block_media`,
+    `update_design` ou `create_product`. Só então o arquivo é movido para o
+    lugar definitivo.
+  </Step>
+</Steps>
+
+<Note>
+  Os valores de `uploadId` são usados pelas ferramentas MCP. Os endpoints REST
+  da API recebem URLs: com uma chave de API, envie imagens com
+  [`POST /v1/uploads/image`](/pt-BR/api-reference/uploads) e passe a URL
+  devolvida.
+</Note>
+
+### Regras de um link de envio
+
+| Regra | Valor |
+| --- | --- |
+| Arquivos por link | Até 10 (um arquivo que falhou não ocupa lugar) |
+| Tempo para enviar | 15 minutos a partir da criação |
+| Por quanto tempo um `uploadId` vale | 24 horas, até 5 usos |
+| Links abertos por loja | Até 20 ao mesmo tempo, e 60 links novos por hora |
+| Quem pode criar | Uma chave com o escopo **write**, ou o conector do Claude |
+
+O segredo `lzu_...` faz parte do endereço da página e do cabeçalho. Qualquer
+pessoa com ele pode enviar arquivos para a sua loja até o link fechar, então
+compartilhe-o só com quem vai enviar os arquivos.
+
+## Formatos e limites
+
+| Tipo | Aceitos | Tamanho |
+| --- | --- | --- |
+| Foto | JPEG, PNG, WebP, GIF, AVIF | Até 8 MB |
+| Vídeo | MP4 ou MOV (H.264 ou HEVC) | Até 40 MB |
+
+Recusados: fotos **HEIC**, SVG, TIFF e PDF. No iPhone, defina o formato da
+câmera como **Mais Compatível**, ou escolha a foto pela galeria: o iPhone a
+converte para JPEG quando a página não aceita HEIC.
+
+As fotos viram WebP. O formato é decidido pelos bytes do arquivo, não pelo nome
+nem pelo tipo declarado.
+
+## Vídeos e jobs
+
+Os vídeos são otimizados em segundo plano, então a ferramenta responde na hora
+com um job:
+
+| Destino | Ferramenta | Origem |
+| --- | --- | --- |
+| Vídeo do hero | `set_hero_video` | URL, `uploadId` ou `fromProducts` (gerado a partir de 3 a 6 fotos de produtos) |
+| Vídeo de fundo | `set_background_video` | URL ou `uploadId` |
+| Item de vídeo de uma galeria Reel | `set_block_media` | `{ "uploadId": "..." }` ou `{ "url": "..." }` |
+| Vídeo de card de link | `set_link_media` (`type: "video"`) | Só `{ "uploadId": "..." }`, mais uma imagem de capa (poster) |
+
+O agente acompanha cada job com `get_media_job` até ele ficar `ready` ou
+`failed`. Quando fica pronto, a página já está atualizada; nada é publicado
+antes disso. Os vídeos do hero e de fundo são cortados nos primeiros 30
+segundos e perdem o áudio; os itens do Reel mantêm o áudio.
+
+## Limites por loja
+
+Downloads e envios são contados por loja, seja qual for o agente ou a rede que
+ele usa:
+
+| O quê | Limite |
+| --- | --- |
+| Imagens a partir de URLs | 200 por hora, 1.000 por dia, 500 MB por dia |
+| Vídeos a partir de URLs | 10 por hora, 30 por dia, 600 MB por dia |
+| Arquivos enviados a links de envio | 26 por minuto (fotos 20, vídeos 6), 60 vídeos por dia, 2.560 MB por dia |
+| Vídeos de card de link | 6 por minuto, 1.536 MB por dia |
+| Downloads rodando ao mesmo tempo | 2 por loja; um terceiro espera até 10 segundos |
+
+Acima de um limite a chamada responde `429` e você pode tentar de novo mais
+tarde.
+
+## Erros no envio
+
+| Status | Significado |
+| --- | --- |
+| `200` com `status: "failed"` | O arquivo chegou, mas o conteúdo foi recusado (formato, arquivo danificado). A mensagem diz o motivo; envie outro arquivo. |
+| `400` | Nenhum arquivo, ou um tipo de arquivo que o link não aceita. |
+| `401` | Link inválido ou revogado. |
+| `403` | A chave ou conexão por trás do link foi revogada, ou o plano não inclui mais a API. |
+| `409` | O link está cheio. |
+| `410` | O link expirou. Peça um novo ao agente. |
+| `413` | Arquivo grande demais. |
+| `429` | Um limite da loja foi atingido. |
+
+<CardGroup cols={2}>
+  <Card title="Monte uma bio com um agente" icon="wand-magic-sparkles" href="/pt-BR/integrations/mcp/build-bio-with-agent">
+    Onde os arquivos entram no fluxo completo.
+  </Card>
+  <Card title="Uploads (API)" icon="image" href="/pt-BR/api-reference/uploads">
+    Envio de imagens e vídeos com uma chave de API.
+  </Card>
+</CardGroup>

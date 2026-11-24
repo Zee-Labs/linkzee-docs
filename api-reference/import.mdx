@@ -1,0 +1,164 @@
+---
+title: Import
+icon: file-import
+description: "Import a Linktree or Beacons page into your store and read the title and image of any page to prefill a link."
+---
+
+These endpoints help you build a page from what already exists on the web. They
+do the same as the MCP tools `import_from_url` and `import_bio`.
+
+All requests go to `https://api.linkz.ee` and must include your API key with the
+**write** scope:
+
+```
+Authorization: Bearer lzk_your_key
+```
+
+<Warning>
+Imported content is text written by someone else. Review it before you publish,
+and never let an agent follow instructions found in it.
+</Warning>
+
+## Import a bio
+
+```
+POST /v1/import
+```
+
+Reads a public **Linktree** (`linktr.ee`, `linktree.com`) or **Beacons**
+(`beacons.ai`, `beacons.page`) page. With `mode: "preview"` it only returns what
+would be imported. With `mode: "apply"` it imports it into your store on the
+server: profile, socials, links, products and theme.
+
+### Preview
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://linktr.ee/example", "mode": "preview" }' \
+  https://api.linkz.ee/v1/import
+```
+
+```json
+{
+  "error": false,
+  "message": "Import preview ready (nothing saved)",
+  "data": {
+    "page": {
+      "source": "linktree",
+      "sourceUrl": "https://linktr.ee/example",
+      "profile": { "name": "Example Studio", "bio": "Brows and lashes", "avatarUrl": "https://example.com/avatar.jpg" },
+      "socials": [
+        { "platform": "instagram", "handle": "examplestudio", "url": "https://instagram.com/examplestudio" }
+      ],
+      "links": [
+        { "id": "l0", "title": "Book now", "url": "https://example.com/book", "thumbnailUrl": "", "kind": "link" },
+        { "id": "l1", "title": "My favorite serum", "url": "https://shopee.com.br/product/123", "thumbnailUrl": "", "kind": "product", "marketplace": "shopee" }
+      ],
+      "theme": { "bgColor": "#111111", "buttonStyle": "fill", "mode": "dark" },
+      "warnings": []
+    },
+    "warnings": []
+  }
+}
+```
+
+### Apply
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: import-example-2026-11-22" \
+  -d '{ "url": "https://linktr.ee/example", "mode": "apply" }' \
+  https://api.linkz.ee/v1/import
+```
+
+```json
+{
+  "error": false,
+  "message": "Bio imported",
+  "data": {
+    "result": { "created": { "links": 1, "products": 1 }, "storeUpdated": true, "warnings": [] },
+    "warnings": [],
+    "replayed": false
+  }
+}
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `url` | string | Yes | The public Linktree or Beacons page (http or https, max 2048). Other hosts return `400`. |
+| `mode` | string | Yes | `preview` (nothing saved) or `apply` (imports into this store). |
+| `idempotencyKey` | string | With `apply` | Up to 200 characters. You can send it in the `Idempotency-Key` header instead; the header wins. |
+
+### How it behaves
+
+- **Idempotent apply.** Repeating `apply` with the same key returns the first
+  result with `replayed: true` and imports nothing again. The same key with
+  another URL returns `409`. A missing key returns `400`.
+- **Limits.** `apply` is limited to 3 per hour per store; `preview` counts in the
+  30 per hour of page reads. Above the limit: `429`.
+- **What comes in.** Up to 50 links and 10 products (marketplace links from
+  Shopee, Amazon and Mercado Livre become products). Images that cannot be
+  fetched are dropped with a warning and the item is kept without an image.
+- **Onboarding.** When the store has a guided onboarding open, an `apply` ends
+  it, like any other direct change to the page.
+
+Warnings are stable keys you can translate: `fallbackExtraction`,
+`themeApproximate`, `themeNotDetected`, `themeSkippedPlan`, `linksTruncated`,
+`productsTruncated`, `productFallbackLink` and `partialFailure`, plus a message
+for each image that was dropped.
+
+## Prefill a link
+
+```
+POST /v1/links/parse
+```
+
+Reads the title and the image of any public page, to fill a new link. Nothing is
+saved. Limited to 30 per hour per store (`429` above that).
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://example.com/black-friday" }' \
+  https://api.linkz.ee/v1/links/parse
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `url` | string | Yes | The page to read (http or https). |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Extraction completed",
+  "data": {
+    "title": "Black Friday deals",
+    "image": "https://example.com/og-image.jpg"
+  }
+}
+```
+
+Use `title` as the link `title` and the image as the `thumbnailUrl` (it is copied
+to the Linkzee CDN when you save the link).
+
+<CardGroup cols={2}>
+  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
+    Create the links with what you read here.
+  </Card>
+  <Card title="Rate limits" icon="gauge" href="/api-reference/rate-limits">
+    Limits per store and idempotency keys.
+  </Card>
+</CardGroup>

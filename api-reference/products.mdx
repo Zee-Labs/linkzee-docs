@@ -1,12 +1,12 @@
 ---
 title: Products
 icon: box
-description: "List, read, create, update and delete the products in your Linkzee showcase."
+description: "List, read, create, update, delete and reorder the products in your Linkzee showcase."
 ---
 
 Products are the items in your public showcase. Each product has a name, an
-optional price, an image and an affiliate link. Use these endpoints to keep your
-catalog in sync from your own systems.
+optional price, an image and an affiliate or product link. Use these endpoints to
+keep your catalog in sync from your own systems.
 
 All requests go to `https://api.linkz.ee` and must include your API key:
 
@@ -15,9 +15,22 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-Reading products (`GET`) works with any key. Creating, updating or deleting a
-product requires a key with the **write** scope.
+Reading products (`GET`) needs the **read** scope. Creating, updating, deleting
+or reordering a product requires a key with the **write** scope.
 </Note>
+
+## Showcase order
+
+The showcase has two order modes:
+
+- **Newest first** (default): the most recent products come first.
+- **Manual**: turned on by the first reorder (see "Reorder products" below) that changes the
+  order visitors see. From then on the showcase follows the `order` of each
+  product, and new products enter at the top.
+
+`GET /v1/products`, the MCP tool `list_products` and the public page always
+return the products in the order visitors see. There is no endpoint to go back to
+newest first.
 
 ## List products
 
@@ -25,7 +38,7 @@ product requires a key with the **write** scope.
 GET /v1/products
 ```
 
-Returns every product in your store, in showcase order.
+Returns every product in your store, in the order of the showcase.
 
 ### Request
 
@@ -58,6 +71,7 @@ curl -X GET \
       "categoryId": "665f0000aa11bb22cc33dd44",
       "externalId": "SKU-1042",
       "barcode": "7891234567895",
+      "order": 0,
       "clicks": 128,
       "createdAt": "2026-07-10T12:04:55.000Z"
     }
@@ -71,7 +85,9 @@ curl -X GET \
 GET /v1/products/{id}
 ```
 
-Returns a single product by its ID.
+Returns a single product by its ID. The answer is an allow list of the product
+fields (the same view as the MCP tool `get_product`); internal fields are never
+returned.
 
 ### Request
 
@@ -104,16 +120,24 @@ curl -X GET \
     "imageUrl": "https://cdn.linkz.ee/u/abc/products/665f1a2b.webp",
     "gallery": [],
     "externalLink": "https://shopee.com.br/product/123",
+    "externalId": "SKU-1042",
+    "barcode": "7891234567895",
     "buttonText": "Buy",
     "badge": "Deal",
     "isActive": true,
     "isFeatured": false,
-    "categoryId": "665f0000aa11bb22cc33dd44",
-    "externalId": "SKU-1042",
-    "barcode": "7891234567895",
+    "highlightFx": "",
+    "imageRatio": 1,
+    "cardSize": "normal",
+    "offerEndsAt": null,
+    "offerDurationMinutes": 120,
     "showCountdown": false,
     "clicks": 128,
-    "createdAt": "2026-07-10T12:04:55.000Z"
+    "order": 0,
+    "categoryId": "665f0000aa11bb22cc33dd44",
+    "collectionId": null,
+    "createdAt": "2026-07-10T12:04:55.000Z",
+    "updatedAt": "2026-07-12T08:30:00.000Z"
   }
 }
 ```
@@ -136,6 +160,7 @@ lookup comes back incomplete, send at least `name` so the product can be saved.
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
+  -H "Idempotency-Key: sync-SKU-1042" \
   -d '{
     "name": "Wireless Headphones XYZ",
     "description": "Bluetooth 5.3, 30h battery",
@@ -144,7 +169,8 @@ curl -X POST \
     "imageUrl": "https://example.com/headphones.jpg",
     "externalLink": "https://shopee.com.br/product/123",
     "badge": "Deal",
-    "isFeatured": true
+    "isFeatured": true,
+    "externalId": "SKU-1042"
   }' \
   https://api.linkz.ee/v1/products
 ```
@@ -153,39 +179,34 @@ curl -X POST \
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `name` | string | Conditional | Product name (max 160). Optional when `url` is sent — it is filled from the marketplace lookup. |
-| `url` | string | No | Marketplace URL. When sent without `name`/`price`, Linkzee tries to fill them automatically. |
+| `name` | string | Conditional | Product name (max 160). Optional when `url` is sent: it is filled from the marketplace lookup. |
+| `url` | string | No | Marketplace URL. When sent without `name` or `price`, Linkzee tries to fill them automatically. |
 | `slug` | string | No | Custom slug (max 80). Derived from the name when omitted; unique per store. |
 | `description` | string | No | Short description (max 2000). |
-| `price` | number | No | Current price in R$. Leave empty for a "no price" product. |
+| `price` | number | No | Current price in R$. Leave it out for a "no price" product. |
 | `priceOriginal` | number | No | Original price, used to show a discount. |
-| `installments` | string | No | Installment text, e.g. `3x of R$ 33.30` (max 80). |
-| `imageUrl` | string | No | Main image URL (http/https). External URLs are re-hosted on the CDN. |
+| `installments` | string | No | Installment text, for example `3x of R$ 33.30` (max 80). |
+| `imageUrl` | string | No | Main image URL (http or https). Outside URLs are copied to the Linkzee CDN. |
 | `gallery` | string[] | No | Up to 10 extra image URLs. |
-| `externalLink` | string | No | Affiliate/marketplace link (http/https). |
-| `buttonText` | string | No | Call-to-action label (max 60), e.g. `Buy`. |
-| `badge` | string | No | Short promo tag (max 40), e.g. `Deal`. |
+| `externalLink` | string | No | Affiliate or product link (http or https). A product without a link stays a hidden draft. |
+| `buttonText` | string | No | Call to action label (max 60), for example `Buy`. |
+| `badge` | string | No | Short promo tag (max 28), for example `Deal`. |
 | `categoryId` | string | No | ID of the category this product belongs to. |
 | `isActive` | boolean | No | Whether the product is visible in the showcase. Defaults to `true`. |
-| `isFeatured` | boolean | No | Show the product larger, at the top of the showcase. |
+| `isFeatured` | boolean | No | Adds the product to the highlights carousel. |
+| `highlightFx` | string | No | Animated highlight (Premium): `""`, `"shake"`, `"shine"`, `"pulse"` or `"bounce"`. |
 | `cardSize` | string | No | `normal` or `wide` (a `wide` card spans both grid columns). |
-| `offerDurationMinutes` | number | No | Scarcity countdown duration, in minutes. |
-| `showCountdown` | boolean | No | Show the countdown timer on the card. |
-| `externalId` | string | No | Your own reference for this product — a CRM/ERP id or SKU — to match it with your systems (max 64). Stored and returned as-is; never shown on your public page. |
+| `offerEndsAt` | string | No | Offer end date (ISO 8601). |
+| `offerDurationMinutes` | number | No | Scarcity countdown duration, in minutes (relative, restarts per visitor). |
+| `showCountdown` | boolean | No | Shows the countdown timer on the card. |
+| `externalId` | string | No | Your own reference for this product (a CRM or ERP id, or a SKU) to match it with your systems (max 64). Never shown on your public page. |
 | `barcode` | string | No | Product barcode: EAN, GTIN or UPC (max 32). Never shown publicly. |
 
 <Note>
-`externalId` and `barcode` are optional and never appear on your public page.
-They're returned by `list`/`get` and accepted by `create`/`update` here and
-through [MCP](/integrations/mcp/tools-reference) (`create_product`,
-`update_product`, `list_products`), so agents and your own systems can keep them
-in sync.
-</Note>
-
-<Note>
-To avoid creating the same product twice on a retry, send an
-`Idempotency-Key` header. If a create with that key already succeeded, the
-original product is returned instead of a duplicate.
+Send an `Idempotency-Key` header to retry safely: repeating the request with the
+same key and the same body within 24 hours returns the product created the first
+time instead of a duplicate. The same key with a different body returns `409`.
+See [Rate limits](/api-reference/rate-limits).
 </Note>
 
 ### Response
@@ -242,7 +263,8 @@ curl -X PATCH \
 
 The body accepts the same fields as **Create a product**, except `url` (the
 automatic lookup only runs on creation). All fields are optional. Send
-`categoryId: null` to remove the product from its category.
+`categoryId: null` to remove the product from its category and
+`offerEndsAt: null` to clear the offer end date.
 
 ### Response
 
@@ -290,6 +312,49 @@ curl -X DELETE \
   "message": "Product deleted successfully"
 }
 ```
+
+## Reorder products
+
+```
+PUT /v1/products/order
+```
+
+Sets the position of products in the showcase. Requires the **write** scope.
+Each item moves to the position given by `order` (`0` is the top):
+
+- Send the **complete** list for an exact order.
+- Send only the products you want to move: the others keep their relative order.
+
+The first reorder that changes what visitors see turns the showcase to manual
+order (see "Showcase order" above).
+
+### Request
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "items": [
+      { "id": "665f1a2b9c4e1f0012a3b4c5", "order": 0 },
+      { "id": "665f1a2b9c4e1f0012a3b4c6", "order": 1 }
+    ]
+  }' \
+  https://api.linkz.ee/v1/products/order
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `items` | array | Yes | 1 to 5000 items. |
+| `items[].id` | string | Yes | The product ID. |
+| `items[].order` | integer | Yes | New position (`0` is the top). |
+
+### Response
+
+Returns the products in the new order, in the same format as
+`GET /v1/products`.
 
 <CardGroup cols={2}>
   <Card title="Categories" icon="layer-group" href="/api-reference/categories">

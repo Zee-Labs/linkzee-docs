@@ -15,11 +15,11 @@ necesita la cabecera `Authorization: Bearer lzk_your_key`, y las operaciones de
 escritura (POST/PATCH/DELETE) requieren una clave con el permiso **write**.
 
 <Note>
-El comportamiento global del asistente — el tono de voz (`aiAssistantTone`) y el
-texto de conocimiento "sobre tu negocio" (`aboutBusiness`) — vive en la tienda,
+El comportamiento global del asistente (el tono de voz, `aiAssistantTone`, y el
+texto de conocimiento "sobre tu negocio", `aboutBusiness`) vive en la tienda,
 no en cada asistente. Configúralos mediante
-[`PATCH /v1/store`](/es/api-reference/store#update-the-store-profile). La base de
-conocimiento en PDF tiene sus propios endpoints; consulta la
+[`PATCH /v1/store`](/es/api-reference/store). La base de
+conocimiento en PDF tiene sus propios endpoints: consulta la
 [referencia de Knowledge](/es/api-reference/knowledge).
 </Note>
 
@@ -82,7 +82,8 @@ POST /v1/ai-assistant
 
 Crea un nuevo asistente. Todos los campos son opcionales: puedes crearlo vacío y
 completarlo después, o enviar toda la configuración en una sola llamada. Los
-asistentes nuevos están activos por defecto.
+asistentes nuevos están activos por defecto; envía `isActive: false` para crear
+uno oculto.
 
 ### Solicitud
 
@@ -103,13 +104,14 @@ curl -X POST \
 | Parámetro | Tipo | Obligatorio | Descripción |
 | --- | --- | --- | --- |
 | `title` | string | No | Nombre que se muestra en la tarjeta del asistente (máx. 80 caracteres). |
-| `avatarUrl` | string | No | URL de la imagen del avatar. Súbela primero con [`POST /v1/uploads/image`](/es/api-reference/uploads) usando `kind=aiAssistantAvatar` y luego pasa la URL devuelta (máx. 500 caracteres). |
+| `avatarUrl` | string | No | URL de la imagen del avatar (máx. 500 caracteres). Súbela con [`POST /v1/uploads/image`](/es/api-reference/uploads) usando `kind=aiAssistantAvatar` y pasa la URL devuelta, o pasa una URL pública de imagen: se copia a la CDN de Linkzee cuando cambia. |
 | `opening` | string | No | El saludo con el que el asistente abre el chat (máx. 2000 caracteres). |
-| `personality` | string | No | Avanzado: cómo debe percibirse el asistente — su estilo al atender a la gente (máx. 600 caracteres). |
+| `personality` | string | No | Avanzado: cómo debe percibirse el asistente, su estilo al atender a la gente (máx. 600 caracteres). |
 | `instructions` | string | No | Avanzado: reglas y preferencias que el asistente debe seguir (máx. 1500 caracteres). |
 | `starterButtons` | array of string | No | Hasta 6 botones de inicio rápido que se muestran antes de que el visitante escriba (cada uno máx. 120 caracteres). |
 | `leadCapture` | object | No | Ajustes de captura de leads (ver abajo). |
 | `collectionId` | string | No | Coloca el asistente dentro de una colección de tu página. |
+| `isActive` | boolean | No | Muestra el asistente en tu página. Por defecto `true`. |
 
 El objeto `leadCapture` controla cómo el asistente pide el contacto del
 visitante:

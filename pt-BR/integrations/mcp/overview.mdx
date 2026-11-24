@@ -1,40 +1,70 @@
 ---
 title: MCP para agentes de IA
 icon: robot
-description: "Deixe agentes de IA como Claude, ChatGPT ou Cursor gerenciarem seu Linkzee em linguagem natural."
+description: "Deixe agentes de IA como Claude, ChatGPT ou Cursor montarem e gerenciarem seu Linkzee em linguagem natural."
 ---
 
-O **MCP** (Model Context Protocol) permite que agentes de IA — como **Claude**,
-**ChatGPT** ou **Cursor** — controlem seu Linkzee em linguagem natural. É só pedir,
+O **MCP** (Model Context Protocol) permite que agentes de IA como **Claude**,
+**ChatGPT** ou **Cursor** controlem seu Linkzee em linguagem natural. É só pedir,
 e o agente faz o trabalho por você:
 
+- "Monte minha bio do zero com estes serviços e fotos."
 - "Adicione este produto à minha página."
 - "O que tenho agendado esta semana?"
-- "Mude meu tema."
+- "Mude meu tema e coloque o card de avaliações acima do mapa."
 
-É a forma mais simples de gerenciar sua página sem precisar de mãos.
+Um agente conectado ao Linkzee pode fazer tudo o que você faz no editor da sua
+página pública: ler o estado real, criar links e blocos de mídia, enviar fotos e
+vídeos, definir o cabeçalho e o design, configurar os cards especiais e decidir
+a ordem da página.
 
 ## Como funciona
 
-O agente se conecta ao endpoint MCP do Linkzee em `https://api.linkz.ee/mcp`
-usando sua **chave de API**. Depois de conectado, você conversa com seu agente
-normalmente e ele atualiza seu Linkzee para você — sem menus, sem cliques.
+O agente se conecta ao endpoint MCP do Linkzee em `https://api.linkz.ee/mcp`.
+Há duas formas de entrar:
+
+| Forma | Ideal para | Como o acesso é decidido |
+| --- | --- | --- |
+| **Conector do Claude** (OAuth) | claude.ai, o app desktop do Claude e o app do Claude no celular. Nenhuma chave para copiar. | Você entra no Linkzee e escolhe os grupos: `content` (obrigatório), `agenda`, `leads` e `finance` (opcionais). |
+| **Chave de API** (`lzk_`) | Claude Code, Cursor, ChatGPT, automações e qualquer cliente MCP que envie um cabeçalho `Authorization`. | Os escopos da chave: `read`, `write` e o opcional `finance`. |
+
+As duas agem em **uma loja**: a loja em que a chave foi criada, ou a loja que
+você escolheu ao conectar o Claude. Usar a API e o MCP exige um plano que os
+inclua (Pro ou Scale).
 
 <Note>
   Tudo o que o agente altera é salvo automaticamente e atualiza sua página no ar
   em tempo real, como se você mesmo estivesse editando.
 </Note>
 
+## O que um agente precisa de você
+
+- **Fotos e vídeos.** O agente pode usar URLs públicas. Quando os arquivos estão
+  só no seu celular ou no chat, ele cria um link de envio e você escolhe os
+  arquivos em uma página do Linkzee. Veja [Envio de arquivos](/pt-BR/integrations/mcp/sending-files).
+- **Consentimento para fotos de pessoas.** Antes de blocos de mídia com fotos ou
+  vídeos de pessoas irem ao ar, o agente pede que você confirme que as pessoas
+  mostradas concordaram.
+- **Sua concordância antes de uma importação.** Importar uma página do Linktree
+  ou do Beacons substitui seu perfil e adiciona links, então o agente mostra uma
+  prévia antes.
+
 ## Conecte seu agente
 
 <CardGroup cols={2}>
   <Card title="Claude" icon="comment" href="/pt-BR/integrations/mcp/claude">
-    Conecte o Linkzee no Claude Code, no aplicativo desktop do Claude ou no claude.ai.
+    Conecte o Linkzee no claude.ai, nos apps do Claude ou no Claude Code.
   </Card>
   <Card title="ChatGPT e outros" icon="plug" href="/pt-BR/integrations/mcp/chatgpt-and-others">
     Configure o ChatGPT, o Cursor e qualquer agente compatível com MCP.
   </Card>
+  <Card title="Monte uma bio com um agente" icon="wand-magic-sparkles" href="/pt-BR/integrations/mcp/build-bio-with-agent">
+    O passo a passo que um agente segue para montar sua página.
+  </Card>
+  <Card title="Envio de arquivos" icon="upload" href="/pt-BR/integrations/mcp/sending-files">
+    Como fotos e vídeos chegam ao Linkzee.
+  </Card>
   <Card title="Referência de ferramentas" icon="screwdriver-wrench" href="/pt-BR/integrations/mcp/tools-reference">
-    Veja tudo o que um agente pode fazer através do MCP.
+    Veja todas as ferramentas e o acesso que cada uma exige.
   </Card>
 </CardGroup>

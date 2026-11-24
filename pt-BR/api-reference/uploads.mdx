@@ -1,18 +1,17 @@
 ---
 title: Uploads
 icon: image
-description: "Envie uma imagem e receba de volta uma URL hospedada que você pode usar no seu logo, produtos, links e muito mais."
+description: "Envie imagens e vídeos, crie links de envio para arquivos que não estão online e acompanhe os jobs de vídeo."
 ---
 
-Use o endpoint de uploads para enviar uma imagem ao Linkzee e receber de volta uma
-URL permanente, hospedada em CDN. Toda imagem é convertida para **WebP**,
-redimensionada para caber dentro de 1600&nbsp;px e servida com cache de longa
-duração, então a URL que você recebe já está pronta para usar direto em um
-produto, link ou no perfil da sua loja.
+Use estes endpoints para colocar imagens e vídeos no Linkzee. As imagens voltam
+como uma URL permanente, hospedada em CDN, que você define em um produto, um link
+ou na sua loja. Os vídeos são otimizados em segundo plano e aplicados à sua
+página quando ficam prontos.
 
-O endpoint fica sob a URL base `https://api.linkz.ee` e exige o cabeçalho
+Os endpoints ficam sob a URL base `https://api.linkz.ee` e exigem o cabeçalho
 `Authorization: Bearer lzk_your_key`. Fazer upload altera sua página, então é
-preciso uma chave com o escopo **write**.
+preciso uma chave com o escopo **write**. Ler um job de vídeo exige só **read**.
 
 ## Enviar uma imagem
 
@@ -21,7 +20,9 @@ POST /v1/uploads/image
 ```
 
 Envia uma única imagem e retorna sua URL hospedada. Envie a requisição como
-`multipart/form-data`, não como JSON.
+`multipart/form-data`, não como JSON. Toda imagem é convertida para **WebP**,
+redimensionada para caber dentro de 1600&nbsp;px e servida com cache de longa
+duração.
 
 ### Requisição
 
@@ -40,50 +41,45 @@ Envie-os como campos de formulário multipart.
 
 | Parâmetro | Tipo | Obrigatório | Descrição |
 | --- | --- | --- | --- |
-| `file` | file | Sim | A imagem a enviar. Qualquer formato comum (JPEG, PNG, WebP, etc.), até **8&nbsp;MB**. É convertida para WebP automaticamente. |
-| `kind` | string | Não | Onde a imagem se encaixa. Determina um local de armazenamento estável, de modo que reenviar o mesmo tipo sobrescreve a imagem anterior em vez de acumular. Veja a tabela abaixo. |
-| `productId` | string | Não | Obrigatório quando `kind` é `product`. O produto ao qual esta imagem pertence. Deve ser um produto da sua própria loja. |
-| `linkId` | string | Não | Obrigatório quando `kind` é `link`, `linkMedia` ou `linkPoster`. O link ao qual a imagem pertence. Deve ser um link da sua própria loja. |
-| `staffId` | string | Não | Obrigatório quando `kind` é `staffAvatar`. O membro da equipe ao qual o avatar pertence. |
-| `socialKey` | string | Não | Obrigatório quando `kind` é `socialCard`. A rede social à qual a capa do card pertence (ex.: `instagram`, `tiktok`, `youtube`). |
+| `file` | file | Sim | A imagem, até **8&nbsp;MB**. JPEG, PNG, WebP, GIF ou AVIF. O formato é conferido pelos bytes do arquivo. HEIC, SVG, TIFF e PDF são recusados. |
+| `kind` | string | Sim | Onde a imagem se encaixa. Define um local de armazenamento fixo, de modo que um novo upload do mesmo tipo substitui a imagem anterior. Veja a tabela abaixo. Uma requisição sem `kind` é recusada. |
+| `productId` | string | Com `kind=product` | O produto ao qual a imagem pertence, na sua própria loja. |
+| `linkId` | string | Com `link`, `linkMedia`, `linkPoster` ou `linkMediaSlot` | O link ao qual a imagem pertence, na sua própria loja. |
+| `slot` | string | Com `kind=linkMediaSlot` | O slot de foto (`0` a `9`) de um bloco Antes e Depois ou Galeria. Reenviar o mesmo slot substitui a foto. |
+| `staffId` | string | Com `kind=staffAvatar` | O membro da equipe ao qual o avatar pertence. |
+| `socialKey` | string | Com `kind=socialCard` | A rede social da capa do card, por exemplo `instagram`. |
 
 #### Valores para `kind`
 
 | `kind` | Use para | Envie também |
 | --- | --- | --- |
-| `logo` | O logo da sua loja | — |
+| `logo` | O logo da sua loja | |
 | `product` | A imagem de um produto | `productId` |
-| `wallpaper` | O papel de parede da sua página | — |
-| `wallpaperPoster` | Legado — o pôster de um papel de parede em vídeo agora é gerado automaticamente a partir do vídeo | — |
-| `banner` | O banner do seu cabeçalho | — |
-| `cutout` | Uma imagem recortada do cabeçalho | — |
-| `wordmark` | O logotipo horizontal exibido no lugar do nome da loja (estilo de título **Logo**). Salve a URL retornada em `headerSettings.wordmarkUrl` com `PATCH /v1/store`; uma string vazia remove | — |
+| `wallpaper` | O papel de parede da sua página | |
+| `banner` | O banner do seu cabeçalho | |
+| `cutout` | Uma imagem recortada do cabeçalho (use um PNG ou WebP com transparência) | |
+| `wordmark` | O logotipo horizontal exibido no lugar do nome da loja (estilo de título **Logo**). Salve a URL em `headerSettings.wordmarkUrl` com `PATCH /v1/store` | |
+| `heroPhoto` | A foto de capa do cabeçalho **Hero**, separada do logo. Salve a URL em `headerSettings.heroPhotoUrl` | |
 | `link` | A miniatura de um link | `linkId` |
 | `linkMedia` | A capa do card de um link | `linkId` |
 | `linkPoster` | O pôster de vídeo de um link | `linkId` |
-| `aiAssistantAvatar` | O avatar do seu assistente de IA | — |
+| `linkMediaSlot` | Uma foto de um bloco Antes e Depois ou Galeria (Premium; redimensionada para caber dentro de 1344×2016) | `linkId`, `slot` |
+| `aiAssistantAvatar` | O avatar do seu assistente de IA | |
 | `staffAvatar` | A foto de um membro da equipe | `staffId` |
-| `heroPoster` | Legado — o pôster de um vídeo da hero agora é gerado automaticamente a partir do vídeo | — |
 | `socialCard` | A capa do card de uma rede social | `socialKey` |
-
-<Note>
-Quando você envia um `kind` (e seu ID correspondente), a imagem é armazenada em um
-local fixo para aquele recurso, de modo que um novo upload substitui o antigo.
-Omita o `kind` e cada upload recebe sua própria URL exclusiva.
-</Note>
+| `wallpaperPoster`, `heroPoster` | Legado. Os pôsteres de vídeo agora são gerados a partir do vídeo | |
 
 <Warning>
-Arquivos acima de 8&nbsp;MB são rejeitados. Apenas arquivos de imagem são aceitos —
-outros tipos de arquivo retornam um `400 Bad Request`. Se você definir `kind` como
-`product` ou `link`, o `productId` ou `linkId` correspondente deve referenciar um
-recurso da sua própria loja.
+Arquivos acima de 8&nbsp;MB são rejeitados com `413`. Um arquivo que não é uma
+imagem aceita retorna `400 Bad Request`. Quando você envia `productId`, `linkId`
+ou `staffId`, ele precisa referenciar um recurso da sua própria loja.
 </Warning>
 
 ### Resposta
 
-A `url` é sua imagem hospedada. Como as imagens armazenadas são fortemente
-cacheadas, a URL termina com um marcador de versão `?v=` que muda a cada upload —
-use sempre a URL exata que você recebe de volta.
+A URL termina com um marcador de versão `?v=` que muda a cada upload, então uma
+imagem substituída nunca é servida de um cache antigo. Use sempre a URL exata que
+você recebe.
 
 ```json
 {
@@ -101,28 +97,162 @@ use sempre a URL exata que você recebe de volta.
 
 | Campo | Tipo | Descrição |
 | --- | --- | --- |
-| `url` | string | A URL hospedada da imagem, com cache-busting. |
+| `url` | string | A URL hospedada da imagem, com quebra de cache. |
 | `width` | integer | Largura da imagem processada, em pixels. |
 | `height` | integer | Altura da imagem processada, em pixels. |
 | `format` | string | Sempre `webp`. |
-| `hasAlpha` | boolean | Se a imagem tem canal transparente. |
+| `hasAlpha` | boolean | Se a imagem tem canal de transparência. |
 
 <Note>
-Para anexar uma imagem enviada a um recurso, pegue a `url` retornada e defina-a no
-produto ou link — por exemplo, passe-a como o `image` do produto ao criá-lo ou
-atualizá-lo.
+Para anexar a imagem, defina a `url` retornada no recurso: por exemplo
+`imageUrl` de um produto, `thumbnailUrl` de um link ou `logoUrl` da loja.
 </Note>
 
-## Upload de vídeo (hero, papel de parede e itens da vitrine)
+## Criar um link de envio
+
+```
+POST /v1/upload-links
+```
+
+Cria um link de envio de vida curta para arquivos que ainda não estão online.
+Você passa a página para uma pessoa ("abra e escolha as fotos"), ou envia os
+arquivos você mesmo para o endereço de envio direto. É o mesmo que a ferramenta
+MCP `create_upload_link`. Exige o escopo **write**.
+
+### Requisição
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "maxFiles": 4, "accept": "image" }' \
+  https://api.linkz.ee/v1/upload-links
+```
+
+### Parâmetros
+
+| Parâmetro | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `maxFiles` | integer | Não | Arquivos que o link aceita, de 1 a 10. Padrão 10. |
+| `accept` | string | Não | `image`, `video` ou `any`. Padrão `any`. |
+
+### Resposta
+
+```json
+{
+  "error": false,
+  "message": "Upload link created",
+  "data": {
+    "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+    "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+    "directUpload": {
+      "method": "POST",
+      "url": "https://api.linkz.ee/upload-tickets/files",
+      "header": "Authorization: Bearer lzu_AbC123...",
+      "field": "file"
+    },
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image"
+  }
+}
+```
+
+O segredo `lzu_...` aparece só em `uploadPageUrl` e em `directUpload.header`.
+O link fica aberto por **15 minutos**; até 20 links podem estar abertos por loja
+ao mesmo tempo, e 60 podem ser criados por hora.
+
+### Enviar um arquivo para o link
+
+```
+POST https://api.linkz.ee/upload-tickets/files
+```
+
+Envie um arquivo por requisição, como `multipart/form-data` com o campo `file` e
+o cabeçalho `Authorization: Bearer lzu_...` (nunca a sua chave `lzk_`, e nunca o
+segredo na URL).
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzu_AbC123..." \
+  -F "file=@/path/to/after.jpg" \
+  https://api.linkz.ee/upload-tickets/files
+```
+
+```json
+{
+  "error": false,
+  "message": "File received",
+  "data": {
+    "uploadId": "6740b2a1c3d4e5f6a7b8c9d2",
+    "kind": "image",
+    "status": "done",
+    "name": "after.jpg",
+    "size": 512044,
+    "w": 1600,
+    "h": 1200
+  }
+}
+```
+
+| Regra | Valor |
+| --- | --- |
+| Fotos | JPEG, PNG, WebP, GIF ou AVIF, até 8&nbsp;MB. HEIC é recusado (no iPhone, use o formato de câmera **Mais Compatível** ou escolha pela galeria). |
+| Vídeos | MP4 ou MOV (H.264 ou HEVC), até 40&nbsp;MB. |
+| Por loja | 26 arquivos por minuto (fotos 20, vídeos 6), 60 vídeos por dia, 2.560&nbsp;MB por dia. |
+
+Um **conteúdo** recusado (arquivo danificado, formato errado) retorna `200` com
+`"status": "failed"` e uma mensagem em `error`; o arquivo não ocupa lugar. Uma
+**requisição** recusada retorna o erro padrão: `400` sem arquivo ou com um tipo
+que o link não aceita, `401` link inválido, `403` chave revogada ou plano sem a
+API, `409` link cheio, `410` link expirado, `413` arquivo grande demais, `429`
+limite da loja.
+
+### Ler o status do link
+
+```
+GET https://api.linkz.ee/upload-tickets/status
+```
+
+Com o mesmo cabeçalho `Authorization: Bearer lzu_...`. Não consome o link.
+
+```json
+{
+  "error": false,
+  "message": "Upload link loaded",
+  "data": {
+    "status": "open",
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image",
+    "storeName": "Studio Ana",
+    "files": [
+      { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2", "kind": "image", "status": "done", "name": "after.jpg", "size": 512044 }
+    ]
+  }
+}
+```
+
+`status` é `open`, `full` ou `expired`; cada arquivo fica `uploading`, `done` ou
+`failed`.
+
+<Note>
+Um `uploadId` é usado nos campos de imagem e vídeo das ferramentas MCP como
+`{ "uploadId": "..." }`, por 24 horas e até 5 vezes. Os endpoints REST recebem
+URLs: com uma chave de API, envie imagens com `POST /v1/uploads/image`. Veja
+[Envio de arquivos](/pt-BR/integrations/mcp/sending-files).
+</Note>
+
+## Uploads de vídeo (hero, papel de parede e itens do Reel)
 
 ```
 POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
-Envia um vídeo curto para o topo **Hero** ou para o **papel de parede** da sua
-página e o otimiza em segundo plano. Envie como `multipart/form-data` com um
-único campo `file` (MP4 ou MOV, até **40&nbsp;MB**). Este endpoint exige uma
-chave com o escopo **write** e uma loja em um plano **Premium**.
+Envia um vídeo curto para o seu cabeçalho **Hero**, o **papel de parede** da sua
+página ou um item de vídeo de uma galeria Reel, e o otimiza em segundo plano.
+Envie como `multipart/form-data` com um único campo `file` (MP4 ou MOV, até
+**40&nbsp;MB**). Exige o escopo **write** e um plano **Premium**.
 
 ```bash
 curl -X POST \
@@ -131,26 +261,31 @@ curl -X POST \
   "https://api.linkz.ee/v1/uploads/video?kind=hero"
 ```
 
-| Parâmetro | Onde | Obrigatório | Descrição |
+| Parâmetro | Em | Obrigatório | Descrição |
 | --- | --- | --- | --- |
-| `kind` | query | Sim | `hero` para o vídeo do topo Hero, `wallpaper` para o fundo da página, `media` para um item em vídeo de uma vitrine vertical. |
-| `linkId` | query | Com `kind=media` | O bloco de galeria (layout `reel`) ao qual o vídeo pertence. Precisa ser um link da sua própria loja. |
-| `slot` | query | Com `kind=media` | A posição do item, de `0` a `9`. |
-| `file` | multipart | Sim | O vídeo a enviar, MP4 ou MOV, até **40&nbsp;MB**. |
+| `kind` | query | Sim | `hero` para o vídeo do cabeçalho Hero, `wallpaper` para o fundo da página, `media` para um item de vídeo de uma galeria Reel. |
+| `linkId` | query | Com `kind=media` | O bloco de galeria (layout `reel`) ao qual o vídeo pertence, na sua própria loja. |
+| `slot` | query | Com `kind=media` | O slot do item, de `0` a `9`. |
+| `file` | multipart | Sim | O vídeo, MP4 ou MOV, até **40&nbsp;MB**. |
 
-### Itens em vídeo de uma vitrine vertical
+### Itens de vídeo de uma galeria Reel
 
-Com `kind=media`, o vídeo vira um item de um bloco de galeria que usa o layout
-`reel`. Diferente dos vídeos de hero e de papel de parede, um item **mantém o
-áudio** (o visitante pode ligar o som); ele também fica com os primeiros 30
-segundos. Depois do upload, salve o item com `PATCH /v1/links/{id}`, enviando
-`{ "type": "video", "slot": 0, "jobId": "<id do job>" }` em `mediaItems`. O
-vídeo é preenchido automaticamente quando o job fica pronto.
+Com `kind=media`, o vídeo vira um item de um bloco de galeria com o layout
+`reel`. Um item **mantém o áudio** (os visitantes podem ligar o som) e os
+primeiros 30 segundos. Depois do upload, salve o item com `PATCH /v1/links/{id}`,
+enviando `{ "type": "video", "slot": 0, "jobId": "<job id>" }` em `mediaItems`.
+O vídeo é preenchido quando o job fica pronto.
+
+<Note>
+Um **vídeo de card de link** (`mediaType: "video"` em um link comum) não pode ser
+enviado por URL nem por este endpoint. Ele vai só por um link de envio e pela
+ferramenta MCP `set_link_media` com `{ "uploadId": "..." }`.
+</Note>
 
 ### Resposta
 
-A requisição retorna `200` assim que o arquivo é recebido, com um **job** que
-descreve a otimização, mais uma dica `pollMs` de com que frequência consultá-lo.
+A requisição retorna `200` assim que o arquivo é recebido, com um **job** e uma
+sugestão em `pollMs` de com que frequência consultá-lo.
 
 ```json
 {
@@ -173,24 +308,24 @@ descreve a otimização, mais uma dica `pollMs` de com que frequência consultá
 
 | Campo | Tipo | Descrição |
 | --- | --- | --- |
-| `id` | string | O ID do job. Use-o para acompanhar o progresso. |
-| `kind` | string | `hero` ou `wallpaper`. |
-| `status` | string | `queued` → `processing` → `ready`, `failed` ou `superseded`. `superseded` significa que um upload mais novo do mesmo tipo substituiu este. |
+| `id` | string | O id do job. Use-o para consultar o andamento. |
+| `kind` | string | `hero`, `wallpaper` ou `media`. |
+| `status` | string | `queued`, `processing`, depois `ready`, `failed` ou `superseded` (um upload mais novo do mesmo tipo substituiu este). |
 | `error` | string \| null | Uma mensagem legível quando o job falhou. |
 | `errorCode` | string \| null | Um código de erro estável quando o job falhou. |
 | `tries` | integer | Quantas vezes a otimização foi tentada. |
-| `result` | object \| null | Preenchido quando `status` é `ready` — veja abaixo. |
+| `result` | object \| null | Preenchido quando `status` é `ready`. |
 | `createdAt` | string | Quando o job foi criado (ISO 8601). |
 | `finishedAt` | string \| null | Quando o job terminou, se já terminou. |
 
-Quando o job está `ready`, `result` contém o vídeo otimizado — e ele **já está
-aplicado** à sua loja, então não é preciso nenhum `PATCH` extra:
+Quando o job fica `ready`, `result` traz o vídeo otimizado e ele **já está
+aplicado** à sua página, então nenhum `PATCH` extra é necessário:
 
 | Campo | Tipo | Descrição |
 | --- | --- | --- |
 | `url` | string | A URL hospedada do vídeo otimizado. |
-| `posterUrl` | string | A imagem de capa, gerada a partir do primeiro quadro do vídeo. |
-| `durationMs` | integer | Duração do vídeo otimizado, em milissegundos. |
+| `posterUrl` | string | A imagem de capa, gerada a partir do primeiro quadro. |
+| `durationMs` | integer | Duração, em milissegundos. |
 | `width` | integer | Largura em pixels. |
 | `height` | integer | Altura em pixels. |
 | `bytes` | integer | Tamanho do arquivo otimizado. |
@@ -204,78 +339,77 @@ GET    /v1/uploads/video/latest?kind=hero
 DELETE /v1/uploads/video/{kind}
 ```
 
-- `GET /v1/uploads/video/jobs/{id}` retorna o job no estado atual — consulte a
-  cada `pollMs` milissegundos até o `status` ser `ready` ou `failed`.
-- `GET /v1/uploads/video/latest?kind=hero` (ou `kind=wallpaper`) retorna o job
-  mais recente daquele tipo, ou `null` se nunca houve um.
-- `DELETE /v1/uploads/video/{kind}` remove o vídeo publicado (`hero` ou
-  `wallpaper`) da sua página.
+- `GET /v1/uploads/video/jobs/{id}` (escopo **read**) retorna o job no estado
+  atual. Consulte a cada `pollMs` milissegundos até `status` ser `ready` ou
+  `failed`. Também acompanha jobs iniciados pelo painel ou por um agente.
+- `GET /v1/uploads/video/latest?kind=hero` (ou `kind=wallpaper`, escopo
+  **read**) retorna o job mais recente desse tipo, ou `null`.
+- `DELETE /v1/uploads/video/{kind}` (escopo **write**) remove da sua página o
+  vídeo `hero` ou `wallpaper` publicado.
 
 ### Perfil de saída
 
-Todo vídeo é codificado no mesmo perfil, para começar na hora no celular:
+Os vídeos de hero e de papel de parede são codificados no mesmo perfil, para
+começarem na hora no celular:
 
-| Ajuste | Valor |
+| Configuração | Valor |
 | --- | --- |
-| Resolução | **720p** no lado menor — nunca ampliado |
+| Resolução | **720p** no lado menor, nunca ampliado |
 | Taxa de quadros | 24 fps |
 | Codec | H.264 (MP4) |
 | Duração | Os **primeiros 30 segundos** |
-| Áudio | Removido — os vídeos são sempre sem som |
-| Tamanho | No máximo **~6&nbsp;MB** |
+| Áudio | Removido: esses vídeos são sempre mudos |
+| Tamanho | No máximo **cerca de 6&nbsp;MB** |
 
 <Note>
-Vídeos com mais de 30 segundos nunca são rejeitados pela duração: são cortados,
-e o resultado informa `trimmed: true`. Um upload só é rejeitado quando o arquivo
-passa de 40&nbsp;MB ou não é um arquivo de vídeo válido.
-Câmera lenta com taxa de quadros alta é cortada um pouco antes: um clipe de
-240 fps fica com os primeiros 15 segundos.
+Vídeos com mais de 30 segundos nunca são rejeitados pela duração: eles são
+cortados, e o resultado informa `trimmed: true`. Um upload só é rejeitado quando o
+arquivo passa de 40&nbsp;MB ou não é um vídeo válido. Câmera lenta com taxa de
+quadros alta é cortada um pouco antes: um clipe de 240 fps mantém os primeiros 15
+segundos.
 </Note>
 
-<Note>
-`POST /v1/uploads/video` com `kind=link` (o vídeo de um link) continua
-armazenando o arquivo original como antes — essa otimização não é aplicada.
-</Note>
-
-<CardGroup cols={2}>
-  <Card title="Produtos" icon="box" href="/pt-BR/api-reference/products">
-    Crie produtos e defina suas imagens com uma URL enviada.
-  </Card>
-  <Card title="Links e coleções" icon="link" href="/pt-BR/api-reference/links-collections">
-    Adicione miniaturas e capas aos seus links.
-  </Card>
-  <Card title="Loja" icon="store" href="/pt-BR/api-reference/store">
-    Atualize seu logo, papel de parede e cabeçalho.
-  </Card>
-  <Card title="Autenticação" icon="lock" href="/pt-BR/api-reference/authentication">
-    URL base, chaves, escopos e formatos de resposta.
-  </Card>
-</CardGroup>
-
-## Gerar um vídeo de hero com as fotos dos produtos
+## Gerar um vídeo de hero a partir das fotos dos produtos
 
 ```
 POST /v1/uploads/video/montage
 ```
 
-Monta uma montagem cinematográfica curta com as fotos dos seus produtos (zooms
-e deslizes lentos, fusões, cerca de 14 segundos) e a enfileira como vídeo de
-**hero** — mesmo job e polling do upload, aplicado na hero quando pronto. Usa
-os produtos mais recentes com foto, ou os que você mandar em `productIds` (até
-6, na ordem). Exige uma chave com escopo **write**, uma loja **Premium** e pelo
-menos 3 produtos com foto hospedada no Linkzee.
+Monta uma montagem curta a partir das fotos dos seus produtos (zooms e
+panorâmicas lentos, transições suaves, cerca de 14 segundos) e a coloca na fila
+como vídeo de **hero**, com o mesmo job e a mesma consulta de um upload. Usa os
+produtos mais novos que têm foto, ou os que você passar em `productIds` (até 6,
+em ordem). Exige o escopo **write**, um plano **Premium** e pelo menos 3 produtos
+com foto hospedada no Linkzee. É o mesmo que a ferramenta MCP `set_hero_video`
+com `fromProducts`.
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{"productIds":["prod_a","prod_b","prod_c"]}' \
-  "https://api.linkz.ee/v1/uploads/video/montage"
+  -d '{"productIds":["665f1a2b9c4e1f0012a3b4c5","665f1a2b9c4e1f0012a3b4c6","665f1a2b9c4e1f0012a3b4c7"]}' \
+  https://api.linkz.ee/v1/uploads/video/montage
 ```
 
 | Parâmetro | Onde | Obrigatório | Descrição |
 | --- | --- | --- | --- |
-| `productIds` | body | Não | Até 6 ids de produto, na ordem em que devem aparecer. Ausente: os produtos mais recentes com foto. |
+| `productIds` | body | Não | Até 6 ids de produtos, na ordem em que devem aparecer. Omitido: os produtos mais novos com foto. |
 
-Retorna o job de processamento (`{ id, kind, status, result, error }`), igual ao
-upload de vídeo. Erros: `400` quando menos de 3 produtos têm foto.
+Retorna o job de processamento, exatamente como o upload de vídeo. Erros: `400`
+quando menos de 3 produtos têm foto, `403` com `code: "PLAN_REQUIRED"` em um
+plano gratuito.
+
+<CardGroup cols={2}>
+  <Card title="Envio de arquivos" icon="upload" href="/pt-BR/integrations/mcp/sending-files">
+    URL ou link de envio para agentes de IA.
+  </Card>
+  <Card title="Produtos" icon="box" href="/pt-BR/api-reference/products">
+    Defina as imagens dos produtos com uma URL enviada.
+  </Card>
+  <Card title="Links e coleções" icon="link" href="/pt-BR/api-reference/links-collections">
+    Miniaturas, capas e blocos de mídia.
+  </Card>
+  <Card title="Loja" icon="store" href="/pt-BR/api-reference/store">
+    Logo, papel de parede e imagens do cabeçalho.
+  </Card>
+</CardGroup>

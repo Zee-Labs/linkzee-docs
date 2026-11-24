@@ -1,17 +1,16 @@
 ---
 title: Uploads
 icon: image
-description: "Upload an image and get back a hosted URL you can use for your logo, products, links, and more."
+description: "Upload images and videos, create upload links for files that are not online, and follow video jobs."
 ---
 
-Use the uploads endpoint to send an image to Linkzee and get back a permanent,
-CDN-hosted URL. Every image is converted to **WebP**, resized to fit within
-1600&nbsp;px, and served with long-lived caching, so the URL you receive is ready
-to drop straight into a product, link, or your store profile.
+Use these endpoints to put images and videos on Linkzee. Images come back as a
+permanent, CDN hosted URL that you set on a product, a link or your store. Videos
+are optimized in the background and applied to your page when ready.
 
-The endpoint lives under the base URL `https://api.linkz.ee` and requires the
-`Authorization: Bearer lzk_your_key` header. Uploading changes your storefront,
-so it needs a key with the **write** scope.
+The endpoints live under the base URL `https://api.linkz.ee` and require the
+`Authorization: Bearer lzk_your_key` header. Uploading changes your page, so it
+needs a key with the **write** scope. Reading a video job needs only **read**.
 
 ## Upload an image
 
@@ -20,7 +19,8 @@ POST /v1/uploads/image
 ```
 
 Uploads a single image and returns its hosted URL. Send the request as
-`multipart/form-data`, not JSON.
+`multipart/form-data`, not JSON. Every image is converted to **WebP**, resized to
+fit within 1600&nbsp;px and served with long lived caching.
 
 ### Request
 
@@ -39,51 +39,45 @@ Send these as multipart form fields.
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `file` | file | Yes | The image to upload. Any common format (JPEG, PNG, WebP, etc.), up to **8&nbsp;MB**. It is converted to WebP automatically. |
-| `kind` | string | No | Where the image belongs. Determines a stable storage location so re-uploading the same kind overwrites the previous image instead of piling up. See the table below. |
-| `productId` | string | No | Required when `kind` is `product`. The product this image belongs to. It must be a product in your own store. |
-| `linkId` | string | No | Required when `kind` is `link`, `linkMedia`, `linkPoster`, or `linkMediaSlot`. The link the image belongs to. It must be a link in your own store. |
-| `slot` | string | No | Required when `kind` is `linkMediaSlot`: the photo slot (`0`–`9`) of a Before & After / Gallery block. The slot is the stable file id — re-uploading the same slot replaces the photo. |
-| `staffId` | string | No | Required when `kind` is `staffAvatar`. The team member the avatar belongs to. |
-| `socialKey` | string | No | Required when `kind` is `socialCard`. The social network the card cover belongs to (e.g. `instagram`, `tiktok`, `youtube`). |
+| `file` | file | Yes | The image, up to **8&nbsp;MB**. JPEG, PNG, WebP, GIF or AVIF. The format is checked by the file bytes. HEIC, SVG, TIFF and PDF are refused. |
+| `kind` | string | Yes | Where the image belongs. It sets a fixed storage location, so a new upload of the same kind replaces the previous image. See the table below. A request without `kind` is refused. |
+| `productId` | string | With `kind=product` | The product the image belongs to, in your own store. |
+| `linkId` | string | With `link`, `linkMedia`, `linkPoster` or `linkMediaSlot` | The link the image belongs to, in your own store. |
+| `slot` | string | With `kind=linkMediaSlot` | The photo slot (`0` to `9`) of a Before and After or Gallery block. Re-uploading the same slot replaces the photo. |
+| `staffId` | string | With `kind=staffAvatar` | The team member the avatar belongs to. |
+| `socialKey` | string | With `kind=socialCard` | The social network of the card cover, for example `instagram`. |
 
 #### Values for `kind`
 
 | `kind` | Use it for | Also send |
 | --- | --- | --- |
-| `logo` | Your store logo | — |
+| `logo` | Your store logo | |
 | `product` | A product image | `productId` |
-| `wallpaper` | Your page wallpaper | — |
-| `wallpaperPoster` | Legacy — the poster for a video wallpaper is now generated automatically from the video | — |
-| `banner` | Your header banner | — |
-| `cutout` | A header cutout image | — |
-| `wordmark` | The horizontal logo shown in place of the store name (title style **Logo**). Save the returned URL in `headerSettings.wordmarkUrl` with `PATCH /v1/store`; an empty string removes it | — |
+| `wallpaper` | Your page wallpaper | |
+| `banner` | Your header banner | |
+| `cutout` | A header cutout image (use a PNG or WebP with transparency) | |
+| `wordmark` | The horizontal logo shown in place of the store name (title style **Logo**). Save the URL in `headerSettings.wordmarkUrl` with `PATCH /v1/store` | |
+| `heroPhoto` | The cover photo of the **Hero** header, separate from the logo. Save the URL in `headerSettings.heroPhotoUrl` | |
 | `link` | A link thumbnail | `linkId` |
 | `linkMedia` | A link card cover | `linkId` |
 | `linkPoster` | A link video poster | `linkId` |
-| `linkMediaSlot` | One photo of a Before & After / Gallery block (Premium; resized to 1344px wide (fit inside 1344×2016)) | `linkId`, `slot` |
-| `aiAssistantAvatar` | Your AI assistant avatar | — |
+| `linkMediaSlot` | One photo of a Before and After or Gallery block (Premium; resized to fit inside 1344×2016) | `linkId`, `slot` |
+| `aiAssistantAvatar` | Your AI assistant avatar | |
 | `staffAvatar` | A team member's photo | `staffId` |
-| `heroPoster` | Legacy — the poster for a hero video is now generated automatically from the video | — |
 | `socialCard` | A social network card cover | `socialKey` |
-
-<Note>
-When you send a `kind` (and its matching ID), the image is stored at a fixed
-location for that resource, so a new upload replaces the old one. Omit `kind`
-and each upload gets its own unique URL instead.
-</Note>
+| `wallpaperPoster`, `heroPoster` | Legacy. Video posters are now generated from the video | |
 
 <Warning>
-Files over 8&nbsp;MB are rejected. Only image files are accepted — other file
-types return a `400 Bad Request`. If you set `kind` to `product` or `link`, the
-matching `productId` or `linkId` must reference a resource in your own store.
+Files over 8&nbsp;MB are rejected with `413`. A file that is not an accepted image
+returns `400 Bad Request`. When you send `productId`, `linkId` or `staffId`, it
+must reference a resource in your own store.
 </Warning>
 
 ### Response
 
-The `url` is your hosted image. Because stored images are cached aggressively,
-the URL ends with a `?v=` version marker that changes on every upload — always
-use the exact URL you get back.
+The URL ends with a `?v=` version marker that changes on every upload, so a
+replaced image is never served from an old cache. Always use the exact URL you
+get back.
 
 ```json
 {
@@ -101,28 +95,161 @@ use the exact URL you get back.
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `url` | string | The hosted, cache-busted image URL. |
+| `url` | string | The hosted, cache busted image URL. |
 | `width` | integer | Width of the processed image, in pixels. |
 | `height` | integer | Height of the processed image, in pixels. |
 | `format` | string | Always `webp`. |
 | `hasAlpha` | boolean | Whether the image has a transparent channel. |
 
 <Note>
-To attach an uploaded image to a resource, take the returned `url` and set it on
-the product or link — for example, pass it as the product's `image` when you
-create or update it.
+To attach the image, set the returned `url` on the resource: for example
+`imageUrl` of a product, `thumbnailUrl` of a link or `logoUrl` of the store.
 </Note>
 
-## Video uploads (hero, wallpaper and showcase items)
+## Create an upload link
+
+```
+POST /v1/upload-links
+```
+
+Creates a short lived upload link for files that are not online yet. You give
+the page to a person ("open it and pick the photos"), or send the files yourself
+to the direct upload address. It is the same as the MCP tool
+`create_upload_link`. Requires the **write** scope.
+
+### Request
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{ "maxFiles": 4, "accept": "image" }' \
+  https://api.linkz.ee/v1/upload-links
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `maxFiles` | integer | No | Files the link accepts, 1 to 10. Default 10. |
+| `accept` | string | No | `image`, `video` or `any`. Default `any`. |
+
+### Response
+
+```json
+{
+  "error": false,
+  "message": "Upload link created",
+  "data": {
+    "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+    "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+    "directUpload": {
+      "method": "POST",
+      "url": "https://api.linkz.ee/upload-tickets/files",
+      "header": "Authorization: Bearer lzu_AbC123...",
+      "field": "file"
+    },
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image"
+  }
+}
+```
+
+The secret `lzu_...` appears only in `uploadPageUrl` and in `directUpload.header`.
+The link stays open for **15 minutes**; up to 20 links can be open per store at
+the same time, and 60 can be created per hour.
+
+### Send a file to the link
+
+```
+POST https://api.linkz.ee/upload-tickets/files
+```
+
+Send one file per request, as `multipart/form-data` with the field `file` and the
+header `Authorization: Bearer lzu_...` (never your `lzk_` key, and never the
+secret in the URL).
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzu_AbC123..." \
+  -F "file=@/path/to/after.jpg" \
+  https://api.linkz.ee/upload-tickets/files
+```
+
+```json
+{
+  "error": false,
+  "message": "File received",
+  "data": {
+    "uploadId": "6740b2a1c3d4e5f6a7b8c9d2",
+    "kind": "image",
+    "status": "done",
+    "name": "after.jpg",
+    "size": 512044,
+    "w": 1600,
+    "h": 1200
+  }
+}
+```
+
+| Rule | Value |
+| --- | --- |
+| Photos | JPEG, PNG, WebP, GIF or AVIF, up to 8&nbsp;MB. HEIC is refused (on an iPhone, use the **Most Compatible** camera format or pick from the gallery). |
+| Videos | MP4 or MOV (H.264 or HEVC), up to 40&nbsp;MB. |
+| Per store | 26 files per minute (photos 20, videos 6), 60 videos per day, 2,560&nbsp;MB per day. |
+
+A refused **content** (damaged file, wrong format) returns `200` with
+`"status": "failed"` and an `error` message; the file does not use a place. A
+refused **request** returns the standard error: `400` no file or a type the link
+does not accept, `401` invalid link, `403` key revoked or plan without the API,
+`409` link full, `410` link expired, `413` file too large, `429` store limit.
+
+### Read the link status
+
+```
+GET https://api.linkz.ee/upload-tickets/status
+```
+
+With the same `Authorization: Bearer lzu_...` header. It does not use the link.
+
+```json
+{
+  "error": false,
+  "message": "Upload link loaded",
+  "data": {
+    "status": "open",
+    "expiresAt": "2026-11-22T15:15:00.000Z",
+    "maxFiles": 4,
+    "accept": "image",
+    "storeName": "Studio Ana",
+    "files": [
+      { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2", "kind": "image", "status": "done", "name": "after.jpg", "size": 512044 }
+    ]
+  }
+}
+```
+
+`status` is `open`, `full` or `expired`; each file is `uploading`, `done` or
+`failed`.
+
+<Note>
+An `uploadId` is used in the image and video fields of the MCP tools as
+`{ "uploadId": "..." }`, for 24 hours and up to 5 times. The REST endpoints take
+URLs: with an API key, upload images with `POST /v1/uploads/image`. See
+[Sending files](/integrations/mcp/sending-files).
+</Note>
+
+## Video uploads (hero, wallpaper and Reel items)
 
 ```
 POST /v1/uploads/video?kind=hero|wallpaper|media
 ```
 
-Uploads a short video for your **Hero** header or your page **wallpaper** and
-optimizes it in the background. Send it as `multipart/form-data` with a single
-`file` field (MP4 or MOV, up to **40&nbsp;MB**). This endpoint requires a key
-with the **write** scope and a store on a **Premium** plan.
+Uploads a short video for your **Hero** header, your page **wallpaper** or a
+video item of a Reel gallery, and optimizes it in the background. Send it as
+`multipart/form-data` with a single `file` field (MP4 or MOV, up to
+**40&nbsp;MB**). Requires the **write** scope and a **Premium** plan.
 
 ```bash
 curl -X POST \
@@ -133,24 +260,29 @@ curl -X POST \
 
 | Parameter | In | Required | Description |
 | --- | --- | --- | --- |
-| `kind` | query | Yes | `hero` for the Hero header video, `wallpaper` for the page background, `media` for a video item of a vertical showcase. |
-| `linkId` | query | With `kind=media` | The gallery block (layout `reel`) the video belongs to. It must be a link in your own store. |
+| `kind` | query | Yes | `hero` for the Hero header video, `wallpaper` for the page background, `media` for a video item of a Reel gallery. |
+| `linkId` | query | With `kind=media` | The gallery block (layout `reel`) the video belongs to, in your own store. |
 | `slot` | query | With `kind=media` | The item slot, `0` to `9`. |
-| `file` | multipart | Yes | The video to upload, MP4 or MOV, up to **40&nbsp;MB**. |
+| `file` | multipart | Yes | The video, MP4 or MOV, up to **40&nbsp;MB**. |
 
-### Video items of a vertical showcase
+### Video items of a Reel gallery
 
-With `kind=media`, the video becomes one item of a gallery block that uses the
-`reel` layout. Unlike hero and wallpaper videos, an item **keeps its audio**
-(visitors can turn the sound on); it also keeps the first 30 seconds. After
-the upload, save the item with `PATCH /v1/links/{id}`, sending
-`{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems`. The
-video is filled in automatically when the job is ready.
+With `kind=media`, the video becomes one item of a gallery block with the `reel`
+layout. An item **keeps its audio** (visitors can turn the sound on) and the
+first 30 seconds. After the upload, save the item with `PATCH /v1/links/{id}`,
+sending `{ "type": "video", "slot": 0, "jobId": "<job id>" }` in `mediaItems`.
+The video is filled in when the job is ready.
+
+<Note>
+A **link card video** (`mediaType: "video"` on a regular link) cannot be sent by
+URL or through this endpoint. It goes only through an upload link and the MCP
+tool `set_link_media` with `{ "uploadId": "..." }`.
+</Note>
 
 ### Response
 
-The request returns `200` as soon as the file is received, with a **job** that
-describes the optimization, plus a `pollMs` hint for how often to check on it.
+The request returns `200` as soon as the file is received, with a **job** and a
+`pollMs` hint for how often to check it.
 
 ```json
 {
@@ -174,23 +306,23 @@ describes the optimization, plus a `pollMs` hint for how often to check on it.
 | Field | Type | Description |
 | --- | --- | --- |
 | `id` | string | The job id. Use it to poll for progress. |
-| `kind` | string | `hero` or `wallpaper`. |
-| `status` | string | `queued` → `processing` → `ready`, `failed` or `superseded`. `superseded` means a newer upload of the same kind replaced this one. |
-| `error` | string \| null | A human-readable message when the job failed. |
+| `kind` | string | `hero`, `wallpaper` or `media`. |
+| `status` | string | `queued`, `processing`, then `ready`, `failed` or `superseded` (a newer upload of the same kind replaced this one). |
+| `error` | string \| null | A readable message when the job failed. |
 | `errorCode` | string \| null | A stable error code when the job failed. |
 | `tries` | integer | How many times the optimization was attempted. |
-| `result` | object \| null | Filled in when `status` is `ready` — see below. |
+| `result` | object \| null | Filled in when `status` is `ready`. |
 | `createdAt` | string | When the job was created (ISO 8601). |
 | `finishedAt` | string \| null | When the job finished, if it has. |
 
-When the job is `ready`, `result` contains the optimized video — and it is
-**already applied** to your store, so no extra `PATCH` is needed:
+When the job is `ready`, `result` has the optimized video and it is **already
+applied** to your page, so no extra `PATCH` is needed:
 
 | Field | Type | Description |
 | --- | --- | --- |
 | `url` | string | The hosted, optimized video URL. |
-| `posterUrl` | string | The cover image, generated from the video's first frame. |
-| `durationMs` | integer | Duration of the optimized video, in milliseconds. |
+| `posterUrl` | string | The cover image, generated from the first frame. |
+| `durationMs` | integer | Duration, in milliseconds. |
 | `width` | integer | Width in pixels. |
 | `height` | integer | Height in pixels. |
 | `bytes` | integer | Size of the optimized file. |
@@ -204,53 +336,34 @@ GET    /v1/uploads/video/latest?kind=hero
 DELETE /v1/uploads/video/{kind}
 ```
 
-- `GET /v1/uploads/video/jobs/{id}` returns the job in its current state — poll
-  it every `pollMs` milliseconds until `status` is `ready` or `failed`.
-- `GET /v1/uploads/video/latest?kind=hero` (or `kind=wallpaper`) returns the
-  most recent job for that kind, or `null` if there has never been one.
-- `DELETE /v1/uploads/video/{kind}` removes the published video (`hero` or
-  `wallpaper`) from your page.
+- `GET /v1/uploads/video/jobs/{id}` (scope **read**) returns the job in its
+  current state. Poll it every `pollMs` milliseconds until `status` is `ready`
+  or `failed`. It also follows jobs started by the dashboard or by an agent.
+- `GET /v1/uploads/video/latest?kind=hero` (or `kind=wallpaper`, scope **read**)
+  returns the latest job for that kind, or `null`.
+- `DELETE /v1/uploads/video/{kind}` (scope **write**) removes the published
+  `hero` or `wallpaper` video from your page.
 
 ### Output profile
 
-Every video is encoded to the same profile so it starts instantly on mobile:
+Hero and wallpaper videos are encoded to the same profile, so they start
+instantly on a phone:
 
 | Setting | Value |
 | --- | --- |
-| Resolution | **720p** on the short side — never upscaled |
+| Resolution | **720p** on the short side, never upscaled |
 | Frame rate | 24 fps |
 | Codec | H.264 (MP4) |
 | Length | The **first 30 seconds** |
-| Audio | Removed — videos are always silent |
-| Size | At most **~6&nbsp;MB** |
+| Audio | Removed: these videos are always silent |
+| Size | At most **about 6&nbsp;MB** |
 
 <Note>
 Videos longer than 30 seconds are never rejected for their length: they are
 trimmed, and the result reports `trimmed: true`. An upload is rejected only when
-the file is over 40&nbsp;MB or isn't a valid video file.
-High-frame-rate slow motion is cut a little earlier: a 240 fps clip keeps its
-first 15 seconds.
+the file is over 40&nbsp;MB or is not a valid video. High frame rate slow motion
+is cut a little earlier: a 240 fps clip keeps its first 15 seconds.
 </Note>
-
-<Note>
-`POST /v1/uploads/video` with `kind=link` (a link's video) still stores the raw
-file as before — this optimization is not applied.
-</Note>
-
-<CardGroup cols={2}>
-  <Card title="Products" icon="box" href="/api-reference/products">
-    Create products and set their images to an uploaded URL.
-  </Card>
-  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
-    Add thumbnails and covers to your links.
-  </Card>
-  <Card title="Store" icon="store" href="/api-reference/store">
-    Update your logo, wallpaper, and header.
-  </Card>
-  <Card title="Authentication" icon="lock" href="/api-reference/authentication">
-    Base URL, keys, scopes, and response shapes.
-  </Card>
-</CardGroup>
 
 ## Generate a hero video from product photos
 
@@ -258,24 +371,40 @@ file as before — this optimization is not applied.
 POST /v1/uploads/video/montage
 ```
 
-Builds a short cinematic montage from your product photos (slow zooms and
-pans, dissolves, about 14 seconds) and queues it as a **hero** video — the same
-job and polling as an upload, applied to the hero when ready. Uses the newest
-products that have a photo, or the ones you pass in `productIds` (up to 6, in
-order). Requires a **write** key and a **Premium** store; at least 3 products
-with a photo hosted on Linkzee.
+Builds a short montage from your product photos (slow zooms and pans, dissolves,
+about 14 seconds) and queues it as a **hero** video, with the same job and
+polling as an upload. Uses the newest products that have a photo, or the ones you
+pass in `productIds` (up to 6, in order). Requires the **write** scope, a
+**Premium** plan and at least 3 products with a photo hosted on Linkzee. It is the
+same as the MCP tool `set_hero_video` with `fromProducts`.
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{"productIds":["prod_a","prod_b","prod_c"]}' \
-  "https://api.linkz.ee/v1/uploads/video/montage"
+  -d '{"productIds":["665f1a2b9c4e1f0012a3b4c5","665f1a2b9c4e1f0012a3b4c6","665f1a2b9c4e1f0012a3b4c7"]}' \
+  https://api.linkz.ee/v1/uploads/video/montage
 ```
 
 | Parameter | Where | Required | Description |
 | --- | --- | --- | --- |
 | `productIds` | body | No | Up to 6 product ids, in the order they should appear. Omitted: the newest products with a photo. |
 
-Returns the processing job (`{ id, kind, status, result, error }`), exactly like
-the video upload. Errors: `400` when fewer than 3 products have a photo.
+Returns the processing job, exactly like the video upload. Errors: `400` when
+fewer than 3 products have a photo, `403` with `code: "PLAN_REQUIRED"` on a free
+plan.
+
+<CardGroup cols={2}>
+  <Card title="Sending files" icon="upload" href="/integrations/mcp/sending-files">
+    URL or upload link for AI agents.
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/products">
+    Set product images to an uploaded URL.
+  </Card>
+  <Card title="Links & collections" icon="link" href="/api-reference/links-collections">
+    Thumbnails, covers and media blocks.
+  </Card>
+  <Card title="Store" icon="store" href="/api-reference/store">
+    Logo, wallpaper and header images.
+  </Card>
+</CardGroup>

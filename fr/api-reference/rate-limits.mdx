@@ -1,19 +1,27 @@
 ---
 title: Limites de débit
 icon: gauge
-description: "Comment l'API Linkzee limite le débit des requêtes et comment concevoir des clients qui restent dans les limites."
+description: "Comment l'API Linkzee limite le débit des requêtes, les limites par boutique, et comment les clés d'idempotence rendent les nouvelles tentatives sûres."
 ---
 
 L'API Linkzee applique une limite de débit afin que chaque intégration bénéficie
-d'une part de capacité équitable et fiable. Les limites s'appliquent par clé API,
-ainsi que par IP client comme filet de sécurité. Si vous envoyez vos requêtes à
-un rythme normal et bien réparti, vous les remarquerez rarement.
+d'une part de capacité équitable et fiable. Il existe deux niveaux :
+
+- **Débit par requête**, par IP client, comme filet de sécurité (100 requêtes par
+  minute en général, et moins sur les routes lourdes comme les envois de fichiers
+  et les imports).
+- **Limites par boutique**, comptées dans la boutique quels que soient la clé,
+  l'agent ou le réseau qui envoie la requête. Elles protègent les opérations
+  coûteuses : téléchargements, envois de fichiers, imports et aperçus de liens.
+
+Si vous envoyez vos requêtes à un rythme normal et bien réparti, vous les
+remarquerez rarement.
 
 ## Lorsque vous dépassez une limite
 
-Lorsque vous envoyez trop de requêtes dans un court laps de temps, l'API cesse
-d'en accepter de nouvelles pendant un instant et répond avec le code HTTP
-`429 Too Many Requests`. La réponse utilise l'enveloppe d'erreur standard :
+Lorsque vous envoyez trop de requêtes dans un court laps de temps, l'API répond
+avec le code HTTP `429 Too Many Requests`, en utilisant l'enveloppe d'erreur
+standard :
 
 ```json
 {
@@ -23,28 +31,81 @@ d'en accepter de nouvelles pendant un instant et répond avec le code HTTP
 }
 ```
 
-Un `429` est temporaire. Attendez un court instant et la même requête aboutira —
-aucune donnée n'est perdue et rien n'est facturé à votre compte pour l'appel
-rejeté.
+Un `429` est temporaire. Attendez un instant et la même requête aboutira. Aucune
+donnée n'est perdue et rien n'est facturé pour l'appel rejeté.
 
 <Note>
 Considérez un `429` comme un « réessayez dans un instant », et non comme un échec.
-Cela signifie simplement que vous avez atteint le plafond pour ce court laps de
-temps.
+Cela signifie que vous avez atteint le plafond pour ce laps de temps.
 </Note>
 
-## Bonnes pratiques
+## Limites par boutique
 
-Quelques habitudes permettent de garder votre intégration confortablement sous
-les limites et résiliente lorsqu'elle est tout de même limitée.
+Voici les valeurs actuelles. Elles s'appliquent de la même façon à l'API, au MCP
+et aux liens d'envoi.
+
+| Opération | Limite |
+| --- | --- |
+| Importer une bio (`POST /v1/import` avec `mode: "apply"`, MCP `import_bio`) | 3 par heure |
+| Lire une page pour préremplir un lien ou prévisualiser un import (`POST /v1/links/parse`, `POST /v1/import` avec `mode: "preview"`, MCP `import_from_url`) | 30 par heure |
+| Images téléchargées depuis des URL | 200 par heure, 1 000 par jour, 500 Mo par jour |
+| Vidéos téléchargées depuis des URL | 10 par heure, 30 par jour, 600 Mo par jour |
+| Nouveaux liens d'envoi | 20 ouverts en même temps, 60 par heure |
+| Fichiers envoyés vers des liens d'envoi | 26 par minute (photos 20, vidéos 6), 60 vidéos par jour, 2 560 Mo par jour |
+| Vidéos de carte de lien | 6 par minute, 1 536 Mo par jour |
+| Téléchargements simultanés | 2 ; une troisième requête attend jusqu'à 10 secondes qu'une place se libère, puis reçoit `429` |
+
+## Clés d'idempotence
+
+Certaines opérations de création acceptent une **clé d'idempotence** : une valeur
+unique que vous choisissez pour chaque création logique. Lorsqu'une nouvelle
+tentative a lieu après un délai dépassé, un `429` ou un incident réseau, l'API
+renvoie ce qui a déjà été créé au lieu de le créer deux fois.
+
+### Où elle s'applique
+
+| Opération | Clé |
+| --- | --- |
+| `POST /v1/products` | Facultative, en-tête `Idempotency-Key` |
+| `POST /v1/agenda/packages` | **Obligatoire**, en-tête `Idempotency-Key` ou champ `idempotencyKey` du corps |
+| `POST /v1/agenda/subscription-plans` | **Obligatoire**, en-tête ou champ du corps |
+| `POST /v1/import` avec `mode: "apply"` | **Obligatoire**, en-tête ou champ du corps |
+| MCP `create_link`, `create_product`, `create_products_bulk` (par élément), `create_appointment`, `create_lead` | Facultative, argument `idempotencyKey` |
+| MCP `manage_package` avec `op: "create"`, `import_bio` | **Obligatoire**, argument `idempotencyKey` |
+
+Lorsque l'en-tête et le champ du corps sont tous deux envoyés, l'en-tête
+l'emporte. Les clés font jusqu'à 200 caractères.
+
+### Comment elle se comporte
+
+| Situation | Résultat |
+| --- | --- |
+| Première requête avec une nouvelle clé | Crée l'élément et retient la clé pendant 24 heures. |
+| Même clé, même corps, dans les 24 heures | Renvoie l'élément créé la première fois (un import répond avec `replayed: true`). Rien de nouveau n'est créé. |
+| Même clé, corps **différent** | `409 Conflict`. Utilisez une nouvelle clé pour un nouvel élément. |
+| Même clé pendant que la première requête est encore en cours | Attend quelques secondes que la première se termine et renvoie son résultat, ou `409` si cela prend trop de temps. Réessayez un peu plus tard. |
+| Clé absente là où elle est obligatoire | `400 Bad Request`. |
+
+Une clé appartient à votre boutique, à la clé API (ou à la connexion) qui l'a
+envoyée et à l'opération, si bien que la même valeur utilisée dans une autre
+opération n'entre pas en collision.
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer lzk_your_key" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
+  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
+  https://api.linkz.ee/v1/products
+```
+
+## Bonnes pratiques
 
 ### Réessayer avec un délai croissant
 
 Lorsque vous recevez un `429`, faites une pause avant de réessayer, et augmentez
 la pause à chaque échec consécutif (délai exponentiel). Ajoutez un peu d'aléatoire
 (« jitter ») pour que de nombreux clients ne réessaient pas tous en même temps.
-
-Un modèle simple et efficace :
 
 ```bash
 # Retry with growing delays: 1s, 2s, 4s, 8s...
@@ -66,34 +127,15 @@ envoyer des centaines en parallèle. La régularité vaut mieux que les rafales.
 
 ### Récupérez une fois, réutilisez localement
 
-Les points de terminaison de lecture renvoient l'intégralité de l'état actuel
-(par exemple, votre liste de produits ou de liens). Récupérez-la une seule fois,
-conservez-la en mémoire et travaillez à partir de votre copie locale plutôt que
-de redemander les mêmes données en boucle.
-
-### Réessayez les écritures en toute sécurité avec une clé d'idempotence
-
-La création d'un produit accepte un en-tête facultatif `Idempotency-Key`. Envoyez
-une valeur unique par création logique : si un nouvel essai a lieu après un `429`
-ou un incident réseau, l'API renvoie le produit déjà créé au lieu d'en créer un
-doublon.
-
-```bash
-curl -X POST \
-  -H "Authorization: Bearer lzk_your_key" \
-  -H "Content-Type: application/json" \
-  -H "Idempotency-Key: 8f3a1c22-catalog-import-042" \
-  -d '{"name":"Wireless Earbuds","url":"https://shopee.com.br/..."}' \
-  https://api.linkz.ee/v1/products
-```
-
-Cela vous permet de réessayer de manière agressive sans craindre de créer deux
-fois le même élément.
+Les endpoints de lecture renvoient l'intégralité de l'état actuel (par exemple,
+votre liste de produits ou de liens). Récupérez-la une seule fois, conservez-la en
+mémoire et travaillez à partir de votre copie locale plutôt que de redemander les
+mêmes données en boucle.
 
 <Warning>
-Les seuils de limite de débit peuvent évoluer au fil du temps à mesure que nous
-ajustons la capacité. Concevez votre client pour qu'il réagisse à une réponse
-`429` plutôt que de coder en dur un nombre fixe de requêtes par seconde.
+Les limites peuvent évoluer au fil du temps à mesure que nous ajustons la
+capacité. Concevez votre client pour qu'il réagisse à une réponse `429` plutôt que
+de coder en dur un nombre fixe de requêtes par seconde.
 </Warning>
 
 ## À voir aussi
@@ -105,7 +147,7 @@ ajustons la capacité. Concevez votre client pour qu'il réagisse à une répons
   <Card title="Produits" icon="box" href="/fr/api-reference/products">
     Créez, mettez à jour et listez les produits de votre catalogue.
   </Card>
-  <Card title="Liens et collections" icon="link" href="/fr/api-reference/links-collections">
-    Gérez les liens de votre bio.
+  <Card title="Import" icon="file-import" href="/fr/api-reference/import">
+    Importez une bio et préremplissez des liens.
   </Card>
 </CardGroup>

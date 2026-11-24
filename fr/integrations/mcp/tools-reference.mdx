@@ -1,169 +1,234 @@
 ---
 title: Référence des outils
 icon: screwdriver-wrench
-description: "Tout ce qu'un agent d'IA peut faire dans votre Linkzee via MCP, regroupé par domaine."
+description: "Tous les outils qu'un agent d'IA peut utiliser dans votre Linkzee via MCP, regroupés par domaine, avec l'accès nécessaire à chacun."
 ---
 
-Une fois que vous connectez un agent d'IA via MCP, il peut gérer presque toutes
-les parties de votre Linkzee à votre place — simplement en le lui demandant en
-langage courant. Cette page liste ce qu'un agent peut faire, regroupé par domaine,
-afin que vous sachiez quoi demander.
+Une fois que vous connectez un agent d'IA via MCP, il peut construire et gérer
+toute votre bio à votre place, simplement en le lui demandant en langage courant.
+Cette page liste les **70 outils**, ce que fait chacun et l'accès qu'il nécessite,
+afin que vous sachiez quoi demander et quelles autorisations accorder.
+
+## Quels outils un agent voit
+
+Ce que l'agent voit dépend de la façon dont il se connecte.
+
+**Avec une clé API** (`lzk_`), ce sont les portées de la clé qui décident :
+
+| Portées de la clé | Outils visibles par l'agent |
+| --- | --- |
+| `read` | Les 26 outils de lecture (page, liens, produits, agenda, leads). |
+| `write` | Les 26 outils de lecture plus les 43 outils d'écriture (69 au total). Sur MCP, `write` implique `read` : un agent qui écrit lit toujours l'état d'abord. |
+| `finance` seule | Uniquement `get_earnings`. Une clé finance seule ne lit rien d'autre. |
+| `read` ou `write`, plus `finance` | Ce qui précède plus `get_earnings` (jusqu'à 70). |
+
+**Avec le connecteur Claude** (OAuth), vous choisissez les groupes sur l'écran de consentement :
+
+| Groupe | Obligatoire | Outils |
+| --- | --- | --- |
+| `content` | Oui | Page, liens, produits, catégories, collections, design, médias, cartes spéciales et onboarding (44 outils, lecture et écriture). |
+| `agenda` | Non | Agenda, services, équipe, blocages, rendez-vous, avis et forfaits (19 outils). |
+| `leads` | Non | Leads (3 outils). |
+| `finance` | Non | `get_earnings`. |
+
+<Warning>
+  Trois outils sont **réservés aux clés** et n'apparaissent jamais via OAuth,
+  quels que soient les groupes : `configure_tracking` (les pixels et GTM
+  deviennent un script sur votre page), `configure_tips` (la clé PIX est une
+  destination d'argent) et `disconnect_agenda_google` (il modifie votre compte
+  Google). Utilisez pour eux une clé API avec la portée **write**.
+</Warning>
+
+## Comment les outils répondent
+
+- Chaque réponse contient une phrase courte et, lorsque cette phrase n'est pas
+  déjà du JSON, un second bloc de texte avec le même résultat en JSON compact.
+  Les clients qui lisent `structuredContent` y trouvent le même objet.
+- Les outils d'écriture peuvent renvoyer `warnings` (enregistré, mais avec une
+  réserve), `pending` (jobs vidéo à suivre avec `get_media_job`) et `published`
+  avec un `reason` lorsque le résultat n'est pas encore sur la page publique :
+  `missing_photos`, `pending_video`, `plan_required` ou `consent_required`.
+- Chaque champ d'image accepte une URL d'image publique (téléchargée, vérifiée et
+  hébergée sur le CDN de Linkzee) **ou** `{ "uploadId": "..." }` provenant d'un
+  lien d'envoi (voir [Envoyer des fichiers](/fr/integrations/mcp/sending-files)).
+  Les outils de médias ne publient jamais un fichier qu'ils n'ont pas pu copier :
+  l'appel échoue à la place. Les images de produit gardent l'ancien comportement :
+  une photo impossible à récupérer est ignorée avec un avertissement et le
+  produit est enregistré.
+- Les outils de création qui acceptent `idempotencyKey` renvoient l'élément déjà
+  créé lorsque vous répétez la même clé avec le même contenu, au lieu d'un
+  doublon. Voir [Limites de débit](/fr/api-reference/rate-limits).
 
 <Note>
-  Les actions qui **lisent** vos données nécessitent une clé avec le scope
-  **read**. Les actions qui **créent, mettent à jour ou suppriment** nécessitent
-  une clé avec le scope **write**. L'outil de revenus est l'exception : il
-  nécessite le scope **finance**, qui n'est jamais inclus par défaut. Consultez
-  [Clés API](/fr/integrations/api/api-keys) pour définir le bon scope.
+  Tout ce qu'un agent modifie est enregistré automatiquement et met à jour votre
+  page en direct immédiatement, exactement comme si vous aviez fait la
+  modification dans l'éditeur. Pendant qu'un onboarding guidé est ouvert, la
+  première écriture directe sur la page y met fin, et la réponse l'indique.
 </Note>
 
 ## Page et profil
 
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Vitrine | Lire toute votre page — votre profil, vos liens et vos produits en une seule vue. |
-| Profil | Mettre à jour votre nom, votre photo, votre bio et d'autres détails du profil. |
-| Apparence | Définir votre apparence et votre thème. |
-| Carte et réseaux sociaux | Mettre à jour votre carte et vos réseaux sociaux. |
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `get_store` | read | Vue propriétaire de la boutique : profil, design, en-tête, réseaux sociaux, réglages de la vitrine et de la carte, `pageHidden` et (selon l'accès) réglages de l'agenda, un résumé PIX et l'hôte du webhook de leads. Ne renvoie jamais de secrets. |
+| `get_storefront` | read | Ce que voient les visiteurs : profil, la zone des liens et le résumé de la vitrine. Fonctionne aussi avec une page masquée, et renvoie alors `pageHidden: true`. |
+| `update_profile` | write | Nom, bio, signature de la bio, titre SEO et description SEO. |
+| `update_socials` | write | Identifiants des réseaux sociaux, WhatsApp (chiffres avec l'indicatif du pays), `socialsPosition` (`top` ou `bottom`) et `socialOrder`. Une chaîne vide retire un réseau. Le propriétaire reçoit un e-mail lorsque le numéro WhatsApp change. |
+| `update_page` | write | `isActive` (`false` masque toute la page publique), `publicPreferences` (langue de la page et langue de secours de la traduction, fusionnées avec ce qui est enregistré), `timezone` (nom IANA, validé) et `location` (pays, état, ville ; détermine le calendrier des jours fériés). Le slug ne peut pas être modifié. |
+| `update_map` | write | Carte de localisation : `mapAddress` (une chaîne vide la retire), `mapTheme` et `mapLayout` (`map` ou `card`). |
+| `configure_bio_cards` | write | Active ou désactive des sections de la page (`vitrineEnabled`, `servicesEnabled`, `packagesEnabled`, `instagramEnabled`, `agendaEnabled`, `agendaTopCard`) et configure la carte d'avis Google, le bloc d'avis et les cartes photo des réseaux sociaux. |
+| `configure_vitrine` | write | Grille de la vitrine : `gridDensity`, `vitrineLayout` (`grid`, `masonry`, `carousel`) et `vitrinePhotoFit`. |
+| `configure_tips` | clé uniquement | Carte de pourboires PIX. Renvoie `pixKeyPreview` (4 derniers caractères), jamais la clé. Le propriétaire reçoit un e-mail lorsque la clé change. |
+| `configure_tracking` | clé uniquement | Pixels Meta, TikTok et GA4, jeton de l'API Conversions de Meta, GTM et paramètres UTM par défaut. |
 
-## Liens et collections
+## Design et vidéo
 
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Liens | Créer, mettre à jour et supprimer vos liens. |
-| Collections | Regrouper des liens en collections et les gérer. |
-| Ordre | Réorganiser votre contenu pour que vos meilleurs éléments apparaissent en premier. |
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_themes` | read | Les 23 thèmes prédéfinis (8 sont payants). |
+| `update_design` | write | Thème, couleurs, fond d'écran, boutons, police, carte, texture, animation, disposition de l'en-tête et images de l'en-tête. Voir « Héritage du thème » ci-dessous. Les valeurs payantes répondent `PLAN_REQUIRED` sur une offre gratuite. |
+| `set_appearance` | write | **Obsolète.** Applique un thème prédéfini ; utilisez `update_design` avec `themeId`. |
+| `set_hero_video` | write | Vidéo hero à partir d'une URL publique MP4 ou MOV, d'un `uploadId`, ou de `fromProducts` (une vidéo générée à partir de 3 à 6 photos de produits). Renvoie un job. Premium. |
+| `set_background_video` | write | Vidéo de fond de la page à partir d'une URL ou d'un `uploadId`. Renvoie un job. Premium. |
+| `remove_hero_video` | write | Retire la vidéo hero. |
+| `remove_background_video` | write | Retire la vidéo de fond. |
+| `get_media_job` | read | État de n'importe quel job vidéo (hero, fond, élément de bloc, carte de lien) : `queued`, `processing`, `ready` ou `failed`. |
+
+### Héritage du thème
+
+`update_design` fonctionne comme l'éditeur. `themeId` applique un thème prédéfini
+et repart de zéro : les personnalisations et le niveau d'animation enregistrés
+auparavant sont réinitialisés. Tout autre champ de design sur une boutique avec
+thème prédéfini personnalise **uniquement sa section** (couleurs, fond d'écran,
+boutons, texte, dégradé, carte, texture, animation) et cette section part de la
+palette du thème ; le reste continue de suivre le thème. Les couleurs identiques
+à la palette du thème ne comptent pas comme couleurs personnalisées. N'envoyez
+`overrides` que si vous voulez lister vous-même les sections personnalisées.
+
+## Liens, blocs et collections
+
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_links` | read | Tous les liens et blocs de médias, y compris ceux masqués, programmés et inachevés. Chaque élément indique `published` et, lorsqu'il vaut `false`, un `reason` : `hidden`, `scheduled`, `missing_destination`, `missing_photos`, `pending_video` ou `failed_video`. Les éléments de médias portent `slot`, `type` et `status` (`ready`, `pending` ou `failed`). |
+| `list_collections` | read | Groupes de liens : id, nom, emoji, description, `isActive`, ordre. |
+| `get_content_tree` | read | L'arborescence de la zone des liens dans l'ordre de la page, au format exact qu'accepte `reorder_content`, avec les cartes spéciales sous la forme `{ "type": "section", "key": "..." }`. |
+| `create_link` | write | Ajoute un lien ou un bloc de médias. Accepte `thumbnail`, `isActive`, `isFeatured`, `highlightFx`, `emphasis`, une fenêtre de programmation (ISO 8601 avec décalage) et les champs de bloc. `idempotencyKey` facultatif. |
+| `update_link` | write | Modifie uniquement les champs envoyés. `mediaItems` est la liste complète ; omettre un emplacement vidéo nécessite `confirmRemoveVideos: true`. |
+| `delete_link` | write | Supprime un lien (`confirm: true`). |
+| `set_block_media` | write | Définit la liste complète des éléments d'un bloc Avant/Après ou Galerie : photos, vidéos (galerie Reel uniquement), libellés et boutons. Les nouveaux fichiers nécessitent `mediaConsent: true`. |
+| `set_link_media` | write | Couverture d'une carte de lien : `image`, `embed` (YouTube, Vimeo, TikTok, Spotify ou Panda), `video` (uniquement un `uploadId`, plus une affiche) ou `none`. |
+| `manage_collection` | write | Crée, met à jour ou supprime un groupe de liens (`description`, `isActive`). |
+| `reorder_content` | write | Réordonne les liens, les collections, les assistants IA et les cartes spéciales. Les éléments omis gardent leur place. |
 
 ## Produits et catégories
 
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Produits | Créer des produits un par un ou en masse. |
-| Modifications de produits | Mettre à jour ou supprimer des produits existants. |
-| Catégories | Créer et gérer vos catégories de produits. |
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_products` | read | Produits de la vitrine dans l'ordre où les visiteurs les voient (les plus récents d'abord, ou votre ordre manuel). Accepte `q` et `limit`. |
+| `get_product` | read | Tous les champs modifiables d'un produit. |
+| `list_categories` | read | Catégories (pastilles de la vitrine) : id, nom, emoji, description, `isActive`, ordre. |
+| `create_product` | write | Crée un produit. Accepte `installments`, `highlightFx`, `showCountdown`, `offerEndsAt`, `offerDurationMinutes`, `isActive`, `externalId` et `barcode`. `idempotencyKey` facultatif. |
+| `create_products_bulk` | write | Jusqu'à 20 produits d'un coup, chacun avec son propre `idempotencyKey` facultatif. |
+| `update_product` | write | Modifie uniquement les champs envoyés. `price: null` retire le prix. |
+| `delete_product` | write | Supprime un produit (`confirm: true`). |
+| `manage_category` | write | Crée, met à jour, supprime ou réordonne des catégories (`description`, `isActive`). |
 
 <Note>
-  Lorsqu'un agent crée, met à jour ou liste des produits, il peut également lire et
-  écrire une référence externe (`externalId` — identifiant CRM/ERP ou SKU) et un
-  code-barres (`barcode` — EAN/GTIN/UPC) ; les deux sont facultatifs et ne sont
-  jamais affichés sur la page publique. Pratique pour garder vos produits
-  synchronisés avec vos propres systèmes.
+  Un produit n'apparaît sur la page publique que s'il a un lien de destination
+  (`sourceUrl` ou `externalLink`). L'ordre des produits se définit dans le tableau
+  de bord ou avec `PUT /v1/products/order` (voir [Produits](/fr/api-reference/products)) ;
+  il n'existe pas d'outil MCP pour cela.
 </Note>
 
-## Design
+## Fichiers et import
 
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Design | Mettre à jour votre design et changer de thème. |
-| Vidéo | Définir, remplacer ou supprimer une vidéo hero ou une vidéo de fond à partir d'une URL vidéo publique (Premium). |
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `create_upload_link` | write | Crée un lien d'envoi pour les photos et vidéos que vous n'avez pas sous forme d'URL publiques. Voir [Envoyer des fichiers](/fr/integrations/mcp/sending-files). |
+| `get_upload` | read | État d'un lien d'envoi (`open`, `full`, `expired`) et ses fichiers avec leur `uploadId`. |
+| `import_from_url` | read | Lit uniquement et n'enregistre rien : `prefill_link` (titre et image de n'importe quelle page) ou `preview_bio` (ce que `import_bio` apporterait d'une page Linktree ou Beacons). |
+| `import_bio` | write | Importe une page Linktree ou Beacons dans la boutique. Nécessite `idempotencyKey` ; 3 par heure. Uniquement après l'accord de la personne. |
 
-## Statistiques et leads
+## Assistant IA et onboarding
 
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Statistiques | Lire un résumé des performances de votre page. |
-| Leads | Lister les leads que vous avez captés, rechercher un client et en enregistrer un nouveau. |
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_ai_assistants` | read | Cartes d'assistant IA : id, titre, avatar, message d'ouverture, boutons de démarrage, `isActive`. |
+| `manage_ai_assistant` | write | Crée, met à jour ou supprime un assistant (`personality`, `instructions`, `collectionId`, `isActive`, capture de leads) ou modifie les réglages globaux (`op: "settings"`). |
+| `get_onboarding_brief` | read | Pendant l'onboarding guidé : les réponses déjà données et le script d'entretien dans la langue du propriétaire. |
+| `propose_onboarding_bio` | write | Pendant l'onboarding guidé : enregistre la proposition dans le brouillon. La personne la vérifie et la publie sur Linkzee. |
+| `get_bio_playbook` | read | Le standard de qualité Linkzee pour une bio, l'offre actuelle et les guides par domaine (`toolGuide` : design, liens, agenda). |
+| `get_analytics_summary` | read | Statistiques agrégées de la vitrine. |
 
 ## Agenda
 
-| Domaine d'outils | Ce que l'agent peut faire |
+Tous les outils ci-dessous font partie du groupe OAuth `agenda`, sauf le dernier.
+
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_offerings` | read | Services réservables. |
+| `list_staff` | read | Membres de l'équipe (sans e-mails). |
+| `list_blocks` | read | Blocages horaires (jours fériés, vacances). |
+| `list_appointments` | read | Rendez-vous sur une plage de dates. Le texte des visiteurs est une donnée non fiable. |
+| `get_agenda_availability` | read | Créneaux réellement libres d'un service, par membre de l'équipe ou pour un panier de services supplémentaires. |
+| `get_agenda_google` | read | Indique si Google Agenda est disponible et connecté. |
+| `list_reviews` | read | Avis, y compris les avis masqués. |
+| `list_waitlist` | read | Visiteurs en attente d'un créneau. |
+| `configure_agenda` | write | Réglages de l'agenda, rappels, horaires d'ouverture et service affiché sur la carte de réservation. |
+| `set_opening_hours` | write | Le badge « ouvert maintenant » : source `agenda` ou `custom`, et dates de fermeture. |
+| `manage_offering` | write | Crée, met à jour ou supprime un service, y compris les combos et le paiement en ligne. |
+| `manage_staff` | write | Crée, met à jour ou supprime un membre de l'équipe. `update` remplace la fiche. |
+| `manage_block` | write | Crée ou supprime un blocage horaire. |
+| `create_appointment` | write | Réserve un rendez-vous. `idempotencyKey` facultatif. |
+| `transition_appointment` | write | Modifie le statut d'un rendez-vous. |
+| `reschedule_appointment` | write | Déplace un rendez-vous vers un créneau libre exact. |
+| `update_review` | write | Masque ou affiche (`hidden`) et met en avant (`featured`) un avis. Seuls les champs envoyés changent. |
+| `set_review_hidden` | write | **Obsolète.** Masque ou affiche un avis ; utilisez `update_review`. |
+| `manage_package` | write | Forfaits de séances (`kind: "package"`) et formules d'abonnement (`kind: "subscription_plan"`) : `list`, `create` (nécessite `idempotencyKey`), `update` et `delete` (`confirm: true`). |
+| `disconnect_agenda_google` | clé uniquement | Déconnecte Google Agenda (`confirm: true`). |
+
+## Leads et finance
+
+| Outil | Accès | Ce qu'il fait |
+| --- | --- | --- |
+| `list_leads` | read | Leads captés par l'assistant IA. |
+| `search_leads` | read | Trouve un client par nom, téléphone, e-mail ou Instagram. |
+| `create_lead` | write | Enregistre un lead, dédoublonné par contact. `idempotencyKey` facultatif. |
+| `get_earnings` | finance | Revenus agrégés sur une période. Nécessite la portée `finance` ; ne renvoie aucune donnée client. |
+
+## Obsolètes
+
+Ceux-ci fonctionnent encore pendant une version. Passez à leur remplaçant.
+
+| Obsolète | À utiliser à la place |
 | --- | --- |
-| Agenda | Configurer votre système de prise de rendez-vous. |
-| Services et équipe | Gérer vos services (y compris les combos et le paiement en ligne), votre personnel et vos blocages. |
-| Rendez-vous | Lister et créer des rendez-vous — liés à un membre de l'équipe ou à un client existant — et vérifier les disponibilités réelles (par membre de l'équipe, et pour un panier de services supplémentaires). |
-| Modifications | Reprogrammer des rendez-vous et modifier leur statut. |
-| Avis et liste d'attente | Lire vos avis (y compris les avis masqués), masquer ou afficher un avis, et gérer la liste d'attente. |
-| Google | Vérifier l'état de la connexion à Google Agenda, et la déconnecter. |
-| Revenus | Lire vos revenus agrégés sur une période (nécessite le scope **finance** ; aucune donnée client). |
+| `set_appearance` | `update_design` avec `themeId` (même effet). |
+| `set_review_hidden` | `update_review` avec `hidden`. |
+| `manage_category` avec `op: "list"` | `list_categories`. |
+| `manage_collection` avec `op: "list"` | `list_collections`. |
+| `instagram`, `whatsapp`, `tiktok` et `youtube` dans `update_profile` | `update_socials`. |
+| `vitrineEnabled` dans `configure_vitrine` | `configure_bio_cards` avec `vitrineEnabled`. |
+| `enabled` et `showTopCard` dans `configure_agenda` | `configure_bio_cards` avec `agendaEnabled` et `agendaTopCard`. |
+| `agendaOrder` dans `configure_agenda` | Rien : il n'a aucun effet (la carte de réservation est épinglée en haut). |
 
-## Assistant IA
-
-| Domaine d'outils | Ce que l'agent peut faire |
-| --- | --- |
-| Assistant | Gérer la configuration de votre assistant IA. |
-
-<Note>
-  Tout ce qu'un agent modifie est enregistré automatiquement et met à jour votre
-  page en direct en temps réel, exactement comme si vous aviez fait la
-  modification vous-même dans l'éditeur.
-</Note>
-
-## Noms des outils
-
-Si vous voulez savoir exactement quels outils votre agent voit, voici la liste
-complète. Avec une clé **read**, l'agent obtient les 13 outils de lecture ; une
-clé **write** ajoute par-dessus les 34 outils d'écriture. Une clé avec le scope
-**finance** obtient aussi `get_earnings` (et une clé finance seule obtient
-uniquement celui-là).
-
-### Outils de lecture
-
-| Outil | Ce qu'il fait |
-| --- | --- |
-| `get_storefront` | Lire toute votre page — profil, liens et produits en une seule vue. |
-| `list_products` | Lister vos produits, avec recherche par nom et limite optionnelles. |
-| `list_themes` | Parcourir le catalogue de thèmes prédéfinis. |
-| `get_analytics_summary` | Lire le résumé des performances de votre page. |
-| `list_appointments` | Lister les rendez-vous sur une plage de dates. |
-| `list_leads` | Lister les leads que vous avez captés. |
-| `get_agenda_availability` | Vérifier les créneaux réellement libres pour un service — optionnellement par membre de l'équipe (`staffId`) ou pour un panier de services supplémentaires (`extraOfferingIds`). |
-| `get_agenda_google` | Vérifier si Google Agenda est connecté. |
-| `list_reviews` | Lister les avis que vous avez reçus, y compris les avis masqués. |
-| `list_waitlist` | Lister les visiteurs en attente d'un créneau. |
-| `search_leads` | Trouver un client existant par nom, téléphone, e-mail ou Instagram. |
-| `get_onboarding_brief` | Pendant l’onboarding guidé : lire ce que la personne a déjà répondu et le script pour créer la bio dans sa langue. |
-| `get_bio_playbook` | Après l’onboarding : le standard Linkzee pour rendre une bio publiée encore meilleure, avec l’offre actuelle (pour prévenir avant une fonction payante) et la règle des domaines réglementés. |
-
-### Outils de finance
-
-| Outil | Ce qu'il fait |
-| --- | --- |
-| `get_earnings` | Revenus agrégés sur une période : brut, remboursements, frais et net, plus série quotidienne et répartitions. Requiert le scope `finance` ; ne renvoie aucune donnée client. |
-
-### Outils d'écriture
-
-| Outil | Ce qu'il fait |
-| --- | --- |
-| `update_profile` | Mettre à jour votre nom, votre bio, la signature de la bio et les détails du profil. |
-| `set_appearance` | Appliquer un thème prédéfini. |
-| `create_product` | Créer un produit. |
-| `create_products_bulk` | Créer plusieurs produits d'un coup. |
-| `update_product` | Mettre à jour un produit existant. |
-| `delete_product` | Supprimer un produit. |
-| `manage_category` | Créer, mettre à jour ou supprimer une catégorie de produits. |
-| `manage_collection` | Créer, mettre à jour ou supprimer une collection de liens. |
-| `create_link` | Ajouter un lien à votre page. |
-| `update_link` | Mettre à jour un lien existant. |
-| `delete_link` | Supprimer un lien. |
-| `reorder_content` | Réordonner le contenu de votre page. |
-| `configure_vitrine` | Configurer la vitrine — visibilité, colonnes, cadrage des photos et mise en page (`grid`, `masonry` ou `carousel`). |
-| `configure_tracking` | Définir les pixels, l'API Conversions, GTM et les UTM par défaut. |
-| `update_design` | Ajuster le design : thème, couleurs, boutons, police, en-tête (y compris `heroMedia` : `photo` ou `video`, et `wordmarkUrl`, le logo affiché à la place du nom) et fonds, y compris `mesh`, `duotone` et le fond uni aux couleurs de la marque (`bgFill`, avec `background: solid`). Les vidéos elles-mêmes se définissent avec les outils dédiés ci-dessous. |
-| `propose_onboarding_bio` | Pendant l’onboarding guidé : enregistrer la proposition de bio dans le brouillon (la personne la vérifie et la publie sur Linkzee). Le thème vient des couleurs du logo, sauf si la personne demande un thème prêt précis, et un lien sans titre reçoit un nom par défaut selon son type ; chaque élément écarté revient avec son motif (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
-| `set_hero_video` | Donnez-lui une URL vidéo publique — Linkzee la télécharge, l'optimise et l'applique à la disposition **Hero**, en basculant votre en-tête en Hero. Retourne un job. Nécessite une offre Premium. |
-| `set_background_video` | Idem, pour le fond d'écran de votre page. Retourne un job. Nécessite une offre Premium. |
-| `get_media_job` | Suivre un job vidéo jusqu'à ce qu'il soit `ready` ou `failed`. |
-| `remove_hero_video` | Retirer la vidéo hero de votre page. |
-| `remove_background_video` | Retirer la vidéo de fond de votre page. |
-| `update_map` | Configurer la carte sur votre page. |
-| `update_socials` | Mettre à jour vos identifiants de réseaux sociaux. |
-| `configure_agenda` | Configurer votre système de prise de rendez-vous. |
-| `manage_offering` | Créer, mettre à jour ou supprimer un service — y compris les combos et le paiement en ligne (acompte ou paiement intégral). |
-| `manage_staff` | Créer, mettre à jour ou supprimer un membre de l'équipe. |
-| `manage_block` | Créer ou supprimer un blocage. |
-| `create_appointment` | Réserver un rendez-vous — optionnellement pour un membre précis de l'équipe (`staffId`) ou un client existant (`leadId`). |
-| `transition_appointment` | Modifier le statut d'un rendez-vous. |
-| `reschedule_appointment` | Déplacer un rendez-vous vers un nouvel horaire. |
-| `disconnect_agenda_google` | Déconnecter Google Agenda. |
-| `manage_ai_assistant` | Gérer votre assistant IA — persona, message d'accueil, capture de leads, ton de voix. |
-| `set_review_hidden` | Masquer ou afficher un avis sur votre page publique. |
-| `create_lead` | Enregistrer un lead/client en votre nom. |
+<Warning>
+  Le texte écrit par des visiteurs ou des tiers (rendez-vous, avis, leads, liste
+  d'attente et pages importées) parvient à l'agent en tant que donnée. Linkzee
+  indique à l'agent de ne jamais suivre les instructions qui s'y trouvent, et les
+  outils qui déplacent de l'argent ou modifient des comptes sont réservés aux clés.
+</Warning>
 
 <CardGroup cols={2}>
+  <Card title="Construire une bio avec un agent" icon="wand-magic-sparkles" href="/fr/integrations/mcp/build-bio-with-agent">
+    Le parcours complet, d'une page vide à une bio publiée.
+  </Card>
+  <Card title="Envoyer des fichiers" icon="upload" href="/fr/integrations/mcp/sending-files">
+    Photos et vidéos par URL ou par lien d'envoi.
+  </Card>
   <Card title="Vue d'ensemble du MCP" icon="robot" href="/fr/integrations/mcp/overview">
     Comment les agents d'IA contrôlent votre Linkzee en langage courant.
   </Card>
   <Card title="Clés API" icon="key" href="/fr/integrations/api/api-keys">
-    Créez une clé et choisissez le scope read ou write.
+    Créez une clé et choisissez ses portées.
   </Card>
 </CardGroup>

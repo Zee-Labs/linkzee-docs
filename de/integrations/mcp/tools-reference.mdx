@@ -1,171 +1,237 @@
 ---
 title: Tool-Referenz
 icon: screwdriver-wrench
-description: "Alles, was ein KI-Agent über MCP in deinem Linkzee tun kann, nach Bereichen gruppiert."
+description: "Alle Tools, die ein KI-Agent über MCP in deinem Linkzee nutzen kann, nach Bereichen gruppiert, mit dem Zugriff, den jedes benötigt."
 ---
 
-Sobald du einen KI-Agenten über MCP verbindest, kann er fast jeden Teil deines
-Linkzee für dich verwalten — einfach, indem du es in ganz normaler Sprache
-verlangst. Diese Seite listet auf, was ein Agent tun kann, nach Bereichen
-gruppiert, damit du weißt, worum du bitten kannst.
+Sobald du einen KI-Agenten über MCP verbindest, kann er deine gesamte Bio für
+dich aufbauen und verwalten, einfach indem du es in ganz normaler Sprache
+verlangst. Diese Seite listet alle **70 Tools** auf: was jedes tut und welchen
+Zugriff es benötigt, damit du weißt, worum du bitten kannst und welche
+Berechtigungen du erteilen musst.
 
-<Note>
-  Aktionen, die deine Daten **lesen**, benötigen einen Schlüssel mit dem
-  Berechtigungsbereich **read**. Aktionen, die **erstellen, aktualisieren oder
-  löschen**, benötigen einen Schlüssel mit dem Berechtigungsbereich **write**.
-  Das Einnahmen-Tool ist die Ausnahme: Es benötigt den Berechtigungsbereich
-  **finance**, der nie standardmäßig enthalten ist. Siehe
-  [API-Schlüssel](/de/integrations/api/api-keys), um den richtigen
-  Berechtigungsbereich festzulegen.
-</Note>
+## Welche Tools ein Agent sieht
 
-## Seite & Profil
+Was der Agent sieht, hängt davon ab, wie er sich verbindet.
 
-| Tool-Bereich | Was der Agent tun kann |
+**Mit einem API-Schlüssel** (`lzk_`) entscheiden die Scopes des Schlüssels:
+
+| Scopes des Schlüssels | Tools, die der Agent sieht |
 | --- | --- |
-| Storefront | Deine gesamte Seite lesen — dein Profil, deine Links und Produkte in einer Ansicht. |
-| Profil | Deinen Namen, dein Foto, deine Bio und weitere Profildetails aktualisieren. |
-| Erscheinungsbild | Dein Erscheinungsbild und Theme festlegen. |
-| Karte & soziale Netzwerke | Deine Karte und deine sozialen Netzwerke aktualisieren. |
+| `read` | Die 26 Lese-Tools (Seite, Links, Produkte, Agenda, Leads). |
+| `write` | Die 26 Lese-Tools plus die 43 Schreib-Tools (insgesamt 69). Bei MCP schließt `write` den Scope `read` ein: Ein Agent, der schreibt, liest immer zuerst den Zustand. |
+| `finance` allein | Nur `get_earnings`. Ein reiner finance-Schlüssel liest sonst nichts. |
+| `read` oder `write`, plus `finance` | Das Obige plus `get_earnings` (bis zu 70). |
 
-## Links & Sammlungen
+**Mit dem Claude-Konnektor** (OAuth) wählst du die Gruppen auf dem Zustimmungsbildschirm:
 
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Links | Deine Links erstellen, aktualisieren und löschen. |
-| Sammlungen | Links in Sammlungen gruppieren und verwalten. |
-| Reihenfolge | Deine Inhalte neu anordnen, sodass deine besten Elemente zuerst kommen. |
+| Gruppe | Erforderlich | Tools |
+| --- | --- | --- |
+| `content` | Ja | Seite, Links, Produkte, Kategorien, Sammlungen, Design, Medien, Spezialkarten und Onboarding (44 Tools, Lesen und Schreiben). |
+| `agenda` | Nein | Agenda, Leistungen, Team, Sperrzeiten, Termine, Bewertungen und Pakete (19 Tools). |
+| `leads` | Nein | Leads (3 Tools). |
+| `finance` | Nein | `get_earnings`. |
 
-## Produkte & Kategorien
+<Warning>
+  Drei Tools gibt es **nur mit Schlüssel**, und sie erscheinen nie über OAuth,
+  egal welche Gruppen gewählt sind: `configure_tracking` (Pixel und GTM landen
+  in einem Skript auf deiner Seite), `configure_tips` (der PIX-Schlüssel ist ein
+  Geldziel) und `disconnect_agenda_google` (es verändert dein Google-Konto).
+  Nutze dafür einen API-Schlüssel mit dem Scope **write**.
+</Warning>
 
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Produkte | Produkte einzeln oder im Stapel erstellen. |
-| Produktbearbeitungen | Vorhandene Produkte aktualisieren oder löschen. |
-| Kategorien | Deine Produktkategorien erstellen und verwalten. |
+## Wie Tools antworten
 
-<Note>
-  Wenn ein Agent Produkte erstellt, aktualisiert oder auflistet, kann er auch eine
-  externe Referenz (`externalId` — CRM-/ERP-ID oder SKU) und einen Barcode
-  (`barcode` — EAN/GTIN/UPC) lesen und schreiben. Beide sind optional und werden
-  nie auf der öffentlichen Seite angezeigt — praktisch, um Produkte mit deinen
-  eigenen Systemen synchron zu halten.
-</Note>
-
-## Design
-
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Design | Dein Design aktualisieren und dein Theme wechseln. |
-| Video | Ein Hero-Video oder ein Hintergrund-Video aus einer öffentlichen Video-URL setzen, ersetzen oder entfernen (Premium). |
-
-## Analytics & Leads
-
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Analytics | Eine Zusammenfassung lesen, wie sich deine Seite entwickelt. |
-| Leads | Die von dir erfassten Leads auflisten, einen Kunden suchen und einen neuen registrieren. |
-
-## Terminplanung
-
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Agenda | Deine Terminplanung einrichten. |
-| Dienstleistungen & Team | Deine Dienstleistungen (einschließlich Combos und Online-Bezahlung), dein Personal und Sperrzeiten verwalten. |
-| Termine | Termine auflisten und erstellen — verknüpft mit einem Teammitglied oder einem bestehenden Kunden — und die echte Verfügbarkeit prüfen (pro Teammitglied und für einen Warenkorb zusätzlicher Leistungen). |
-| Änderungen | Termine verschieben und ihren Status ändern. |
-| Bewertungen & Warteliste | Deine Bewertungen lesen (einschließlich ausgeblendeter), eine Bewertung aus- oder einblenden und die Warteliste verwalten. |
-| Google | Den Verbindungsstatus von Google Calendar prüfen und die Verbindung trennen. |
-| Einnahmen | Deine aggregierten Einnahmen für einen Zeitraum lesen (benötigt den Berechtigungsbereich **finance**; keine Kundendaten). |
-
-## KI-Assistent
-
-| Tool-Bereich | Was der Agent tun kann |
-| --- | --- |
-| Assistent | Die Konfiguration deines KI-Assistenten verwalten. |
+- Jede Antwort enthält einen kurzen Satz und, wenn dieser Satz nicht schon JSON
+  ist, einen zweiten Textblock mit demselben Ergebnis als kompaktes JSON.
+  Clients, die `structuredContent` lesen, erhalten dort dasselbe Objekt.
+- Schreib-Tools können `warnings` (gespeichert, aber mit einem Vorbehalt),
+  `pending` (Video-Jobs, die du mit `get_media_job` verfolgst) und `published`
+  mit einem `reason` zurückgeben, wenn das Ergebnis noch nicht auf der
+  öffentlichen Seite ist: `missing_photos`, `pending_video`, `plan_required`
+  oder `consent_required`.
+- Jedes Bildfeld akzeptiert eine öffentliche Bild-URL (heruntergeladen, geprüft
+  und im Linkzee-CDN gehostet) **oder** `{ "uploadId": "..." }` aus einem
+  Upload-Link (siehe [Dateien senden](/de/integrations/mcp/sending-files)). Die
+  Medien-Tools veröffentlichen nie eine Datei, die sie nicht kopieren konnten:
+  Der Aufruf schlägt stattdessen fehl. Produktbilder behalten das alte
+  Verhalten: Ein Foto, das nicht abgerufen werden kann, wird mit einer Warnung
+  übersprungen, und das Produkt wird gespeichert.
+- Erstellungs-Tools, die `idempotencyKey` akzeptieren, geben das bereits
+  erstellte Element zurück, wenn du denselben Schlüssel mit derselben Nutzlast
+  wiederholst, statt ein Duplikat anzulegen. Siehe
+  [Ratenbegrenzungen](/de/api-reference/rate-limits).
 
 <Note>
   Alles, was ein Agent ändert, wird automatisch gespeichert und aktualisiert
-  deine Live-Seite in Echtzeit — genau so, als hättest du die Änderung selbst
-  im Editor vorgenommen.
+  deine Live-Seite sofort, genau so, als hättest du die Änderung im Editor
+  vorgenommen. Solange ein geführtes Onboarding offen ist, beendet der erste
+  direkte Schreibvorgang auf der Seite es, und die Antwort sagt das.
 </Note>
 
-## Tool-Namen
+## Seite und Profil
 
-Wenn du genau wissen möchtest, welche Tools dein Agent sieht, ist hier die
-vollständige Liste. Mit einem **read**-Schlüssel erhält der Agent die 13
-Lese-Tools; ein **write**-Schlüssel fügt zusätzlich die 34 Schreib-Tools hinzu.
-Ein Schlüssel mit dem **finance**-Berechtigungsbereich erhält außerdem
-`get_earnings` (ein reiner finance-Schlüssel erhält nur dieses eine Tool).
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `get_store` | read | Inhaberansicht des Stores: Profil, Design, Header, soziale Netzwerke, Einstellungen von Schaufenster und Karte, `pageHidden` und (je nach Zugriff) Agenda-Einstellungen, eine PIX-Zusammenfassung und der Host des Lead-Webhooks. Gibt nie Geheimnisse zurück. |
+| `get_storefront` | read | Was Besucher sehen: Profil, der Linkbereich und die Zusammenfassung des Schaufensters. Funktioniert auch mit einer ausgeblendeten Seite und gibt dann `pageHidden: true` zurück. |
+| `update_profile` | write | Name, Bio, Bio-Signatur, SEO-Titel und SEO-Beschreibung. |
+| `update_socials` | write | Handles in sozialen Netzwerken, WhatsApp (Ziffern mit Ländervorwahl), `socialsPosition` (`top` oder `bottom`) und `socialOrder`. Ein leerer String entfernt ein Netzwerk. Der Inhaber erhält eine E-Mail, wenn sich die WhatsApp-Nummer ändert. |
+| `update_page` | write | `isActive` (`false` blendet die gesamte öffentliche Seite aus), `publicPreferences` (Seitensprache und Übersetzungs-Fallback, mit dem Gespeicherten zusammengeführt), `timezone` (IANA-Name, validiert) und `location` (Land, Bundesland, Stadt; steuert den Feiertagskalender). Der Slug kann nicht geändert werden. |
+| `update_map` | write | Kartenkarte: `mapAddress` (ein leerer String entfernt sie), `mapTheme` und `mapLayout` (`map` oder `card`). |
+| `configure_bio_cards` | write | Schaltet Seitenabschnitte ein oder aus (`vitrineEnabled`, `servicesEnabled`, `packagesEnabled`, `instagramEnabled`, `agendaEnabled`, `agendaTopCard`) und konfiguriert die Google-Bewertungskarte, den Bewertungsblock und die Social-Fotokarten. |
+| `configure_vitrine` | write | Raster des Schaufensters: `gridDensity`, `vitrineLayout` (`grid`, `masonry`, `carousel`) und `vitrinePhotoFit`. |
+| `configure_tips` | nur Schlüssel | PIX-Trinkgeldkarte. Gibt `pixKeyPreview` (letzte 4 Zeichen) zurück, nie den Schlüssel. Der Inhaber erhält eine E-Mail, wenn sich der Schlüssel ändert. |
+| `configure_tracking` | nur Schlüssel | Pixel von Meta, TikTok und GA4, das Token der Meta Conversion API, GTM und Standard-UTM-Parameter. |
 
-### Lese-Tools
+## Design und Video
 
-| Tool | Was es tut |
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_themes` | read | Die 23 vorgefertigten Themes (8 sind kostenpflichtig). |
+| `update_design` | write | Theme, Farben, Hintergrund, Buttons, Schrift, Karte, Textur, Bewegung, Header-Layout und Header-Bilder. Siehe "Theme-Vererbung" unten. Kostenpflichtige Werte antworten in einem kostenlosen Tarif mit `PLAN_REQUIRED`. |
+| `set_appearance` | write | **Veraltet.** Wendet ein vorgefertigtes Theme an; nutze `update_design` mit `themeId`. |
+| `set_hero_video` | write | Hero-Video aus einer öffentlichen MP4- oder MOV-URL, einer `uploadId` oder `fromProducts` (ein aus 3 bis 6 Produktfotos generiertes Video). Gibt einen Job zurück. Premium. |
+| `set_background_video` | write | Hintergrund-Video der Seite aus einer URL oder einer `uploadId`. Gibt einen Job zurück. Premium. |
+| `remove_hero_video` | write | Entfernt das Hero-Video. |
+| `remove_background_video` | write | Entfernt das Hintergrund-Video. |
+| `get_media_job` | read | Status jedes Video-Jobs (Hero, Hintergrund, Blockelement, Linkkarte): `queued`, `processing`, `ready` oder `failed`. |
+
+### Theme-Vererbung
+
+`update_design` funktioniert wie der Editor. `themeId` wendet ein Preset an und
+startet es sauber: Die zuvor gespeicherten Overrides und die Bewegungsstufe
+werden zurückgesetzt. Jedes andere Designfeld in einem Store mit Preset passt
+**nur seinen Abschnitt** an (Farben, Hintergrund, Buttons, Text, Verlauf,
+Karte, Textur, Bewegung), und dieser Abschnitt startet von der Palette des
+Themes; der Rest folgt weiter dem Theme. Farben, die der Palette des Presets
+entsprechen, zählen nicht als eigene Farben. Sende `overrides` nur, wenn du die
+angepassten Abschnitte selbst auflisten willst.
+
+## Links, Blöcke und Sammlungen
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_links` | read | Jeder Link und Medienblock, einschließlich ausgeblendeter, geplanter und unfertiger. Jedes Element gibt `published` an und, wenn `false`, einen `reason`: `hidden`, `scheduled`, `missing_destination`, `missing_photos`, `pending_video` oder `failed_video`. Medienelemente tragen `slot`, `type` und `status` (`ready`, `pending` oder `failed`). |
+| `list_collections` | read | Linkgruppen: ID, Name, Emoji, Beschreibung, `isActive`, Reihenfolge. |
+| `get_content_tree` | read | Der Baum des Linkbereichs in Seitenreihenfolge, genau im Format, das `reorder_content` akzeptiert, mit Spezialkarten als `{ "type": "section", "key": "..." }`. |
+| `create_link` | write | Fügt einen Link oder einen Medienblock hinzu. Akzeptiert `thumbnail`, `isActive`, `isFeatured`, `highlightFx`, `emphasis`, ein Zeitfenster (ISO 8601 mit Offset) und die Blockfelder. Optionaler `idempotencyKey`. |
+| `update_link` | write | Ändert nur die gesendeten Felder. `mediaItems` ist die vollständige Liste; wer einen Video-Slot weglässt, braucht `confirmRemoveVideos: true`. |
+| `delete_link` | write | Löscht einen Link (`confirm: true`). |
+| `set_block_media` | write | Setzt die vollständige Liste der Elemente eines Vorher-Nachher- oder Galerieblocks: Fotos, Videos (nur Reel-Galerie), Beschriftungen und Buttons. Neue Dateien brauchen `mediaConsent: true`. |
+| `set_link_media` | write | Titelbild einer Linkkarte: `image`, `embed` (YouTube, Vimeo, TikTok, Spotify oder Panda), `video` (nur eine `uploadId`, plus ein Poster) oder `none`. |
+| `manage_collection` | write | Erstellt, aktualisiert oder löscht eine Linkgruppe (`description`, `isActive`). |
+| `reorder_content` | write | Ordnet Links, Sammlungen, KI-Assistenten und Spezialkarten neu an. Weggelassene Elemente behalten ihren Platz. |
+
+## Produkte und Kategorien
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_products` | read | Produkte des Schaufensters in der Reihenfolge, in der Besucher sie sehen (neueste zuerst oder deine manuelle Reihenfolge). Akzeptiert `q` und `limit`. |
+| `get_product` | read | Jedes bearbeitbare Feld eines Produkts. |
+| `list_categories` | read | Kategorien (Chips im Schaufenster): ID, Name, Emoji, Beschreibung, `isActive`, Reihenfolge. |
+| `create_product` | write | Erstellt ein Produkt. Akzeptiert `installments`, `highlightFx`, `showCountdown`, `offerEndsAt`, `offerDurationMinutes`, `isActive`, `externalId` und `barcode`. Optionaler `idempotencyKey`. |
+| `create_products_bulk` | write | Bis zu 20 Produkte auf einmal, jedes mit eigenem optionalem `idempotencyKey`. |
+| `update_product` | write | Ändert nur die gesendeten Felder. `price: null` entfernt den Preis. |
+| `delete_product` | write | Löscht ein Produkt (`confirm: true`). |
+| `manage_category` | write | Erstellt, aktualisiert, löscht oder ordnet Kategorien neu an (`description`, `isActive`). |
+
+<Note>
+  Ein Produkt erscheint nur dann auf der öffentlichen Seite, wenn es einen
+  Ziellink hat (`sourceUrl` oder `externalLink`). Die Produktreihenfolge legst
+  du im Dashboard oder mit `PUT /v1/products/order` fest (siehe
+  [Produkte](/de/api-reference/products)); dafür gibt es kein MCP-Tool.
+</Note>
+
+## Dateien und Import
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `create_upload_link` | write | Erstellt einen Upload-Link für Fotos und Videos, die du nicht als öffentliche URLs hast. Siehe [Dateien senden](/de/integrations/mcp/sending-files). |
+| `get_upload` | read | Status eines Upload-Links (`open`, `full`, `expired`) und seine Dateien mit ihrer `uploadId`. |
+| `import_from_url` | read | Liest nur und speichert nichts: `prefill_link` (Titel und Bild einer beliebigen Seite) oder `preview_bio` (was `import_bio` von einer Linktree- oder Beacons-Seite übernehmen würde). |
+| `import_bio` | write | Importiert eine Linktree- oder Beacons-Seite in den Store. Erfordert `idempotencyKey`; 3 pro Stunde. Nur nachdem die Person zugestimmt hat. |
+
+## KI-Assistent und Onboarding
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_ai_assistants` | read | Karten der KI-Assistenten: ID, Titel, Avatar, Begrüßung, Start-Buttons, `isActive`. |
+| `manage_ai_assistant` | write | Erstellt, aktualisiert oder löscht einen Assistenten (`personality`, `instructions`, `collectionId`, `isActive`, Lead-Erfassung) oder ändert die globalen Einstellungen (`op: "settings"`). |
+| `get_onboarding_brief` | read | Im geführten Onboarding: die bereits gegebenen Antworten und das Interview-Skript in der Sprache des Inhabers. |
+| `propose_onboarding_bio` | write | Im geführten Onboarding: speichert den Vorschlag im Entwurf. Die Person prüft und veröffentlicht ihn in Linkzee. |
+| `get_bio_playbook` | read | Der Linkzee-Qualitätsstandard für eine Bio, der aktuelle Tarif und die Leitfäden pro Bereich (`toolGuide`: design, links, agenda). |
+| `get_analytics_summary` | read | Aggregierte Kennzahlen des Schaufensters. |
+
+## Agenda
+
+Jedes Tool unten gehört zur OAuth-Gruppe `agenda`, außer dem letzten.
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_offerings` | read | Buchbare Leistungen. |
+| `list_staff` | read | Teammitglieder (ohne E-Mails). |
+| `list_blocks` | read | Sperrzeiten (Feiertage, Urlaub). |
+| `list_appointments` | read | Termine in einem Datumsbereich. Von Besuchern geschriebener Text sind nicht vertrauenswürdige Daten. |
+| `get_agenda_availability` | read | Echte freie Zeiten einer Leistung, pro Teammitglied oder für einen Warenkorb zusätzlicher Leistungen. |
+| `get_agenda_google` | read | Ob Google Calendar verfügbar und verbunden ist. |
+| `list_reviews` | read | Bewertungen, einschließlich ausgeblendeter. |
+| `list_waitlist` | read | Besucher, die auf ein Zeitfenster warten. |
+| `configure_agenda` | write | Agenda-Einstellungen, Erinnerungen, Öffnungszeiten und die auf der Buchungskarte gezeigte Leistung. |
+| `set_opening_hours` | write | Das Badge "Jetzt geöffnet": Quelle `agenda` oder `custom` und geschlossene Tage. |
+| `manage_offering` | write | Erstellt, aktualisiert oder löscht eine Leistung, einschließlich Combos und Online-Bezahlung. |
+| `manage_staff` | write | Erstellt, aktualisiert oder löscht ein Teammitglied. `update` ersetzt den Datensatz. |
+| `manage_block` | write | Erstellt oder entfernt eine Sperrzeit. |
+| `create_appointment` | write | Bucht einen Termin. Optionaler `idempotencyKey`. |
+| `transition_appointment` | write | Ändert den Status eines Termins. |
+| `reschedule_appointment` | write | Verschiebt einen Termin auf eine exakte freie Zeit. |
+| `update_review` | write | Blendet eine Bewertung aus oder ein (`hidden`) und hebt sie hervor (`featured`). Nur die gesendeten Felder ändern sich. |
+| `set_review_hidden` | write | **Veraltet.** Blendet eine Bewertung aus oder ein; nutze `update_review`. |
+| `manage_package` | write | Sitzungspakete (`kind: "package"`) und Abo-Pläne (`kind: "subscription_plan"`): `list`, `create` (erfordert `idempotencyKey`), `update` und `delete` (`confirm: true`). |
+| `disconnect_agenda_google` | nur Schlüssel | Trennt Google Calendar (`confirm: true`). |
+
+## Leads und Finanzen
+
+| Tool | Zugriff | Was es tut |
+| --- | --- | --- |
+| `list_leads` | read | Vom KI-Assistenten erfasste Leads. |
+| `search_leads` | read | Findet einen Kunden per Name, Telefon, E-Mail oder Instagram. |
+| `create_lead` | write | Registriert einen Lead, dedupliziert nach Kontakt. Optionaler `idempotencyKey`. |
+| `get_earnings` | finance | Aggregierte Einnahmen für einen Zeitraum. Benötigt den Scope `finance`; gibt keine Kundendaten zurück. |
+
+## Veraltet
+
+Diese funktionieren noch für ein weiteres Release. Steig auf den Ersatz um.
+
+| Veraltet | Stattdessen nutzen |
 | --- | --- |
-| `get_storefront` | Deine gesamte Seite lesen — Profil, Links und Produkte in einer Ansicht. |
-| `list_products` | Deine Produkte auflisten, mit optionaler Namenssuche und Limit. |
-| `list_themes` | Den Katalog der vorgefertigten Themes durchsuchen. |
-| `get_analytics_summary` | Die Leistungsübersicht deiner Seite lesen. |
-| `list_appointments` | Termine innerhalb eines Datumsbereichs auflisten. |
-| `list_leads` | Die von dir erfassten Leads auflisten. |
-| `get_agenda_availability` | Echte freie Zeiten für eine Leistung prüfen — optional pro Teammitglied (`staffId`) oder für einen Warenkorb zusätzlicher Leistungen (`extraOfferingIds`). |
-| `get_agenda_google` | Prüfen, ob Google Calendar verbunden ist. |
-| `list_reviews` | Die erhaltenen Bewertungen auflisten, einschließlich ausgeblendeter. |
-| `list_waitlist` | Besucher auflisten, die auf ein Zeitfenster warten. |
-| `search_leads` | Einen bestehenden Kunden per Name, Telefon, E-Mail oder Instagram finden. |
-| `get_onboarding_brief` | Im geführten Onboarding: lesen, was die Person schon beantwortet hat, und das Skript, um die Bio in ihrer Sprache zu erstellen. |
-| `get_bio_playbook` | Nach dem Onboarding: der Linkzee-Standard, um eine veröffentlichte Bio noch besser zu machen, mit dem aktuellen Tarif (um vor kostenpflichtigen Funktionen zu warnen) und der Regel für regulierte Bereiche. |
+| `set_appearance` | `update_design` mit `themeId` (gleiche Wirkung). |
+| `set_review_hidden` | `update_review` mit `hidden`. |
+| `manage_category` mit `op: "list"` | `list_categories`. |
+| `manage_collection` mit `op: "list"` | `list_collections`. |
+| `instagram`, `whatsapp`, `tiktok` und `youtube` in `update_profile` | `update_socials`. |
+| `vitrineEnabled` in `configure_vitrine` | `configure_bio_cards` mit `vitrineEnabled`. |
+| `enabled` und `showTopCard` in `configure_agenda` | `configure_bio_cards` mit `agendaEnabled` und `agendaTopCard`. |
+| `agendaOrder` in `configure_agenda` | Nichts: Es hat keine Wirkung (die Buchungskarte ist oben fixiert). |
 
-### Finance-Tools
-
-| Tool | Was es tut |
-| --- | --- |
-| `get_earnings` | Aggregierte Einnahmen für einen Zeitraum: Brutto, Erstattungen, Gebühren und Netto, dazu Tagesreihe und Aufschlüsselungen. Erfordert den `finance`-Berechtigungsbereich; gibt keine Kundendaten zurück. |
-
-### Schreib-Tools
-
-| Tool | Was es tut |
-| --- | --- |
-| `update_profile` | Deinen Namen, deine Bio, die Bio-Signatur und Profildetails aktualisieren. |
-| `set_appearance` | Ein vorgefertigtes Theme anwenden. |
-| `create_product` | Ein Produkt erstellen. |
-| `create_products_bulk` | Mehrere Produkte auf einmal erstellen. |
-| `update_product` | Ein bestehendes Produkt aktualisieren. |
-| `delete_product` | Ein Produkt löschen. |
-| `manage_category` | Eine Produktkategorie erstellen, aktualisieren oder löschen. |
-| `manage_collection` | Eine Link-Sammlung erstellen, aktualisieren oder löschen. |
-| `create_link` | Einen Link zu deiner Seite hinzufügen. |
-| `update_link` | Einen bestehenden Link aktualisieren. |
-| `delete_link` | Einen Link löschen. |
-| `reorder_content` | Deine Seiteninhalte neu anordnen. |
-| `configure_vitrine` | Die Vitrine konfigurieren — Sichtbarkeit, Spalten, Foto-Anpassung und Layout (`grid`, `masonry` oder `carousel`). |
-| `configure_tracking` | Pixel, Conversion API, GTM und Standard-UTMs festlegen. |
-| `update_design` | Das Design anpassen: Theme, Farben, Buttons, Schrift, Header (einschließlich `heroMedia`: `photo` oder `video`, und `wordmarkUrl`, dem Logo anstelle des Namens) und Hintergründe, darunter `mesh`, `duotone` und der einfarbige Hintergrund in der Markenfarbe (`bgFill`, mit `background: solid`). Die Videos selbst werden mit den eigenen Tools unten gesetzt. |
-| `propose_onboarding_bio` | Im geführten Onboarding: den Bio-Vorschlag im Entwurf speichern (die Person prüft und veröffentlicht ihn in Linkzee). Das Theme ergibt sich aus den Logofarben, außer die Person wünscht ein bestimmtes fertiges Theme, und ein Link ohne Titel erhält einen Standardnamen nach seinem Typ; jeder verworfene Eintrag kommt mit Grund zurück (`too_long`, `contact_data`, `price`, `promise`, `regulated_term`, `invalid`). |
-| `set_hero_video` | Gib eine öffentliche Video-URL an — Linkzee lädt das Video herunter, optimiert es und wendet es auf das **Hero**-Layout an, wobei dein Header auf Hero umgestellt wird. Gibt einen Job zurück. Erfordert einen Premium-Tarif. |
-| `set_background_video` | Dasselbe für den Hintergrund deiner Seite. Gibt einen Job zurück. Erfordert einen Premium-Tarif. |
-| `get_media_job` | Einen Video-Job abfragen, bis er `ready` oder `failed` ist. |
-| `remove_hero_video` | Das Hero-Video von deiner Seite entfernen. |
-| `remove_background_video` | Das Hintergrund-Video von deiner Seite entfernen. |
-| `update_map` | Die Kartenkarte auf deiner Seite konfigurieren. |
-| `update_socials` | Deine Handles in sozialen Netzwerken aktualisieren. |
-| `configure_agenda` | Deine Terminplanung einrichten. |
-| `manage_offering` | Eine Leistung erstellen, aktualisieren oder löschen — einschließlich Combos und Online-Bezahlung (Anzahlung oder volle Zahlung). |
-| `manage_staff` | Ein Teammitglied erstellen, aktualisieren oder löschen. |
-| `manage_block` | Eine Sperrzeit erstellen oder löschen. |
-| `create_appointment` | Einen Termin buchen — optional für ein bestimmtes Teammitglied (`staffId`) oder einen bestehenden Kunden (`leadId`). |
-| `transition_appointment` | Den Status eines Termins ändern. |
-| `reschedule_appointment` | Einen Termin auf eine neue Zeit verschieben. |
-| `disconnect_agenda_google` | Google Calendar trennen. |
-| `manage_ai_assistant` | Deinen KI-Assistenten verwalten — Persona, Begrüßung, Lead-Erfassung, Tonfall. |
-| `set_review_hidden` | Eine Bewertung auf deiner öffentlichen Seite aus- oder einblenden. |
-| `create_lead` | Einen Lead/Kunden in deinem Namen registrieren. |
+<Warning>
+  Text, den Besucher oder Dritte geschrieben haben (Termine, Bewertungen, Leads,
+  die Warteliste und importierte Seiten), erreicht den Agenten als Daten.
+  Linkzee weist den Agenten an, darin gefundenen Anweisungen nie zu folgen, und
+  die Tools, die Geld bewegen oder Konten verändern, gibt es nur mit Schlüssel.
+</Warning>
 
 <CardGroup cols={2}>
+  <Card title="Eine Bio mit einem Agenten erstellen" icon="wand-magic-sparkles" href="/de/integrations/mcp/build-bio-with-agent">
+    Der vollständige Ablauf, von einer leeren Seite bis zur veröffentlichten Bio.
+  </Card>
+  <Card title="Dateien senden" icon="upload" href="/de/integrations/mcp/sending-files">
+    Fotos und Videos per URL oder per Upload-Link.
+  </Card>
   <Card title="MCP-Überblick" icon="robot" href="/de/integrations/mcp/overview">
     Wie KI-Agenten dein Linkzee in ganz normaler Sprache steuern.
   </Card>
   <Card title="API-Schlüssel" icon="key" href="/de/integrations/api/api-keys">
-    Erstelle einen Schlüssel und wähle den Berechtigungsbereich read oder write.
+    Erstelle einen Schlüssel und wähle seine Scopes.
   </Card>
 </CardGroup>

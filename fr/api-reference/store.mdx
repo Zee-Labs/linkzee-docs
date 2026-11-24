@@ -1,16 +1,14 @@
 ---
 title: Boutique
 icon: store
-description: "Lisez et modifiez le profil de la boutique, parcourez le catalogue de thèmes et récupérez un résumé des performances."
+description: "Lisez et modifiez le profil, le design et les paramètres de la boutique, parcourez le catalogue de thèmes et récupérez un résumé des performances."
 ---
 
 Une boutique porte une page publique : son nom, sa bio, ses identifiants de
-réseaux sociaux, son thème, ses champs SEO, ses pixels de suivi et ses paramètres
-marketing. Un même compte Linkzee peut réunir **plusieurs boutiques** : ces
-endpoints agissent donc toujours sur **une seule** d'entre elles — celle à
-laquelle votre clé d'API est liée. Ils vous permettent de lire le profil complet,
-d'appliquer des modifications, de lister les thèmes prêts à l'emploi et de
-récupérer un résumé rapide des performances.
+réseaux sociaux, son design, ses cartes spéciales, ses champs SEO, ses paramètres
+de suivi et de marketing. Un même compte Linkzee peut réunir **plusieurs
+boutiques**, ces endpoints agissent donc toujours sur **une seule** d'entre elles :
+celle à laquelle votre clé d'API est liée.
 
 Toutes les requêtes sont adressées à `https://api.linkz.ee` et doivent inclure
 votre clé d'API :
@@ -20,14 +18,10 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-  Les lectures fonctionnent avec n'importe quelle clé. Les modifications
-  nécessitent une clé disposant du scope **write**.
-</Note>
-
-<Note>
-  Pour travailler sur une autre boutique, utilisez une clé créée dans cette
-  boutique — voir
-  [Authentification](/fr/api-reference/authentication#sur-quelle-boutique-agit-une-cl%C3%A9).
+  Les lectures nécessitent la portée **read**. Les modifications nécessitent une
+  clé disposant de la portée **write**. Pour travailler sur une autre boutique,
+  utilisez une clé créée dans cette boutique. Voir
+  [Authentification](/fr/api-reference/authentication).
 </Note>
 
 ## Récupérer le profil de la boutique
@@ -36,8 +30,9 @@ Authorization: Bearer lzk_your_key
 GET /v1/store
 ```
 
-Renvoie le profil complet de la boutique à laquelle appartient la clé —
-identité, thème, réseaux sociaux, SEO et paramètres marketing.
+Renvoie la vue propriétaire de la boutique. C'est une **liste autorisée** : seuls
+les champs ci-dessous sont renvoyés, et jamais les secrets. C'est la même vue que
+celle renvoyée par l'outil MCP `get_store`.
 
 ### Requête
 
@@ -55,33 +50,72 @@ curl -X GET \
   "message": "Store loaded successfully",
   "data": {
     "id": "665f1c9a4b2e8a0012a3c9d1",
-    "slug": "achadinhos-da-gabi",
-    "name": "Achadinhos da Gabi",
-    "bio": "As melhores ofertas dos marketplaces, todo dia.",
+    "name": "Studio Ana",
+    "slug": "studioana",
+    "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+    "seoTitle": "Studio Ana | Brows and lashes",
+    "timezone": "America/Sao_Paulo",
+    "themeId": "editorial",
+    "overrides": ["buttons"],
+    "buttonStyle": "soft",
+    "buttonRadius": "rounded",
+    "headerLayout": "hero",
     "titleStyle": "text",
-    "themeId": "aurora",
-    "themeMode": "dark",
-    "socialsPosition": "top",
-    "socialOrder": ["instagram", "tiktok", "whatsapp"],
-    "productsPosition": "top",
-    "social": {
-      "instagram": "achadinhosdagabi",
-      "tiktok": "achadinhosdagabi"
+    "logoUrl": "https://cdn.linkz.ee/u/abc/logo.webp?v=1732190000000",
+    "headerSettings": {
+      "heroPhotoUrl": "https://cdn.linkz.ee/u/abc/hero-photo.webp?v=1732190000000"
     },
-    "seoTitle": "Achadinhos da Gabi",
-    "seoDescription": "Ofertas selecionadas de Shopee, Amazon e Mercado Livre.",
-    "gtmId": "GTM-ABC123",
-    "capiTokenConfigured": true,
-    "capiTokenPreview": "9f3a",
-    "isActive": true
+    "social": { "instagram": "studioana" },
+    "whatsapp": "5511999998888",
+    "socialsPosition": "top",
+    "socialOrder": ["whatsapp", "instagram"],
+    "socialCards": [],
+    "vitrineEnabled": true,
+    "vitrineStyle": "classic",
+    "vitrineLayout": "grid",
+    "mapAddress": "Rua dos Pinheiros 100, São Paulo",
+    "mapLayout": "card",
+    "servicesEnabled": true,
+    "reviewsBlock": { "added": true, "enabled": true, "layout": "carousel", "limit": 6, "minRating": 4 },
+    "publicPreferences": { "locale": "pt-BR", "translationFallback": "original" },
+    "pageHidden": false,
+    "publicUrl": "https://linkz.ee/studioana",
+    "tips": { "enabled": true, "pixKeyType": "random", "pixKeyPreview": "…9f3a", "recipientName": "Ana Souza" },
+    "agenda": { "enabled": true, "title": "Book a time", "timezone": "America/Sao_Paulo", "approvalMode": "auto" },
+    "leadWebhook": { "host": "hooks.example.com", "enabled": true },
+    "tracking": {
+      "metaPixelId": "123456789012345",
+      "tiktokPixelId": "",
+      "gaMeasurementId": "",
+      "gtmId": "GTM-ABC123",
+      "utmSource": "linkzee",
+      "utmMedium": "bio",
+      "utmCampaign": "",
+      "capiTokenConfigured": true
+    }
   }
 }
 ```
 
+### Ce que contient la vue
+
+| Groupe | Champs |
+| --- | --- |
+| Profil | `id`, `name`, `slug`, `bio`, `bioSignature`, `seoTitle`, `seoDescription`, `timezone`, `location`, `publicPreferences`, `publicUrl`, `pageHidden` |
+| Design | `themeId`, `overrides`, couleurs (`themeColor`, `buttonColor`, `buttonTextColor`, `buttonShadowColor`, `textColor`), `themeMode`, champs de fond (`background`, `bgColor2`, `bgFill`, `bgAngle`, `gradientPreset`, `bgAnimated`, `wallpaperUrl` et ses options, options aurora, mesh et pattern), boutons (`buttonStyle`, `buttonRadius`, `buttonShadow`, `buttonText`), `fontId`, `fontPairId`, `cardStyle`, `cardRadius`, `texture`, `motionLevel`, `stageMode`, `saleStyle`, `socialStyle`, `avatarFx`, `wallpaperVideo` |
+| En-tête | `headerLayout`, `titleStyle`, `logoUrl`, `bannerUrl`, `headerSettings` (`heroMedia`, `heroAvatar`, `shapeId`, `shapeColor`, `wordmarkUrl`, `heroPhotoUrl`, `cutoutUrl`, `heroVideo`) |
+| Réseaux sociaux | `social`, `whatsapp`, `socialsPosition`, `socialOrder`, `socialCards` |
+| Vitrine et cartes | `vitrineEnabled`, `vitrineStyle`, `gridDensity`, `vitrineLayout`, `vitrinePhotoFit`, `mapAddress`, `mapTheme`, `mapLayout`, `openingHours`, `servicesEnabled`, `packagesEnabled`, `instagramEnabled`, `googleReviewEnabled`, `googleReviewUrl`, `reviewsBlock` |
+| Assistant IA | `aiAssistantTone`, `aiEmoji` |
+| Pourboires PIX | `tips` sous forme de résumé : `enabled`, `pixKeyType`, `pixKeyPreview` (4 derniers caractères), `recipientName`. Jamais la clé. |
+| Agenda | Réglages `agenda` (sans données personnelles). |
+| Webhook de leads | `leadWebhook` avec uniquement `host` et `enabled`. Jamais le chemin ni le secret de signature. |
+| Suivi | `tracking` : identifiants des pixels, `gtmId`, UTM par défaut et `capiTokenConfigured`. Jamais le jeton de l'API Conversions. |
+
 <Note>
-  Le token de l'API Conversions n'est jamais renvoyé en entier — vous ne voyez
-  que `capiTokenConfigured` et les quatre derniers caractères dans
-  `capiTokenPreview`.
+  `pageHidden: true` signifie que la page publique est désactivée
+  (`isActive: false`). L'ancien champ racine `instagram` est encore renvoyé pour
+  les anciens lecteurs ; utilisez `social.instagram`.
 </Note>
 
 ## Modifier le profil de la boutique
@@ -91,7 +125,7 @@ PATCH /v1/store
 ```
 
 Modifie un ou plusieurs champs de la boutique. N'envoyez que les champs que vous
-souhaitez changer — tout ce que vous omettez reste inchangé. Les modifications
+souhaitez changer ; tout ce que vous omettez reste inchangé. Les modifications
 sont appliquées immédiatement sur la page publique.
 
 ### Requête
@@ -101,54 +135,83 @@ curl -X PATCH \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
   -d '{
-        "name": "Achadinhos da Gabi",
-        "bio": "As melhores ofertas dos marketplaces.",
-        "themeId": "aurora",
+        "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+        "themeId": "editorial",
         "socialsPosition": "top",
-        "seoTitle": "Achadinhos da Gabi"
+        "publicPreferences": { "locale": "en" }
       }' \
   https://api.linkz.ee/v1/store
 ```
 
 ### Paramètres
 
-Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
+Chaque champ est facultatif ; n'envoyez que ce que vous souhaitez changer.
 
 | Paramètre | Type | Description |
 | --- | --- | --- |
-| `name` | string | Nom d'affichage de la boutique (120 caractères max). |
-| `bio` | string | Courte description affichée sous le nom (500 caractères max). |
-| `bioSignature` | string | Signature facultative sur une ligne, affichée sous la bio (60 caractères max, sans saut de ligne). |
+| `name` | string | Nom d'affichage de la boutique (120 caractères max.). |
+| `bio` | string | Courte description affichée sous le nom (500 caractères max.). |
+| `bioSignature` | string | Signature sur une ligne sous la bio (60 caractères max., sans saut de ligne). |
 | `titleStyle` | string | Style du titre de l'en-tête : `text` ou `logo`. |
-| `logoUrl` | string | URL de l'image du logo (http/https). |
-| `bannerUrl` | string | URL de l'image de bannière (http/https). |
-| `themeId` | string | Id d'un thème prêt à l'emploi (voir [thèmes](#browse-the-theme-catalog)) ; une chaîne vide signifie un design personnalisé. |
-| `themeMode` | string | Mode de couleur : `dark` ou `light`. |
+| `logoUrl`, `bannerUrl`, `wallpaperUrl` | string | URL d'images. Envoyez-les d'abord avec [`POST /v1/uploads/image`](/fr/api-reference/uploads). |
+| `headerLayout` | string | `classic`, `hero`, `banner`, `cutout` ou `shape`. |
+| `headerSettings` | object | Détails de l'en-tête : `wordmarkUrl`, `heroPhotoUrl`, `cutoutUrl`, `heroMedia`, `heroAvatar`, `shapeId`, `shapeColor`, `frames` et `media` (les dispositions et emplacements hors de la liste autorisée sont écartés, et les valeurs sont bornées). |
+| `themeId` | string | Id d'un thème prêt à l'emploi (voir le catalogue de thèmes ci-dessous). |
+| `overrides` | string[] | Avancé : les sections de design personnalisées par-dessus `themeId`. |
+| Champs de design | divers | Les mêmes champs de design que l'outil MCP `update_design` : couleurs, `themeMode`, fond, boutons, `fontId`, `fontPairId`, `cardStyle`, `cardRadius`, `texture`, `motionLevel`, `stageMode`, `saleStyle`, `vitrineStyle`, `socialStyle`, `avatarFx`. |
+| `social` | object | Identifiants des réseaux sociaux, par exemple `{ "instagram": "handle", "tiktok": "handle" }`. Une chaîne vide retire un réseau. |
+| `whatsapp` | string | Numéro avec l'indicatif du pays, chiffres uniquement. |
 | `socialsPosition` | string | Emplacement de la rangée de réseaux sociaux : `top` ou `bottom`. |
-| `socialOrder` | string[] | Ordre d'affichage des réseaux sociaux. |
+| `socialOrder` | string[] | Ordre d'affichage des icônes de réseaux sociaux. Uniquement des clés de réseau valides (`whatsapp`, `instagram`, `tiktok`, `youtube` et les autres). |
 | `productsPosition` | string | Position de la vitrine par rapport aux liens : `top` ou `bottom`. |
-| `vitrineLayout` | string | Mise en page de la vitrine : `grid` (grille classique), `masonry` (mosaïque) ou `carousel` (une étagère horizontale par catégorie avec un « Voir tout » intégré). |
-| `vitrineStyle` | string | Style de la carte produit : `classic` (photo, texte et bouton empilés) ou `spotlight` (la photo remplit la carte ; nom, prix et bouton en verre par-dessus, plus la carte « À la une » et les catégories en photo). |
-| `mapLayout` | string | Affichage du bloc carte : `map` (carte ouverte) ou `card` (fiche d’adresse compacte avec « Itinéraire »). |
-| `agenda` | object | Paramètres de réservation (activation, titre, fuseau horaire, horaires d'ouverture, rappels et plus). Fusionné partiellement — n'envoyez que les clés que vous souhaitez changer. Voir la [référence Agenda](/fr/api-reference/agenda). |
-| `social` | object | Identifiants de réseaux sociaux, ex. `{ "instagram": "handle", "tiktok": "handle" }`. |
-| `seoTitle` | string | Titre de la page publique pour les moteurs de recherche (70 caractères max). |
-| `seoDescription` | string | Méta-description de la page publique (160 caractères max). |
-| `gtmId` | string | Id du conteneur Google Tag Manager, ex. `GTM-ABC123`. |
-| `utmSource` | string | Source UTM par défaut ajoutée aux liens sortants. |
-| `utmMedium` | string | Medium UTM par défaut. |
-| `utmCampaign` | string | Campagne UTM par défaut. |
+| `vitrineEnabled`, `vitrineLayout`, `vitrineStyle`, `gridDensity`, `vitrinePhotoFit` | divers | Réglages de la vitrine. `vitrineLayout` : `grid`, `masonry` ou `carousel`. `vitrineStyle` : `classic` ou `spotlight`. |
+| `servicesEnabled`, `packagesEnabled`, `instagramEnabled` | boolean | Active ou désactive les cartes des services, des forfaits et d'Instagram. |
+| `googleReviewEnabled`, `googleReviewUrl` | boolean, string | Carte d'avis Google (lien Google Maps, `g.page` ou `g.co`). |
+| `reviewsBlock` | object | Carte des avis : `added`, `enabled`, `layout`, `limit` (de 1 à 10), `minRating` (de 1 à 5). |
+| `mapAddress`, `mapTheme`, `mapLayout` | string | Carte de localisation. Un `mapAddress` vide la retire ; `mapLayout` vaut `map` ou `card`. |
+| `openingHours` | object | Le badge « ouvert maintenant » : `source`, `showStatus`, `week`, `closedDates`. |
+| `agenda` | object | Réglages de réservation, fusionnés partiellement. Voir la [référence Agenda](/fr/api-reference/agenda). |
+| `tips` | object | Carte de pourboires PIX : `enabled`, `pixKey`, `pixKeyType` (`email` ou `random`), `recipientName` (25 max.), `recipientCity` (15 max.), `message`, `amounts`, `thanksMessage`, `highlight`. Avec une clé, le nom et la ville sont obligatoires. Le propriétaire reçoit un e-mail lorsque la clé change. |
+| `timezone` | string | Fuseau horaire IANA, par exemple `America/Sao_Paulo`. Un nom invalide renvoie `400`. |
+| `location` | object | `countryCode` (ISO 2 lettres), `state`, `city`. Détermine le calendrier des jours fériés. |
+| `publicPreferences` | object | `locale` de la page publique (`pt-BR`, `en`, `es`, `fr`, `de`) et `translationFallback` (`original` ou `dashboardLocale`). **Fusionné** avec ce qui est enregistré : n'envoyer que `locale` conserve la valeur de secours. |
+| `seoTitle` | string | Titre de la page publique pour les moteurs de recherche (70 caractères max.). |
+| `seoDescription` | string | Méta-description de la page publique (160 caractères max.). |
+| `gtmId` | string | Id du conteneur Google Tag Manager, par exemple `GTM-ABC123`. |
+| `utmSource`, `utmMedium`, `utmCampaign` | string | Paramètres UTM par défaut ajoutés aux liens sortants. |
 | `pixels` | object | Ids des pixels de suivi : `metaPixelId`, `tiktokPixelId`, `gaMeasurementId`. |
-| `capiToken` | string | Token de l'API Conversions Meta. Envoyé en clair, stocké chiffré. Une valeur vide signifie « conserver l'actuel ». |
-| `isActive` | boolean | Indique si la page est publiée et en ligne. |
+| `capiToken` | string | Jeton de l'API Conversions de Meta. Envoyé en clair, stocké chiffré. Une valeur vide signifie « conserver l'actuel ». |
+| `isActive` | boolean | Indique si la page publique est en ligne. `false` la masque. |
+
+### Héritage du thème
+
+Les modifications via l'API suivent les mêmes règles que l'éditeur :
+
+- `themeId` **sans** `overrides` applique le thème prédéfini en repartant de
+  zéro : les personnalisations et le niveau d'animation enregistrés auparavant
+  sont réinitialisés.
+- Tout autre champ de design sur une boutique avec thème prédéfini personnalise
+  **uniquement sa section** (couleurs, fond d'écran, boutons, texte, dégradé,
+  carte, texture, animation), qui part de la palette du thème. Le reste continue
+  de suivre le thème.
+- Les couleurs identiques à la palette du thème ne comptent pas comme couleurs
+  personnalisées, elles ne déclenchent donc pas le contrôle premium. Les valeurs
+  payantes (boutons en verre, fonds image, mesh, duotone ou vidéo, dégradés
+  animés ou prédéfinis, couleurs personnalisées, polices payantes, `stageMode`)
+  renvoient `403` avec `code: "PLAN_REQUIRED"` sur une offre gratuite.
+- Envoyez `overrides` lorsque vous voulez lister vous-même les sections
+  personnalisées.
 
 <Warning>
   Le `slug` de la boutique ne peut pas être modifié via l'API. L'envoyer n'a
-  aucun effet — il est ignoré afin que votre lien de bio publié ne soit jamais
+  aucun effet : il est ignoré afin que votre lien de bio publié ne soit jamais
   cassé.
 </Warning>
 
 ### Réponse
+
+La réponse est la même vue en liste autorisée que `GET /v1/store`, plus
+`agentNotes` lorsqu'il y a quelque chose à signaler :
 
 ```json
 {
@@ -156,16 +219,31 @@ Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
   "message": "Store updated successfully",
   "data": {
     "id": "665f1c9a4b2e8a0012a3c9d1",
-    "slug": "achadinhos-da-gabi",
-    "name": "Achadinhos da Gabi",
-    "bio": "As melhores ofertas dos marketplaces.",
-    "themeId": "aurora",
+    "name": "Studio Ana",
+    "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+    "themeId": "editorial",
+    "overrides": [],
     "socialsPosition": "top",
-    "seoTitle": "Achadinhos da Gabi",
-    "isActive": true
+    "publicPreferences": { "locale": "en", "translationFallback": "original" },
+    "pageHidden": false,
+    "agentNotes": {
+      "warnings": []
+    }
   }
 }
 ```
+
+`agentNotes.warnings` liste les champs enregistrés mais pas encore visibles (par
+exemple un en-tête `cutout` sans image détourée, ou un `wallpaperUrl` sans fond
+de type image). Lorsque la clé PIX ou le numéro WhatsApp change, `agentNotes`
+indique aussi le changement avec uniquement les 4 derniers caractères.
+
+<Note>
+  L'ordre de la vitrine n'est pas un champ de la boutique. Il suit les plus
+  récents d'abord jusqu'au premier
+  [`PUT /v1/products/order`](/fr/api-reference/products) qui le modifie ; à
+  partir de là, la vitrine suit votre ordre manuel.
+</Note>
 
 ## Parcourir le catalogue de thèmes
 
@@ -173,9 +251,9 @@ Chaque champ est optionnel ; n'envoyez que ce que vous souhaitez changer.
 GET /v1/themes
 ```
 
-Liste les **15** thèmes prêts à l'emploi que vous pouvez appliquer avec `themeId`.
-Chaque entrée inclut une courte description pour vous aider à associer un style
-à l'esprit d'une boutique.
+Liste les **23** thèmes prêts à l'emploi que vous pouvez appliquer avec
+`themeId`. Chaque entrée inclut une courte description pour vous aider à associer
+un style à l'esprit d'une boutique, et `premium` pour les thèmes payants.
 
 ### Requête
 
@@ -196,31 +274,25 @@ curl -X GET \
       "id": "pure",
       "name": "Pure",
       "mode": "light",
-      "description": "Minimal light, near-white background, full focus on the products."
+      "description": "Minimal light, near-white background, full focus on the products.",
+      "premium": false
     },
     {
       "id": "noir",
       "name": "Noir",
       "mode": "dark",
-      "description": "Sober dark, graphite grey, elegant and neutral."
-    },
-    {
-      "id": "aurora",
-      "name": "Aurora",
-      "mode": "dark",
-      "description": "Animated violet/blue gradient, modern and premium."
+      "description": "Sober dark, graphite grey, elegant and neutral.",
+      "premium": false
     }
   ]
 }
 ```
 
-Le catalogue complet compte 15 thèmes : `pure`, `noir`, `gesso`, `solar`,
-`midnight`, `groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`,
-`brutalista`, `editorial` et `pista`.
+Le catalogue complet compte 23 thèmes. Gratuits : `pure`, `noir`, `gesso`, `solar`, `midnight`, `groove`, `carbon`, `oceano`, `neon`, `pessego`, `selva`, `aurora`, `brutalista`, `editorial`, `pista`. Payants : `motion-neon`, `motion-clean`, `motion-achadinhos`, `motion-boutique`, `onix`, `cinema`, `perola`, `iridescente`.
 
 <Note>
   Utilisez n'importe quel `id` de cette liste comme `themeId` lorsque vous
-  modifiez la boutique. Les `id` sont stables — `name` et `description` sont
+  modifiez la boutique. Les `id` sont stables ; `name` et `description` sont
   informatifs et renvoyés en anglais.
 </Note>
 
@@ -230,8 +302,8 @@ Le catalogue complet compte 15 thèmes : `pure`, `noir`, `gesso`, `solar`,
 GET /v1/analytics/summary
 ```
 
-Renvoie les indicateurs clés de la vitrine — les totaux ainsi que les produits
-les plus populaires et les plus récents.
+Renvoie les indicateurs clés de la vitrine : les totaux ainsi que les produits les
+plus populaires et les plus récents.
 
 ### Requête
 
@@ -254,7 +326,7 @@ curl -X GET \
     "topProducts": [
       {
         "id": "665f2a114b2e8a0012a3ca07",
-        "name": "Fone Bluetooth TWS",
+        "name": "Bluetooth earbuds",
         "price": 79.9,
         "clicks": 312
       }
@@ -262,7 +334,7 @@ curl -X GET \
     "latestProducts": [
       {
         "id": "665f2b884b2e8a0012a3ca19",
-        "name": "Luminária de mesa articulada",
+        "name": "Desk lamp",
         "price": 129.9,
         "clicks": 4
       }
@@ -281,12 +353,12 @@ curl -X GET \
 
 <CardGroup cols={2}>
   <Card title="Contenu" icon="table-cells" href="/fr/api-reference/content">
-    Lisez l'arborescence de contenu public et réorganisez les liens, collections et produits.
+    Lisez l'arborescence de contenu et réordonnez les liens, les collections et les cartes spéciales.
   </Card>
   <Card title="Produits" icon="box" href="/fr/api-reference/products">
-    Listez, créez, modifiez et supprimez les produits de la vitrine.
+    Listez, créez, modifiez, supprimez et réordonnez les produits de la vitrine.
   </Card>
   <Card title="Authentification" icon="lock" href="/fr/api-reference/authentication">
-    URL de base, clés d'API, scopes et le format de réponse standard.
+    URL de base, clés d'API, portées et le format de réponse standard.
   </Card>
 </CardGroup>

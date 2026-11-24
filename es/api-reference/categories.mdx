@@ -9,8 +9,14 @@ agrupar productos en secciones (por ejemplo **Cocina** o **Belleza**) que aparec
 chips de filtro en tu página pública.
 
 Todos los endpoints están bajo la URL base `https://api.linkz.ee` y requieren el
-encabezado `Authorization: Bearer lzk_your_key`. Las operaciones de lectura funcionan con cualquier clave;
+encabezado `Authorization: Bearer lzk_your_key`. Las operaciones de lectura necesitan el alcance **read**;
 crear, actualizar, eliminar y reordenar necesitan una clave con el alcance **write**.
+
+<Note>
+Una categoría con `isActive: false` oculta su chip en la página pública. Los agentes
+conectados por MCP leen las categorías con `list_categories` y las cambian con
+`manage_category` (`create`, `update`, `delete`, `reorder`).
+</Note>
 
 ## Listar categorías
 

@@ -1,12 +1,14 @@
 ---
 title: Links & Sammlungen
 icon: link
-description: "Verwalte die Links auf deiner Bio-Seite und gruppiere sie in Sammlungen."
+description: "Verwalte die Links und Medienblöcke auf deiner Bio-Seite und gruppiere sie in Sammlungen."
 ---
 
-Links sind die Buttons auf deiner Bio-Seite. Sammlungen sind die benannten Gruppen,
-in die du diese Buttons einsortieren kannst (zum Beispiel "Cozinha" oder "Favoritos").
-Diese Seite behandelt die Lese- und Schreiboperationen für beide.
+Links sind die Buttons auf deiner Bio-Seite. Medienblöcke (Vorher-Nachher,
+Galerie) sind ebenfalls Links, mit Fotos oder Videos statt eines Ziels.
+Sammlungen sind die benannten Gruppen, in die du diese Buttons einsortieren
+kannst (zum Beispiel "Kitchen" oder "Favorites"). Diese Seite behandelt die
+Lese- und Schreiboperationen für beide.
 
 **Basis-URL:** `https://api.linkz.ee` · jeder Pfad liegt unter `/v1`.
 Sende deinen Schlüssel bei jeder Anfrage mit:
@@ -16,8 +18,9 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-Lesevorgänge (`GET`) funktionieren mit jedem Schlüssel. Schreibvorgänge (`POST`, `PATCH`, `DELETE`, `PUT`) benötigen einen
-Schlüssel mit dem **write**-Scope. Sende Bodys als `application/json`.
+Lesevorgänge (`GET`) benötigen den Scope **read**. Schreibvorgänge (`POST`,
+`PATCH`, `DELETE`, `PUT`) benötigen einen Schlüssel mit dem Scope **write**.
+Sende Bodys als `application/json`.
 </Note>
 
 ## Links
@@ -28,7 +31,10 @@ Schlüssel mit dem **write**-Scope. Sende Bodys als `application/json`.
 GET /v1/links
 ```
 
-Gibt jeden Link auf deiner Seite in der Anzeigereihenfolge zurück.
+Gibt jeden Link auf deiner Seite in der Anzeigereihenfolge zurück,
+**einschließlich ausgeblendeter, geplanter und unfertiger** (zum Beispiel ein
+Medienblock, der noch auf seine Fotos wartet). Interne Speicherschlüssel von
+Videos werden nie zurückgegeben.
 
 #### Anfrage
 
@@ -48,8 +54,8 @@ curl -X GET \
     {
       "id": "507f1f77bcf86cd799439011",
       "collectionId": "66a3c0f2e1b2a40012ab34cd",
-      "title": "Meu Instagram",
-      "url": "https://instagram.com/minhaloja",
+      "title": "My Instagram",
+      "url": "https://instagram.com/mystore",
       "thumbnailUrl": "",
       "mediaType": "",
       "mediaUrl": "",
@@ -57,6 +63,8 @@ curl -X GET \
       "highlightFx": "",
       "order": 0,
       "isActive": true,
+      "scheduledStartAt": null,
+      "scheduledEndAt": null,
       "clicks": 128,
       "createdAt": "2026-07-01T14:02:11.000Z",
       "updatedAt": "2026-07-18T09:41:55.000Z"
@@ -64,6 +72,12 @@ curl -X GET \
   ]
 }
 ```
+
+<Tip>
+Das MCP-Tool `list_links` gibt dieselben Links in schlanker Form zurück, mit
+`published` und einem `reason` (`hidden`, `scheduled`, `missing_destination`,
+`missing_photos`, `pending_video`, `failed_video`) für jeden.
+</Tip>
 
 ### Einen Link erstellen
 
@@ -80,9 +94,11 @@ curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "Meu Instagram",
-    "url": "https://instagram.com/minhaloja",
-    "collectionId": "66a3c0f2e1b2a40012ab34cd"
+    "title": "Black Friday deals",
+    "url": "https://mystore.com/black-friday",
+    "collectionId": "66a3c0f2e1b2a40012ab34cd",
+    "scheduledStartAt": "2026-11-27T00:00:00-03:00",
+    "scheduledEndAt": "2026-11-30T23:59:00-03:00"
   }' \
   https://api.linkz.ee/v1/links
 ```
@@ -91,20 +107,30 @@ curl -X POST \
 
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `title` | string | Ja | Button-Beschriftung. Bis zu 120 Zeichen. |
-| `url` | string | Ja | Ziel-URL, einschließlich `https://`. |
-| `collectionId` | string | Nein | ID der Sammlung, zu der dieser Link gehört. Weglassen, um den Link ungruppiert zu lassen. |
-| `thumbnailUrl` | string | Nein | URL des Vorschaubilds. Lade das Bild zuerst hoch und übergib dann die zurückgegebene URL. |
-| `isActive` | boolean | Nein | Ob der Link auf deiner Seite sichtbar ist. Standardwert ist `true`. |
-| `isFeatured` | boolean | Nein | Zeigt den Link mit zusätzlicher Hervorhebung an. Standardwert ist `false`. |
+| `title` | string | Ja | Beschriftung des Buttons. Bis zu 120 Zeichen. |
+| `url` | string | Bedingt | Ziel, einschließlich `https://`, oder ein Kontaktkanal (`tel:`, `sms:`, `mailto:`). Erforderlich, außer `mediaType` ist `image`, `video`, `before_after` oder `gallery`. |
+| `collectionId` | string | Nein | ID der Sammlung, zu der dieser Link gehört. Lass es weg, um den Link ungruppiert zu lassen. Medienblöcke bleiben außerhalb von Sammlungen. |
+| `thumbnailUrl` | string | Nein | Kleines Bild neben dem Titel. Lade es mit `POST /v1/uploads/image` (`kind=link`) hoch oder übergib eine öffentliche URL, die in das Linkzee-CDN kopiert wird. |
+| `isActive` | boolean | Nein | Ob der Link auf deiner Seite sichtbar ist. Standard ist `true`. |
+| `isFeatured` | boolean | Nein | Zeigt den Link besonders hervorgehoben. Standard ist `false`. |
+| `emphasis` | string | Nein | `"cta"` macht den Link zum Hauptbutton der Seite; `""` ist ein normaler Button. |
 | `highlightFx` | string | Nein | Animierte Hervorhebung (Premium): `""` (keine), `"shake"`, `"shine"`, `"pulse"` oder `"bounce"`. |
-| `mediaType` | string | Nein | Stil des Cover-Mediums: `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` oder `"gallery"` (Fotoblöcke, Premium — siehe die englische Referenz für `mediaItems`). |
-| `galleryLayout` | string | Nein | `gallery`-Block: `"carousel"` (Standard), `"strip"` oder `"reel"` (vertikales 9:16-Schaufenster mit Vollbild-Viewer). |
-| `reelCta` | string | Nein | `reel`-Galerie: Standard-Button der Fotos ohne Service/Produkt — `"none"` (Standard) oder `"whatsapp"` (öffnet das WhatsApp des Shops mit dem Namen des Produkts und dem Foto-Link `https://linkz.ee/<slug>/look/<linkId>-<slot>` in der Nachricht, in der Sprache der Seite; benötigt die `whatsapp`-Nummer des Shops). Jedes Element von `mediaItems` kann `label`, `offeringId` (Service), `productId` (Produkt des Shops; öffnet den Produktlink mit gezähltem Klick) und `cta` (`"inherit"`, `"none"` oder `"whatsapp"`) tragen. Der Button wird pro Foto aufgelöst: Service → Produkt → WhatsApp → nichts. |
-| `mediaUrl` | string | Nein | URL des Cover-Mediums für den gewählten `mediaType`. |
-| `posterUrl` | string | Nein | URL des Poster-Bilds für ein Video-Cover. |
-| `scheduledStartAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), ab dem der Link erscheint. `null` löscht ihn. Beide `null` bedeutet immer sichtbar. |
-| `scheduledEndAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), zu dem der Link verschwindet. Muss nach `scheduledStartAt` liegen. `null` löscht ihn. |
+| `mediaType` | string | Nein | `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` (zwei Fotos mit verschiebbarer Kante) oder `"gallery"` (2 bis 10 Fotos). `before_after` und `gallery` sind Premium und verwenden `mediaItems`. |
+| `mediaUrl` | string | Nein | Titelbild der Karte. Für `embed` eine URL von YouTube, Vimeo, TikTok, Spotify oder Panda; das Titelbild kommt nur von diesem Anbieter. Für `image` und `video` eine URL des Linkzee-CDN (siehe den Hinweis unten). |
+| `posterUrl` | string | Nein | Poster eines Video-Titelbilds, eine URL des Linkzee-CDN. |
+| `caption` | string | Nein | Sichtbare Bildunterschrift einer Medienkarte (max. 160). Der `title` bleibt der interne Name. |
+| `subtitle` | string | Nein | Untertitel eines Ergebnisabschnitts (Medienblöcke). |
+| `mediaConsent` | boolean | Nein | Medienblöcke: bestätigt, dass du die Erlaubnis der fotografierten Personen hast. Erforderlich, bevor Fotos gespeichert werden; gespeichert als `mediaConsentAt`. |
+| `scheduledStartAt` | string \| null | Nein | Zeitpunkt, ab dem der Link erscheint, ISO 8601 **mit Offset**, zum Beispiel `2026-11-27T00:00:00-03:00` oder `2026-11-27T03:00:00Z`. `null` löscht ihn. |
+| `scheduledEndAt` | string \| null | Nein | Zeitpunkt, an dem der Link verschwindet, im selben Format. Muss nach `scheduledStartAt` liegen. `null` löscht ihn. Beide `null` bedeutet immer sichtbar. |
+
+<Note>
+Ein Kartentitelbild vom Typ `image` wird mit `POST /v1/uploads/image`
+(`kind=linkMedia`) hochgeladen, und die zurückgegebene URL kommt in `mediaUrl`.
+Ein **Kartenvideo** (`mediaType: "video"`) kann nicht von einer externen URL
+kommen: Es wird nur über einen Upload-Link und das MCP-Tool `set_link_media`
+gesendet.
+</Note>
 
 #### Antwort
 
@@ -115,17 +141,38 @@ curl -X POST \
   "data": {
     "id": "66b8f1aa77bcf86cd7994400",
     "collectionId": "66a3c0f2e1b2a40012ab34cd",
-    "title": "Meu Instagram",
-    "url": "https://instagram.com/minhaloja",
+    "title": "Black Friday deals",
+    "url": "https://mystore.com/black-friday",
     "isActive": true,
     "isFeatured": false,
+    "scheduledStartAt": "2026-11-27T03:00:00.000Z",
+    "scheduledEndAt": "2026-12-01T02:59:00.000Z",
     "order": 4,
     "clicks": 0,
-    "createdAt": "2026-07-21T11:20:03.000Z",
-    "updatedAt": "2026-07-21T11:20:03.000Z"
+    "createdAt": "2026-11-21T11:20:03.000Z",
+    "updatedAt": "2026-11-21T11:20:03.000Z"
   }
 }
 ```
+
+Daten werden in UTC gespeichert und zurückgegeben.
+
+### Medienblöcke
+
+Vorher-Nachher- und Galerieblöcke werden in drei Schritten erstellt:
+
+1. Erstelle den Link mit `mediaType` und **ohne** `url`. Er bleibt
+   unveröffentlicht.
+2. Lade jedes Foto mit `POST /v1/uploads/image` hoch (`kind=linkMediaSlot`,
+   `linkId`, `slot` 0 bis 9). Videoelemente einer Reel-Galerie verwenden
+   `POST /v1/uploads/video?kind=media` und geben eine `jobId` zurück.
+3. Aktualisiere den Link mit der vollständigen Liste `mediaItems` und
+   `mediaConsent: true`.
+
+Ein Block wird erst veröffentlicht, wenn er vollständig ist: genau 2 Fotos für
+`before_after`, 2 bis 10 Elemente für `gallery` (ein Video zählt, sobald es
+fertig ist). Beide sind Premium: Die API antwortet in kostenlosen Tarifen mit
+`403` und `code: "PLAN_REQUIRED"`.
 
 ### Einen Link aktualisieren
 
@@ -133,7 +180,8 @@ curl -X POST \
 PATCH /v1/links/{id}
 ```
 
-Ändert ein oder mehrere Felder eines bestehenden Links. Sende nur das, was du aktualisieren möchtest.
+Ändert ein oder mehrere Felder eines bestehenden Links. Sende nur, was du
+aktualisieren möchtest.
 
 #### Anfrage
 
@@ -141,7 +189,7 @@ PATCH /v1/links/{id}
 curl -X PATCH \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{ "title": "Sigo lá!", "isActive": false }' \
+  -d '{ "title": "Follow me!", "isActive": false }' \
   https://api.linkz.ee/v1/links/507f1f77bcf86cd799439011
 ```
 
@@ -150,18 +198,51 @@ curl -X PATCH \
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
 | `id` | string | Ja | Pfadparameter. ID des zu aktualisierenden Links. |
-| `title` | string | Nein | Neue Button-Beschriftung. Bis zu 120 Zeichen. |
-| `url` | string | Nein | Neue Ziel-URL, einschließlich `https://`. |
-| `collectionId` | string \| null | Nein | Verschiebt den Link in eine Sammlung oder sende `null`, um ihn aus seiner Sammlung zu entfernen. |
-| `thumbnailUrl` | string | Nein | Neue URL des Vorschaubilds. |
-| `isActive` | boolean | Nein | Link ein- oder ausblenden. |
-| `isFeatured` | boolean | Nein | Zusätzliche Hervorhebung umschalten. |
-| `highlightFx` | string | Nein | `""` (keine), `"shake"`, `"shine"`, `"pulse"` oder `"bounce"` (Premium). |
-| `mediaType` | string | Nein | `""`, `"image"`, `"video"` oder `"embed"`. |
-| `mediaUrl` | string | Nein | URL des Cover-Mediums. |
-| `posterUrl` | string | Nein | URL des Poster-Bilds für ein Video-Cover. |
-| `scheduledStartAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), ab dem der Link erscheint. `null` löscht ihn. |
-| `scheduledEndAt` | string \| null | Nein | Zeitplan: Zeitpunkt (ISO 8601, UTC), zu dem der Link verschwindet. Muss nach `scheduledStartAt` liegen. `null` löscht ihn. |
+| `title` | string | Nein | Neue Beschriftung des Buttons. Bis zu 120 Zeichen. |
+| `url` | string | Nein | Neues Ziel, einschließlich `https://`, oder `tel:`, `sms:`, `mailto:`. |
+| `collectionId` | string \| null | Nein | Verschiebt den Link in eine Sammlung, oder sende `null`, um ihn aus seiner Sammlung zu entfernen. |
+| `thumbnailUrl` | string | Nein | Neues Thumbnail. `""` entfernt es. |
+| `isActive` | boolean | Nein | Blendet den Link ein oder aus. |
+| `isFeatured` | boolean | Nein | Schaltet die besondere Hervorhebung um. |
+| `emphasis` | string | Nein | `"cta"` oder `""`. |
+| `highlightFx` | string | Nein | `""`, `"shake"`, `"shine"`, `"pulse"` oder `"bounce"` (Premium). |
+| `mediaType` | string | Nein | `""`, `"image"`, `"video"`, `"embed"`, `"before_after"` oder `"gallery"`. |
+| `mediaUrl` | string | Nein | Neues Titelbild (dieselben Regeln wie beim Erstellen). |
+| `posterUrl` | string | Nein | Neues Video-Poster. |
+| `caption` | string | Nein | Sichtbare Bildunterschrift einer Medienkarte (max. 160). |
+| `subtitle` | string | Nein | Untertitel eines Ergebnisabschnitts. |
+| `mediaItems` | array | Nein | Medienblöcke: die **vollständige** Liste der Elemente (sie ersetzt die gespeicherte). Siehe unten. |
+| `mediaLabels` | object | Nein | `before_after`: Beschriftungen `{ "before": "", "after": "" }` (je max. 24). Leer bedeutet den lokalisierten Standard. |
+| `mediaStartPct` | integer | Nein | `before_after`: wo die verschiebbare Kante startet, als Prozentsatz der Breite von links (10 bis 90, Standard 50). |
+| `mediaConsent` | boolean | Nein | Medienblöcke: Bestätigung der Erlaubnis (siehe Erstellen). |
+| `linkedOfferingId` | string \| null | Nein | Agenda-Leistung, die mit einem Ergebnisabschnitt verknüpft ist. |
+| `galleryLayout` | string | Nein | `gallery`: `"carousel"` (Standard), `"strip"` (3 Thumbnails unter einem Vorher-Nachher) oder `"reel"` (vertikales 9:16-Schaufenster mit Vollbildbetrachter). |
+| `reelCta` | string | Nein | Galerie `reel`: Standardbutton für Fotos ohne Leistung oder Produkt, `"none"` (Standard) oder `"whatsapp"` (öffnet das WhatsApp des Stores mit dem Produktnamen und dem Fotolink `https://linkz.ee/<slug>/look/<linkId>-<slot>`; benötigt die WhatsApp-Nummer des Stores). |
+| `scheduledStartAt` | string \| null | Nein | Wie beim Erstellen. |
+| `scheduledEndAt` | string \| null | Nein | Wie beim Erstellen. Das Ende muss nach dem Start bleiben, auch wenn du nur eines der beiden Daten sendest: Es wird mit dem bereits gespeicherten verglichen. |
+
+#### Elemente von `mediaItems`
+
+Jedes Element ist `{ slot, type?, url, w, h, alt?, frame?, label?, offeringId?, productId?, cta?, jobId? }`:
+
+- `slot` (0 bis 9) ist die stabile Datei-ID, die beim Upload verwendet wird;
+  die Reihenfolge im Array ist die Anzeigereihenfolge. Bei `before_after` ist
+  `[0]` vorher und `[1]` nachher.
+- `url`, `w` und `h` kommen von `POST /v1/uploads/image` mit
+  `kind=linkMediaSlot` für diesen Link und Slot.
+- `frame` `{ zoom 1 to 3, focalX 0 to 1, focalY 0 to 1 }` ist ein optionaler
+  Bildausschnitt, der auf der Seite angewendet wird; weggelassen bedeutet
+  zentriert.
+- In einer Galerie `reel` kann ein Element `label` (max. 40), `offeringId` (die
+  Leistung seines Buttons "Book this"), `productId` (öffnet den Produktlink über
+  die getrackte Weiterleitung) und `cta` (`"inherit"`, `"none"` oder
+  `"whatsapp"`) tragen. Der Button wird pro Element aufgelöst: Leistung, dann
+  Produkt, dann WhatsApp, dann keiner.
+- Ein Videoelement ist `{ "type": "video", "slot": 2, "jobId": "<job id>" }`.
+  Um ein bereits gespeichertes Video zu **behalten**, sende
+  `{ "type": "video", "slot": 2 }` ohne `jobId`: Das gespeicherte Video dieses
+  Slots bleibt erhalten.
+- Ein Slot, den du in der Liste weglässt, wird entfernt, Videos eingeschlossen.
 
 #### Antwort
 
@@ -171,11 +252,11 @@ curl -X PATCH \
   "message": "Link updated successfully",
   "data": {
     "id": "507f1f77bcf86cd799439011",
-    "title": "Sigo lá!",
-    "url": "https://instagram.com/minhaloja",
+    "title": "Follow me!",
+    "url": "https://instagram.com/mystore",
     "isActive": false,
     "order": 0,
-    "updatedAt": "2026-07-21T11:32:47.000Z"
+    "updatedAt": "2026-11-21T11:32:47.000Z"
   }
 }
 ```
@@ -217,7 +298,10 @@ curl -X DELETE \
 PUT /v1/links/order
 ```
 
-Legt die Anzeigereihenfolge deiner Links fest. Sende jede Link-ID mit ihrer neuen Position.
+Legt die Anzeigereihenfolge deiner Links fest. Sende jede Link-ID mit ihrer
+neuen Position. Es gelten dieselben Regeln wie beim
+[Neuordnen von Inhalten](/de/api-reference/content): Links, die du weglässt,
+behalten ihren Platz neben ihren alten Nachbarn.
 
 #### Anfrage
 
@@ -251,14 +335,20 @@ curl -X PUT \
 }
 ```
 
+### Einen Link vorausfüllen
+
+Um Titel und Bild einer beliebigen Seite zu lesen, bevor du einen Link
+erstellst, verwende [`POST /v1/links/parse`](/de/api-reference/import). Es wird
+nichts gespeichert.
+
 ## Sammlungen
 
-Sammlungen gruppieren deine Links in benannte Abschnitte auf der Seite. Eine Sammlung kann
-einen Namen, ein Emoji und eine kurze Beschreibung tragen.
+Sammlungen gruppieren deine Links in benannte Abschnitte auf der Seite. Eine
+Sammlung kann einen Namen, ein Emoji und eine kurze Beschreibung tragen.
 
 <Note>
-Sammlungen gruppieren ausschließlich **Links**. Um Produkte zu organisieren, verwende stattdessen Kategorien —
-siehe die Kategorien-Referenz.
+Sammlungen gruppieren nur **Links**. Um Produkte zu organisieren, verwende
+stattdessen Kategorien. Siehe die [Kategorien-Referenz](/de/api-reference/categories).
 </Note>
 
 ### Sammlungen auflisten
@@ -286,10 +376,10 @@ curl -X GET \
   "data": [
     {
       "id": "66a3c0f2e1b2a40012ab34cd",
-      "name": "Cozinha",
-      "slug": "cozinha",
+      "name": "Kitchen",
+      "slug": "kitchen",
       "emoji": "🍳",
-      "description": "Meus achados para a cozinha",
+      "description": "My kitchen finds",
       "isActive": true,
       "order": 0,
       "createdAt": "2026-06-28T18:10:00.000Z",
@@ -313,7 +403,7 @@ Fügt eine neue Gruppe hinzu, in die deine Links einsortiert werden können.
 curl -X POST \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{ "name": "Cozinha", "emoji": "🍳" }' \
+  -d '{ "name": "Kitchen", "emoji": "🍳" }' \
   https://api.linkz.ee/v1/collections
 ```
 
@@ -321,11 +411,11 @@ curl -X POST \
 
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
-| `name` | string | Nein | Anzeigename, 1–80 Zeichen. Bei Weglassen wird ein Slug für dich generiert. |
-| `slug` | string | Nein | URL-freundlicher Bezeichner, bis zu 60 Zeichen. Wird bei Weglassen aus `name` abgeleitet. |
+| `name` | string | Nein | Anzeigename, 1 bis 80 Zeichen. Wenn weggelassen, wird ein Slug für dich generiert. |
+| `slug` | string | Nein | URL-freundlicher Bezeichner, bis zu 60 Zeichen. Wird aus `name` abgeleitet, wenn weggelassen. |
 | `emoji` | string | Nein | Ein Emoji, das neben dem Namen angezeigt wird. Bis zu 16 Zeichen. |
 | `description` | string | Nein | Kurze Beschreibung. Bis zu 280 Zeichen. |
-| `isActive` | boolean | Nein | Ob die Sammlung sichtbar ist. Standardwert ist `true`. |
+| `isActive` | boolean | Nein | Ob die Sammlung sichtbar ist. Standard ist `true`. |
 | `order` | integer | Nein | Anzeigeposition. |
 
 #### Antwort
@@ -336,8 +426,8 @@ curl -X POST \
   "message": "Collection created successfully",
   "data": {
     "id": "66a3c0f2e1b2a40012ab34cd",
-    "name": "Cozinha",
-    "slug": "cozinha",
+    "name": "Kitchen",
+    "slug": "kitchen",
     "emoji": "🍳",
     "description": "",
     "isActive": true,
@@ -354,7 +444,8 @@ curl -X POST \
 PATCH /v1/collections/{id}
 ```
 
-Ändert ein oder mehrere Felder einer Sammlung. Sende nur das, was du aktualisieren möchtest.
+Ändert ein oder mehrere Felder einer Sammlung. Sende nur, was du aktualisieren
+möchtest.
 
 #### Anfrage
 
@@ -362,7 +453,7 @@ PATCH /v1/collections/{id}
 curl -X PATCH \
   -H "Authorization: Bearer lzk_your_key" \
   -H "Content-Type: application/json" \
-  -d '{ "name": "Cozinha & Casa", "emoji": "🏠" }' \
+  -d '{ "name": "Kitchen and home", "emoji": "🏠" }' \
   https://api.linkz.ee/v1/collections/66a3c0f2e1b2a40012ab34cd
 ```
 
@@ -371,11 +462,11 @@ curl -X PATCH \
 | Parameter | Typ | Erforderlich | Beschreibung |
 | --- | --- | --- | --- |
 | `id` | string | Ja | Pfadparameter. ID der zu aktualisierenden Sammlung. |
-| `name` | string | Nein | Neuer Anzeigename, 1–80 Zeichen. |
+| `name` | string | Nein | Neuer Anzeigename, 1 bis 80 Zeichen. |
 | `slug` | string | Nein | Neuer Slug, bis zu 60 Zeichen. |
 | `emoji` | string | Nein | Neues Emoji. Bis zu 16 Zeichen. |
 | `description` | string | Nein | Neue Beschreibung. Bis zu 280 Zeichen. |
-| `isActive` | boolean | Nein | Sammlung ein- oder ausblenden. |
+| `isActive` | boolean | Nein | Blendet die Sammlung ein oder aus. |
 | `order` | integer | Nein | Neue Anzeigeposition. |
 
 #### Antwort
@@ -386,8 +477,8 @@ curl -X PATCH \
   "message": "Collection updated successfully",
   "data": {
     "id": "66a3c0f2e1b2a40012ab34cd",
-    "name": "Cozinha & Casa",
-    "slug": "cozinha",
+    "name": "Kitchen and home",
+    "slug": "kitchen",
     "emoji": "🏠",
     "isActive": true,
     "order": 0,
@@ -402,8 +493,8 @@ curl -X PATCH \
 DELETE /v1/collections/{id}
 ```
 
-Entfernt eine Sammlung. Die darin enthaltenen Links werden nicht gelöscht — sie werden einfach
-ungruppiert, bis du sie neu zuweist.
+Entfernt eine Sammlung. Die Links darin werden nicht gelöscht: Sie werden
+ungruppiert, bis du sie neu zuordnest.
 
 #### Anfrage
 
@@ -469,21 +560,21 @@ curl -X PUT \
 ```
 
 <Warning>
-IDs sind für dein Konto eindeutig. Eine Anfrage nach einem Link oder einer Sammlung, die auf deiner Seite nicht
-existiert, gibt `404 Not Found` zurück.
+IDs sind für deinen Store eindeutig. Eine Anfrage für einen Link oder eine
+Sammlung, die auf deiner Seite nicht existiert, gibt `404 Not Found` zurück.
 </Warning>
 
 ## Verwandte Seiten
 
 <CardGroup cols={2}>
-  <Card title="Produkte" icon="box" href="/de/api-reference/products">
-    Erstelle und verwalte die Produkte in deiner Vitrine.
-  </Card>
-  <Card title="Kategorien" icon="layer-group" href="/de/api-reference/categories">
-    Organisiere Produkte mit Produktkategorien.
-  </Card>
   <Card title="Inhaltsbaum" icon="table-cells" href="/de/api-reference/content">
-    Lies deinen gesamten Seiteninhalt und ordne ihn neu an.
+    Lies den Inhalt deiner Seite und ordne ihn neu an, Spezialkarten eingeschlossen.
+  </Card>
+  <Card title="Uploads" icon="image" href="/de/api-reference/uploads">
+    Thumbnails, Titelbilder und Blockfotos.
+  </Card>
+  <Card title="Import" icon="file-import" href="/de/api-reference/import">
+    Importiere eine Linktree-Seite und fülle Links vorab aus.
   </Card>
   <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
     Schlüssel, Scopes, Antwortformat und Statuscodes.

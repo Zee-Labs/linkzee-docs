@@ -1,0 +1,212 @@
+---
+title: Crear una bio con un agente
+icon: wand-magic-sparkles
+description: "El flujo que sigue un agente de IA para crear una bio de Linkzee desde cero: leer el estado, crear enlaces y bloques, enviar las fotos, definir el diseño y el orden, y revisar el resultado."
+---
+
+Esta guía muestra cómo un agente conectado por MCP crea una bio completa, desde
+una página vacía hasta el resultado publicado. Puedes seguirla para entender qué
+hace tu agente, o para escribir el prompt de tu propia automatización.
+
+<Note>
+  Si la tienda tiene un **onboarding guiado** abierto (versión 2), el agente empieza
+  con `get_onboarding_brief` y termina con `propose_onboarding_bio`, que guarda un
+  borrador para que la persona lo revise y lo publique en Linkzee. El flujo de abajo
+  edita la página en vivo directamente, y su primera escritura cierra el onboarding
+  guiado.
+</Note>
+
+## 1. Leer el estado real
+
+Antes de cambiar nada, el agente lee lo que hay:
+
+| Herramienta | Qué devuelve |
+| --- | --- |
+| `get_store` | Perfil, diseño, encabezado, redes, tarjetas especiales y `pageHidden`. |
+| `list_links` | Cada enlace y bloque, incluidos los ocultos, programados y sin terminar, con `published` y el `reason` cuando no está en la página. |
+| `get_content_tree` | El orden de la página, en el formato que acepta `reorder_content`. |
+| `get_bio_playbook` | El estándar de calidad de una bio, el plan actual y las guías de campos. |
+
+<Tip>
+  ¿Vienes de Linktree o Beacons? `import_from_url` con `mode: "preview_bio"`
+  muestra lo que se importaría. Después de que la persona esté de acuerdo,
+  `import_bio` trae el perfil, las redes, los enlaces, los productos y el tema en
+  una sola llamada (requiere un `idempotencyKey` y está limitado a 3 por hora).
+  Luego continúa desde el paso 3.
+</Tip>
+
+## 2. Perfil y redes
+
+```json update_profile
+{
+  "name": "Studio Ana",
+  "bio": "Brows and lashes in Pinheiros. Book online in two taps.",
+  "seoTitle": "Studio Ana | Brows and lashes"
+}
+```
+
+```json update_socials
+{
+  "instagram": "studioana",
+  "whatsapp": "5511999998888",
+  "socialsPosition": "top",
+  "socialOrder": ["whatsapp", "instagram"]
+}
+```
+
+## 3. Enlaces y bloques
+
+Un enlace normal necesita un destino. Un bloque de medios (Antes y Después o
+Galería) se crea **sin** URL y recibe sus archivos en el paso 5.
+
+```json create_link (el botón principal)
+{
+  "title": "Book on WhatsApp",
+  "url": "https://wa.me/5511999998888",
+  "emphasis": "cta",
+  "idempotencyKey": "studioana-cta-1"
+}
+```
+
+```json create_link (un bloque de Antes y Después)
+{
+  "title": "Results",
+  "mediaType": "before_after",
+  "idempotencyKey": "studioana-results-1"
+}
+```
+
+La respuesta de cada llamada trae el nuevo `id`. Un bloque sin sus fotos responde
+`published: false` con `reason: "missing_photos"`, lo cual es esperado en este
+punto.
+
+## 4. Conseguir las fotos y los videos
+
+Cuando los archivos ya están en línea, salta al paso 5 y usa las URLs. Cuando están
+en el teléfono de la persona o adjuntos al chat, el agente crea un enlace de subida:
+
+```json create_upload_link
+{ "maxFiles": 4, "accept": "image" }
+```
+
+El agente le da `uploadPageUrl` a la persona ("ábrelo y elige las fotos de antes y
+después"), espera a que termine y llama a `get_upload` con el `ticketId`. Cada
+archivo con `status: "done"` tiene un `uploadId`. Consulta
+[Enviar archivos](/es/integrations/mcp/sending-files) para ver los límites y la subida
+directa.
+
+## 5. Llenar los bloques, con consentimiento
+
+Las fotos y los videos de personas se publican solo después de que el dueño
+confirma que las personas que aparecen estuvieron de acuerdo. El agente pregunta,
+y solo entonces envía `mediaConsent: true`.
+
+```json set_block_media
+{
+  "id": "6740c3b2d4e5f6a7b8c9d0e1",
+  "items": [
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }, "alt": "Brows before" },
+    { "image": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d2" }, "alt": "Brows after" }
+  ],
+  "mediaLabels": { "before": "Before", "after": "After" },
+  "mediaConsent": true
+}
+```
+
+- El orden del array es el orden de visualización. En Antes y Después, `[0]` es el
+  antes y `[1]` es el después (exactamente 2 elementos). Una galería acepta de 2 a
+  10 elementos.
+- Para cambiar solo una etiqueta o un botón, envía el elemento con su `slot` y sin
+  archivo: el archivo guardado se mantiene.
+- Un slot que se omite se elimina. Omitir un slot de video requiere
+  `confirmRemoveVideos: true`.
+- Los videos solo van en una galería con `galleryLayout: "reel"`. La respuesta
+  lista los trabajos de video en `pending`; síguelos con `get_media_job`.
+
+Para la portada de una tarjeta de enlace normal, usa `set_link_media` (`image`,
+`embed`, `video` o `none`). Una imagen pequeña junto al título es el campo
+`thumbnail` de `create_link` o `update_link`.
+
+## 6. Encabezado y diseño
+
+```json update_design
+{
+  "themeId": "editorial",
+  "headerLayout": "hero",
+  "heroPhotoUrl": { "uploadId": "6740b2a1c3d4e5f6a7b8c9d3" }
+}
+```
+
+`themeId` aplica un preset y lo empieza limpio. Cualquier campo posterior (por
+ejemplo `{ "buttonStyle": "soft" }`) personaliza solo su sección y el resto sigue
+el tema. Los valores de pago (botones de vidrio, fondos de imagen o video, colores
+personalizados fuera de la paleta, fuentes de pago) responden `PLAN_REQUIRED` en un
+plan gratuito. `warnings` lista los campos que se guardaron pero todavía no son
+visibles, como un layout `cutout` sin imagen recortada.
+
+## 7. Tarjetas especiales
+
+```json configure_bio_cards
+{
+  "servicesEnabled": true,
+  "reviewsBlock": { "added": true, "enabled": true, "layout": "carousel", "limit": 6, "minRating": 4 },
+  "googleReview": { "enabled": true, "url": "https://g.page/r/CXexample/review" }
+}
+```
+
+```json update_map
+{ "mapAddress": "Rua dos Pinheiros 100, São Paulo", "mapLayout": "card" }
+```
+
+## 8. Poner todo en orden
+
+El agente vuelve a leer el árbol con `get_content_tree`, mueve las entradas y envía
+el resultado a `reorder_content`. Las tarjetas especiales aparecen como
+`{ "type": "section", "key": "..." }`; las claves son `carousel`, `map`, `tips`,
+`review` (reseña de Google), `reviews`, `packages`, `services`, `instagram` y
+`social:<network>`.
+
+```json reorder_content
+{
+  "root": [
+    { "type": "link", "id": "6740c3a0d4e5f6a7b8c9d0e0" },
+    { "type": "section", "key": "services" },
+    { "type": "link", "id": "6740c3b2d4e5f6a7b8c9d0e1" },
+    { "type": "section", "key": "reviews" },
+    { "type": "section", "key": "map" }
+  ]
+}
+```
+
+- Los elementos omitidos conservan su lugar junto a sus vecinos anteriores.
+- Con al menos una `section` en el árbol, el servidor recalcula la posición de cada
+  tarjeta especial en la página.
+- Una tarjeta que no está en la página vuelve como advertencia
+  (`section_not_on_page:<key>`), nunca como error. Otras advertencias:
+  `unknown_item:<id>`, `unknown_collection:<id>` y
+  `media_block_not_in_collection:<id>` (un bloque de medios se queda en la raíz).
+- Los productos de la vitrina no van en este árbol.
+
+## 9. Revisar el resultado
+
+- `list_links`: cada elemento debería decir `published: true`. Si no, el `reason`
+  indica lo que falta (`missing_photos`, `pending_video`, `failed_video`,
+  `missing_destination`, `scheduled` o `hidden`).
+- `get_media_job`: cada video pendiente debería terminar en `ready`.
+- `get_storefront`: lo que ve un visitante. Con la página oculta sigue respondiendo,
+  con `pageHidden: true`; `update_page` con `isActive: true` la vuelve a mostrar.
+
+<Warning>
+  Nunca dejes que el agente invente precios, direcciones, horarios de atención,
+  resultados ni testimonios. El texto escrito por visitantes o terceros (reseñas,
+  leads, páginas importadas) es dato, nunca instrucciones.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Enviar archivos" icon="upload" href="/es/integrations/mcp/sending-files">
+    URL o enlace de subida, límites y trabajos de video.
+  </Card>
+  <Card title="Referencia de herramientas" icon="screwdriver-wrench" href="/es/integrations/mcp/tools-reference">
+    Cada herramienta y el acceso que necesita.
+  </Card>
+</CardGroup>

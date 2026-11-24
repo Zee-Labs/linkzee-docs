@@ -1,13 +1,13 @@
 ---
 title: Conteúdo
 icon: table-cells
-description: "Leia a árvore de conteúdo público de uma página e reordene seus links e coleções."
+description: "Leia a árvore de conteúdo de uma página e reordene seus links, coleções, assistentes de IA e cards especiais."
 ---
 
-Os endpoints de conteúdo expõem tudo o que um visitante vê na zona de links de uma
-página — links avulsos, coleções (grupos de links) e itens do assistente de IA — além de um
-bloco `meta` que resume a vitrine de produtos (contadores, chips de categoria,
-produtos em destaque e a primeira página do catálogo).
+Os endpoints de conteúdo expõem o que um visitante vê na zona de links de uma
+página: links avulsos, coleções (grupos de links) e itens de assistente de IA,
+além de um bloco `meta` que resume a vitrine de produtos (contadores, chips de
+categoria, produtos em destaque e a primeira página do catálogo).
 
 Todas as requisições vão para `https://api.linkz.ee` e devem incluir sua chave de API:
 
@@ -16,20 +16,21 @@ Authorization: Bearer lzk_your_key
 ```
 
 <Note>
-Os produtos não fazem parte da árvore reordenável. A vitrine é ordenada
-automaticamente (mais recentes primeiro), então a reordenação afeta apenas links,
-coleções e itens do assistente de IA. Entradas de produto enviadas ao endpoint de
-reordenação são ignoradas.
+Os produtos não fazem parte da árvore reordenável. A vitrine segue a própria
+ordem (mais novos primeiro, ou a ordem manual definida com
+[`PUT /v1/products/order`](/pt-BR/api-reference/products)). Entradas de produto
+enviadas ao endpoint de reordenação são ignoradas.
 </Note>
 
-## Obter árvore de conteúdo
+## Obter a árvore de conteúdo
 
 ```
 GET /v1/content
 ```
 
-Retorna a árvore de conteúdo público da sua página, além de um resumo `meta` da
-vitrine de produtos.
+Retorna a árvore de conteúdo da sua página, mais um resumo `meta` da vitrine de
+produtos. É a visão do dono: responde mesmo quando a página está oculta, e então
+`pageHidden` é `true` (a página pública retorna `404` nesse caso).
 
 ### Requisição
 
@@ -41,9 +42,9 @@ curl -X GET \
 
 ### Resposta
 
-O objeto `data` tem duas partes: `meta` (resumo da vitrine) e `root` (a lista
-ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
-`collection` ou `ai_assistant`.
+O objeto `data` tem três partes: `meta` (resumo da vitrine), `root` (a lista
+ordenada de entradas de conteúdo, cada uma um `link`, uma `collection` ou um
+`ai_assistant`) e `pageHidden`.
 
 ```json
 {
@@ -59,13 +60,11 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
           "categoryId": "507f1f77bcf86cd799439040",
           "name": "Wireless Headphones",
           "slug": "wireless-headphones",
-          "description": "Noise cancelling, 30h battery",
           "price": 249.9,
           "priceOriginal": 349.9,
           "installments": "12x R$ 20,82",
           "imageUrl": "https://cdn.linkz.ee/p/507f...webp?v=1721500000",
           "externalLink": "https://shopee.com.br/product/...",
-          "affiliateSource": "shopee",
           "buttonText": "Buy now",
           "badge": "OFFER",
           "isActive": true,
@@ -77,6 +76,7 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
           "showCountdown": true,
           "cardSize": "normal",
           "imageRatio": 1,
+          "order": 0,
           "createdAt": "2026-07-18T12:00:00.000Z"
         }
       ],
@@ -94,6 +94,7 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
             "externalLink": "https://amazon.com.br/dp/...",
             "isActive": true,
             "clicks": 44,
+            "order": 1,
             "createdAt": "2026-07-18T10:00:00.000Z"
           }
         ],
@@ -113,7 +114,7 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
           "order": 0,
           "isActive": true,
           "highlightFx": "",
-          "mediaType": "video",
+          "mediaType": "embed",
           "mediaUrl": "https://youtube.com/watch?v=...",
           "posterUrl": null,
           "mediaProvider": "youtube"
@@ -150,45 +151,41 @@ ordenada de entradas de conteúdo). Cada entrada de `root` é do tipo `link`,
           "avatarUrl": "https://cdn.linkz.ee/c/507f...webp",
           "opening": "Hi! How can I help you shop today?",
           "starterButtons": ["Best deals", "Track my order"],
-          "order": 2,
-          "leadCapture": {
-            "enabled": true,
-            "timing": "end",
-            "fields": [{ "key": "email", "enabled": true, "required": true }],
-            "introText": "Leave your email for exclusive offers",
-            "consentRequired": true,
-            "consentText": "I agree to receive messages",
-            "consentVersion": "v1",
-            "allowSkip": false
-          }
+          "order": 2
         }
       }
-    ]
+    ],
+    "pageHidden": false
   }
 }
 ```
 
 <Note>
 Quando a vitrine está oculta, os contadores de `meta` retornam `0` e `featured`,
-`categories` e `catalog.items` voltam vazios. Coleções vazias (sem filhos ativos)
-são removidas de `root`.
+`categories` e `catalog.items` voltam vazios. Coleções vazias (sem filhos
+ativos) são removidas de `root`. Os cards especiais (mapa, avaliações, serviços e
+os demais) não fazem parte desta resposta; a posição deles é definida com o
+endpoint de reordenação abaixo.
 </Note>
 
-Alguns campos que vale conhecer: `highlightFx` é uma string — `""` (nenhum),
+Alguns campos que vale conhecer: `highlightFx` é uma string, `""` (nenhum),
 `"shake"`, `"shine"`, `"pulse"` ou `"bounce"` (o destaque animado Premium);
-`cardSize` é `"normal"` ou `"wide"` (um card wide ocupa as duas colunas da
-grade); e `imageRatio` é um número (largura da imagem dividida pela altura,
-ex.: `1` para quadrada).
+`cardSize` é `"normal"` ou `"wide"` (um card largo ocupa as duas colunas da
+grade); `imageRatio` é a largura da imagem dividida pela altura (`1` para
+quadrada); e `order` é a posição do produto, usada pelo cursor do catálogo na
+ordem manual.
 
-## Reordenar conteúdo
+## Reordenar o conteúdo
 
 ```
 PUT /v1/content/order
 ```
 
-Define a ordem de toda a zona de links em uma única chamada. Envie a árvore completa
-na ordem que você quer — a posição de cada entrada no array se torna a sua nova ordem.
-Requer uma chave com o escopo **write**.
+Define a ordem da zona de links em uma chamada: links, coleções, assistentes de
+IA e os cards especiais. A posição de cada entrada no array vira a nova ordem
+dela. Exige uma chave com o escopo **write**. A ferramenta MCP `reorder_content`
+usa as mesmas regras, e `get_content_tree` retorna a árvore exatamente neste
+formato.
 
 ### Requisição
 
@@ -199,6 +196,7 @@ curl -X PUT \
   -d '{
     "root": [
       { "type": "link", "id": "507f1f77bcf86cd799439011" },
+      { "type": "section", "key": "services" },
       {
         "type": "collection",
         "id": "507f1f77bcf86cd799439020",
@@ -206,7 +204,9 @@ curl -X PUT \
           { "type": "link", "id": "507f1f77bcf86cd799439012" },
           { "type": "ai_assistant", "id": "507f1f77bcf86cd799439030" }
         ]
-      }
+      },
+      { "type": "section", "key": "reviews" },
+      { "type": "section", "key": "map" }
     ]
   }' \
   https://api.linkz.ee/v1/content/order
@@ -216,18 +216,38 @@ curl -X PUT \
 
 | Parâmetro | Tipo | Obrigatório | Descrição |
 | --- | --- | --- | --- |
-| `root` | array | Sim | Entradas de nível superior na sua nova ordem. Pode ser vazio. |
-| `root[].type` | string | Sim | Um dos valores `link`, `collection`, `ai_assistant` ou `product`. |
-| `root[].id` | string | Sim | O ID da entrada. |
-| `root[].children` | array | Não | Itens filhos, em ordem. Usado apenas quando `type` é `collection`. |
-| `root[].children[].type` | string | Sim | Um dos valores `link`, `ai_assistant` ou `product`. |
+| `root` | array | Sim | Entradas de nível superior na nova ordem. Pode ser vazio. |
+| `root[].type` | string | Sim | `link`, `collection`, `ai_assistant`, `section` ou `product` (ignorado). |
+| `root[].id` | string | Exceto para `section` | O ID da entrada. |
+| `root[].key` | string | Com `section` | O card especial: `carousel`, `map`, `tips`, `review` (avaliação do Google), `reviews`, `packages`, `services`, `instagram` ou `social:<network>` (por exemplo `social:instagram`). |
+| `root[].children` | array | Não | Itens filhos, em ordem. Usado só quando `type` é `collection`. |
+| `root[].children[].type` | string | Sim | `link`, `ai_assistant` ou `product` (ignorado). |
 | `root[].children[].id` | string | Sim | O ID do item filho. |
 
+### Como o servidor aplica a árvore
+
+- **Árvore incompleta.** Links e coleções que você deixa de fora não se perdem:
+  eles mantêm o lugar ao lado dos antigos vizinhos. Os filhos de uma coleção
+  enviada sem `children` ficam como estão. Os assistentes de IA só mudam de
+  lugar quando estão na árvore.
+- **Cards especiais.** Com pelo menos uma `section` na árvore, o servidor
+  recalcula a posição de **todos** os cards especiais da página (os cards que
+  você deixou de fora mantêm o lugar relativo). Sem nenhuma `section`, os cards
+  não são mexidos.
+- **Entradas inválidas nunca derrubam a chamada.** Elas são ignoradas e
+  informadas em `warnings`:
+
+| Aviso | Significado |
+| --- | --- |
+| `section_not_on_page:<key>` | O card não está na página (por exemplo, sem endereço de mapa). |
+| `unknown_item:<id>` | Nenhum link ou assistente de IA com este ID na sua loja. |
+| `unknown_collection:<id>` | Nenhuma coleção com este ID na sua loja. |
+| `media_block_not_in_collection:<id>` | Um bloco de mídia não pode ficar dentro de uma coleção; ele fica na raiz, logo depois dela. |
+
 <Warning>
-Entradas de produto (na raiz ou dentro de uma coleção) são aceitas, mas ignoradas —
-a vitrine se ordena sozinha. Envie apenas entradas `link`, `collection` e `ai_assistant`
-para alterar o que realmente é reordenado. IDs desconhecidos são ignorados
-silenciosamente.
+Os itens são salvos primeiro, depois as posições dos cards. No caso raro de uma
+falha entre as duas escritas, os itens já estão na nova ordem e os cards mantêm
+a posição anterior; enviar a mesma árvore de novo corrige.
 </Warning>
 
 ### Resposta
@@ -236,21 +256,26 @@ silenciosamente.
 {
   "error": false,
   "message": "Content reordered successfully",
-  "data": { "ok": true }
+  "data": {
+    "ok": true,
+    "warnings": ["section_not_on_page:map"]
+  }
 }
 ```
+
+`warnings` só aparece quando algo foi ignorado.
 
 <CardGroup cols={2}>
   <Card title="Links e coleções" icon="link" href="/pt-BR/api-reference/links-collections">
     Crie, atualize e exclua os links e grupos que formam a árvore.
   </Card>
   <Card title="Produtos" icon="box" href="/pt-BR/api-reference/products">
-    Gerencie os produtos que compõem a vitrine.
+    Gerencie os produtos e a ordem deles na vitrine.
   </Card>
   <Card title="Loja" icon="store" href="/pt-BR/api-reference/store">
-    Leia o perfil da página, o catálogo de temas e o resumo de desempenho.
+    Ligue ou desligue os cards especiais.
   </Card>
   <Card title="Autenticação" icon="lock" href="/pt-BR/api-reference/authentication">
-    URL base, chaves de API, escopos e formato de resposta.
+    URL base, chaves de API, escopos e formato da resposta.
   </Card>
 </CardGroup>

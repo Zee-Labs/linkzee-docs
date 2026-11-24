@@ -210,6 +210,8 @@
                   "integrations/mcp/overview",
                   "integrations/mcp/claude",
                   "integrations/mcp/chatgpt-and-others",
+                  "integrations/mcp/build-bio-with-agent",
+                  "integrations/mcp/sending-files",
                   "integrations/mcp/tools-reference"
                 ]
               }
@@ -222,7 +224,8 @@
                 "group": "Overview",
                 "pages": [
                   "api-reference/authentication",
-                  "api-reference/rate-limits"
+                  "api-reference/rate-limits",
+                  "api-reference/changelog"
                 ]
               },
               {
@@ -237,6 +240,7 @@
                   "api-reference/ai-assistant",
                   "api-reference/leads",
                   "api-reference/uploads",
+                  "api-reference/import",
                   "api-reference/knowledge"
                 ]
               }
@@ -429,6 +433,8 @@
                   "pt-BR/integrations/mcp/overview",
                   "pt-BR/integrations/mcp/claude",
                   "pt-BR/integrations/mcp/chatgpt-and-others",
+                  "pt-BR/integrations/mcp/build-bio-with-agent",
+                  "pt-BR/integrations/mcp/sending-files",
                   "pt-BR/integrations/mcp/tools-reference"
                 ]
               }
@@ -441,7 +447,8 @@
                 "group": "Visão geral",
                 "pages": [
                   "pt-BR/api-reference/authentication",
-                  "pt-BR/api-reference/rate-limits"
+                  "pt-BR/api-reference/rate-limits",
+                  "pt-BR/api-reference/changelog"
                 ]
               },
               {
@@ -456,6 +463,7 @@
                   "pt-BR/api-reference/ai-assistant",
                   "pt-BR/api-reference/leads",
                   "pt-BR/api-reference/uploads",
+                  "pt-BR/api-reference/import",
                   "pt-BR/api-reference/knowledge"
                 ]
               }
@@ -648,6 +656,8 @@
                   "es/integrations/mcp/overview",
                   "es/integrations/mcp/claude",
                   "es/integrations/mcp/chatgpt-and-others",
+                  "es/integrations/mcp/build-bio-with-agent",
+                  "es/integrations/mcp/sending-files",
                   "es/integrations/mcp/tools-reference"
                 ]
               }
@@ -660,7 +670,8 @@
                 "group": "Descripción general",
                 "pages": [
                   "es/api-reference/authentication",
-                  "es/api-reference/rate-limits"
+                  "es/api-reference/rate-limits",
+                  "es/api-reference/changelog"
                 ]
               },
               {
@@ -675,6 +686,7 @@
                   "es/api-reference/ai-assistant",
                   "es/api-reference/leads",
                   "es/api-reference/uploads",
+                  "es/api-reference/import",
                   "es/api-reference/knowledge"
                 ]
               }
@@ -867,6 +879,8 @@
                   "fr/integrations/mcp/overview",
                   "fr/integrations/mcp/claude",
                   "fr/integrations/mcp/chatgpt-and-others",
+                  "fr/integrations/mcp/build-bio-with-agent",
+                  "fr/integrations/mcp/sending-files",
                   "fr/integrations/mcp/tools-reference"
                 ]
               }
@@ -879,7 +893,8 @@
                 "group": "Aperçu",
                 "pages": [
                   "fr/api-reference/authentication",
-                  "fr/api-reference/rate-limits"
+                  "fr/api-reference/rate-limits",
+                  "fr/api-reference/changelog"
                 ]
               },
               {
@@ -894,6 +909,7 @@
                   "fr/api-reference/ai-assistant",
                   "fr/api-reference/leads",
                   "fr/api-reference/uploads",
+                  "fr/api-reference/import",
                   "fr/api-reference/knowledge"
                 ]
               }
@@ -1086,6 +1102,8 @@
                   "de/integrations/mcp/overview",
                   "de/integrations/mcp/claude",
                   "de/integrations/mcp/chatgpt-and-others",
+                  "de/integrations/mcp/build-bio-with-agent",
+                  "de/integrations/mcp/sending-files",
                   "de/integrations/mcp/tools-reference"
                 ]
               }
@@ -1098,7 +1116,8 @@
                 "group": "Überblick",
                 "pages": [
                   "de/api-reference/authentication",
-                  "de/api-reference/rate-limits"
+                  "de/api-reference/rate-limits",
+                  "de/api-reference/changelog"
                 ]
               },
               {
@@ -1113,6 +1132,7 @@
                   "de/api-reference/ai-assistant",
                   "de/api-reference/leads",
                   "de/api-reference/uploads",
+                  "de/api-reference/import",
                   "de/api-reference/knowledge"
                 ]
               }

@@ -9,9 +9,15 @@ Produkte in Bereiche zu gruppieren (zum Beispiel **Küche** oder **Beauty**), di
 als Filter-Chips auf deiner öffentlichen Seite erscheinen.
 
 Alle Endpunkte liegen unter der Basis-URL `https://api.linkz.ee` und benötigen den
-Header `Authorization: Bearer lzk_your_key`. Lesevorgänge funktionieren mit jedem
-Schlüssel; Erstellen, Aktualisieren, Löschen und Neuanordnen benötigen einen
+Header `Authorization: Bearer lzk_your_key`. Lesevorgänge benötigen den Scope
+**read**; Erstellen, Aktualisieren, Löschen und Neuanordnen benötigen einen
 Schlüssel mit dem Scope **write**.
+
+<Note>
+Eine Kategorie mit `isActive: false` blendet ihren Chip auf der öffentlichen
+Seite aus. Über MCP verbundene Agenten lesen Kategorien mit `list_categories`
+und ändern sie mit `manage_category` (`create`, `update`, `delete`, `reorder`).
+</Note>
 
 ## Kategorien auflisten
 

@@ -1,0 +1,102 @@
+---
+title: Changelog
+icon: clock-rotate-left
+description: "Changes to the public API and to MCP that matter to integrators."
+---
+
+This page lists the changes to the API contract and to the MCP tools that can
+affect an integration. Each entry says what changed and what to do.
+
+<Update label="November 2026" description="The complete bio through MCP and the API" tags={["MCP", "API"]}>
+
+An agent can now build the whole bio: read the real state, send photos and
+videos, fill media blocks, set the design and the special cards, and decide the
+order of the page. See [Build a bio with an agent](/integrations/mcp/build-bio-with-agent).
+
+### New
+
+- **MCP tools:** `get_store`, `list_links`, `get_content_tree`,
+  `list_collections`, `list_categories`, `get_product`, `list_ai_assistants`,
+  `list_staff`, `list_blocks`, `create_upload_link`, `get_upload`,
+  `set_block_media`, `set_link_media`, `configure_bio_cards`, `configure_tips`,
+  `update_page`, `update_review`, `manage_package`, `import_from_url` and
+  `import_bio`. The catalog now has 70 tools. See the
+  [tools reference](/integrations/mcp/tools-reference).
+- **Images by URL or upload:** every image field of the MCP tools takes a public
+  URL or `{ "uploadId": "..." }` from an upload link. See
+  [Sending files](/integrations/mcp/sending-files).
+- **API routes:** `POST /v1/upload-links`, plus `POST /upload-tickets/files` and
+  `GET /upload-tickets/status` with the `lzu_` secret; `GET`, `POST`, `PATCH` and
+  `DELETE` on `/v1/agenda/packages` and `/v1/agenda/subscription-plans`;
+  `POST /v1/import`; `POST /v1/links/parse`.
+- **Special cards in the order:** `PUT /v1/content/order` and `reorder_content`
+  accept `{ "type": "section", "key": "..." }` entries and the server places
+  every card. See [Content](/api-reference/content).
+- **Reviews:** `PATCH /v1/agenda/reviews/{id}` accepts `featured`.
+
+### Changed
+
+- **`GET` and `PATCH /v1/store` return an allow list** (the same view as
+  `get_store`). Pixels, GTM and UTM moved into a `tracking` object
+  (`capiTokenPreview` is gone; `tracking.capiTokenConfigured` remains), the lead
+  webhook shows only `host` and `enabled`, and PIX shows only
+  `pixKeyPreview`. `GET /v1/products/{id}` is an allow list too. Read the new
+  fields if your integration used the old ones.
+- **Theme inheritance:** `themeId` without `overrides` applies the preset clean
+  (old overrides and the motion level are reset). Other design fields customize
+  only their section. This applies to MCP and to `PATCH /v1/store`.
+- **`publicPreferences` is merged** instead of replaced, `timezone` is
+  validated (invalid name: `400`) and `socialOrder` accepts only valid network
+  keys.
+- **`PATCH /v1/agenda/reviews/{id}` changes only the fields sent.** Before,
+  a body without `hidden` showed the review again.
+- **Idempotency keys** are required to create packages, subscription plans and
+  to apply an import. The same key with a different body returns `409`. See
+  [Rate limits](/api-reference/rate-limits).
+- **Video jobs are reads:** `GET /v1/uploads/video/jobs/{id}` and
+  `get_media_job` need only the `read` scope.
+- **`GET /v1/links`** returns every link, hidden and unfinished ones included,
+  without the internal storage keys of videos.
+- **`GET /v1/content`** answers with a hidden page too, with `pageHidden: true`.
+- **Links:** a schedule end must be after the start, also when you send only one
+  of the dates. Use ISO 8601 with the offset. An embed cover comes only from the
+  provider of the embed.
+- **Showcase order:** `GET /v1/products` and `list_products` return the products
+  in the order visitors see. `PUT /v1/products/order` works again (up to 5000
+  items) and turns the showcase to manual order. Public product items include
+  `order`, and the catalog cursor format changes in manual order: always treat
+  `nextCursor` as an opaque value.
+- **Limits per store** for downloads, uploads, imports and link previews. See
+  [Rate limits](/api-reference/rate-limits).
+- **Guided onboarding:** while a guided onboarding is open, a write to the page
+  through the API (store, content, links, uploads, import) ends it, as MCP writes
+  already did. Products, categories and collections do not. If you run
+  automations (n8n, scripts) on new stores, wait until the onboarding is
+  published.
+
+### MCP
+
+- **Scopes:** on MCP, `write` implies `read`. A finance-only key sees only
+  `get_earnings`. `disconnect_agenda_google` is now **key only**, like
+  `configure_tracking` and `configure_tips`.
+- **Answers:** a second text block repeats the result as JSON, and
+  `structuredContent` carries `published`, `reason`, `warnings` and `pending`.
+- **Media fails closed:** the new media tools never publish a file they could not
+  copy. Product images still skip a bad photo with a warning.
+- **HEIC is refused** (also on `POST /v1/uploads/image`), like SVG, TIFF and PDF.
+  On an iPhone, use the **Most Compatible** camera format or pick from the
+  gallery.
+- **Import split in two:** `import_from_url` only reads (`prefill_link`,
+  `preview_bio`); importing is the `import_bio` tool.
+
+### Deprecated
+
+`set_appearance` (use `update_design`), `set_review_hidden` (use
+`update_review`), `op: "list"` in `manage_category` and `manage_collection` (use
+`list_categories` and `list_collections`), the social fields of
+`update_profile` (use `update_socials`), `vitrineEnabled` in
+`configure_vitrine` and `enabled` and `showTopCard` in `configure_agenda` (use
+`configure_bio_cards`), and `agendaOrder` (no effect). They still work for one
+more release.
+
+</Update>

@@ -1,0 +1,205 @@
+---
+title: Dateien senden
+icon: upload
+description: "Wie ein KI-Agent Fotos und Videos in dein Linkzee bringt: eine öffentliche URL oder ein Upload-Link, mit den Limits und den Video-Jobs."
+---
+
+Jedes Foto und Video, das ein Agent auf deine Seite stellt, erreicht Linkzee
+auf einem von zwei Wegen. Linkzee kopiert die Datei immer in sein eigenes CDN,
+prüft das Format anhand ihrer Bytes und speichert sie unter deinem Store. Eine
+Datei, die nicht kopiert werden kann, wird nie von einem anderen Ort aus
+veröffentlicht.
+
+| Weg | Wann du ihn nutzt | Was der Agent sendet |
+| --- | --- | --- |
+| **Öffentliche URL** | Das Foto oder Video ist bereits online (deine Website, ein CDN, ein öffentlicher Cloud-Link, der die Datei selbst öffnet). | Die URL, zum Beispiel `"https://example.com/team.jpg"`. |
+| **Upload-Link** | Die Dateien liegen auf deinem Handy, deinem Computer oder sind an den Chat angehängt, ohne öffentliche URL. | `{ "uploadId": "..." }`, nachdem die Dateien an den Link gesendet wurden. |
+
+## Öffentliche URL
+
+Jedes Bildfeld der MCP-Tools akzeptiert eine öffentliche `http`- oder
+`https`-URL: Logo, Banner, Wortmarke, Freisteller, Hero-Foto, Hintergrund,
+Link-Thumbnail, Blockfotos, Titelbilder von Karten, Social-Karten, Avatare von
+Team und Assistent sowie Produktbilder. Linkzee lädt sie herunter, prüft sie
+und hostet sie.
+
+- Die URL muss die Datei selbst öffnen, nicht eine Seite, die sie anzeigt.
+- Private und lokale Adressen werden abgelehnt.
+- Video-URLs funktionieren für das Hero-Video, das Hintergrund-Video und
+  Videoelemente einer Reel-Galerie. Ein **Video einer Linkkarte** kommt nie von
+  einer URL: Sende es über einen Upload-Link.
+
+## Upload-Link
+
+Ein Upload-Link ist eine kurzlebige Seite, auf der eine Person Dateien
+auswählt, plus eine Adresse, an die ein Agent oder ein Skript sie direkt senden
+kann. Ein Link nimmt bis zu 10 Dateien auf.
+
+<Steps>
+  <Step title="Der Agent erstellt den Link">
+    Er ruft `create_upload_link` (MCP) oder `POST /v1/upload-links`
+    (API-Schlüssel) auf. Optionale Einstellungen: `maxFiles` (1 bis 10,
+    Standard 10) und `accept` (`image`, `video` oder `any`, Standard `any`).
+
+    ```json
+    {
+      "ticketId": "6740b1f2c3d4e5f6a7b8c9d0",
+      "uploadPageUrl": "https://linkz.ee/u/lzu_AbC123...",
+      "directUpload": {
+        "method": "POST",
+        "url": "https://api.linkz.ee/upload-tickets/files",
+        "header": "Authorization: Bearer lzu_AbC123...",
+        "field": "file"
+      },
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any"
+    }
+    ```
+  </Step>
+  <Step title="Die Dateien werden gesendet">
+    **Eine Person** öffnet `uploadPageUrl` auf einem Handy oder Computer und
+    wählt die Dateien aus. Die Seite zeigt jede Datei an, sobald sie ankommt.
+
+    **Ein Agent mit Dateizugriff** (Claude Code, Cursor, n8n, ein Skript)
+    sendet jede Datei an `directUpload.url`, eine Datei pro Anfrage:
+
+    ```bash
+    curl -X POST \
+      -H "Authorization: Bearer lzu_AbC123..." \
+      -F "file=@/path/to/before.jpg" \
+      https://api.linkz.ee/upload-tickets/files
+    ```
+
+    ```json
+    {
+      "error": false,
+      "message": "File received",
+      "data": {
+        "uploadId": "6740b2a1c3d4e5f6a7b8c9d1",
+        "kind": "image",
+        "status": "done",
+        "name": "before.jpg",
+        "size": 482113,
+        "w": 1600,
+        "h": 1200
+      }
+    }
+    ```
+  </Step>
+  <Step title="Der Agent liest die uploadIds">
+    Er ruft `get_upload` mit der `ticketId` auf (oder
+    `GET https://api.linkz.ee/upload-tickets/status` mit demselben Header
+    `Authorization: Bearer lzu_...`). Der Link ist `open`, `full` oder
+    `expired`, und jede Datei ist `uploading`, `done` oder `failed`.
+
+    ```json
+    {
+      "status": "open",
+      "expiresAt": "2026-11-22T15:15:00.000Z",
+      "maxFiles": 10,
+      "accept": "any",
+      "storeName": "Studio Ana",
+      "files": [
+        { "uploadId": "6740b2a1c3d4e5f6a7b8c9d1", "kind": "image", "status": "done", "name": "before.jpg", "size": 482113 }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="Der Agent verwendet jede Datei">
+    Er setzt `{ "uploadId": "6740b2a1c3d4e5f6a7b8c9d1" }` in ein Bild- oder
+    Videofeld eines MCP-Tools, zum Beispiel in `set_block_media`,
+    `update_design` oder `create_product`. Erst dann wird die Datei an ihren
+    endgültigen Ort verschoben.
+  </Step>
+</Steps>
+
+<Note>
+  Die `uploadId`-Werte werden von den MCP-Tools verwendet. Die REST-Endpunkte
+  der API nehmen URLs: Mit einem API-Schlüssel lädst du Bilder mit
+  [`POST /v1/uploads/image`](/de/api-reference/uploads) hoch und übergibst die
+  zurückgegebene URL.
+</Note>
+
+### Regeln eines Upload-Links
+
+| Regel | Wert |
+| --- | --- |
+| Dateien pro Link | Bis zu 10 (eine fehlgeschlagene Datei belegt keinen Platz) |
+| Zeit zum Senden | 15 Minuten ab der Erstellung |
+| Wie lange eine `uploadId` gültig bleibt | 24 Stunden, bis zu 5 Verwendungen |
+| Offene Links pro Store | Bis zu 20 gleichzeitig und 60 neue Links pro Stunde |
+| Wer einen erstellen kann | Ein Schlüssel mit dem Scope **write** oder der Claude-Konnektor |
+
+Das Geheimnis `lzu_...` ist Teil der Seitenadresse und des Headers. Jeder, der
+es hat, kann Dateien an deinen Store senden, bis der Link schließt. Teile es
+daher nur mit der Person, die die Dateien sendet.
+
+## Formate und Limits
+
+| Typ | Akzeptiert | Größe |
+| --- | --- | --- |
+| Foto | JPEG, PNG, WebP, GIF, AVIF | Bis 8 MB |
+| Video | MP4 oder MOV (H.264 oder HEVC) | Bis 40 MB |
+
+Abgelehnt: **HEIC**-Fotos, SVG, TIFF und PDF. Stell auf einem iPhone das
+Kameraformat auf **Maximale Kompatibilität** oder wähle das Foto aus der
+Galerie: Das iPhone wandelt es in JPEG um, wenn die Seite kein HEIC akzeptiert.
+
+Fotos werden zu WebP. Das Format wird anhand der Bytes der Datei bestimmt,
+nicht anhand ihres Namens oder angegebenen Typs.
+
+## Videos und Jobs
+
+Videos werden im Hintergrund optimiert, daher antwortet das Tool sofort mit
+einem Job:
+
+| Ziel | Tool | Quelle |
+| --- | --- | --- |
+| Hero-Video | `set_hero_video` | URL, `uploadId` oder `fromProducts` (aus 3 bis 6 Produktfotos generiert) |
+| Hintergrund-Video | `set_background_video` | URL oder `uploadId` |
+| Videoelement einer Reel-Galerie | `set_block_media` | `{ "uploadId": "..." }` oder `{ "url": "..." }` |
+| Video einer Linkkarte | `set_link_media` (`type: "video"`) | Nur `{ "uploadId": "..." }`, plus ein Posterbild |
+
+Der Agent verfolgt jeden Job mit `get_media_job`, bis er `ready` oder `failed`
+ist. Wenn er fertig ist, ist die Seite bereits aktualisiert; vorher wird nichts
+veröffentlicht. Hero- und Hintergrund-Videos werden auf die ersten 30 Sekunden
+gekürzt und verlieren den Ton; Reel-Elemente behalten den Ton.
+
+## Limits pro Store
+
+Downloads und Uploads werden pro Store gezählt, egal welcher Agent oder welches
+Netzwerk sie nutzt:
+
+| Was | Limit |
+| --- | --- |
+| Bilder aus URLs | 200 pro Stunde, 1.000 pro Tag, 500 MB pro Tag |
+| Videos aus URLs | 10 pro Stunde, 30 pro Tag, 600 MB pro Tag |
+| An Upload-Links gesendete Dateien | 26 pro Minute (Fotos 20, Videos 6), 60 Videos pro Tag, 2.560 MB pro Tag |
+| Videos von Linkkarten | 6 pro Minute, 1.536 MB pro Tag |
+| Gleichzeitig laufende Downloads | 2 pro Store; ein dritter wartet bis zu 10 Sekunden |
+
+Oberhalb eines Limits antwortet der Aufruf mit `429`, und du kannst es später
+erneut versuchen.
+
+## Fehler beim Senden
+
+| Status | Bedeutung |
+| --- | --- |
+| `200` mit `status: "failed"` | Die Datei ist angekommen, aber ihr Inhalt wurde abgelehnt (Format, beschädigte Datei). Die Nachricht sagt, warum; sende eine andere Datei. |
+| `400` | Keine Datei oder ein Dateityp, den der Link nicht akzeptiert. |
+| `401` | Ungültiger oder widerrufener Link. |
+| `403` | Der Schlüssel oder die Verbindung hinter dem Link wurde widerrufen, oder der Tarif enthält die API nicht mehr. |
+| `409` | Der Link ist voll. |
+| `410` | Der Link ist abgelaufen. Bitte den Agenten um einen neuen. |
+| `413` | Datei zu groß. |
+| `429` | Ein Limit des Stores wurde erreicht. |
+
+<CardGroup cols={2}>
+  <Card title="Eine Bio mit einem Agenten erstellen" icon="wand-magic-sparkles" href="/de/integrations/mcp/build-bio-with-agent">
+    Wo die Dateien in den vollständigen Ablauf passen.
+  </Card>
+  <Card title="Uploads (API)" icon="image" href="/de/api-reference/uploads">
+    Bild- und Video-Uploads mit einem API-Schlüssel.
+  </Card>
+</CardGroup>

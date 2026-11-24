@@ -1,13 +1,13 @@
 ---
 title: Assistente de IA
 icon: robot
-description: "Crie e gerencie os assistentes de IA da sua página bio — persona, saudação, botões iniciais e captura de leads."
+description: "Crie e gerencie os assistentes de IA da sua página bio: persona, saudação, botões iniciais e captura de leads."
 ---
 
 Um assistente de IA é um card de chat na sua página bio: os visitantes tocam
 nele e conversam com um assistente que responde com a voz da sua loja, os guia
 até seus produtos e serviços e pode capturar o contato deles como lead. Estes
-endpoints gerenciam os assistentes em si — título, avatar, saudação, botões
+endpoints gerenciam os assistentes em si: título, avatar, saudação, botões
 iniciais e configurações de captura de leads.
 
 Todos os caminhos ficam sob `https://api.linkz.ee/v1/ai-assistant`. Toda
@@ -16,11 +16,11 @@ operações de escrita (POST/PATCH/DELETE) exigem uma chave com o escopo
 **write**.
 
 <Note>
-O comportamento global do assistente — tom de voz (`aiAssistantTone`) e o texto
-de conhecimento "sobre o seu negócio" (`aboutBusiness`) — fica na loja, não em
+O comportamento global do assistente (tom de voz, `aiAssistantTone`, e o texto
+de conhecimento "sobre o seu negócio", `aboutBusiness`) fica na loja, não em
 cada assistente. Configure-os por
-[`PATCH /v1/store`](/pt-BR/api-reference/store#update-the-store-profile). A base
-de conhecimento em PDF tem endpoints próprios — veja a
+[`PATCH /v1/store`](/pt-BR/api-reference/store). A base
+de conhecimento em PDF tem endpoints próprios: veja a
 [referência de Conhecimento](/pt-BR/api-reference/knowledge).
 </Note>
 
@@ -81,9 +81,10 @@ curl -X GET \
 POST /v1/ai-assistant
 ```
 
-Cria um novo assistente. Todos os campos são opcionais — você pode criá-lo
+Cria um novo assistente. Todos os campos são opcionais: você pode criá-lo
 vazio e preenchê-lo depois, ou enviar a configuração inteira em uma única
-chamada. Assistentes novos nascem ativos por padrão.
+chamada. Assistentes novos nascem ativos por padrão; envie `isActive: false`
+para criar um oculto.
 
 ### Requisição
 
@@ -104,13 +105,14 @@ curl -X POST \
 | Parâmetro | Tipo | Obrigatório | Descrição |
 | --- | --- | --- | --- |
 | `title` | string | Não | Nome exibido no card do assistente (máx. 80 caracteres). |
-| `avatarUrl` | string | Não | URL da imagem do avatar. Faça o upload primeiro com [`POST /v1/uploads/image`](/pt-BR/api-reference/uploads) usando `kind=aiAssistantAvatar` e depois passe a URL retornada (máx. 500 caracteres). |
+| `avatarUrl` | string | Não | URL da imagem do avatar (máx. 500 caracteres). Faça o upload com [`POST /v1/uploads/image`](/pt-BR/api-reference/uploads) usando `kind=aiAssistantAvatar` e passe a URL retornada, ou passe uma URL pública de imagem: ela é copiada para a CDN do Linkzee quando muda. |
 | `opening` | string | Não | A saudação com a qual o assistente abre o chat (máx. 2000 caracteres). |
-| `personality` | string | Não | Avançado: como o assistente deve se apresentar — seu estilo de atender as pessoas (máx. 600 caracteres). |
+| `personality` | string | Não | Avançado: como o assistente deve se apresentar, seu estilo de atender as pessoas (máx. 600 caracteres). |
 | `instructions` | string | Não | Avançado: regras e preferências que o assistente deve seguir (máx. 1500 caracteres). |
 | `starterButtons` | array of string | Não | Até 6 botões de início rápido exibidos antes de o visitante digitar (cada um com máx. 120 caracteres). |
 | `leadCapture` | object | Não | Configurações de captura de leads (veja abaixo). |
 | `collectionId` | string | Não | Coloca o assistente dentro de uma coleção na sua página. |
+| `isActive` | boolean | Não | Mostra o assistente na sua página. Padrão `true`. |
 
 O objeto `leadCapture` controla como o assistente pede o contato do visitante:
 

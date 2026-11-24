@@ -1,0 +1,110 @@
+---
+title: Changelog
+icon: clock-rotate-left
+description: "Änderungen an der öffentlichen API und an MCP, die für Integratoren wichtig sind."
+---
+
+Diese Seite listet die Änderungen am API-Vertrag und an den MCP-Tools auf, die
+sich auf eine Integration auswirken können. Jeder Eintrag sagt, was sich
+geändert hat und was zu tun ist.
+
+<Update label="November 2026" description="Die vollständige Bio über MCP und die API" tags={["MCP", "API"]}>
+
+Ein Agent kann jetzt die gesamte Bio aufbauen: den echten Zustand lesen, Fotos
+und Videos senden, Medienblöcke füllen, Design und Spezialkarten festlegen und
+die Reihenfolge der Seite bestimmen. Siehe
+[Eine Bio mit einem Agenten erstellen](/de/integrations/mcp/build-bio-with-agent).
+
+### Neu
+
+- **MCP-Tools:** `get_store`, `list_links`, `get_content_tree`,
+  `list_collections`, `list_categories`, `get_product`, `list_ai_assistants`,
+  `list_staff`, `list_blocks`, `create_upload_link`, `get_upload`,
+  `set_block_media`, `set_link_media`, `configure_bio_cards`, `configure_tips`,
+  `update_page`, `update_review`, `manage_package`, `import_from_url` und
+  `import_bio`. Der Katalog hat jetzt 70 Tools. Siehe die
+  [Tool-Referenz](/de/integrations/mcp/tools-reference).
+- **Bilder per URL oder Upload:** Jedes Bildfeld der MCP-Tools nimmt eine
+  öffentliche URL oder `{ "uploadId": "..." }` aus einem Upload-Link. Siehe
+  [Dateien senden](/de/integrations/mcp/sending-files).
+- **API-Routen:** `POST /v1/upload-links`, dazu `POST /upload-tickets/files`
+  und `GET /upload-tickets/status` mit dem Geheimnis `lzu_`; `GET`, `POST`,
+  `PATCH` und `DELETE` auf `/v1/agenda/packages` und
+  `/v1/agenda/subscription-plans`; `POST /v1/import`; `POST /v1/links/parse`.
+- **Spezialkarten in der Reihenfolge:** `PUT /v1/content/order` und
+  `reorder_content` akzeptieren Einträge `{ "type": "section", "key": "..." }`,
+  und der Server platziert jede Karte. Siehe [Inhalt](/de/api-reference/content).
+- **Bewertungen:** `PATCH /v1/agenda/reviews/{id}` akzeptiert `featured`.
+
+### Geändert
+
+- **`GET` und `PATCH /v1/store` geben eine Positivliste zurück** (dieselbe
+  Ansicht wie `get_store`). Pixel, GTM und UTM sind in ein Objekt `tracking`
+  gewandert (`capiTokenPreview` entfällt; `tracking.capiTokenConfigured`
+  bleibt), der Lead-Webhook zeigt nur `host` und `enabled`, und PIX zeigt nur
+  `pixKeyPreview`. `GET /v1/products/{id}` ist ebenfalls eine Positivliste. Lies
+  die neuen Felder, wenn deine Integration die alten verwendet hat.
+- **Theme-Vererbung:** `themeId` ohne `overrides` wendet das Preset sauber an
+  (alte Overrides und die Bewegungsstufe werden zurückgesetzt). Andere
+  Designfelder passen nur ihren Abschnitt an. Das gilt für MCP und für
+  `PATCH /v1/store`.
+- **`publicPreferences` wird zusammengeführt** statt ersetzt, `timezone` wird
+  validiert (ungültiger Name: `400`), und `socialOrder` akzeptiert nur gültige
+  Netzwerkschlüssel.
+- **`PATCH /v1/agenda/reviews/{id}` ändert nur die gesendeten Felder.** Vorher
+  hat ein Body ohne `hidden` die Bewertung wieder eingeblendet.
+- **Idempotency-Keys** sind erforderlich, um Pakete und Abo-Pläne zu erstellen
+  und um einen Import anzuwenden. Derselbe Key mit einem anderen Body gibt
+  `409` zurück. Siehe [Ratenbegrenzungen](/de/api-reference/rate-limits).
+- **Video-Jobs sind Lesevorgänge:** `GET /v1/uploads/video/jobs/{id}` und
+  `get_media_job` benötigen nur den Scope `read`.
+- **`GET /v1/links`** gibt jeden Link zurück, einschließlich ausgeblendeter und
+  unfertiger, ohne die internen Speicherschlüssel von Videos.
+- **`GET /v1/content`** antwortet auch bei ausgeblendeter Seite, mit
+  `pageHidden: true`.
+- **Links:** Das Ende eines Zeitfensters muss nach dem Start liegen, auch wenn
+  du nur eines der Daten sendest. Verwende ISO 8601 mit Offset. Ein
+  Embed-Titelbild kommt nur vom Anbieter des Embeds.
+- **Reihenfolge des Schaufensters:** `GET /v1/products` und `list_products`
+  geben die Produkte in der Reihenfolge zurück, die Besucher sehen.
+  `PUT /v1/products/order` funktioniert wieder (bis zu 5000 Elemente) und
+  stellt das Schaufenster auf manuelle Reihenfolge um. Öffentliche
+  Produktelemente enthalten `order`, und das Format des Katalog-Cursors ändert
+  sich bei manueller Reihenfolge: Behandle `nextCursor` immer als undurchsichtigen
+  Wert.
+- **Limits pro Store** für Downloads, Uploads, Importe und Linkvorschauen. Siehe
+  [Ratenbegrenzungen](/de/api-reference/rate-limits).
+- **Geführtes Onboarding:** Solange ein geführtes Onboarding offen ist, beendet
+  ein Schreibvorgang auf der Seite über die API (Store, Inhalt, Links, Uploads,
+  Import) es, wie es Schreibvorgänge über MCP bereits taten. Produkte,
+  Kategorien und Sammlungen tun das nicht. Wenn du Automatisierungen (n8n,
+  Skripte) auf neuen Stores laufen lässt, warte, bis das Onboarding
+  veröffentlicht ist.
+
+### MCP
+
+- **Scopes:** Bei MCP schließt `write` den Scope `read` ein. Ein reiner
+  finance-Schlüssel sieht nur `get_earnings`. `disconnect_agenda_google` gibt es
+  jetzt **nur mit Schlüssel**, wie `configure_tracking` und `configure_tips`.
+- **Antworten:** Ein zweiter Textblock wiederholt das Ergebnis als JSON, und
+  `structuredContent` trägt `published`, `reason`, `warnings` und `pending`.
+- **Medien schlagen sicher fehl:** Die neuen Medien-Tools veröffentlichen nie
+  eine Datei, die sie nicht kopieren konnten. Produktbilder überspringen ein
+  fehlerhaftes Foto weiterhin mit einer Warnung.
+- **HEIC wird abgelehnt** (auch bei `POST /v1/uploads/image`), wie SVG, TIFF
+  und PDF. Verwende auf einem iPhone das Kameraformat **Maximale
+  Kompatibilität** oder wähle aus der Galerie.
+- **Import in zwei geteilt:** `import_from_url` liest nur (`prefill_link`,
+  `preview_bio`); importiert wird mit dem Tool `import_bio`.
+
+### Veraltet
+
+`set_appearance` (nutze `update_design`), `set_review_hidden` (nutze
+`update_review`), `op: "list"` in `manage_category` und `manage_collection`
+(nutze `list_categories` und `list_collections`), die Social-Felder von
+`update_profile` (nutze `update_socials`), `vitrineEnabled` in
+`configure_vitrine` sowie `enabled` und `showTopCard` in `configure_agenda`
+(nutze `configure_bio_cards`) und `agendaOrder` (keine Wirkung). Sie
+funktionieren noch für ein weiteres Release.
+
+</Update>

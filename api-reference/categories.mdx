@@ -9,8 +9,14 @@ products into sections (for example **Kitchen** or **Beauty**) that show up as
 filter chips on your public page.
 
 All endpoints live under the base URL `https://api.linkz.ee` and require the
-`Authorization: Bearer lzk_your_key` header. Read operations work with any key;
-create, update, delete, and reorder need a key with the **write** scope.
+`Authorization: Bearer lzk_your_key` header. Read operations need the **read**
+scope; create, update, delete, and reorder need a key with the **write** scope.
+
+<Note>
+A category with `isActive: false` hides its chip on the public page. Agents
+connected through MCP read categories with `list_categories` and change them with
+`manage_category` (`create`, `update`, `delete`, `reorder`).
+</Note>
 
 ## List categories
 
