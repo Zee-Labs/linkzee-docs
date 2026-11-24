@@ -29,8 +29,13 @@ The showcase has two order modes:
   product, and new products enter at the top.
 
 `GET /v1/products`, the MCP tool `list_products` and the public page always
-return the products in the order visitors see. There is no endpoint to go back to
-newest first.
+return the products in the order visitors see.
+
+The owner switches between the two modes in the dashboard, with the **Showcase
+order** selector (**Newest first** or **Custom**) on the **Products** screen.
+Going back to newest first keeps the manual order saved, and choosing custom
+again restores it. The API and MCP don't switch the mode: there is no endpoint
+to go back to newest first.
 
 ## List products
 
