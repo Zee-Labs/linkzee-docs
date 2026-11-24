@@ -1,25 +1,46 @@
 ---
 title: Área de clientes
 icon: circle-user
-description: "Una página privada donde tus clientes ven sus reservas, sus créditos de paquetes y sus suscripciones — sin contraseña."
+description: "Una página privada donde tus clientes ven, reprograman y cancelan sus citas y consultan créditos de paquetes y suscripciones, sin contraseña."
 ---
 
-Toda página de Linkzee con agenda tiene un **área de clientes** en
-`linkz.ee/tuusuario/me` — un espacio privado donde tus clientes consultan sus
-próximas citas, sus créditos de paquetes y sus suscripciones, todo por su
-cuenta.
+Toda página de Linkzee con agenda tiene un **área de clientes**: un espacio
+privado donde tus clientes consultan sus próximas citas, sus créditos de
+paquetes y sus suscripciones, todo por su cuenta. Vale para las reservas hechas
+en la agenda de Linkzee y en la [agenda de Qzee](/es/scheduling/qzee-booking)
+de tu bio.
+
+El cliente llega desde tu bio o en `linkz.ee/tuusuario/me`. Los dos llevan a la
+misma página, en un área de Linkzee separada y aislada, por eso la dirección en
+el navegador cambia a `vault.linkz.ee` (ver [Privacidad](#privacidad)).
+
+## Mis citas en tu bio
+
+Quien ya reservó en un dispositivo ve arriba en tu bio:
+
+- **Tu próxima cita**, una tarjeta con el día, la hora y quién atiende, cuando
+  hay una cita próxima;
+- **Mis citas**, dentro de la tarjeta de reservas, que abre el área de
+  clientes.
+
+No hay nada que configurar: los dos aparecen solos después de la primera
+reserva en ese dispositivo, tanto en la agenda de Linkzee como en la agenda de
+Qzee.
 
 ## Cómo entran los clientes
 
-Sin contraseñas. La identidad del cliente es el **teléfono que usa para
-reservar y comprar**:
+**En el dispositivo con el que reservaron**, no hay código ni contraseña. El
+área de clientes se abre con las reservas hechas en ese dispositivo.
 
-1. Abre `linkz.ee/tuusuario/me` y escribe el teléfono que usa para reservar y
-   comprar.
+**En otro dispositivo**, tocan **¿Reservaste desde otro dispositivo?** y luego
+**Recibir un código**. La identidad es el **teléfono que usan para reservar y
+comprar**:
+
+1. Escriben el teléfono que usan para reservar y comprar.
 2. Linkzee envía un **código de acceso de 6 dígitos** al correo de su registro
    (y por WhatsApp, cuando está disponible).
-3. Ingresa el código y ya está dentro. La sesión es de corta duración y solo
-   vale para tu página — segura en dispositivos compartidos.
+3. Ingresan el código y ya están dentro. La sesión dura 90 días y solo vale
+   para tu página.
 
 <Note>
   El código se envía solo si el número de teléfono coincide con un cliente
@@ -27,38 +48,72 @@ reservar y comprar**:
   limitado para protegerte a ti y a tus clientes de abusos.
 </Note>
 
-<Tip>
-  **Sin código en el teléfono de siempre.** Quien ya reservó en ese dispositivo
-  entra en `linkz.ee/tuusuario/me` directo, y tu página muestra el botón **Mis
-  citas** y la tarjeta **Tu próxima cita** arriba. El código solo se pide en otro
-  dispositivo; la sesión dura entonces 90 días.
-</Tip>
+El código recupera las reservas de la agenda de Linkzee, los créditos de
+paquetes y las suscripciones. Las reservas hechas en la agenda de Qzee aparecen
+en el dispositivo con el que se hicieron.
 
 ## Qué pueden hacer
 
-| Sección | Qué encuentran |
+| Sección | Qué hay ahí |
 | --- | --- |
-| **Citas** | Reservas próximas y pasadas; pueden **cancelar** dentro de tu política de cancelación. |
-| **Créditos de paquetes** | Sesiones restantes por paquete y la fecha de vencimiento. |
-| **Suscripciones** | Plan activo, beneficios, uso en el ciclo actual y fecha de renovación — además de **Gestionar cobro**, que abre el portal seguro de Stripe para actualizar la tarjeta o cancelar. |
+| **Mis citas** | Citas próximas y pasadas, con **Reprogramar** y **Cancelar**. |
+| **Mis paquetes** | Sesiones restantes por paquete y la fecha de vencimiento. |
+| **Mis suscripciones** | Plan activo, beneficios, uso en el ciclo actual y fecha de renovación, además de **Gestionar cobro**, que abre el portal seguro de Stripe para actualizar la tarjeta o cancelar. |
 
 La lista destaca la **próxima cita** (fecha, "en 2 días", profesional, botones
-Reprogramar y Cancelar), luego las próximas en orden y las anteriores
-plegadas, cada una con **Reservar de nuevo**.
+Reprogramar y Cancelar), luego las **Próximas** en orden y las **Anteriores**
+plegadas, cada una con **Reservar de nuevo**. Las horas se muestran en la zona
+horaria de cada reserva. En los servicios por orden de llegada, la hora aparece
+como "a partir de 9:00".
+
+### Reservas en la agenda de Qzee
+
+Las reservas de Qzee están en la misma lista que las demás:
+
+- **Reprogramar** abre tu agenda de Qzee en un panel, directo en el paso de
+  elegir la nueva hora.
+- **Cancelar** se hace ahí mismo en el área de clientes, después de que el
+  cliente confirma. La regla viene de tu agenda de Qzee: cancelar antes del
+  plazo que definiste allí no cuenta como cancelación tardía, y después de él
+  el cliente todavía puede cancelar hasta la hora de la cita.
+- Los botones siguen lo que Qzee permite en cada reserva. Cuando no se puede ni
+  reprogramar ni cancelar, el cliente ve **Hablar con** y el nombre de tu
+  negocio.
+- Si el negocio cambió la cita después de que cargó la lista, no se cancela
+  nada: el cliente ve la nueva hora y confirma de nuevo.
+- **Reservar de nuevo** solo aparece mientras la unidad recibe reservas en
+  línea.
+
+Las reservas hechas en el mismo dispositivo en la agenda de Qzee de otro
+negocio aparecen en **Otras citas en este dispositivo**, con el nombre de ese
+negocio.
+
+## Privacidad
+
+Lo que permite al cliente ver y cambiar una reserva queda en su propio
+dispositivo, en un área de Linkzee separada y aislada (`vault.linkz.ee`). Nunca
+está en la página de tu bio, así que ningún script de la página, ni siquiera
+tus propias etiquetas de medición, puede llegar hasta allí. Tu bio solo
+recuerda que el dispositivo ya reservó contigo y guarda un recordatorio corto de
+la próxima cita, para mostrar **Tu próxima cita**.
+
+<Note>
+  Quien ya había entrado con un código en un dispositivo antes de este cambio
+  confirma el código una vez más. No se pierde ninguna reserva.
+</Note>
 
 ## Por qué te ayuda
 
-- Menos mensajes de "¿a qué hora era mi cita?" — los clientes se atienden
-  solos.
-- Quienes compran paquetes y suscripciones siempre pueden ver lo que pagaron,
-  lo que genera confianza en los prepagos.
-- Las cancelaciones respetan la **ventana de cancelación** que definas en
-  Agenda → Configuración, y las reservas cubiertas devuelven sus créditos
-  automáticamente.
+- Menos mensajes de "¿a qué hora era mi cita?": los clientes se atienden solos.
+- Quienes compran paquetes y suscripciones siempre pueden ver lo que pagaron, lo
+  que genera confianza en los paquetes prepagados.
+- Las cancelaciones de la agenda de Linkzee respetan la **ventana de
+  cancelación** que configuras en Agenda → Configuración, y las reservas
+  cubiertas devuelven sus créditos automáticamente.
 
 <Note>
-  Comparte el área de clientes con quien quieras: es simplemente la URL de
-  tu página seguida de `/me`. Un buen hábito es ponerla en tu bio o enviarla
-  después de una compra, para que tus clientes sepan dónde encontrar sus
+  Comparte el área de clientes con quien quieras: es simplemente la URL de tu
+  página seguida de `/me`. Un buen hábito es incluirla en tu bio o enviarla
+  después de una compra, para que los clientes sepan dónde encontrar sus
   créditos y reservas.
 </Note>

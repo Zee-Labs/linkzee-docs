@@ -1,7 +1,7 @@
 ---
 title: Terminbuchung
 icon: calendar
-description: "Lassen Sie Ihre Kundschaft Termine für Ihre Leistungen direkt aus Ihrer Bio buchen — mit einem Buchungsassistenten, der zu Ihrer Seite passt."
+description: "Lassen Sie Ihre Kundschaft Termine für Ihre Leistungen direkt aus Ihrer Bio buchen, mit einem Buchungsassistenten, der zu Ihrer Seite passt."
 ---
 
 Mit der Terminbuchung kann Ihre Kundschaft **Termine für Ihre Leistungen direkt
@@ -16,7 +16,7 @@ können, ohne Ihr Linkzee zu verlassen.
 ## Drei Einrichtungen, eine Engine
 
 Die Terminbuchung passt sich an Ihre Arbeitsweise an. Wählen Sie die Einrichtung,
-die zu Ihrem Geschäft passt — alle laufen auf derselben zugrunde liegenden Engine.
+die zu Ihrem Geschäft passt: alle laufen auf derselben zugrunde liegenden Engine.
 
 | Modus | Für wen | So funktioniert es |
 | --- | --- | --- |
@@ -27,21 +27,38 @@ die zu Ihrem Geschäft passt — alle laufen auf derselben zugrunde liegenden En
 ## So buchen Besucher
 
 Auf Ihrer Seite erscheint eine Buchungskarte im Stil Ihres Themes. Besucher buchen
-in einem einfachen, schrittweisen Assistenten — sie wählen, was sie brauchen,
+in einem einfachen, schrittweisen Assistenten: sie wählen, was sie brauchen,
 sehen die tatsächlich freien Zeiten und bestätigen. Die verfügbaren Zeiten richten
 sich nach der **Zeitzone Ihres Geschäfts**, die Sie unter **Kalender →
 Einstellungen** festlegen, sodass alle die richtigen Zeitfenster sehen.
 
 <Note>
-  Wie alles in Linkzee werden Ihre Änderungen an der Terminbuchung automatisch
-  gespeichert, und die Vorschau aktualisiert sich live — rechts auf dem Desktop,
-  unter dem Editor auf dem Handy.
+  Wie alles in Linkzee werden Ihre Änderungen an der Terminplanung automatisch
+  gespeichert, und die Vorschau aktualisiert sich live. Am Desktop steht sie
+  rechts; am Handy tippen Sie oben auf **Vorschau**, um Ihre Seite im Vollbild
+  zu sehen.
 </Note>
+
+### Das Telefonfeld
+
+Jedes Telefonfeld auf Ihrer Seite (Buchung, Warteliste, Pakete und Abos,
+Kundenbereich und Kontaktformulare) zeigt neben der Nummer die **Landesflagge
+und die Ländervorwahl**. Es startet im Land des Besuchers, erkannt über seine
+Verbindung, sonst im Land Ihres Unternehmens. Besucher tippen auf die Flagge,
+um aus einer Liste ein anderes Land zu wählen, die sich nach Name oder Vorwahl
+durchsuchen lässt. Eine Nummer, die mit `+` und einer Vorwahl beginnt, stellt
+die Flagge von selbst um.
+
+Scheint eine Nummer aus einem anderen Land zu sein, schlägt das Feld vor, dieses
+Land zu **verwenden**. Passt sie zu beiden Ländern, bestätigt der Besucher vor
+dem Senden, welches gilt. So bleibt jeder Kunde bei einer einzigen
+Telefonnummer, und seine Buchungen, Guthaben und sein Kundenbereich bleiben
+zusammen. Das Gerät merkt sich das gewählte Land für das nächste Mal.
 
 ### Die Buchungskarte oben
 
-Die Buchungskarte ist **oben auf Ihrer Seite fixiert**, direkt unter Ihrem Namen —
-sie ist die wichtigste Aktion Ihrer Bio. Neben dem Button **Termin buchen** zeigt
+Die Buchungskarte ist **oben auf Ihrer Seite fixiert**, direkt unter Ihrem Namen.
+Sie ist die wichtigste Aktion Ihrer Bio. Neben dem Button **Termin buchen** zeigt
 sie die **nächsten freien Termine** einer Leistung: Besucher tippen auf eine Zeit
 und landen direkt bei der Bestätigung, Leistung und Uhrzeit sind schon gewählt.
 
@@ -77,11 +94,18 @@ Buchungen**.
 `configure_agenda` dasselbe mit `showTopCard: false` (oder `true`, um die Karte
 wieder anzuzeigen).
 
+## Sie nutzen schon Qzee?
+
+Wenn Ihr Unternehmen seine Termine in Qzee verwaltet, können Sie Ihren
+**Qzee-Kalender** statt des Linkzee-Kalenders oben in die Bio setzen. Kunden
+buchen direkt in Qzee, und Ihre Bio nimmt Buchungen immer nur über einen
+Kalender an. Siehe [Qzee-Kalender in der Bio](/de/scheduling/qzee-booking).
+
 ## Einrichten
 
 <CardGroup cols={2}>
   <Card title="Leistungen" icon="list-check" href="/de/scheduling/services">
-    Legen Sie die Leistungen an, die gebucht werden können — mit Dauer, Preis und mehr.
+    Legen Sie die Leistungen an, die gebucht werden können, mit Dauer, Preis und mehr.
   </Card>
   <Card title="Tage und Zeiten" icon="clock" href="/de/scheduling/business-hours">
     Legen Sie fest, wann Sie verfügbar sind, und Ihre Buchungsregeln.
@@ -90,7 +114,7 @@ wieder anzuzeigen).
     Fügen Sie die Personen hinzu, die Termine annehmen, und die Leistungen, die sie anbieten.
   </Card>
   <Card title="Buchungen kassieren" icon="credit-card" href="/de/scheduling/payments">
-    Anzahlung oder Gesamtbetrag bei der Buchung — direkt an Sie gezahlt.
+    Anzahlung oder Gesamtbetrag bei der Buchung, direkt an Sie gezahlt.
   </Card>
   <Card title="Einnahmen & Auszahlungen" icon="sack-dollar" href="/de/scheduling/earnings">
     Was Sie erhalten haben, wer gezahlt hat und wie es auf Ihre Bank kommt.
@@ -105,12 +129,15 @@ wieder anzuzeigen).
     Verbinden Sie Ihren Kalender, damit Buchungen mit Google Meet auf Ihrem Handy erscheinen.
   </Card>
   <Card title="Sitzungspakete" icon="ticket" href="/de/scheduling/packages">
-    Verkaufen Sie Sitzungsbündel im Voraus — die Guthaben werden bei der Buchung automatisch eingelöst.
+    Verkaufen Sie Sitzungsbündel im Voraus. Die Guthaben werden bei der Buchung automatisch eingelöst.
   </Card>
   <Card title="Wiederkehrende Abos" icon="arrows-rotate" href="/de/scheduling/subscription-plans">
     Monatliche oder jährliche Abonnements mit unbegrenzten Sitzungen, Guthaben oder Rabatten.
   </Card>
   <Card title="Kundenbereich" icon="circle-user" href="/de/scheduling/customer-area">
     Eine private Seite, auf der Kunden Buchungen, Guthaben und Abonnements im Blick behalten.
+  </Card>
+  <Card title="Qzee-Kalender" icon="calendar-days" href="/de/scheduling/qzee-booking">
+    Schon bei Qzee? Setzen Sie Ihren Qzee-Kalender oben in die Bio.
   </Card>
 </CardGroup>

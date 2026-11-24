@@ -166,7 +166,7 @@ Every field is optional; send only what you want to change.
 | `reviewsBlock` | object | Reviews card: `added`, `enabled`, `layout`, `limit` (1 to 10), `minRating` (1 to 5). |
 | `mapAddress`, `mapTheme`, `mapLayout` | string | Map card. An empty `mapAddress` removes it; `mapLayout` is `map` or `card`. |
 | `openingHours` | object | The "open now" badge: `source`, `showStatus`, `week`, `closedDates`. |
-| `agenda` | object | Scheduling settings, merged partially. See the [Scheduling reference](/api-reference/agenda). |
+| `agenda` | object | Scheduling settings, merged partially. See the [Scheduling reference](/api-reference/agenda). While the [Qzee agenda](/scheduling/qzee-booking) is on the bio, turning `agenda.enabled` on returns `409` with `code: "AGENDA_QZEE_BOOKING_ON"`: the owner switches back in the dashboard. |
 | `tips` | object | PIX tips card: `enabled`, `pixKey`, `pixKeyType` (`email` or `random`), `recipientName` (max 25), `recipientCity` (max 15), `message`, `amounts`, `thanksMessage`, `highlight`. With a key, the name and the city are required. The owner gets an email when the key changes. |
 | `timezone` | string | IANA time zone, for example `America/Sao_Paulo`. An invalid name returns `400`. |
 | `location` | object | `countryCode` (ISO 2 letters), `state`, `city`. Drives the holiday calendar. |
@@ -232,7 +232,8 @@ image background). When the PIX key or the WhatsApp number changes,
 <Note>
   The showcase order is not a store field. It is newest first until the first
   [`PUT /v1/products/order`](/api-reference/products) that changes it; from then
-  on the showcase follows your manual order.
+  on the showcase follows your manual order. Only the dashboard switches it back
+  to newest first.
 </Note>
 
 ## Browse the theme catalog

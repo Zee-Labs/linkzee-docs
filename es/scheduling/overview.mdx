@@ -15,7 +15,7 @@ para que los visitantes reserven un horario sin salir de tu Linkzee.
 ## Tres configuraciones, un solo motor
 
 La Agenda se adapta a cómo trabajas. Elige la configuración que combine con tu
-negocio — todas funcionan sobre el mismo motor subyacente.
+negocio: todas funcionan sobre el mismo motor subyacente.
 
 | Modo | Para quién es | Cómo funciona |
 | --- | --- | --- |
@@ -26,21 +26,37 @@ negocio — todas funcionan sobre el mismo motor subyacente.
 ## Cómo reservan los visitantes
 
 Aparece una tarjeta de reserva en tu página, con el estilo de tu tema. Los
-visitantes reservan en un asistente sencillo, paso a paso — eligen lo que
+visitantes reservan en un asistente sencillo, paso a paso: eligen lo que
 necesitan, ven los horarios realmente disponibles y confirman. Los horarios
 disponibles siguen la **zona horaria del negocio**, configurada en
 **Agenda → Configuración**, así todos ven los cupos correctos.
 
 <Note>
   Como todo en Linkzee, tus cambios de agenda se guardan automáticamente y la
-  vista previa se actualiza en vivo — a la derecha en computadora, debajo del
-  editor en el móvil.
+  vista previa se actualiza en vivo. En computadora queda a la derecha; en el
+  móvil, toca **Vista previa** arriba para ver tu página a pantalla completa.
 </Note>
+
+### El campo de teléfono
+
+Todo campo de teléfono de tu página (reservas, lista de espera, paquetes y
+suscripciones, área de clientes y formularios de contacto) muestra la **bandera
+del país y el código de marcación** junto al número. Empieza en el país del
+visitante, detectado por su conexión, o si no en el país de tu negocio. El
+visitante toca la bandera para elegir otro país de una lista con búsqueda por
+nombre o código, y escribir un número que empieza con `+` y el código del país
+cambia la bandera solo.
+
+Cuando el número parece ser de otro país, el campo sugiere **Usar** ese país.
+Cuando sirve para los dos países, el visitante confirma cuál es antes de
+enviar. Así cada cliente queda con un solo teléfono, y sus reservas, créditos y
+su área de clientes quedan juntos. El dispositivo recuerda el país que eligió
+el visitante para la próxima vez.
 
 ### La tarjeta de reservas arriba
 
 La tarjeta de reservas queda **fija arriba de tu página**, justo debajo de tu
-nombre — es la acción principal de tu bio. Además del botón **Reservar**, muestra
+nombre. Es la acción principal de tu bio. Además del botón **Reservar**, muestra
 los **próximos horarios libres** de un servicio: el visitante toca un horario y
 llega directo a la confirmación, con el servicio y el horario ya elegidos.
 
@@ -75,6 +91,13 @@ Con el [servidor MCP](/es/integrations/mcp/tools-reference), `configure_agenda`
 hace lo mismo con `showTopCard: false` (o `true` para volver a mostrar la
 tarjeta).
 
+## ¿Ya usas Qzee?
+
+Si tu negocio organiza las citas en Qzee, puedes poner tu **agenda de Qzee**
+arriba en la bio en lugar de la agenda de Linkzee. El cliente reserva directo
+en Qzee, y tu bio recibe reservas por una agenda a la vez. Ver
+[Agenda de Qzee en la bio](/es/scheduling/qzee-booking).
+
 ## Configúrala
 
 <CardGroup cols={2}>
@@ -88,7 +111,7 @@ tarjeta).
     Agrega a las personas que atienden citas y los servicios que ofrecen.
   </Card>
   <Card title="Cobrar en las reservas" icon="credit-card" href="/es/scheduling/payments">
-    Señal o importe total al reservar — pagado directo a ti.
+    Señal o importe total al reservar, pagado directo a ti.
   </Card>
   <Card title="Cobros y transferencias" icon="sack-dollar" href="/es/scheduling/earnings">
     Lo que recibiste, quién pagó y cómo llega a tu banco.
@@ -103,12 +126,15 @@ tarjeta).
     Conecta tu calendario para que las reservas aparezcan en tu teléfono, con Google Meet.
   </Card>
   <Card title="Paquetes de sesiones" icon="ticket" href="/es/scheduling/packages">
-    Vende paquetes de sesiones por adelantado — los créditos se usan automáticamente al reservar.
+    Vende paquetes de sesiones por adelantado. Los créditos se usan automáticamente al reservar.
   </Card>
   <Card title="Planes recurrentes" icon="arrows-rotate" href="/es/scheduling/subscription-plans">
     Suscripciones mensuales o anuales con sesiones ilimitadas, créditos o descuentos.
   </Card>
   <Card title="Área de clientes" icon="circle-user" href="/es/scheduling/customer-area">
     Una página privada donde los clientes siguen sus reservas, créditos y suscripciones.
+  </Card>
+  <Card title="Agenda de Qzee" icon="calendar-days" href="/es/scheduling/qzee-booking">
+    ¿Ya usas Qzee? Pon tu agenda de Qzee arriba en la bio.
   </Card>
 </CardGroup>

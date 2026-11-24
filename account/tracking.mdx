@@ -1,7 +1,7 @@
 ---
 title: Tracking
 icon: chart-simple
-description: "Measure conversions with your own tools — connect Meta Pixel, the Conversions API, Google Tag Manager and default UTMs."
+description: "Measure conversions with your own tools: connect Meta Pixel, the Conversions API, Google Tag Manager and default UTMs."
 ---
 
 Linkzee has its own [Performance](/analytics/overview) screen, but you can also
@@ -12,7 +12,7 @@ Linkzee sends the data as visitors interact with your page.
   <img src="/images/account/settings-integrations-en.webp" alt="Linkzee screenshot" />
 </Frame>
 
-Everything here auto-saves as you type — there's no Save button.
+Everything here auto-saves as you type. There's no Save button.
 
 ## Meta Pixel
 
@@ -30,14 +30,37 @@ Add your **Google Tag Manager** container ID to load your GTM container on your
 public page. From there you can manage your own tags and triggers in Google Tag
 Manager.
 
+To protect your visitors, your container runs on your page in a **restricted
+mode**. Every bio lives on the same Linkzee address, so tags that can run any
+code are switched off:
+
+**What works:**
+
+- Google tags: Google Analytics 4, Google Ads and the conversion linker.
+- Meta Pixel and TikTok Pixel tags from the Community Template Gallery.
+- The **Custom image** tag.
+
+**What doesn't run:**
+
+- **Custom HTML** tags and **Custom JavaScript** variables.
+- The **JavaScript variable**, **1st-party cookie** and **DOM element**
+  variables.
+- Built-in tags from other vendors that load their own script or frame.
+- Universal Analytics tags, and a second container loaded from inside yours.
+
+If a tag of yours doesn't fire on your page, check whether it is on the
+list of what doesn't run. For Meta, the Meta Pixel and Conversions API
+fields above
+are the most reliable option.
+
 ## UTM parameters
 
-Set default **UTM** parameters — such as source, medium and campaign — that
+Set default **UTM** parameters, such as source, medium and campaign, that
 Linkzee automatically adds to your outgoing links. This tags the traffic you send
 out so your analytics attribute it to the right source and campaign.
 
 <Note>
-  You'll find these values in your marketing tools — your Pixel ID and
+  You'll find these values in your marketing tools: your Pixel ID and
   Conversions API token in **Meta Events Manager**, and your container ID in
   **Google Tag Manager**.
 </Note>

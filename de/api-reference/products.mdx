@@ -33,8 +33,14 @@ Das Schaufenster hat zwei Sortiermodi:
   oben hinzu.
 
 `GET /v1/products`, das MCP-Tool `list_products` und die öffentliche Seite
-geben die Produkte immer in der Reihenfolge zurück, die Besucher sehen. Es gibt
-keinen Endpunkt, um zu "neueste zuerst" zurückzukehren.
+geben die Produkte immer in der Reihenfolge zurück, die Besucher sehen.
+
+Der Inhaber wechselt im Dashboard zwischen den beiden Modi, mit der Auswahl
+**Reihenfolge im Schaufenster** (**Neueste zuerst** oder **Individuell**) im
+Bereich **Produkte**. Der Wechsel zurück zu neueste zuerst behält die manuelle
+Reihenfolge gespeichert, und die erneute Wahl von individuell stellt sie wieder
+her. API und MCP wechseln den Modus nicht: Es gibt keinen Endpoint, um zu
+"neueste zuerst" zurückzukehren.
 
 ## Produkte auflisten
 

@@ -32,8 +32,14 @@ La vitrine a deux modes d'ordre :
   arrivent en haut.
 
 `GET /v1/products`, l'outil MCP `list_products` et la page publique renvoient
-toujours les produits dans l'ordre que voient les visiteurs. Il n'existe pas
-d'endpoint pour revenir à l'ordre des plus récents d'abord.
+toujours les produits dans l'ordre que voient les visiteurs.
+
+Le propriétaire passe d'un mode à l'autre dans le tableau de bord, avec le
+sélecteur **Ordre de la vitrine** (**Plus récents** ou **Personnalisé**) de
+l'écran **Produits**. Revenir aux plus récents conserve l'ordre manuel, et
+choisir personnalisé à nouveau le rétablit. L'API et le MCP ne changent pas le
+mode : il n'existe pas d'endpoint pour revenir à l'ordre des plus récents
+d'abord.
 
 ## Lister les produits
 

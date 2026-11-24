@@ -15,7 +15,7 @@ page, pour que les visiteurs réservent un créneau sans quitter votre Linkzee.
 ## Trois configurations, un seul moteur
 
 L'Agenda s'adapte à votre façon de travailler. Choisissez la configuration qui
-correspond à votre activité — elles reposent toutes sur le même moteur.
+correspond à votre activité: elles reposent toutes sur le même moteur.
 
 | Mode | Pour qui | Comment ça marche |
 | --- | --- | --- |
@@ -26,22 +26,39 @@ correspond à votre activité — elles reposent toutes sur le même moteur.
 ## Comment les visiteurs réservent
 
 Une carte de réservation apparaît sur votre page, aux couleurs de votre thème.
-Les visiteurs réservent dans un assistant simple, étape par étape — ils
+Les visiteurs réservent dans un assistant simple, étape par étape: ils
 choisissent ce dont ils ont besoin, voient les horaires réellement disponibles,
 puis confirment. Les horaires disponibles suivent le **fuseau horaire de
 l'activité**, défini dans **Agenda → Paramètres**, pour que chacun voie les
 bons créneaux.
 
 <Note>
-  Comme tout dans Linkzee, vos modifications d'agenda s'enregistrent
-  automatiquement et l'aperçu se met à jour en direct — à droite sur ordinateur,
-  sous l'éditeur sur mobile.
+  Comme tout dans Linkzee, vos modifications d'agenda sont enregistrées
+  automatiquement et l'aperçu se met à jour en direct. Sur ordinateur, il est à
+  droite ; sur mobile, touchez **Aperçu** en haut pour voir votre page en plein
+  écran.
 </Note>
+
+### Le champ de téléphone
+
+Chaque champ de téléphone de votre page (réservation, liste d'attente, forfaits
+et abonnements, espace client et formulaires de contact) affiche le **drapeau
+du pays et l'indicatif** à côté du numéro. Il démarre sur le pays du visiteur,
+détecté d'après sa connexion, ou à défaut sur le pays de votre activité. Le
+visiteur touche le drapeau pour choisir un autre pays dans une liste où il peut
+chercher par nom ou par indicatif, et saisir un numéro qui commence par `+` et
+un indicatif change le drapeau tout seul.
+
+Quand un numéro semble venir d'un autre pays, le champ propose **Utiliser** ce
+pays. Quand il convient aux deux pays, le visiteur confirme lequel avant
+d'envoyer. Ainsi chaque client garde un seul numéro, et ses réservations, ses
+crédits et son espace client restent ensemble. L'appareil retient le pays
+choisi par le visiteur pour la fois suivante.
 
 ### La carte de réservation en haut
 
 La carte de réservation est **épinglée en haut de votre page**, juste sous votre
-nom — c’est l’action principale de votre bio. En plus du bouton **Réserver**, elle
+nom. C’est l’action principale de votre bio. En plus du bouton **Réserver**, elle
 affiche les **prochains créneaux libres** d’une prestation : le visiteur touche un
 créneau et arrive directement sur la confirmation, prestation et horaire déjà
 choisis.
@@ -79,6 +96,13 @@ Via le [serveur MCP](/fr/integrations/mcp/tools-reference), `configure_agenda`
 fait la même chose avec `showTopCard: false` (ou `true` pour réafficher la
 carte).
 
+## Vous utilisez déjà Qzee ?
+
+Si votre activité gère ses rendez-vous sur Qzee, vous pouvez placer votre
+**agenda Qzee** en haut de votre bio à la place de l'agenda Linkzee. Les
+clients réservent directement sur Qzee, et votre bio prend les réservations par
+un seul agenda à la fois. Voir [Agenda Qzee sur votre bio](/fr/scheduling/qzee-booking).
+
 ## Configurez-le
 
 <CardGroup cols={2}>
@@ -92,7 +116,7 @@ carte).
     Ajoutez les personnes qui reçoivent les rendez-vous et les services qu'elles proposent.
   </Card>
   <Card title="Encaisser les réservations" icon="credit-card" href="/fr/scheduling/payments">
-    Acompte ou montant total à la réservation — payé directement à vous.
+    Acompte ou montant total à la réservation, payé directement à vous.
   </Card>
   <Card title="Encaissements et virements" icon="sack-dollar" href="/fr/scheduling/earnings">
     Ce que vous avez reçu, qui a payé et comment ça arrive sur votre banque.
@@ -107,12 +131,15 @@ carte).
     Connectez votre agenda pour que les réservations apparaissent sur votre téléphone, avec Google Meet.
   </Card>
   <Card title="Forfaits de séances" icon="ticket" href="/fr/scheduling/packages">
-    Vendez des lots de séances payés d'avance — les crédits s'utilisent automatiquement à la réservation.
+    Vendez des lots de séances payés d'avance. Les crédits s'utilisent automatiquement à la réservation.
   </Card>
   <Card title="Abonnements récurrents" icon="arrows-rotate" href="/fr/scheduling/subscription-plans">
     Des abonnements mensuels ou annuels avec séances illimitées, crédits ou réductions.
   </Card>
   <Card title="Espace client" icon="circle-user" href="/fr/scheduling/customer-area">
     Une page privée où vos clients suivent leurs réservations, crédits et abonnements.
+  </Card>
+  <Card title="Agenda Qzee" icon="calendar-days" href="/fr/scheduling/qzee-booking">
+    Déjà sur Qzee ? Placez votre agenda Qzee en haut de votre bio.
   </Card>
 </CardGroup>

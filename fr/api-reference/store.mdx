@@ -170,7 +170,7 @@ Chaque champ est facultatif ; n'envoyez que ce que vous souhaitez changer.
 | `reviewsBlock` | object | Carte des avis : `added`, `enabled`, `layout`, `limit` (de 1 à 10), `minRating` (de 1 à 5). |
 | `mapAddress`, `mapTheme`, `mapLayout` | string | Carte de localisation. Un `mapAddress` vide la retire ; `mapLayout` vaut `map` ou `card`. |
 | `openingHours` | object | Le badge « ouvert maintenant » : `source`, `showStatus`, `week`, `closedDates`. |
-| `agenda` | object | Réglages de réservation, fusionnés partiellement. Voir la [référence Agenda](/fr/api-reference/agenda). |
+| `agenda` | object | Réglages de réservation, fusionnés partiellement. Voir la [référence Agenda](/fr/api-reference/agenda). Tant que l'[agenda Qzee](/fr/scheduling/qzee-booking) est sur la bio, activer `agenda.enabled` renvoie `409` avec `code: "AGENDA_QZEE_BOOKING_ON"` : le propriétaire revient en arrière depuis le tableau de bord. |
 | `tips` | object | Carte de pourboires PIX : `enabled`, `pixKey`, `pixKeyType` (`email` ou `random`), `recipientName` (25 max.), `recipientCity` (15 max.), `message`, `amounts`, `thanksMessage`, `highlight`. Avec une clé, le nom et la ville sont obligatoires. Le propriétaire reçoit un e-mail lorsque la clé change. |
 | `timezone` | string | Fuseau horaire IANA, par exemple `America/Sao_Paulo`. Un nom invalide renvoie `400`. |
 | `location` | object | `countryCode` (ISO 2 lettres), `state`, `city`. Détermine le calendrier des jours fériés. |
@@ -242,7 +242,8 @@ indique aussi le changement avec uniquement les 4 derniers caractères.
   L'ordre de la vitrine n'est pas un champ de la boutique. Il suit les plus
   récents d'abord jusqu'au premier
   [`PUT /v1/products/order`](/fr/api-reference/products) qui le modifie ; à
-  partir de là, la vitrine suit votre ordre manuel.
+  partir de là, la vitrine suit votre ordre manuel. Seul le tableau de bord la
+  ramène aux plus récents d'abord.
 </Note>
 
 ## Parcourir le catalogue de thèmes

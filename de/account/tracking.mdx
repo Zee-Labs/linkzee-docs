@@ -1,7 +1,7 @@
 ---
 title: Tracking
 icon: chart-simple
-description: "Messen Sie Conversions mit Ihren eigenen Tools — verbinden Sie Meta Pixel, die Conversion-API, den Google Tag Manager und Standard-UTMs."
+description: "Messen Sie Conversions mit Ihren eigenen Tools: Verbinden Sie Meta Pixel, die Conversion-API, den Google Tag Manager und Standard-UTMs."
 ---
 
 Linkzee hat eine eigene [Performance](/de/analytics/overview)-Seite, aber Sie können
@@ -12,7 +12,7 @@ einmal, und Linkzee sendet die Daten, während Besucher mit Ihrer Seite interagi
   <img src="/images/account/settings-integrations-de.webp" alt="Linkzee-Screenshot" />
 </Frame>
 
-Alles hier wird automatisch gespeichert, während Sie tippen — es gibt keinen
+Alles hier wird automatisch gespeichert, während Sie tippen. Es gibt keinen
 Speichern-Button.
 
 ## Meta Pixel
@@ -31,15 +31,40 @@ Fügen Sie die Container-ID Ihres **Google Tag Manager** hinzu, um Ihren
 GTM-Container auf Ihrer öffentlichen Seite zu laden. Von dort aus können Sie Ihre
 eigenen Tags und Trigger im Google Tag Manager verwalten.
 
+Zum Schutz Ihrer Besucher läuft Ihr Container auf Ihrer Seite in einem
+**eingeschränkten Modus**. Alle Bios liegen unter derselben Linkzee-Adresse,
+deshalb sind Tags ausgeschaltet, die beliebigen Code ausführen können.
+
+**Was funktioniert:**
+
+- Google-Tags: Google Analytics 4, Google Ads und die Conversion-Verknüpfung.
+- Meta-Pixel- und TikTok-Pixel-Tags aus der Community-Vorlagengalerie.
+- Das Tag **Benutzerdefiniertes Bild**.
+
+**Was nicht läuft:**
+
+- Tags mit **Benutzerdefiniertem HTML** und Variablen mit
+  **Benutzerdefiniertem JavaScript**.
+- Die Variablen **JavaScript-Variable**, **Eigenes Cookie** und
+  **DOM-Element**.
+- Integrierte Tags anderer Anbieter, die ein eigenes Skript oder einen eigenen
+  Frame laden.
+- Universal-Analytics-Tags und ein zweiter Container, der aus Ihrem heraus
+  geladen wird.
+
+Wenn ein Tag auf Ihrer Seite nicht auslöst, prüfen Sie, ob es auf der Liste
+dessen steht, was nicht läuft. Für Meta sind die Felder Meta Pixel und
+Conversion-API oben die zuverlässigste Option.
+
 ## UTM-Parameter
 
-Legen Sie Standard-**UTM**-Parameter fest — etwa Quelle, Medium und Kampagne —,
+Legen Sie Standard-**UTM**-Parameter fest, etwa Quelle, Medium und Kampagne,
 die Linkzee automatisch zu Ihren ausgehenden Links hinzufügt. So kennzeichnen Sie
 den Traffic, den Sie aussenden, damit Ihre Analyse ihn der richtigen Quelle und
 Kampagne zuordnet.
 
 <Note>
-  Diese Werte finden Sie in Ihren Marketing-Tools — Ihre Pixel-ID und den Token
+  Diese Werte finden Sie in Ihren Marketing-Tools: Ihre Pixel-ID und den Token
   der Conversion-API im **Meta Events Manager** und Ihre Container-ID im **Google
   Tag Manager**.
 </Note>

@@ -29,7 +29,12 @@ La vitrina tiene dos modos de orden:
   vitrina sigue el `order` de cada producto, y los productos nuevos entran arriba.
 
 `GET /v1/products`, la herramienta MCP `list_products` y la página pública siempre
-devuelven los productos en el orden que ven los visitantes. No hay endpoint para
+devuelven los productos en el orden que ven los visitantes.
+
+El dueño cambia entre los dos modos en el panel, con el selector **Orden del
+catálogo** (**Más recientes** o **Personalizado**) en la pantalla **Productos**.
+Volver a más recientes deja guardado el orden manual, y elegir personalizado de
+nuevo lo restaura. La API y el MCP no cambian el modo: no hay endpoint para
 volver a los más nuevos primero.
 
 ## Listar productos

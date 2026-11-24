@@ -8,6 +8,26 @@ Diese Seite listet die Änderungen am API-Vertrag und an den MCP-Tools auf, die
 sich auf eine Integration auswirken können. Jeder Eintrag sagt, was sich
 geändert hat und was zu tun ist.
 
+<Update label="November 2026" description="Reihenfolge im Schaufenster und der Qzee-Kalender" tags={["API"]}>
+
+### Geändert
+
+- **Reihenfolge im Schaufenster:** Der Inhaber kann jetzt im Dashboard zwischen
+  "neueste zuerst" und der manuellen Reihenfolge wechseln (**Reihenfolge im
+  Schaufenster** im Bereich **Produkte**). Die manuelle Reihenfolge bleibt
+  gespeichert, solange "neueste zuerst" aktiv ist. `GET /v1/products` und
+  `list_products` liefern weiter die Reihenfolge, die Besucher sehen. Lesen Sie
+  sie also neu, statt nach Ihrem letzten `PUT /v1/products/order` von der
+  manuellen Reihenfolge auszugehen. Siehe
+  [Produkte](/de/api-reference/products#reihenfolge-des-schaufensters).
+- **`PATCH /v1/store` und der Qzee-Kalender:** Solange der
+  [Qzee-Kalender](/de/scheduling/qzee-booking) in der Bio ist, liefert das
+  Einschalten von `agenda.enabled` `409` mit `code: "AGENDA_QZEE_BOOKING_ON"`.
+  Die Bio nimmt Buchungen nur über einen Kalender an, und der Inhaber wechselt
+  im Dashboard zurück.
+
+</Update>
+
 <Update label="November 2026" description="Die vollständige Bio über MCP und die API" tags={["MCP", "API"]}>
 
 Ein Agent kann jetzt die gesamte Bio aufbauen: den echten Zustand lesen, Fotos

@@ -33,9 +33,36 @@ Añade el ID de tu contenedor de **Google Tag Manager** para cargar tu contenedo
 de GTM en tu página pública. Desde ahí puedes gestionar tus propias etiquetas y
 activadores en Google Tag Manager.
 
+Para proteger a tus visitantes, tu contenedor se ejecuta en la página en un
+**modo restringido**. Todas las bios están en la misma dirección de Linkzee, por
+eso las etiquetas que pueden ejecutar cualquier código están desactivadas.
+
+**Lo que funciona:**
+
+- Etiquetas de Google: Google Analytics 4, Google Ads y la vinculación de
+  conversiones.
+- Etiquetas de Meta Pixel y TikTok Pixel de la Galería de plantillas de la
+  comunidad.
+- La etiqueta de **Imagen personalizada**.
+
+**Lo que no se ejecuta:**
+
+- Etiquetas de **HTML personalizado** y variables de **JavaScript
+  personalizado**.
+- Las variables de **Variable JavaScript**, **Cookie propia** y **Elemento
+  DOM**.
+- Etiquetas integradas de otros proveedores que cargan su propio script o
+  marco.
+- Etiquetas de Universal Analytics y un segundo contenedor cargado desde el
+  tuyo.
+
+Si alguna etiqueta tuya no se activa en tu página, revisa si está en la lista de
+lo que no se ejecuta. Para Meta, los campos de Meta Pixel y Conversion API de
+arriba son la opción más fiable.
+
 ## Parámetros UTM
 
-Define parámetros **UTM** predeterminados —como source, medium y campaign— que
+Define parámetros **UTM** predeterminados, como source, medium y campaign, que
 Linkzee añade automáticamente a tus enlaces de salida. Esto etiqueta el tráfico
 que envías para que tus analíticas lo atribuyan a la fuente y la campaña correctas.
 

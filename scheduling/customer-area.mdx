@@ -1,23 +1,42 @@
 ---
 title: Customer area
 icon: circle-user
-description: "A private page where your customers see their bookings, package credits and subscriptions — no password needed."
+description: "A private page where your customers see, reschedule and cancel their bookings and check package credits and subscriptions, with no password."
 ---
 
-Every Linkzee page with scheduling gets a **customer area** at
-`linkz.ee/yourusername/me` — a private space where your customers check their
-upcoming appointments, package credits and subscriptions, all by themselves.
+Every Linkzee page with scheduling gets a **customer area**: a private space
+where your customers check their upcoming appointments, package credits and
+subscriptions, all by themselves. It works for bookings made on the Linkzee
+agenda and on the [Qzee agenda](/scheduling/qzee-booking) of your bio.
+
+Customers reach it from your bio or at `linkz.ee/yourusername/me`. Both take
+them to the same page in a separate, isolated Linkzee area, so the address in
+the browser changes to `vault.linkz.ee` (see [Privacy](#privacy)).
+
+## My bookings on your bio
+
+Anyone who already booked on a device sees, at the top of your bio:
+
+- **Your next appointment**, a card with the day, the time and who will see
+  them, when an appointment is coming up;
+- **My bookings**, inside the booking card, which opens the customer area.
+
+Nothing to set up: both appear on their own after the first booking on that
+device, whether it was made on the Linkzee agenda or on the Qzee agenda.
 
 ## How customers sign in
 
-No passwords. The customer's identity is the **phone number they use to book
-and buy**:
+**On the device they booked with**, there is no code and no password. The
+customer area opens with the bookings made on that device.
 
-1. They open `linkz.ee/yourusername/me` and type the phone number they use to book and buy.
+**On another device**, they tap **Booked on another device?** and then **Get a
+code**. The identity is the **phone number they use to book and buy**:
+
+1. They type the phone number they use to book and buy.
 2. Linkzee sends a **6-digit access code** to the e-mail on their record (and
    by WhatsApp, where available).
-3. They enter the code and they're in. The session is short-lived and only
-   valid for your page — safe on shared devices.
+3. They enter the code and they're in. The session lasts 90 days and only works
+   for your page.
 
 <Note>
   The code is sent only if the phone number matches an existing customer of
@@ -25,32 +44,64 @@ and buy**:
   you and your customers from abuse.
 </Note>
 
-<Tip>
-  **No code on their usual phone.** Anyone who already booked on that device opens
-  `linkz.ee/yourusername/me` straight away, and your page shows the **My
-  appointments** button and a **Your next appointment** card at the top. The code
-  is only asked on another device; the session then lasts 90 days.
-</Tip>
+The code brings back Linkzee agenda bookings, package credits and
+subscriptions. Bookings made on the Qzee agenda show up on the device used to
+book.
 
 ## What they can do
 
 | Section | What's there |
 | --- | --- |
-| **Appointments** | Upcoming and past bookings; they can **cancel** within your cancellation policy. |
-| **Package credits** | Remaining sessions per package and the expiry date. |
-| **Subscriptions** | Active plan, benefits, usage in the current cycle and renewal date — plus **Manage billing**, which opens the secure Stripe portal to update the card or cancel. |
+| **My appointments** | Upcoming and past bookings, with **Reschedule** and **Cancel**. |
+| **My packages** | Remaining sessions per package and the expiry date. |
+| **My subscriptions** | Active plan, benefits, usage in the current cycle and renewal date, plus **Manage billing**, which opens the secure Stripe portal to update the card or cancel. |
 
 The list highlights the **next appointment** (date, "in 2 days", professional,
-Reschedule and Cancel buttons), then upcoming ones in order and past ones
-collapsed, each with **Book again**.
+Reschedule and Cancel buttons), then the **Upcoming** ones in order and the
+**Past** ones collapsed, each with **Book again**. Times show in each booking's
+own time zone. For services served in order of arrival, the time reads "from
+9:00 AM".
+
+### Bookings on the Qzee agenda
+
+Qzee bookings sit in the same list as the others:
+
+- **Reschedule** opens your Qzee agenda in a panel, straight on the step to
+  pick a new time.
+- **Cancel** happens right in the customer area, after the customer
+  confirms. The rule comes from your Qzee agenda: cancelling before the time
+  you set there doesn't count as a late cancellation, and after it the customer
+  can still cancel until the appointment time.
+- The buttons follow what Qzee allows for each booking. When neither
+  rescheduling nor cancelling is possible, the customer sees **Contact** with
+  your business name.
+- If the business changed the appointment after the list loaded, nothing is
+  cancelled: the customer sees the new time and confirms again.
+- **Book again** appears only while the unit takes online bookings.
+
+Bookings made on the same device at another business's Qzee agenda appear
+under **Other bookings on this device**, with that business's name.
+
+## Privacy
+
+What lets a customer see and change a booking stays on their own device, in a
+separate and isolated Linkzee area (`vault.linkz.ee`). It never sits on your
+bio page, so no script on the page, including your own tracking tags, can reach
+it. Your bio only remembers that the device has booked with you and a short
+reminder of the next appointment, so it can show **Your next appointment**.
+
+<Note>
+  Customers who signed in with a code on a device before this change confirm a
+  code once more. No booking is lost.
+</Note>
 
 ## Why it helps you
 
-- Fewer "what time was my appointment?" messages — customers self-serve.
+- Fewer "what time was my appointment?" messages: customers self-serve.
 - Package and subscription buyers can always see what they've paid for, which
   builds trust in prepaid bundles.
-- Cancellations respect the **cancellation window** you set in Bookings →
-  Settings, and covered bookings return their credits automatically.
+- Linkzee agenda cancellations respect the **cancellation window** you set in
+  Bookings → Settings, and covered bookings return their credits automatically.
 
 <Note>
   Share the customer area with anyone: it's simply your page URL followed by

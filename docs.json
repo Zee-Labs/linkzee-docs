@@ -117,6 +117,7 @@
                   "scheduling/dashboard",
                   "scheduling/booking-link",
                   "scheduling/customer-area",
+                  "scheduling/qzee-booking",
                   "scheduling/ai-scheduling"
                 ]
               },
@@ -340,6 +341,7 @@
                   "pt-BR/scheduling/dashboard",
                   "pt-BR/scheduling/booking-link",
                   "pt-BR/scheduling/customer-area",
+                  "pt-BR/scheduling/qzee-booking",
                   "pt-BR/scheduling/ai-scheduling"
                 ]
               },
@@ -563,6 +565,7 @@
                   "es/scheduling/dashboard",
                   "es/scheduling/booking-link",
                   "es/scheduling/customer-area",
+                  "es/scheduling/qzee-booking",
                   "es/scheduling/ai-scheduling"
                 ]
               },
@@ -786,6 +789,7 @@
                   "fr/scheduling/dashboard",
                   "fr/scheduling/booking-link",
                   "fr/scheduling/customer-area",
+                  "fr/scheduling/qzee-booking",
                   "fr/scheduling/ai-scheduling"
                 ]
               },
@@ -1009,6 +1013,7 @@
                   "de/scheduling/dashboard",
                   "de/scheduling/booking-link",
                   "de/scheduling/customer-area",
+                  "de/scheduling/qzee-booking",
                   "de/scheduling/ai-scheduling"
                 ]
               },

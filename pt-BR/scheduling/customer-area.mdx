@@ -1,24 +1,45 @@
 ---
 title: Área do cliente
 icon: circle-user
-description: "Uma página privada onde seus clientes veem os agendamentos, os créditos de pacotes e as assinaturas, sem precisar de senha."
+description: "Uma página privada onde seus clientes veem, remarcam e cancelam os agendamentos e consultam créditos de pacotes e assinaturas, sem senha."
 ---
 
-Toda página Linkzee com agenda ganha uma **área do cliente** em
-`linkz.ee/seuusuario/me`: um espaço privado onde seus clientes consultam os
-próximos agendamentos, os créditos de pacotes e as assinaturas, tudo sozinhos.
+Toda página Linkzee com agenda ganha uma **área do cliente**: um espaço privado
+onde seus clientes consultam os próximos agendamentos, os créditos de pacotes e
+as assinaturas, tudo sozinhos. Ela vale para os agendamentos feitos na agenda
+do Linkzee e na [agenda do Qzee](/pt-BR/scheduling/qzee-booking) da sua bio.
+
+O cliente chega lá pela sua bio ou em `linkz.ee/seuusuario/me`. Os dois levam à
+mesma página, numa área do Linkzee separada e isolada, por isso o endereço no
+navegador muda para `vault.linkz.ee` (veja [Privacidade](#privacidade)).
+
+## Meus agendamentos na sua bio
+
+Quem já agendou num aparelho vê no topo da sua bio:
+
+- **Seu próximo horário**, um card com o dia, o horário e quem vai atender,
+  quando há um agendamento chegando;
+- **Meus agendamentos**, dentro do card de agendamento, que abre a área do
+  cliente.
+
+Não há nada para configurar: os dois aparecem sozinhos depois do primeiro
+agendamento naquele aparelho, seja na agenda do Linkzee, seja na agenda do
+Qzee.
 
 ## Como o cliente entra
 
-Sem senhas. A identidade do cliente é o **telefone que ele usa para agendar e
+**No aparelho em que agendou**, não há código nem senha. A área do cliente abre
+com os agendamentos feitos naquele aparelho.
+
+**Em outro aparelho**, ele toca em **Agendou em outro aparelho?** e depois em
+**Receber um código**. A identidade é o **telefone que ele usa para agendar e
 comprar**:
 
-1. Ele abre `linkz.ee/seuusuario/me` e digita o telefone que usa para agendar
-   e comprar.
+1. Ele digita o telefone que usa para agendar e comprar.
 2. O Linkzee envia um **código de acesso de 6 dígitos** para o e-mail do
    cadastro (e por WhatsApp, quando disponível).
-3. Ele digita o código e pronto, está dentro. A sessão dura pouco e vale só
-   para a sua página, o que é seguro em aparelhos compartilhados.
+3. Ele digita o código e pronto, está dentro. A sessão dura 90 dias e vale só
+   para a sua página.
 
 <Note>
   O código só é enviado se o telefone corresponder a um cliente existente da
@@ -26,24 +47,56 @@ comprar**:
   proteger você e seus clientes contra abusos.
 </Note>
 
-<Tip>
-  **Sem código no celular de sempre.** Quem já agendou naquele aparelho entra em
-  `linkz.ee/seuusuario/me` direto, e a sua página mostra o botão **Meus
-  agendamentos** e o card **Seu próximo horário** no topo. O código só é pedido
-  em outro aparelho; aí a sessão dura 90 dias.
-</Tip>
+O código traz de volta os agendamentos da agenda do Linkzee, os créditos de
+pacotes e as assinaturas. Os agendamentos feitos na agenda do Qzee aparecem no
+aparelho em que foram feitos.
 
 ## O que ele pode fazer
 
 | Seção | O que tem lá |
 | --- | --- |
-| **Agendamentos** | Próximos agendamentos e histórico; ele pode **cancelar** dentro da sua política de cancelamento. |
-| **Créditos de pacotes** | Sessões restantes por pacote e a data de validade. |
-| **Assinaturas** | Plano ativo, benefícios, uso no ciclo atual e data de renovação, além de **Gerenciar cobrança**, que abre o portal seguro da Stripe para atualizar o cartão ou cancelar. |
+| **Meus agendamentos** | Próximos agendamentos e histórico, com **Remarcar** e **Cancelar**. |
+| **Meus pacotes** | Sessões restantes por pacote e a data de validade. |
+| **Minhas assinaturas** | Plano ativo, benefícios, uso no ciclo atual e data de renovação, além de **Gerenciar cobrança**, que abre o portal seguro da Stripe para atualizar o cartão ou cancelar. |
 
 A lista mostra o **próximo horário em destaque** (data, "em 2 dias", profissional,
-botões Remarcar e Cancelar), depois os próximos em ordem e os anteriores
-recolhidos, cada um com **Agendar de novo**.
+botões Remarcar e Cancelar), depois os **Próximos** em ordem e os **Anteriores**
+recolhidos, cada um com **Agendar de novo**. Os horários aparecem no fuso de
+cada agendamento. Nos serviços por ordem de chegada, o horário aparece como "a
+partir de 9:00".
+
+### Agendamentos da agenda do Qzee
+
+Os agendamentos do Qzee ficam na mesma lista dos outros:
+
+- **Remarcar** abre a sua agenda do Qzee num painel, direto no passo de escolher
+  o novo horário.
+- **Cancelar** acontece ali mesmo na área do cliente, depois que o cliente
+  confirma. A regra vem da sua agenda do Qzee: cancelar antes do prazo que você
+  definiu lá não conta como cancelamento tardio, e depois dele o cliente ainda
+  pode cancelar até o horário do atendimento.
+- Os botões seguem o que o Qzee permite em cada agendamento. Quando não dá para
+  remarcar nem cancelar, o cliente vê **Falar com** e o nome do seu negócio.
+- Se o negócio mudou o horário depois que a lista carregou, nada é cancelado: o
+  cliente vê o novo horário e confirma de novo.
+- **Agendar de novo** só aparece enquanto a unidade recebe agendamentos online.
+
+Os agendamentos feitos no mesmo aparelho na agenda do Qzee de outro negócio
+aparecem em **Outros agendamentos neste aparelho**, com o nome desse negócio.
+
+## Privacidade
+
+O que permite ao cliente ver e mudar um agendamento fica no próprio aparelho
+dele, numa área do Linkzee separada e isolada (`vault.linkz.ee`). Isso nunca
+fica na página da sua bio, então nenhum script da página, nem as suas próprias
+tags de medição, consegue chegar até lá. A bio só lembra que o aparelho já
+agendou com você e guarda um lembrete curto do próximo horário, para mostrar
+**Seu próximo horário**.
+
+<Note>
+  Quem já tinha entrado com código num aparelho antes desta mudança confirma o
+  código mais uma vez. Nenhum agendamento se perde.
+</Note>
 
 ## Por que isso ajuda você
 
@@ -51,9 +104,9 @@ recolhidos, cada um com **Agendar de novo**.
   sozinho.
 - Quem compra pacote ou assinatura sempre vê o que já pagou, o que aumenta a
   confiança nas vendas pré-pagas.
-- Os cancelamentos respeitam a **janela de cancelamento** que você define em
-  Agenda → Configurações, e agendamentos cobertos devolvem os créditos
-  automaticamente.
+- Os cancelamentos da agenda do Linkzee respeitam a **janela de cancelamento**
+  que você define em Agenda → Configurações, e agendamentos cobertos devolvem os
+  créditos automaticamente.
 
 <Note>
   Compartilhe a área do cliente com quem quiser: é só a URL da sua página

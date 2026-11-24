@@ -170,7 +170,7 @@ Jedes Feld ist optional; sende nur, was du ändern möchtest.
 | `reviewsBlock` | object | Bewertungskarte: `added`, `enabled`, `layout`, `limit` (1 bis 10), `minRating` (1 bis 5). |
 | `mapAddress`, `mapTheme`, `mapLayout` | string | Kartenkarte. Ein leeres `mapAddress` entfernt sie; `mapLayout` ist `map` oder `card`. |
 | `openingHours` | object | Das Badge "Jetzt geöffnet": `source`, `showStatus`, `week`, `closedDates`. |
-| `agenda` | object | Einstellungen der Terminplanung, teilweise zusammengeführt. Siehe die [Referenz zur Terminplanung](/de/api-reference/agenda). |
+| `agenda` | object | Einstellungen der Terminplanung, teilweise zusammengeführt. Siehe die [Referenz zur Terminplanung](/de/api-reference/agenda). Solange der [Qzee-Kalender](/de/scheduling/qzee-booking) in der Bio ist, liefert das Einschalten von `agenda.enabled` `409` mit `code: "AGENDA_QZEE_BOOKING_ON"`: Der Inhaber wechselt im Dashboard zurück. |
 | `tips` | object | PIX-Trinkgeldkarte: `enabled`, `pixKey`, `pixKeyType` (`email` oder `random`), `recipientName` (max. 25), `recipientCity` (max. 15), `message`, `amounts`, `thanksMessage`, `highlight`. Mit einem Schlüssel sind Name und Stadt erforderlich. Der Inhaber erhält eine E-Mail, wenn sich der Schlüssel ändert. |
 | `timezone` | string | IANA-Zeitzone, zum Beispiel `America/Sao_Paulo`. Ein ungültiger Name gibt `400` zurück. |
 | `location` | object | `countryCode` (ISO, 2 Buchstaben), `state`, `city`. Steuert den Feiertagskalender. |
@@ -243,6 +243,7 @@ letzten 4 Zeichen.
   Die Reihenfolge des Schaufensters ist kein Store-Feld. Sie ist "neueste
   zuerst" bis zum ersten [`PUT /v1/products/order`](/de/api-reference/products),
   das sie ändert; ab dann folgt das Schaufenster deiner manuellen Reihenfolge.
+  Nur das Dashboard stellt sie auf "neueste zuerst" zurück.
 </Note>
 
 ## Theme-Katalog durchsuchen

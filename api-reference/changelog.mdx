@@ -7,6 +7,24 @@ description: "Changes to the public API and to MCP that matter to integrators."
 This page lists the changes to the API contract and to the MCP tools that can
 affect an integration. Each entry says what changed and what to do.
 
+<Update label="November 2026" description="Showcase order and the Qzee agenda" tags={["API"]}>
+
+### Changed
+
+- **Showcase order:** the owner can now switch between newest first and the
+  manual order in the dashboard (**Showcase order** on the **Products** screen).
+  The manual order stays saved while newest first is on. `GET /v1/products` and
+  `list_products` keep returning the order visitors see, so read it again
+  instead of assuming manual order after your last `PUT /v1/products/order`.
+  See [Products](/api-reference/products#showcase-order).
+- **`PATCH /v1/store` and the Qzee agenda:** while the
+  [Qzee agenda](/scheduling/qzee-booking) is on the bio, turning
+  `agenda.enabled` on returns `409` with `code: "AGENDA_QZEE_BOOKING_ON"`. The
+  bio takes bookings through one agenda only, and the owner switches back in
+  the dashboard.
+
+</Update>
+
 <Update label="November 2026" description="The complete bio through MCP and the API" tags={["MCP", "API"]}>
 
 An agent can now build the whole bio: read the real state, send photos and

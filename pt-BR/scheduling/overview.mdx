@@ -15,7 +15,7 @@ reservem um horário sem sair do seu Linkzee.
 ## Três configurações, um só motor
 
 A Agenda se adapta ao seu jeito de trabalhar. Escolha a configuração que combina com
-o seu negócio — todas rodam no mesmo motor por baixo.
+o seu negócio: todas rodam no mesmo motor por baixo.
 
 | Modo | Para quem é | Como funciona |
 | --- | --- | --- |
@@ -26,20 +26,37 @@ o seu negócio — todas rodam no mesmo motor por baixo.
 ## Como os visitantes agendam
 
 Um cartão de agendamento aparece na sua página, com o estilo do seu tema. Os visitantes
-agendam num assistente simples, passo a passo — eles escolhem o que precisam, veem os
+agendam num assistente simples, passo a passo: eles escolhem o que precisam, veem os
 horários realmente disponíveis e confirmam. Os horários disponíveis seguem o
 **fuso horário do negócio**, definido em **Agenda → Configurações**, então todo
 mundo vê as vagas certas.
 
 <Note>
   Como tudo no Linkzee, suas mudanças na agenda salvam automaticamente e o
-  preview atualiza ao vivo — à direita no desktop, embaixo do editor no mobile.
+  preview atualiza ao vivo. No desktop ele fica à direita; no celular, toque em
+  **Preview** no topo para ver a sua página em tela cheia.
 </Note>
+
+### O campo de telefone
+
+Todo campo de telefone da sua página (agendamento, lista de espera, pacotes e
+assinaturas, área do cliente e formulários de contato) mostra a **bandeira do
+país e o código de discagem** ao lado do número. Ele começa no país do
+visitante, detectado pela conexão, ou então no país do seu negócio. O visitante
+toca na bandeira para escolher outro país numa lista com busca por nome ou
+código, e digitar um número que começa com `+` e o código do país troca a
+bandeira sozinho.
+
+Quando o número parece ser de outro país, o campo sugere **Usar** esse país.
+Quando ele serve para os dois países, o visitante confirma qual é antes de
+enviar. Assim cada cliente fica com um telefone só, e os agendamentos, créditos
+e a área do cliente dele ficam juntos. O aparelho lembra o país que o visitante
+escolheu para a próxima vez.
 
 ### O cartão de agendamento no topo
 
 O cartão de agendamento fica **fixo no topo da sua página**, logo abaixo do seu
-nome — é a ação principal da bio. Além do botão **Agendar horário**, ele mostra
+nome. É a ação principal da bio. Além do botão **Agendar horário**, ele mostra
 os **próximos horários livres** de um serviço: o visitante toca num horário e já
 cai na tela de confirmação, com o serviço e o horário escolhidos.
 
@@ -72,6 +89,13 @@ horário** quando tem um marcado, ou **Meus agendamentos** quando não tem.
 Pelo [servidor MCP](/pt-BR/integrations/mcp/tools-reference), `configure_agenda`
 faz o mesmo com `showTopCard: false` (ou `true` para mostrar o cartão de novo).
 
+## Já usa o Qzee?
+
+Se o seu negócio organiza os atendimentos no Qzee, você pode colocar a sua
+**agenda do Qzee** no topo da bio no lugar da agenda do Linkzee. O cliente marca
+direto no Qzee, e a bio recebe agendamentos por uma agenda de cada vez. Veja
+[Agenda do Qzee na bio](/pt-BR/scheduling/qzee-booking).
+
 ## Configure
 
 <CardGroup cols={2}>
@@ -85,7 +109,7 @@ faz o mesmo com `showTopCard: false` (ou `true` para mostrar o cartão de novo).
     Adicione as pessoas que atendem e os serviços que cada uma oferece.
   </Card>
   <Card title="Cobrar nos agendamentos" icon="credit-card" href="/pt-BR/scheduling/payments">
-    Sinal ou valor total no agendamento — pago direto a você.
+    Sinal ou valor total no agendamento, pago direto a você.
   </Card>
   <Card title="Recebimentos e repasses" icon="sack-dollar" href="/pt-BR/scheduling/earnings">
     O que você recebeu, quem pagou e como chega no seu banco.
@@ -100,12 +124,15 @@ faz o mesmo com `showTopCard: false` (ou `true` para mostrar o cartão de novo).
     Conecte seu calendário para os agendamentos aparecerem no seu celular, com Google Meet.
   </Card>
   <Card title="Pacotes de sessões" icon="ticket" href="/pt-BR/scheduling/packages">
-    Venda pacotes de sessões pagos de uma vez — os créditos são usados automaticamente ao agendar.
+    Venda pacotes de sessões pagos de uma vez. Os créditos são usados automaticamente ao agendar.
   </Card>
   <Card title="Assinaturas recorrentes" icon="arrows-rotate" href="/pt-BR/scheduling/subscription-plans">
     Assinaturas mensais ou anuais com sessões ilimitadas, créditos ou descontos.
   </Card>
   <Card title="Área do cliente" icon="circle-user" href="/pt-BR/scheduling/customer-area">
     Uma página privada onde os clientes acompanham agendamentos, créditos e assinaturas.
+  </Card>
+  <Card title="Agenda do Qzee" icon="calendar-days" href="/pt-BR/scheduling/qzee-booking">
+    Já usa o Qzee? Coloque a sua agenda do Qzee no topo da bio.
   </Card>
 </CardGroup>
