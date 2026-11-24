@@ -7,6 +7,24 @@ description: "Cambios en la API pública y en MCP que importan a quienes integra
 Esta página lista los cambios en el contrato de la API y en las herramientas MCP que
 pueden afectar una integración. Cada entrada indica qué cambió y qué hacer.
 
+<Update label="Noviembre de 2026" description="Orden del catálogo y la agenda de Qzee" tags={["API"]}>
+
+### Cambios
+
+- **Orden del catálogo:** el dueño ahora cambia entre los más nuevos primero y
+  el orden manual en el panel (**Orden del catálogo** en la pantalla
+  **Productos**). El orden manual queda guardado mientras más recientes está
+  activo. `GET /v1/products` y `list_products` siguen devolviendo el orden que
+  ven los visitantes, así que vuelve a leerlo en lugar de suponer el orden
+  manual después de tu último `PUT /v1/products/order`. Consulta
+  [Productos](/es/api-reference/products#orden-de-la-vitrina).
+- **`PATCH /v1/store` y la agenda de Qzee:** mientras la
+  [agenda de Qzee](/es/scheduling/qzee-booking) esté en la bio, activar
+  `agenda.enabled` devuelve `409` con `code: "AGENDA_QZEE_BOOKING_ON"`. La bio
+  recibe reservas por una sola agenda, y el dueño vuelve desde el panel.
+
+</Update>
+
 <Update label="Noviembre de 2026" description="La bio completa por MCP y por la API" tags={["MCP", "API"]}>
 
 Un agente ahora puede crear toda la bio: leer el estado real, enviar fotos y

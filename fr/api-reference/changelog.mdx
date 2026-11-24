@@ -8,6 +8,25 @@ Cette page liste les changements du contrat de l'API et des outils MCP qui peuve
 affecter une intégration. Chaque entrée indique ce qui a changé et ce qu'il faut
 faire.
 
+<Update label="Novembre 2026" description="Ordre de la vitrine et agenda Qzee" tags={["API"]}>
+
+### Modifications
+
+- **Ordre de la vitrine :** le propriétaire peut maintenant passer des plus
+  récents d'abord à l'ordre manuel dans le tableau de bord (**Ordre de la
+  vitrine** sur l'écran **Produits**). L'ordre manuel reste enregistré tant que
+  les plus récents sont actifs. `GET /v1/products` et `list_products` renvoient
+  toujours l'ordre que voient les visiteurs : relisez-le au lieu de supposer
+  l'ordre manuel après votre dernier `PUT /v1/products/order`. Voir
+  [Produits](/fr/api-reference/products#ordre-de-la-vitrine).
+- **`PATCH /v1/store` et l'agenda Qzee :** tant que
+  l'[agenda Qzee](/fr/scheduling/qzee-booking) est sur la bio, activer
+  `agenda.enabled` renvoie `409` avec `code: "AGENDA_QZEE_BOOKING_ON"`. La bio
+  prend les réservations par un seul agenda, et le propriétaire revient en
+  arrière depuis le tableau de bord.
+
+</Update>
+
 <Update label="Novembre 2026" description="La bio complète via le MCP et l'API" tags={["MCP", "API"]}>
 
 Un agent peut désormais construire toute la bio : lire l'état réel, envoyer des

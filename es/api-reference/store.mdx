@@ -167,7 +167,7 @@ Todos los campos son opcionales; envía solo lo que quieras cambiar.
 | `reviewsBlock` | object | Tarjeta de reseñas: `added`, `enabled`, `layout`, `limit` (de 1 a 10), `minRating` (de 1 a 5). |
 | `mapAddress`, `mapTheme`, `mapLayout` | string | Tarjeta de mapa. Un `mapAddress` vacío la elimina; `mapLayout` es `map` o `card`. |
 | `openingHours` | object | El distintivo "abierto ahora": `source`, `showStatus`, `week`, `closedDates`. |
-| `agenda` | object | Ajustes de reservas, combinados parcialmente. Consulta la [referencia de Agenda](/es/api-reference/agenda). |
+| `agenda` | object | Ajustes de reservas, combinados parcialmente. Consulta la [referencia de Agenda](/es/api-reference/agenda). Con la [agenda de Qzee](/es/scheduling/qzee-booking) en la bio, activar `agenda.enabled` devuelve `409` con `code: "AGENDA_QZEE_BOOKING_ON"`: el dueño vuelve desde el panel. |
 | `tips` | object | Tarjeta de propinas PIX: `enabled`, `pixKey`, `pixKeyType` (`email` o `random`), `recipientName` (máx. 25), `recipientCity` (máx. 15), `message`, `amounts`, `thanksMessage`, `highlight`. Con una clave, el nombre y la ciudad son obligatorios. El dueño recibe un email cuando cambia la clave. |
 | `timezone` | string | Zona horaria IANA, por ejemplo `America/Sao_Paulo`. Un nombre inválido devuelve `400`. |
 | `location` | object | `countryCode` (ISO de 2 letras), `state`, `city`. Define el calendario de feriados. |
@@ -234,7 +234,8 @@ WhatsApp, `agentNotes` también trae el cambio con solo los últimos 4 caractere
 <Note>
   El orden de la vitrina no es un campo de la tienda. Es de los más nuevos primero
   hasta el primer [`PUT /v1/products/order`](/es/api-reference/products) que lo
-  cambia; a partir de entonces la vitrina sigue tu orden manual.
+  cambia; a partir de entonces la vitrina sigue tu orden manual. Solo el panel
+  la vuelve a los más nuevos primero.
 </Note>
 
 ## Explorar el catálogo de temas
