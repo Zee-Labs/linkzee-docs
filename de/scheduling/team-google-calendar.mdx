@@ -4,7 +4,7 @@ icon: user-clock
 description: "Lassen Sie jede Fachkraft ihren eigenen Google Kalender über einen Verbindungslink verbinden, den Sie teilen."
 ---
 
-Im Modus **Team** kann jede Fachkraft ihren **eigenen** Google Kalender verbinden — optional, und der
+Im Modus **Team** kann jede Fachkraft ihren **eigenen** Google Kalender verbinden. Optional, und der
 Kalender jeder Person bleibt von Ihrem getrennt.
 
 Sie erstellen einen **Verbindungslink** und teilen ihn mit der Fachkraft (oder sie verbindet sich in
@@ -23,21 +23,22 @@ ihrem Hauptkalender blockieren nur **ihre** Zeitfenster.
     Klicken Sie auf **Verbinden**, um einen persönlichen Verbindungslink zu erstellen.
   </Step>
   <Step title="Link teilen">
-    Senden Sie den Link — etwa per WhatsApp —, damit die Fachkraft Google auf dem eigenen Gerät
+    Senden Sie den Link (etwa per WhatsApp), damit die Fachkraft Google auf dem eigenen Gerät
     freigibt. Wenn Sie schon an ihrem Gerät sind, können Sie ihn selbst öffnen.
   </Step>
   <Step title="Google freigeben">
-    Die Fachkraft öffnet den Link, meldet sich im Google-Konto an und aktiviert die Berechtigung,
-    **sekundäre Kalender zu erstellen und deren Termine zu verwalten**.
+    Die Fachkraft öffnet den Link, meldet sich im Google-Konto an und klickt auf **Weiter**. Google
+    fragt nur eine einzige Berechtigung an: den Kalender „Linkzee“ anzulegen und nur dessen Termine
+    zu verwalten, ohne Kästchen zum Anklicken.
   </Step>
 </Steps>
 
 Der Verbindungslink gilt nur **begrenzt**, bitten Sie also darum, ihn bald nach dem Senden zu öffnen.
-Ist er abgelaufen, erstellen Sie einfach einen neuen.
+Ist er abgelaufen, erstellen Sie einfach einen neuen. Jeder Link gilt für eine einzige Verbindung, und ein neuer Link deaktiviert den vorherigen.
 
 <Note>
   Jede Verbindung ist unabhängig. Hat eine Fachkraft ihr eigenes Google nicht verbunden, gehen ihre
-  Termine (und Google-Meet-Links) in **Ihren** Kalender „Linkzee“ — den des Geschäfts. Die Vorlaufzeit
+  Termine (und Google-Meet-Links) in **Ihren** Kalender „Linkzee“, den des Geschäfts. Die Vorlaufzeit
   der Erinnerung ist die, die Sie auf der Google-Karte gewählt haben.
 </Note>
 
@@ -45,24 +46,28 @@ Ist er abgelaufen, erstellen Sie einfach einen neuen.
 
 - Jeder Termin mit dieser Fachkraft landet im Kalender **„Linkzee“** in **ihrem** Google.
 - Bei Leistungen mit **Online-Meeting** wird der **Google-Meet**-Link in diesem Kalender erstellt.
-- Ihre **belegten Zeiten** im Hauptkalender werden nur in **ihren** Zeitfenstern nicht mehr angeboten —
+- Ihre **belegten Zeiten** im Hauptkalender werden nur in **ihren** Zeitfenstern nicht mehr angeboten.
   Linkzee sieht nur „frei“ oder „belegt“, ohne Details.
-- Damit ihre Termine Zeiten blockieren, muss im Google-Dialog auch das Kästchen zum **Anzeigen der
-  Verfügbarkeit in den Kalendern** aktiviert sein (es ist optional).
+- Ist **Meine Google-Termine berücksichtigen** in Ihrem Geschäft eingeschaltet, fragt Google direkt
+  nach der Verbindung eine weitere Berechtigung an: zu sehen, wann die Fachkraft belegt ist, ohne
+  Titel oder Details. Lehnt sie ab, funktioniert die Verbindung weiter, aber ihre Termine blockieren
+  keine Zeiten; sie kann es später in ihrem Dashboard unter **Einstellungen → Integrationen** mit
+  **In Google erlauben** freigeben.
 - Wenn Sie **einen Termin einer anderen Fachkraft zuweisen**, verlässt der Termin den bisherigen
   Kalender und erscheint im neuen.
 - Wenn Sie jemandem den Zugang entziehen, wird **dessen Google Kalender** gleichzeitig getrennt.
 - Ältere Verbindungen zeigen **Link zum erneuten Verbinden**: Link erstellen und um erneutes
   Verbinden bitten. Bereits gebuchte Termine bleiben, wo sie sind.
 
-<Warning>
-  Im Google-Berechtigungsdialog muss das Kästchen zum **Erstellen sekundärer Kalender und Verwalten
-  ihrer Termine** aktiviert sein. Andernfalls lehnt Linkzee die Verbindung ab und der Status erklärt,
-  was zu aktivieren ist — einfach den Link erneut öffnen.
-</Warning>
+<Note>
+  Die Fachkraft muss die Verbindung im **selben Browser** abschließen, in dem sie den Link geöffnet
+  hat. Öffnet sich Google in einer anderen App oder einem anderen Browser, lehnt Linkzee die
+  Verbindung aus Sicherheitsgründen ab; einfach den Link erneut öffnen. Wird dasselbe Google-Konto
+  erneut verbunden, nutzt Linkzee ihren Kalender „Linkzee“ weiter und legt keinen zweiten an.
+</Note>
 
 <Warning>
-  Teilen Sie den Verbindungslink nur mit dieser Fachkraft — sie verbindet ihr persönliches Google-Konto.
+  Teilen Sie den Verbindungslink nur mit dieser Fachkraft. Sie verbindet ihr persönliches Google-Konto.
 </Warning>
 
 ## Und die anderen Kalender der Fachkraft?

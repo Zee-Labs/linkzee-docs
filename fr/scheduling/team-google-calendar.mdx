@@ -4,7 +4,7 @@ icon: user-clock
 description: "Laissez chaque professionnel connecter son propre Google Agenda avec un lien de connexion que vous partagez."
 ---
 
-En mode **Équipe**, chaque professionnel peut connecter son **propre** Google Agenda — c'est
+En mode **Équipe**, chaque professionnel peut connecter son **propre** Google Agenda. C'est
 facultatif, et l'agenda de chacun reste séparé du vôtre.
 
 Vous générez un **lien de connexion** et le partagez avec le professionnel (ou il se connecte depuis
@@ -23,21 +23,22 @@ son agenda principal ne bloquent que **ses** créneaux.
     Cliquez sur **Connecter** pour créer un lien de connexion personnel pour ce professionnel.
   </Step>
   <Step title="Partagez le lien">
-    Envoyez-lui le lien — par WhatsApp, par exemple — pour qu'il autorise Google sur son propre
+    Envoyez-lui le lien (par WhatsApp, par exemple) pour qu'il autorise Google sur son propre
     appareil. Si vous êtes déjà sur son appareil, vous pouvez l'ouvrir vous-même.
   </Step>
   <Step title="Il autorise Google">
-    Il ouvre le lien, se connecte à son compte Google et coche l'autorisation de **créer des agendas
-    secondaires et d'en gérer les événements**.
+    Il ouvre le lien, se connecte à son compte Google et clique sur **Continuer**. Google demande une
+    seule autorisation, celle de créer l'agenda « Linkzee » et de gérer uniquement ses événements,
+    sans case à cocher.
   </Step>
 </Steps>
 
 Le lien de connexion est valable pour une **durée limitée** : demandez-lui de l'ouvrir peu après
-l'envoi. S'il expire, générez-en simplement un nouveau.
+l'envoi. S'il expire, générez-en simplement un nouveau. Chaque lien sert à une seule connexion, et en générer un nouveau désactive le précédent.
 
 <Note>
   La connexion de chaque professionnel est indépendante. Quand un professionnel n'a pas connecté son
-  propre Google, ses rendez-vous (et les liens Google Meet) vont dans **votre** agenda « Linkzee » —
+  propre Google, ses rendez-vous (et les liens Google Meet) vont dans **votre** agenda « Linkzee »,
   celui de l'établissement. Le délai du rappel est celui que vous avez choisi sur la carte Google.
 </Note>
 
@@ -46,23 +47,27 @@ l'envoi. S'il expire, générez-en simplement un nouveau.
 - Chaque rendez-vous avec ce professionnel arrive dans l'agenda **« Linkzee »** de **son** Google.
 - Pour les services avec **réunion en ligne**, le lien **Google Meet** est créé dans cet agenda.
 - Ses **créneaux occupés** dans son agenda principal ne sont plus proposés, uniquement sur **ses**
-  créneaux — Linkzee ne voit que « libre » ou « occupé », sans détail.
-- Pour que ses engagements bloquent des créneaux, la case permettant de **voir sa disponibilité
-  dans ses agendas** doit aussi être cochée sur l'écran Google (elle est facultative).
+  créneaux. Linkzee ne voit que « libre » ou « occupé », sans détail.
+- Si **Respecter mes événements Google** est activé dans votre établissement, Google demande juste
+  après la connexion une autorisation de plus : voir quand il est occupé, sans titres ni détails.
+  S'il refuse, la connexion continue de fonctionner mais ses engagements ne bloquent pas de
+  créneaux ; il peut l'autoriser plus tard dans son tableau de bord, dans **Paramètres →
+  Intégrations**, avec **Autoriser dans Google**.
 - Si vous **transférez un rendez-vous à un autre professionnel**, l'événement quitte l'agenda précédent
   et apparaît dans le nouveau.
 - Retirer l'accès de quelqu'un **déconnecte son Google Agenda** de votre établissement en même temps.
 - Les anciennes connexions affichent **Lien de reconnexion** : générez le lien et
   demandez-lui de se reconnecter. Les rendez-vous déjà pris restent où ils sont.
 
-<Warning>
-  Sur l'écran d'autorisation de Google, la case pour **créer des agendas secondaires et en gérer les
-  événements** doit être cochée. Sinon, Linkzee refuse la connexion et le statut explique quoi cocher —
-  il suffit de rouvrir le lien.
-</Warning>
+<Note>
+  Le professionnel doit terminer la connexion dans le **même navigateur** que celui où il a ouvert
+  le lien. Si Google s'ouvre dans une autre app ou un autre navigateur, Linkzee refuse la connexion
+  par sécurité ; il suffit de rouvrir le lien. Se reconnecter avec le même compte Google réutilise
+  son agenda « Linkzee », sans en créer un second.
+</Note>
 
 <Warning>
-  Ne partagez le lien de connexion qu'avec ce professionnel — il connecte son compte Google personnel.
+  Ne partagez le lien de connexion qu'avec ce professionnel. Il connecte son compte Google personnel.
 </Warning>
 
 ## Et les autres agendas du professionnel ?

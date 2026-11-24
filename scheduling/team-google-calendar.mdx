@@ -4,7 +4,7 @@ icon: user-clock
 description: "Let each staff member connect their own Google Calendar with a connection link you share."
 ---
 
-In **Team** mode, each staff member can connect their **own** Google Calendar — it's optional, and
+In **Team** mode, each staff member can connect their **own** Google Calendar. It's optional, and
 each person's calendar stays separate from yours.
 
 You generate a **connection link** and share it with the staff member (or they connect from their
@@ -23,21 +23,22 @@ go there, with a phone reminder before each one, and busy times in their main ca
     Click **Connect** to create a personal connection link for that staff member.
   </Step>
   <Step title="Share the link">
-    Send them the link — over WhatsApp, for example — so they can authorize Google on their own
+    Send them the link (over WhatsApp, for example) so they can authorize Google on their own
     device. If you're already on their device, you can open it yourself.
   </Step>
   <Step title="They authorize Google">
-    They open the link, sign in to their Google account and tick the permission **"Make secondary
-    Google calendars, and see, create, change, and delete events on them"**.
+    They open the link, sign in to their Google account and click **Continue**. Google asks for a
+    single permission, to create the "Linkzee" calendar and manage only its events, with no box
+    to tick.
   </Step>
 </Steps>
 
 The connection link is valid for a **limited time**, so ask them to open it soon after you send it.
-If it expires, just generate a new one.
+If it expires, just generate a new one. Each link works for a single connection, and generating a new one turns off the previous one.
 
 <Note>
   Each staff member's connection is independent. When a staff member hasn't connected their own
-  Google, their bookings (and Google Meet links) go to **your** "Linkzee" calendar — the store's.
+  Google, their bookings (and Google Meet links) go to **your** "Linkzee" calendar, the one for the business.
   The phone reminder timing is the one you chose on the Google card.
 </Note>
 
@@ -45,24 +46,27 @@ If it expires, just generate a new one.
 
 - Every booking with that staff member goes into the **"Linkzee"** calendar in **their** Google.
 - For services with **online meetings**, the **Google Meet** link is created in that calendar.
-- Their **busy times** in their main calendar stop being offered only in **their** slots — Linkzee
+- Their **busy times** in their main calendar stop being offered only in **their** slots. Linkzee
   only sees "free" or "busy", with no details.
-- For their events to block times, the box **"View your availability in your calendars"** must
-  also be ticked on the Google screen (it's optional).
+- If **Respect my Google events** is on in your business, Google asks right after the connection
+  for one more permission: seeing when they're busy, with no titles or details. If they decline,
+  the connection keeps working but their events don't block times; they can allow it later in
+  their dashboard, under **Settings → Integrations**, with **Allow in Google**.
 - If you **move a booking to another professional**, the event leaves the previous calendar and
   shows up in the new one.
 - Removing someone's access **disconnects their Google Calendar** from your business at the same time.
 - Older connections show a **Reconnect link** button: generate the link and ask
   them to connect again. Bookings already made stay where they are.
 
-<Warning>
-  On Google's permission screen, the box **"Make secondary Google calendars, and see, create, change,
-  and delete events on them"** must be ticked. If it's left unticked, Linkzee refuses the connection
-  and the status explains what to tick — just open the link again.
-</Warning>
+<Note>
+  The staff member has to finish the connection in the **same browser** where they opened the link.
+  If Google opens in another app or browser, Linkzee refuses the connection for security; they just
+  open the link again. Reconnecting the same Google account reuses their "Linkzee" calendar, it
+  never creates a second one.
+</Note>
 
 <Warning>
-  Share the connection link only with that staff member — they connect their personal Google account.
+  Share the connection link only with that staff member. They connect their personal Google account.
 </Warning>
 
 ## What about the staff member's other calendars?
