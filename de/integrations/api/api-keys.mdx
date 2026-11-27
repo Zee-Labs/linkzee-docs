@@ -1,37 +1,37 @@
 ---
 title: API-Schlüssel
 icon: key
-description: "Erstellen und verwalten Sie die API-Schlüssel, mit denen Ihre Tools und Skripte sicher in einem Ihrer Linkzee-Geschäfte handeln können."
+description: "Erstelle und verwalte die API-Schlüssel, mit denen deine Tools und Skripte sicher in einem deiner Linkzee-Geschäfte handeln können."
 ---
 
-Ein **API-Schlüssel** ist die Art und Weise, wie Ihre Tools, Skripte und
-KI-Agenten nachweisen, dass sie in Ihrem Linkzee handeln dürfen. Sie erstellen
-die Schlüssel selbst, geben jedem genau den Zugriff, den er braucht, und
-widerrufen jeden Schlüssel in dem Moment, in dem Sie ihm nicht mehr vertrauen.
+Ein **API-Schlüssel** ist die Art und Weise, wie deine Tools, Skripte und
+KI-Agenten nachweisen, dass sie in deinem Linkzee handeln dürfen. Du erstellst
+die Schlüssel selbst, gibst jedem genau den Zugriff, den er braucht, und
+widerrufst jeden Schlüssel in dem Moment, in dem du ihm nicht mehr vertraust.
 
-Jeder Schlüssel gehört zu **einem Geschäft**. Enthält Ihr Konto mehr als ein
-Geschäft, wirkt der Schlüssel auf das Geschäft, in dem Sie ihn erstellt haben,
+Jeder Schlüssel gehört zu **einem Geschäft**. Enthält dein Konto mehr als ein
+Geschäft, wirkt der Schlüssel auf das Geschäft, in dem du ihn erstellt hast,
 und rührt die anderen nie an — siehe
 [Mehrere Geschäfte](/de/account/multiple-stores).
 
 ## Einen Schlüssel erstellen
 
 <Steps>
-  <Step title="Wechseln Sie in das richtige Geschäft">
+  <Step title="Wechsle in das richtige Geschäft">
     Der Schlüssel wird für das Geschäft erstellt, das in der Seitenleiste
-    **aktiv** ist — wählen Sie es also aus, bevor Sie beginnen.
+    **aktiv** ist — wähle es also aus, bevor du beginnst.
   </Step>
-  <Step title="Öffnen Sie Ihre Einstellungen">
-    Öffnen Sie in den Einstellungen Ihres Dashboards den Bereich **API und MCP**.
+  <Step title="Öffne deine Einstellungen">
+    Öffne in den Einstellungen deines Dashboards den Bereich **API und MCP**.
   </Step>
-  <Step title="Erstellen Sie einen neuen Schlüssel">
-    Erstellen Sie einen Schlüssel und wählen Sie den Zugriff, den er haben soll.
+  <Step title="Erstelle einen neuen Schlüssel">
+    Erstelle einen Schlüssel und wähle den Zugriff, den er haben soll.
     Jeder Schlüssel beginnt mit `lzk_`, damit er leicht zu erkennen ist.
   </Step>
-  <Step title="Kopieren Sie ihn sofort">
-    Kopieren Sie den Schlüssel, solange er angezeigt wird, und bewahren Sie ihn
-    an einem sicheren Ort auf — behandeln Sie ihn wie ein Passwort. Fügen Sie ihn
-    in das Tool oder den Agenten ein, das bzw. den Sie verbinden möchten.
+  <Step title="Kopiere ihn sofort">
+    Kopiere den Schlüssel, solange er angezeigt wird, und bewahre ihn
+    an einem sicheren Ort auf — behandle ihn wie ein Passwort. Füge ihn
+    in das Tool oder den Agenten ein, das bzw. den du verbinden möchtest.
   </Step>
 </Steps>
 
@@ -41,45 +41,45 @@ Jeder Schlüssel trägt eine **Berechtigung**, die festlegt, was er tun darf:
 
 | Berechtigung | Was sie erlaubt |
 | --- | --- |
-| **read** | Ihre Daten auflisten und lesen |
+| **read** | Deine Daten auflisten und lesen |
 | **write** | Erstellen, aktualisieren und löschen |
-| **finance** | Finanzberichte (wie Ihre Einnahmen-Zusammenfassung) |
+| **finance** | Finanzberichte (wie deine Einnahmen-Zusammenfassung) |
 
-Geben Sie einem Schlüssel nur den Zugriff, den er braucht. Wenn ein Tool Ihre
-Daten nur anzeigt, reicht ein **read**-Schlüssel; ein Schlüssel, der Ihre Seite
+Gib einem Schlüssel nur den Zugriff, den er braucht. Wenn ein Tool deine
+Daten nur anzeigt, reicht ein **read**-Schlüssel; ein Schlüssel, der deine Seite
 oder Produkte ändert, braucht **write**. **finance** ist niemals standardmäßig
-enthalten — Sie fügen es beim Erstellen des Schlüssels ausdrücklich hinzu, und
+enthalten — du fügst es beim Erstellen des Schlüssels ausdrücklich hinzu, und
 beim Rotieren behält ein Schlüssel genau die Berechtigungen, die er hatte.
 Zusammengefasste Einnahmen sind die Art von Zugriff, die man bewusst gewährt.
 
 ## Einen Schlüssel widerrufen
 
-Sie können einen Schlüssel jederzeit im selben Bereich **API und MCP**
+Du kannst einen Schlüssel jederzeit im selben Bereich **API und MCP**
 widerrufen. Das Widerrufen wird sofort wirksam und stoppt umgehend jedes Tool,
 das diesen Schlüssel noch verwendet — es ist also der schnellste Weg, den
 Zugriff zu kappen, falls ein Schlüssel jemals offengelegt wird oder nicht mehr
 benötigt wird.
 
 <Note>
-  Der Bereich **API und MCP** listet die Schlüssel des Geschäfts, in dem Sie
-  gerade sind. Um den Schlüssel eines anderen Geschäfts zu sehen, zu rotieren
-  oder zu widerrufen, wechseln Sie zuerst in dieses Geschäft. Beim Rotieren
-  bleibt ein Schlüssel bei seinem eigenen Geschäft — Ihre Integration wandert
+  Der Bereich **API und MCP** listet die Schlüssel des Geschäfts, in dem du
+  gerade bist. Um den Schlüssel eines anderen Geschäfts zu sehen, zu rotieren
+  oder zu widerrufen, wechsle zuerst in dieses Geschäft. Beim Rotieren
+  bleibt ein Schlüssel bei seinem eigenen Geschäft — deine Integration wandert
   also nie zu einem anderen.
 </Note>
 
 <Warning>
-  Geben Sie Ihren Schlüssel niemals weiter und fügen Sie ihn nicht in
+  Gib deinen Schlüssel niemals weiter und füge ihn nicht in
   öffentlichen Code ein — wer ihn hat, kann in dem Geschäft handeln, zu dem er
-  gehört. Wenn ein Schlüssel durchsickert, widerrufen Sie ihn sofort und
-  erstellen Sie einen neuen.
+  gehört. Wenn ein Schlüssel durchsickert, widerrufe ihn sofort und
+  erstelle einen neuen.
 </Warning>
 
 <CardGroup cols={2}>
   <Card title="Öffentliche API" icon="plug" href="/de/integrations/api/overview">
-    Sehen Sie, was Sie mit der Linkzee-API automatisieren können.
+    Sieh dir an, was du mit der Linkzee-API automatisieren kannst.
   </Card>
   <Card title="Authentifizierung" icon="lock" href="/de/api-reference/authentication">
-    So senden Sie Ihren Schlüssel mit jeder Anfrage.
+    So sendest du deinen Schlüssel mit jeder Anfrage.
   </Card>
 </CardGroup>
